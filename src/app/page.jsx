@@ -10,6 +10,13 @@ export default function Home() {
 
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState('');
+  const [slugs, setSlugs] = useState([]);
+  const [ScriptID, setScriptID] = useState('');
+  const [currentSlug, setCurrentSlug] = useState(-1);
+  const [currentSlugSlugName, setCurrentSlugSlugName] = useState('');
+
+  const [content, setContent] = useState('');
+
 
   const endpoint = async (str) => {
     const requestOptions = {
@@ -35,19 +42,75 @@ export default function Home() {
     async function fetchData() {
       try {
         const res = await fetch('/api/newsid');
-        const data = await res.json();
-        setRunOrderTitles(data.RunOrderTitles);
+        setRunOrderTitles((await res.json()).data);
       } catch (error) {
-        console.error('Error fetching RunOrderTitles:', error);
+        console.error(error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch(`/api/slug?param1=${selectedRunOrderTitle}`);
+        setSlugs((await res.json()).data);
+      } catch (error) {
+        console.error(error);
       }
     }
 
     fetchData();
-  }, []);
+  }, [selectedRunOrderTitle]);
 
-  return (
-    <div>
-      <h1>This is Casparcg Next Js Client</h1>
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch(`/api/script?ScriptID=${ScriptID}`);
+        setContent((await res.json()).data.Script);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchData();
+  }, [ScriptID]);
+
+  return (<div>
+    <div style={{ display: 'flex' }}>
+      <div>
+        <div>
+          Run Orders:<select value={selectedRunOrderTitle} onChange={handleSelectionChange}>
+            <option value="" disabled>Select a Run Order</option>
+            {runOrderTitles && runOrderTitles.map((runOrderTitle, i) => (
+              <option key={i} value={runOrderTitle.title}>{runOrderTitle.title}</option>
+            ))}
+          </select>
+        </div>
+        <div style={{ minWidth: 300, maxHeight: 700, overflow: 'auto' }}>
+          {slugs?.map((val, i) => {
+            return (
+              <div onClick={() => {
+                setScriptID(val.ScriptID);
+                setCurrentSlug(i);
+                setCurrentSlugSlugName(val.SlugName)
+              }} key={i} style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}>
+                {i} <label style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div>
+        <textarea
+          value={content}
+          rows="31"
+          cols="45"
+          style={{ fontSize: 20 }}
+          disabled
+        />
+      </div>
       <div>
         <button
           style={{ backgroundColor: connected ? 'green' : 'red' }}
@@ -59,8 +122,6 @@ export default function Home() {
         >
           Connect
         </button>
-      </div>
-      <div>
         <button
           onClick={() =>
             endpoint({
@@ -71,39 +132,7 @@ export default function Home() {
           DisConnect
         </button>
       </div>
-      <button
-        onClick={() =>
-          endpoint({
-            action: 'endpoint',
-            command: 'play 1-1 red',
-          })
-        }
-      >
-        Play red color
-      </button>
-      <div>
-        <span>Command:</span>
-        <input value={command} onChange={(e) => setCommand(e.target.value)} />
-        <button
-          onClick={() =>
-            endpoint({
-              action: 'endpoint',
-              command: command,
-            })
-          }
-        >
-          Play Command
-        </button>
-      </div>
-
-      <div >
-        Run Orders:<select value={selectedRunOrderTitle} onChange={handleSelectionChange}>
-          <option value="" disabled>Select a Run Order</option>
-          {runOrderTitles && runOrderTitles.map((runOrderTitle, i) => (
-            <option key={i} value={runOrderTitle.title}>{runOrderTitle.title}</option>
-          ))}
-        </select>
-      </div>
     </div>
-  );
+
+  </div>);
 }
