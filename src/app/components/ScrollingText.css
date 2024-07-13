@@ -1,0 +1,26 @@
+.scroll-container {
+  position: relative;
+  height: 500px; /* Adjust as needed */
+  overflow: hidden;
+  background-color: #000; /* Background color */
+  color: #fff; /* Text color */
+}
+
+.scrolling-text {
+  position: absolute;
+  top: 250px; /* Start the text below the container */
+  width: 100%;
+  text-align: center;
+  font-weight: bolder;
+  font-size: larger;
+  animation: scroll-up 15s linear infinite; /* Adjust the duration as needed */
+}
+
+@keyframes scroll-up {
+  0% {
+    top: 250px;
+  }
+  100% {
+    top: -100%;
+  }
+}

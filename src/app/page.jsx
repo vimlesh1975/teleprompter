@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import ScrollingText from './components/ScrollingText'
 
 
 export default function Home() {
-  const [command, setCommand] = useState('play 1-1 amb loop');
 
   const [connected, setConnected] = useState(false);
 
@@ -112,6 +112,9 @@ export default function Home() {
         />
       </div>
       <div>
+        <div style={{maxWidth:600, minWidth:600,maxHeight:500, minHeight:500}}>
+        <ScrollingText text={content} />
+        </div>
         <button
           style={{ backgroundColor: connected ? 'green' : 'red' }}
           onClick={() =>
