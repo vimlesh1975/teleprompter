@@ -16,6 +16,7 @@ export default function Home() {
   const [currentSlugSlugName, setCurrentSlugSlugName] = useState('');
 
   const [content, setContent] = useState('');
+  const [allContent, setAllContent] = useState('');
 
 
   const endpoint = async (str) => {
@@ -51,16 +52,40 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    var aa;
     async function fetchData() {
       try {
         const res = await fetch(`/api/slug?param1=${selectedRunOrderTitle}`);
-        setSlugs((await res.json()).data);
+        aa=await (await res.json()).data
+        setSlugs(aa);
       } catch (error) {
         console.error(error);
       }
     }
 
-    fetchData();
+ 
+
+    const fetchAllContent = async () => {
+      const data1 = new Array(aa.length * 2); // Creating an array with double the length to store index and script content
+      const fetchPromises = aa.map((slug, i) => fetch(`/api/script?ScriptID=${slug.ScriptID}`)
+        .then(async (res) => {
+          const data = (await res.json()).data?.Script
+          data1[i * 2] = `${i + 1} ${slug.SlugName}`;
+          data1[i * 2 + 1] = `${data}\n_ _ _ _ _ _ _\n`;
+        })
+        .catch(error => {
+          console.error('Error fetching content:', error);
+        })
+      );
+  
+      // Await all fetch promises to complete
+      await Promise.all(fetchPromises);
+      setAllContent(data1.filter(item => item !== undefined))
+      // return data1.filter(item => item !== undefined); // Filter out any undefined entries
+    };
+    fetchData().then(()=>fetchAllContent())//
+
+
   }, [selectedRunOrderTitle]);
 
   useEffect(() => {
@@ -74,7 +99,14 @@ export default function Home() {
     }
 
     fetchData();
+
+
+
   }, [ScriptID]);
+
+ 
+
+
 
   return (<div>
     <div style={{ display: 'flex' }}>
@@ -113,7 +145,8 @@ export default function Home() {
       </div>
       <div>
         <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500 }}>
-          <ScrollingText text={content} />
+          {/* <ScrollingText text={content} /> */}
+          <ScrollingText text={allContent} />
         </div>
         {/* <div>
           <button

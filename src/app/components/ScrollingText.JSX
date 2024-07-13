@@ -6,7 +6,7 @@ const ScrollingText = ({ text }) => {
   const [uniqueKey, setUniqueKey] = useState(0);
   const [animationDuration, setAnimationDuration] = useState(10);
   const containerRef = useRef(null);
-  const [speed, setSpeed] = useState(250)
+  const [speed, setSpeed] = useState(50)
 
   useEffect(() => {
     if (containerRef.current) {
@@ -16,14 +16,17 @@ const ScrollingText = ({ text }) => {
     }
     // Update the key to force re-render and restart animation
     setUniqueKey(prevKey => prevKey + 1);
-  }, [text ]);
+  }, [text]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (containerRef.current) {
       const height = containerRef.current.clientHeight;
       setAnimationDuration((height + 425) / speed)
     }
   }, [speed])
+
+
+
 
   return (<div>
     <div className="scroll-container">
@@ -43,7 +46,7 @@ const ScrollingText = ({ text }) => {
         min={0.001}
         max={500}
         value={speed}
-        onChange={e=>setSpeed(e.target.value)}
+        onChange={e => setSpeed(e.target.value)}
         style={{ width: '100%' }}
       />
     </div>
