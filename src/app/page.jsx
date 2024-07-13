@@ -67,7 +67,7 @@ export default function Home() {
     async function fetchData() {
       try {
         const res = await fetch(`/api/script?ScriptID=${ScriptID}`);
-        setContent((await res.json()).data.Script);
+        setContent((await res.json()).data?.Script);
       } catch (error) {
         console.error(error);
       }
@@ -112,28 +112,30 @@ export default function Home() {
         />
       </div>
       <div>
-        <div style={{maxWidth:600, minWidth:600,maxHeight:500, minHeight:500}}>
-        <ScrollingText text={content} />
+        <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500 }}>
+          <ScrollingText text={content} />
         </div>
-        <button
-          style={{ backgroundColor: connected ? 'green' : 'red' }}
-          onClick={() =>
-            endpoint({
-              action: 'connect',
-            })
-          }
-        >
-          Connect
-        </button>
-        <button
-          onClick={() =>
-            endpoint({
-              action: 'disconnect',
-            })
-          }
-        >
-          DisConnect
-        </button>
+        {/* <div>
+          <button
+            style={{ backgroundColor: connected ? 'green' : 'red' }}
+            onClick={() =>
+              endpoint({
+                action: 'connect',
+              })
+            }
+          >
+            Connect
+          </button>
+          <button
+            onClick={() =>
+              endpoint({
+                action: 'disconnect',
+              })
+            }
+          >
+            DisConnect
+          </button>
+        </div> */}
       </div>
     </div>
 

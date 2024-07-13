@@ -1,26 +1,27 @@
 .scroll-container {
   position: relative;
-  height: 500px; /* Adjust as needed */
+  height: 500px;
   overflow: hidden;
-  background-color: #000; /* Background color */
-  color: #fff; /* Text color */
+  background-color: #000;
+  color: #fff;
+
 }
 
 .scrolling-text {
   position: absolute;
-  top: 250px; /* Start the text below the container */
+  top: 425px;
   width: 100%;
-  text-align: center;
+  text-align: left;
   font-weight: bolder;
-  font-size: larger;
-  animation: scroll-up 15s linear infinite; /* Adjust the duration as needed */
+  padding: 0 25px;
+  box-sizing: border-box;
+  font-size: 25px;
+
+  animation: scroll-up calc(var(--animationDuration, 10s)) linear infinite;
 }
 
 @keyframes scroll-up {
-  0% {
-    top: 250px;
-  }
   100% {
-    top: -100%;
+    top: calc(-1 * var(--text-height, 0px));
   }
 }
