@@ -97,14 +97,15 @@ export default function Home() {
 
   // Fetch all content for scrolling
   const fetchAllContent = async (slugs, startNumber) => {
-    const data1 = new Array(slugs.length * 2);
+    const data1 = new Array(slugs.length * 3);
     const fetchPromises = slugs.map((slug, i) =>
       fetch(`/api/script?ScriptID=${slug.ScriptID}`)
         .then(async (res) => {
           const dd = await res.json();
           const data = dd.data?.Script;
-          data1[i * 2] = `${startNumber + i + 1} ${slug.SlugName}`;
-          data1[i * 2 + 1] = `${data}`;
+          data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' -No Visual'}`;
+          data1[i * 3 + 1] = `${data}`;
+          data1[i * 3 + 2] = `--------------`;
         })
         .catch((error) => console.error('Error fetching content:', error))
     );
@@ -219,7 +220,7 @@ export default function Home() {
             <div ref={containerRef} className="scroll-container">
               <div ref={textRef} className="scrolling-text">
                 {allContent.map((line, i) => (
-                  <div key={i} style={{ backgroundColor: i % 2 === 0 ? 'blue' : 'transparent' }}>
+                  <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent' }}>
                     {line}
                   </div>
                 ))}
@@ -236,7 +237,11 @@ export default function Home() {
                 style={{ width: '100%' }}
               />
             </div>
-            <div style={{ textAlign: 'center' }}>
+            <div onContextMenu={(e) => {
+              setSpeed(0);
+              e.preventDefault();
+            }}
+              style={{ textAlign: 'center', border: '1px solid red', minHeight: 100 }}>
               <button onClick={() => setSpeed(-200)}> Speed -200</button>
               <button onClick={() => setSpeed(0)}> Pause</button>
               <button onClick={() => setSpeed(200)}> Speed 200</button>
