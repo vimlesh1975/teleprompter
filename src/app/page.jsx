@@ -173,15 +173,21 @@ export default function Home() {
         </div>
         <div style={{ textAlign: 'center' }}>
           <button onClick={() => {
+            setCurrentSlug(0);
+            handleDoubleClick(0);
+            setCurrentSlugSlugName(slugs[0].SlugName)
+            setScriptID(slugs[0].ScriptID);
+          }}>From Start</button>
+          <button onClick={() => {
             var aa = currentSlug;
             aa--;
-            if (aa <0) {
-              aa = slugs.length-1
+            if (aa < 0) {
+              aa = slugs.length - 1
             }
             setCurrentSlug(aa);
             handleDoubleClick(aa);
             setCurrentSlugSlugName(slugs[aa].SlugName)
-    setScriptID(slugs[aa].ScriptID);
+            setScriptID(slugs[aa].ScriptID);
           }}>Previous</button>
           <button onClick={() => {
             var aa = currentSlug;
@@ -192,8 +198,15 @@ export default function Home() {
             setCurrentSlug(aa);
             handleDoubleClick(aa);
             setCurrentSlugSlugName(slugs[aa].SlugName)
-    setScriptID(slugs[aa].ScriptID);
+            setScriptID(slugs[aa].ScriptID);
           }}>Next</button>
+          <button onClick={()=>{
+            const aa=slugs.length-1;
+             setCurrentSlug(aa);
+             handleDoubleClick(aa);
+             setCurrentSlugSlugName(slugs[aa].SlugName)
+             setScriptID(slugs[aa].ScriptID);
+          }}>Go to Last</button>
         </div>
       </div>
 
