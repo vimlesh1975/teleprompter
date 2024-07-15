@@ -1,10 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import ScrollingText from './components/ScrollingText'
+import { useState, useEffect, useRef } from 'react';
+// import ScrollingText from './components/ScrollingText'
+import './components/ScrollingText.css';
+
 
 
 export default function Home() {
+  const [speed, setSpeed] = useState(0.001)
 
   const [connected, setConnected] = useState(false);
 
@@ -12,11 +15,32 @@ export default function Home() {
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState('');
   const [slugs, setSlugs] = useState([]);
   const [ScriptID, setScriptID] = useState('');
-  const [currentSlug, setCurrentSlug] = useState(-1);
+  const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugSlugName, setCurrentSlugSlugName] = useState('');
 
   const [content, setContent] = useState('');
   const [allContent, setAllContent] = useState([]);
+
+
+
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
+
+
+  useEffect(() => {
+    let animationFrameId;
+
+    const scrollText = () => {
+      if (textRef.current) {
+        const currentTop = textRef.current.offsetTop;
+        const newTop = currentTop - (speed / 60); // Assuming 60 frames per second
+        textRef.current.style.top = `${newTop}px`;
+      }
+      animationFrameId = requestAnimationFrame(scrollText);
+    };
+    animationFrameId = requestAnimationFrame(scrollText);
+    return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
+  }, [speed]);
 
 
   const endpoint = async (str) => {
@@ -37,8 +61,6 @@ export default function Home() {
     setSelectedRunOrderTitle(e.target.value);
 
   };
-
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -51,39 +73,38 @@ export default function Home() {
     fetchData();
   }, []);
 
+  const fetchAllContent = async (aa, startNumber) => {
+    const data1 = new Array(aa.length * 2);
+    const fetchPromises = aa.map((slug, i) => fetch(`/api/script?ScriptID=${slug.ScriptID}`)
+      .then(async (res) => {
+        const data = (await res.json()).data?.Script
+        data1[i * 2] = `${startNumber + 1} ${slug.SlugName}`;
+        data1[i * 2 + 1] = `${data}`;
+        startNumber++;
+      })
+      .catch(error => {
+        console.error('Error fetching content:', error);
+      })
+    );
+
+    await Promise.all(fetchPromises);
+    setAllContent(data1.filter(item => item !== undefined))
+  };
+
+
+
   useEffect(() => {
     var aa;
     async function fetchData() {
       try {
         const res = await fetch(`/api/slug?param1=${selectedRunOrderTitle}`);
-        aa=await (await res.json()).data
+        aa = await (await res.json()).data
         setSlugs(aa);
       } catch (error) {
         console.error(error);
       }
     }
-
- 
-
-    const fetchAllContent = async () => {
-      const data1 = new Array(aa.length * 2); 
-      const fetchPromises = aa.map((slug, i) => fetch(`/api/script?ScriptID=${slug.ScriptID}`)
-        .then(async (res) => {
-          const data = (await res.json()).data?.Script
-          data1[i * 2] = `${i + 1} ${slug.SlugName}`;
-          data1[i * 2 + 1] = `${data}`;
-        })
-        .catch(error => {
-          console.error('Error fetching content:', error);
-        })
-      );
-  
-      await Promise.all(fetchPromises);
-      setAllContent(data1.filter(item => item !== undefined))
-    };
-    fetchData().then(()=>fetchAllContent())//
-
-
+    fetchData().then(() => fetchAllContent(aa, 0))//
   }, [selectedRunOrderTitle]);
 
   useEffect(() => {
@@ -95,16 +116,8 @@ export default function Home() {
         console.error(error);
       }
     }
-
     fetchData();
-
-
-
   }, [ScriptID]);
-
- 
-
-
 
   return (<div>
     <div style={{ display: 'flex' }}>
@@ -120,12 +133,25 @@ export default function Home() {
         <div style={{ minWidth: 300, maxHeight: 700, overflow: 'auto' }}>
           {slugs?.map((val, i) => {
             return (
-              <div onClick={() => {
-                setScriptID(val.ScriptID);
-                setCurrentSlug(i);
-                setCurrentSlugSlugName(val.SlugName)
-              }} key={i} style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}>
-                {i+1} <label style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
+              <div
+                onClick={() => {
+                  setScriptID(val.ScriptID);
+                  setCurrentSlug(i);
+                  setCurrentSlugSlugName(val.SlugName)
+                }}
+                onDoubleClick={() => {
+                  const aa = [...slugs];
+                  aa.splice(0, i);
+                  fetchAllContent(aa, i);
+                  setSpeed(0);
+
+                  if (textRef.current) {
+                    textRef.current.style.top = `${325}px`;
+                  }
+
+                }}
+                key={i} style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}>
+                {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
               </div>
             )
           })}
@@ -143,9 +169,31 @@ export default function Home() {
       </div>
       <div>
         <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500 }}>
-          <ScrollingText text={allContent.map((line, i) => (
+          {/* <ScrollingText speed={speed} setSpeed={setSpeed} text={allContent.map((line, i) => (
             <div key={i} style={{backgroundColor:i % 2 !== 0 ? 'transparent' : 'blue'}}>{line}</div>
-          ))} />
+          ))} /> */}
+
+          <div>
+            <div ref={containerRef} className="scroll-container">
+              <div ref={textRef} className="scrolling-text">
+                {allContent.map((line, i) => (
+                  <div key={i} style={{ backgroundColor: i % 2 !== 0 ? 'transparent' : 'blue' }}>{line}</div>
+                ))}
+              </div>
+            </div>
+            <div>
+              S:{speed}
+              <input
+                type="range"
+                min={-500}
+                max={500}
+                value={speed}
+                onChange={e => setSpeed(e.target.value)}
+                style={{ width: '100%' }}
+              />
+            </div>
+          </div>
+
         </div>
         {/* <div>
           <button

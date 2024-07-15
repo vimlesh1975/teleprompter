@@ -9,7 +9,7 @@
 
 .scrolling-text {
   position: absolute;
-  top: 425px;
+  top: 325px;
   width: 100%;
   text-align: left;
   font-weight: bolder;
@@ -17,11 +17,4 @@
   box-sizing: border-box;
   font-size: 40px;
 
-  animation: scroll-up calc(var(--animationDuration, 10s)) linear infinite;
-}
-
-@keyframes scroll-up {
-  100% {
-    top: calc(-1 * var(--text-height, 0px));
-  }
 }
