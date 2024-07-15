@@ -7,7 +7,7 @@ import './components/ScrollingText.css';
 
 
 export default function Home() {
-  const [speed, setSpeed] = useState(0.001)
+  const [speed, setSpeed] = useState(0)
 
   const [connected, setConnected] = useState(false);
 
@@ -59,7 +59,9 @@ export default function Home() {
   };
   const handleSelectionChange = (e) => {
     setSelectedRunOrderTitle(e.target.value);
-
+    setCurrentSlug(0)
+    setCurrentSlugSlugName(slugs[0].SlugName)
+    setScriptID(slugs[0].ScriptID);
   };
   useEffect(() => {
     async function fetchData() {
@@ -80,7 +82,7 @@ export default function Home() {
         .then(async (res) => {
           const dd = await res.json();
           const data = dd.data?.Script;
-          data1[i * 2] = `${startNumber+i + 1} ${slug.SlugName}`;
+          data1[i * 2] = `${startNumber + i + 1} ${slug.SlugName}`;
           data1[i * 2 + 1] = `${data}`;
           console.log(data1)
         })
@@ -119,6 +121,15 @@ export default function Home() {
     fetchData();
   }, [ScriptID]);
 
+  const handleDoubleClick = (i) => {
+    const aa = [...slugs];
+    aa.splice(0, i);
+    fetchAllContent(aa, i);
+    setSpeed(0);
+    if (textRef.current) {
+      textRef.current.style.top = `${325}px`;
+    }
+  };
   return (<div>
     <div style={{ display: 'flex' }}>
       <div>
@@ -140,15 +151,7 @@ export default function Home() {
                   setCurrentSlugSlugName(val.SlugName)
                 }}
                 onDoubleClick={() => {
-                  const aa = [...slugs];
-                  aa.splice(0, i);
-                  fetchAllContent(aa, i);
-                  setSpeed(0);
-
-                  if (textRef.current) {
-                    textRef.current.style.top = `${325}px`;
-                  }
-
+                  handleDoubleClick(i)
                 }}
                 key={i} style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}>
                 {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
@@ -157,22 +160,45 @@ export default function Home() {
           })}
         </div>
       </div>
-
       <div>
-        <textarea
-          value={content}
-          rows="31"
-          cols="45"
-          style={{ fontSize: 20 }}
-          disabled
-        />
+        <div>
+          <div>{selectedRunOrderTitle} {currentSlugSlugName}</div>
+          <textarea
+            value={content}
+            rows="25"
+            cols="45"
+            style={{ fontSize: 20 }}
+            disabled
+          />
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <button onClick={() => {
+            var aa = currentSlug;
+            aa--;
+            if (aa <0) {
+              aa = slugs.length-1
+            }
+            setCurrentSlug(aa);
+            handleDoubleClick(aa);
+            setCurrentSlugSlugName(slugs[aa].SlugName)
+    setScriptID(slugs[aa].ScriptID);
+          }}>Previous</button>
+          <button onClick={() => {
+            var aa = currentSlug;
+            aa++;
+            if (aa >= slugs.length) {
+              aa = 0
+            }
+            setCurrentSlug(aa);
+            handleDoubleClick(aa);
+            setCurrentSlugSlugName(slugs[aa].SlugName)
+    setScriptID(slugs[aa].ScriptID);
+          }}>Next</button>
+        </div>
       </div>
+
       <div>
         <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500 }}>
-          {/* <ScrollingText speed={speed} setSpeed={setSpeed} text={allContent.map((line, i) => (
-            <div key={i} style={{backgroundColor:i % 2 !== 0 ? 'transparent' : 'blue'}}>{line}</div>
-          ))} /> */}
-
           <div>
             <div ref={containerRef} className="scroll-container">
               <div ref={textRef} className="scrolling-text">
@@ -191,6 +217,11 @@ export default function Home() {
                 onChange={e => setSpeed(e.target.value)}
                 style={{ width: '100%' }}
               />
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <button onClick={() => setSpeed(-200)}> Speed -200</button>
+              <button onClick={() => setSpeed(0)}> Pause</button>
+              <button onClick={() => setSpeed(200)}> Speed 20</button>
             </div>
           </div>
 
