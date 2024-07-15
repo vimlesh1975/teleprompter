@@ -15,7 +15,7 @@
   font-weight: bolder;
   padding: 0 25px;
   box-sizing: border-box;
-  font-size: 25px;
+  font-size: 40px;
 
   animation: scroll-up calc(var(--animationDuration, 10s)) linear infinite;
 }

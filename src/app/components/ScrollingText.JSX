@@ -6,7 +6,7 @@ const ScrollingText = ({ text }) => {
   const [uniqueKey, setUniqueKey] = useState(0);
   const [animationDuration, setAnimationDuration] = useState(10);
   const containerRef = useRef(null);
-  const [speed, setSpeed] = useState(50)
+  const [speed, setSpeed] = useState(40)
 
   useEffect(() => {
     if (containerRef.current) {

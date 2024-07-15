@@ -16,7 +16,7 @@ export default function Home() {
   const [currentSlugSlugName, setCurrentSlugSlugName] = useState('');
 
   const [content, setContent] = useState('');
-  const [allContent, setAllContent] = useState('');
+  const [allContent, setAllContent] = useState([]);
 
 
   const endpoint = async (str) => {
@@ -66,22 +66,20 @@ export default function Home() {
  
 
     const fetchAllContent = async () => {
-      const data1 = new Array(aa.length * 2); // Creating an array with double the length to store index and script content
+      const data1 = new Array(aa.length * 2); 
       const fetchPromises = aa.map((slug, i) => fetch(`/api/script?ScriptID=${slug.ScriptID}`)
         .then(async (res) => {
           const data = (await res.json()).data?.Script
           data1[i * 2] = `${i + 1} ${slug.SlugName}`;
-          data1[i * 2 + 1] = `${data}\n_ _ _ _ _ _ _\n`;
+          data1[i * 2 + 1] = `${data}`;
         })
         .catch(error => {
           console.error('Error fetching content:', error);
         })
       );
   
-      // Await all fetch promises to complete
       await Promise.all(fetchPromises);
       setAllContent(data1.filter(item => item !== undefined))
-      // return data1.filter(item => item !== undefined); // Filter out any undefined entries
     };
     fetchData().then(()=>fetchAllContent())//
 
@@ -127,7 +125,7 @@ export default function Home() {
                 setCurrentSlug(i);
                 setCurrentSlugSlugName(val.SlugName)
               }} key={i} style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}>
-                {i} <label style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
+                {i+1} <label style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
               </div>
             )
           })}
@@ -145,8 +143,9 @@ export default function Home() {
       </div>
       <div>
         <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500 }}>
-          {/* <ScrollingText text={content} /> */}
-          <ScrollingText text={allContent} />
+          <ScrollingText text={allContent.map((line, i) => (
+            <div key={i} style={{backgroundColor:i % 2 !== 0 ? 'transparent' : 'blue'}}>{line}</div>
+          ))} />
         </div>
         {/* <div>
           <button
