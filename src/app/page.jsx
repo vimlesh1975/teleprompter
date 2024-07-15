@@ -75,23 +75,23 @@ export default function Home() {
 
   const fetchAllContent = async (aa, startNumber) => {
     const data1 = new Array(aa.length * 2);
-    const fetchPromises = aa.map((slug, i) => fetch(`/api/script?ScriptID=${slug.ScriptID}`)
-      .then(async (res) => {
-        const data = (await res.json()).data?.Script
-        data1[i * 2] = `${startNumber + 1} ${slug.SlugName}`;
-        data1[i * 2 + 1] = `${data}`;
-        startNumber++;
-      })
-      .catch(error => {
-        console.error('Error fetching content:', error);
-      })
+    const fetchPromises = aa.map((slug, i) =>
+      fetch(`/api/script?ScriptID=${slug.ScriptID}`)
+        .then(async (res) => {
+          const dd = await res.json();
+          const data = dd.data?.Script;
+          data1[i * 2] = `${startNumber+i + 1} ${slug.SlugName}`;
+          data1[i * 2 + 1] = `${data}`;
+          console.log(data1)
+        })
+        .catch((error) => {
+          console.error('Error fetching content:', error);
+        })
     );
 
     await Promise.all(fetchPromises);
-    setAllContent(data1.filter(item => item !== undefined))
+    setAllContent(data1.filter((item) => item !== undefined));
   };
-
-
 
   useEffect(() => {
     var aa;
