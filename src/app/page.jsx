@@ -18,11 +18,47 @@ export default function Home() {
   const [allContent, setAllContent] = useState([]);
   const [newsReaderText, setNewsReaderText] = useState('Continue...');
   const [showClock, setShowClock] = useState(true);
+  const [startPosition, setStartPosition] = useState(150);
+  const [tempSpeed, setTempSpeed] = useState(150);
+
+
 
 
 
   const containerRef = useRef(null);
   const textRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      switch (event.key) {
+        case 'ArrowUp':
+          setSpeed(val => val + 20);
+          break;
+        case 'ArrowDown':
+          setSpeed(val => val - 20);
+          break;
+        case ' ':
+          if (speed === 0) {
+            setSpeed(tempSpeed);
+          }
+          else {
+            setTempSpeed(speed);
+            setSpeed(0);
+          }
+
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [speed, tempSpeed]);
+
 
   // Scroll text effect
   useEffect(() => {
@@ -237,7 +273,7 @@ export default function Home() {
         </div>
         <div>
           <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500, border: '1px solid black' }}>
-           
+
             <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <div>{'Cur:2 (2/32)'}</div>
@@ -246,9 +282,7 @@ export default function Home() {
                 <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
               </div>
             </div>
-            <div style={{ position: 'absolute', top: 60, scale: '0.5, 0.1' }}>
-              <Triangles />
-            </div>
+
 
             <div ref={containerRef} className="scroll-container">
               <div ref={textRef} className="scrolling-text">
@@ -258,6 +292,9 @@ export default function Home() {
                   </div>
                 ))}
               </div>
+            </div>
+            <div style={{ position: 'absolute', top: startPosition, scale: 1 }}>
+              <Triangles />
             </div>
             <div>
               Speed: {speed}

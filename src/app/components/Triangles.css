@@ -1,9 +1,9 @@
   .triangle-equilateral {
     width: 0;
     height: 0;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    border-bottom: 100px solid rgb(255, 0, 34);
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 40px solid rgb(255, 0, 34);
     rotate: 90deg;
   }
   
