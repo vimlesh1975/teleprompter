@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import './components/ScrollingText.css';
-
+import Clock from './components/Clock';
 export default function Home() {
   const [speed, setSpeed] = useState(0);
   const [connected, setConnected] = useState(false);
@@ -14,6 +14,10 @@ export default function Home() {
   const [currentSlugName, setCurrentSlugName] = useState('');
   const [content, setContent] = useState('');
   const [allContent, setAllContent] = useState([]);
+  const [newsReaderText, setNewsReaderText] = useState('Continue...');
+  const [showClock, setShowClock] = useState(true);
+
+
 
   const containerRef = useRef(null);
   const textRef = useRef(null);
@@ -149,7 +153,7 @@ export default function Home() {
               ))}
             </select>
           </div>
-          <div style={{ minWidth: 300, maxHeight: 700, overflow: 'auto' }}>
+          <div style={{ minWidth: 300, maxHeight: '90vh', overflow: 'auto' }}>
             {slugs.map((val, i) => (
               <div
                 key={i}
@@ -167,16 +171,6 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <div>
-            <div>{selectedRunOrderTitle} {currentSlugName}</div>
-            <textarea
-              value={content}
-              rows="25"
-              cols="45"
-              style={{ fontSize: 20 }}
-              disabled
-            />
-          </div>
           <div style={{ textAlign: 'center' }}>
             <button onClick={() => {
               setCurrentSlug(0);
@@ -214,9 +208,43 @@ export default function Home() {
               setScriptID(slugs[lastIndex].ScriptID);
             }}>Go to Last</button>
           </div>
+          <div>
+            <div>
+              <button onClick={() => setNewsReaderText('Go Fast...')}>Go fast</button>
+              <button onClick={() => setNewsReaderText('Wait...')}>Wait</button>
+              <button onClick={() => setNewsReaderText('.')}>Clear</button>
+              <span> Show Clock:</span>{" "} <input checked={showClock} type="checkbox" onChange={()=>setShowClock(!showClock)}/>
+            </div>
+            <div>
+              <button onClick={() => setNewsReaderText('Go Slow...')}>Go Slow</button>
+              <button onClick={() => setNewsReaderText('Continue...')}>Continue...</button>
+              <button onClick={() => setNewsReaderText('Stop...')}>Stop</button>
+            </div>
+          </div>
+          <div>
+            <div style={{ backgroundColor: 'blue', color: 'white' }}>{selectedRunOrderTitle} {currentSlugName}</div>
+            <textarea
+              value={content}
+              rows="15"
+              cols="45"
+              style={{ fontSize: 20 }}
+              disabled
+            />
+          </div>
+
         </div>
         <div>
-          <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500 }}>
+          <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500, border: '1px solid black' }}>
+            <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                <div>{'Cur:2 (2/32)'}</div>
+                <div>{newsReaderText}</div>
+                <div>{showClock?'':'.'}</div>
+                <div style={{display:showClock?'inline':'none'}}><Clock /></div>
+              </div>
+
+            </div>
+
             <div ref={containerRef} className="scroll-container">
               <div ref={textRef} className="scrolling-text">
                 {allContent.map((line, i) => (
