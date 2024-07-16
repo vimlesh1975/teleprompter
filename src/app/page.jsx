@@ -1,8 +1,10 @@
 'use client';
-
 import { useState, useEffect, useRef } from 'react';
 import './components/ScrollingText.css';
-import Clock from './components/Clock';
+import Triangles from './components/Triangles';
+import dynamic from 'next/dynamic';
+const Clock = dynamic(() => import('./components/Clock'), { ssr: false });
+
 export default function Home() {
   const [speed, setSpeed] = useState(0);
   const [connected, setConnected] = useState(false);
@@ -213,7 +215,7 @@ export default function Home() {
               <button onClick={() => setNewsReaderText('Go Fast...')}>Go fast</button>
               <button onClick={() => setNewsReaderText('Wait...')}>Wait</button>
               <button onClick={() => setNewsReaderText('.')}>Clear</button>
-              <span> Show Clock:</span>{" "} <input checked={showClock} type="checkbox" onChange={()=>setShowClock(!showClock)}/>
+              <span> Show Clock:</span>{" "} <input checked={showClock} type="checkbox" onChange={() => setShowClock(!showClock)} />
             </div>
             <div>
               <button onClick={() => setNewsReaderText('Go Slow...')}>Go Slow</button>
@@ -235,14 +237,17 @@ export default function Home() {
         </div>
         <div>
           <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500, border: '1px solid black' }}>
+           
             <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <div>{'Cur:2 (2/32)'}</div>
                 <div>{newsReaderText}</div>
-                <div>{showClock?'':'.'}</div>
-                <div style={{display:showClock?'inline':'none'}}><Clock /></div>
+                <div>{showClock ? '' : '.'}</div>
+                <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
               </div>
-
+            </div>
+            <div style={{ position: 'absolute', top: 60, scale: '0.5, 0.1' }}>
+              <Triangles />
             </div>
 
             <div ref={containerRef} className="scroll-container">
