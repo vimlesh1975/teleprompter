@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import './components/ScrollingText.css';
 import Triangles from './components/Triangles';
 import dynamic from 'next/dynamic';
@@ -20,13 +20,15 @@ export default function Home() {
   const [showClock, setShowClock] = useState(true);
   const [startPosition, setStartPosition] = useState(150);
   const [tempSpeed, setTempSpeed] = useState(150);
-
+  const [loggedPositions, setLoggedPositions] = useState(new Set());
+  const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
 
 
 
 
   const containerRef = useRef(null);
   const textRef = useRef(null);
+  const contentRefs = useRef([]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -60,15 +62,51 @@ export default function Home() {
   }, [speed, tempSpeed]);
 
 
+  const updateCurrentStory = useCallback((curstory, curbulletin) => {
+    // Your API call here
+    fetch('/api/currentStory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ curstory, curbulletin }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, []);
+
   // Scroll text effect
   useEffect(() => {
     let animationFrameId;
 
-    const scrollText = () => {
+    const scrollText = async () => {
       if (textRef.current) {
         const currentTop = textRef.current.offsetTop;
         const newTop = currentTop - (speed / 60); // Assuming 60 frames per second
         textRef.current.style.top = `${newTop}px`;
+
+        // Determine which div is at startPosition
+        const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
+          if (ref) {
+            const rect = ref.getBoundingClientRect();
+            return rect.top <= startPosition - 20 && rect.bottom > startPosition - 20;
+          }
+          return 0
+        });
+
+        if (startPositionDivIndex !== -1) {
+          if (startPositionDivIndex % 3 === 0) {
+            if (!loggedPositions.has(startPositionDivIndex)) {
+              const curstory = (startPositionDivIndex / 3) + 1;
+              setCurrentStoryNumber(curstory);
+              setLoggedPositions((prev) => new Set(prev).add(startPositionDivIndex));
+            }
+          }
+        }
+
       }
       animationFrameId = requestAnimationFrame(scrollText);
     };
@@ -76,6 +114,11 @@ export default function Home() {
     animationFrameId = requestAnimationFrame(scrollText);
     return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
   }, [speed]);
+
+
+  useEffect(() => {
+    updateCurrentStory(currentStoryNumber, selectedRunOrderTitle)
+  }, [currentStoryNumber])
 
   // Handle connection state
   const endpoint = async (str) => {
@@ -172,7 +215,7 @@ export default function Home() {
     fetchAllContent(newSlugs, i);
     setSpeed(0);
     if (textRef.current) {
-      textRef.current.style.top = `${325}px`;
+      textRef.current.style.top = `${startPosition}px`;
     }
   };
 
@@ -276,7 +319,7 @@ export default function Home() {
 
             <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <div>{'Cur:2 (2/32)'}</div>
+                <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs.length})`}</div>
                 <div>{newsReaderText}</div>
                 <div>{showClock ? '' : '.'}</div>
                 <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
@@ -287,7 +330,7 @@ export default function Home() {
             <div ref={containerRef} className="scroll-container">
               <div ref={textRef} className="scrolling-text">
                 {allContent.map((line, i) => (
-                  <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent' }}>
+                  <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent' }}>
                     {line}
                   </div>
                 ))}
