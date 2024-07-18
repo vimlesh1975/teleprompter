@@ -1,8 +1,9 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import './components/ScrollingText.css';
 import Triangles from './components/Triangles';
+import NewWindow from './components/NewWindow';
 import dynamic from 'next/dynamic';
+import Scroll from './components/Scroll';
 const Clock = dynamic(() => import('./components/Clock'), { ssr: false });
 
 export default function Home() {
@@ -22,6 +23,25 @@ export default function Home() {
   const [tempSpeed, setTempSpeed] = useState(150);
   const [loggedPositions, setLoggedPositions] = useState(new Set());
   const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
+  const [showNewWindow, setShowNewWindow] = useState(false);
+
+  const scrollContainerStyle = {
+    position: 'relative',
+    height: '500px',
+    overflow: 'hidden',
+    backgroundColor: '#000',
+    color: '#fff'
+  };
+  const scrollingTextStyle = {
+    position: 'absolute',
+    top: '150px',
+    width: '100%',
+    textAlign: 'left',
+    fontWeight: 'bolder',
+    padding: '0 25px',
+    boxSizing: 'border-box',
+    fontSize: '40px'
+  };
 
 
 
@@ -29,6 +49,12 @@ export default function Home() {
   const containerRef = useRef(null);
   const textRef = useRef(null);
   const contentRefs = useRef([]);
+
+  const handleCloseNewWindow = () => {
+    setShowNewWindow(false);
+  };
+
+
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -315,8 +341,7 @@ export default function Home() {
 
         </div>
         <div>
-          <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500, border: '1px solid black' }}>
-
+          <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 525, minHeight: 525, border: '1px solid black' }}>
             <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs.length})`}</div>
@@ -325,10 +350,8 @@ export default function Home() {
                 <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
               </div>
             </div>
-
-
-            <div ref={containerRef} className="scroll-container">
-              <div ref={textRef} className="scrolling-text">
+            <div ref={containerRef} style={scrollContainerStyle}>
+              <div ref={textRef} style={scrollingTextStyle}>
                 {allContent.map((line, i) => (
                   <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent' }}>
                     {line}
@@ -339,29 +362,40 @@ export default function Home() {
             <div style={{ position: 'absolute', top: startPosition, scale: 1 }}>
               <Triangles />
             </div>
-            <div>
-              Speed: {speed}
-              <input
-                type="range"
-                min={-500}
-                max={500}
-                value={speed}
-                onChange={(e) => setSpeed(e.target.value)}
-                style={{ width: '100%' }}
-              />
-            </div>
-            <div onContextMenu={(e) => {
-              setSpeed(0);
-              e.preventDefault();
-            }}
-              style={{ textAlign: 'center', border: '1px solid red', minHeight: 100 }}>
-              <button onClick={() => setSpeed(-200)}> Speed -200</button>
-              <button onClick={() => setSpeed(0)}> Pause</button>
-              <button onClick={() => setSpeed(200)}> Speed 200</button>
-            </div>
+          </div>
+
+
+          <div onContextMenu={(e) => {
+            setSpeed(0);
+            e.preventDefault();
+          }}
+          // style={{ textAlign: 'center', border: '1px solid red', minHeight: 100 }}
+          >
+
+
+            {showNewWindow && (
+              <NewWindow onClose={handleCloseNewWindow}>
+                <Scroll startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+              </NewWindow>
+            )}
+
+            <button onClick={() => setSpeed(-200)}> Speed -200</button>
+            <button onClick={() => setSpeed(0)}> Pause</button>
+            <button onClick={() => setSpeed(200)}> Speed 200</button>
+            Speed: {speed}
+            <input
+              type="range"
+              min={-500}
+              max={500}
+              value={speed}
+              onChange={(e) => setSpeed(e.target.value)}
+              style={{ width: '60%' }}
+            />
+
+            <button onClick={() => setShowNewWindow(true)}>Open New Window</button>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
