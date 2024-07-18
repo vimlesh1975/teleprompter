@@ -8,7 +8,7 @@ function NewWindow({ children, onClose }) {
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', 'width=600,height=500');
+            newWindowRef.current = window.open('', '', 'width=640,height=555');
         }
 
         // Ensure the window is still available

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import {  useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
@@ -25,11 +25,26 @@ const scrollingTextStyle = {
 };
 
 
-const Scroll = ({ updateCurrentStory, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
-
+const Scroll = ({  startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const containerRef = useRef(null);
     const textRef = useRef(null);
     const contentRefs = useRef([]);
+
+    const updateCurrentStory = useCallback((curstory, curbulletin) => {
+        // Your API call here
+        fetch('/api/currentStory', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ curstory, curbulletin }),
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }, []);
 
     useEffect(() => {
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle)
