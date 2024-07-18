@@ -1,6 +1,6 @@
 'use client';
 
-import {  useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
@@ -25,7 +25,7 @@ const scrollingTextStyle = {
 };
 
 
-const Scroll = ({textRef,  startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const containerRef = useRef(null);
     // const textRef = useRef(null);
     const contentRefs = useRef([]);
@@ -33,18 +33,18 @@ const Scroll = ({textRef,  startPosition, allContent, showClock, speed, loggedPo
     const updateCurrentStory = useCallback((curstory, curbulletin) => {
         // Your API call here
         fetch('/api/currentStory', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ curstory, curbulletin }),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ curstory, curbulletin }),
         })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-      }, []);
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }, []);
 
     useEffect(() => {
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle)
@@ -68,12 +68,14 @@ const Scroll = ({textRef,  startPosition, allContent, showClock, speed, loggedPo
                     }
                     return 0
                 });
+                // console.log(startPositionDivIndex);
 
                 if (startPositionDivIndex !== -1) {
                     if (startPositionDivIndex % 3 === 0) {
                         if (!loggedPositions.has(startPositionDivIndex)) {
-                            const curstory = (startPositionDivIndex / 3) + 1;
+                            const curstory = ((startPositionDivIndex) / 3) + 1 + doubleClickedPosition;
                             setCurrentStoryNumber(curstory);
+                            // setCurrentStoryNumber(val=>val+1);
                             setLoggedPositions((prev) => new Set(prev).add(startPositionDivIndex));
                         }
                     }

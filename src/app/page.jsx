@@ -21,6 +21,8 @@ export default function Home() {
   const [loggedPositions, setLoggedPositions] = useState(new Set());
   const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
   const [showNewWindow, setShowNewWindow] = useState(false);
+  const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
+
 
   const textRef = useRef(null);
 
@@ -150,6 +152,17 @@ export default function Home() {
     const newSlugs = slugs.slice(i);
     fetchAllContent(newSlugs, i);
     setSpeed(0);
+    setCurrentStoryNumber(i + 1);
+
+    // Calculate and update skipped positions
+    const newLoggedPositions = new Set();
+    //  for (let index = 0; index < (i+1) * 3; index += 3) {
+    //    newLoggedPositions.add(index);
+    //  }
+    //  console.log(newLoggedPositions)
+    setLoggedPositions(newLoggedPositions);
+    setDoubleClickedPosition(i);
+
     if (textRef.current) {
       textRef.current.style.top = `${startPosition}px`;
     }
@@ -251,12 +264,12 @@ export default function Home() {
 
         </div>
         <div>
-          {!showNewWindow && <Scroll textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+          {!showNewWindow && <Scroll doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
 
 
           {showNewWindow && (
             <NewWindow onClose={handleCloseNewWindow}>
-              <Scroll textRef={textRef} startPosition={startPosition } allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+              <Scroll doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
             </NewWindow>
           )}
 
