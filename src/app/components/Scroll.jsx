@@ -25,7 +25,7 @@ const scrollingTextStyle = {
 };
 
 
-const Scroll = ({ startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ updateCurrentStory, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
 
     const containerRef = useRef(null);
     const textRef = useRef(null);
@@ -34,21 +34,7 @@ const Scroll = ({ startPosition, allContent, showClock, speed, loggedPositions, 
     useEffect(() => {
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle)
     }, [currentStoryNumber])
-    const updateCurrentStory = useCallback((curstory, curbulletin) => {
-        // Your API call here
-        fetch('/api/currentStory', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ curstory, curbulletin }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }, []);
+
 
     useEffect(() => {
         let animationFrameId;

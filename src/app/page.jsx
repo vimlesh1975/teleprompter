@@ -332,7 +332,7 @@ export default function Home() {
             <div style={{ backgroundColor: 'blue', color: 'white' }}>{selectedRunOrderTitle} {currentSlugName}</div>
             <textarea
               value={content}
-              rows="15"
+              rows="27"
               cols="45"
               style={{ fontSize: 20 }}
               disabled
@@ -375,7 +375,7 @@ export default function Home() {
 
             {showNewWindow && (
               <NewWindow onClose={handleCloseNewWindow}>
-                <Scroll startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+                <Scroll updateCurrentStory={updateCurrentStory} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
               </NewWindow>
             )}
 
