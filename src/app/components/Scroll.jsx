@@ -25,9 +25,9 @@ const scrollingTextStyle = {
 };
 
 
-const Scroll = ({  startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({textRef,  startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const containerRef = useRef(null);
-    const textRef = useRef(null);
+    // const textRef = useRef(null);
     const contentRefs = useRef([]);
 
     const updateCurrentStory = useCallback((curstory, curbulletin) => {
@@ -88,7 +88,7 @@ const Scroll = ({  startPosition, allContent, showClock, speed, loggedPositions,
     }, [speed]);
 
     return (<div>
-        <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 500, minHeight: 500, border: '1px solid black' }}>
+        <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
             <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs.length})`}</div>

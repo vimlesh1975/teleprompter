@@ -251,10 +251,12 @@ export default function Home() {
 
         </div>
         <div>
-          <Scroll  startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+          {!showNewWindow && <Scroll textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+
+
           {showNewWindow && (
             <NewWindow onClose={handleCloseNewWindow}>
-              <Scroll  startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+              <Scroll textRef={textRef} startPosition={startPosition } allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
             </NewWindow>
           )}
 
@@ -262,7 +264,7 @@ export default function Home() {
             setSpeed(0);
             e.preventDefault();
           }}
-            style={{ textAlign: 'center', border: '1px solid red', minHeight: 100, position: 'absolute', top: 600 }}
+            style={{ textAlign: 'center', border: '1px solid red', minHeight: 100, position: 'absolute', top: 535 }}
           >
             <button onClick={() => setSpeed(-200)}> Speed -200</button>
             <button onClick={() => setSpeed(0)}> Pause</button>
