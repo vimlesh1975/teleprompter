@@ -5,6 +5,13 @@ function NewWindow({ children, onClose, newWindowRef }) {
     // const newWindowRef = useRef(null);
     const [container, setContainer] = useState(null);
 
+    const handleTitleBarDoubleClick = () => {
+        console.log('Title bar double-clicked');
+        container.style.transformOrigin = '0 0';
+        container.style.transform = `scale(${newWindowRef.current.screen.width / 600}, ${newWindowRef.current.screen.height / 500} )`;
+    };
+
+
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
@@ -24,8 +31,7 @@ function NewWindow({ children, onClose, newWindowRef }) {
             containerDiv = newWindowRef.current.document.createElement('div');
             containerDiv.setAttribute('id', 'root');
             newWindowRef.current.document.body.appendChild(containerDiv);
-            containerDiv.style.transformOrigin = '0 0';
-            containerDiv.style.transform = `scale(${window.screen.width/600}, ${window.screen.height/500} )`;
+
             newWindowRef.current.document.body.style.overflow = 'hidden';
 
 
@@ -34,13 +40,16 @@ function NewWindow({ children, onClose, newWindowRef }) {
 
         // Add event listener to clean up on close
         newWindowRef.current.addEventListener('beforeunload', onClose);
+        newWindowRef.current.addEventListener('dblclick', handleTitleBarDoubleClick);
+
 
         // Cleanup function
         return () => {
             newWindowRef.current.removeEventListener('beforeunload', onClose);
+            newWindowRef.current.removeEventListener('dblclick', handleTitleBarDoubleClick);
             // Do not close the window here to keep it open for future updates
         };
-    }, [container, onClose]);
+    }, [container, onClose, handleTitleBarDoubleClick]);
 
     // Render the children into the new window's container
     return container ? ReactDOM.createPortal(children, container) : null;

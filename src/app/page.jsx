@@ -170,6 +170,7 @@ export default function Home() {
     }
   };
 
+
   return (
     <div>
       <div style={{ display: 'flex' }}>
@@ -270,7 +271,7 @@ export default function Home() {
 
 
           {showNewWindow && (
-            <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef}>
+            <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} >
               <Scroll newPosition={newPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
             </NewWindow>
           )}
