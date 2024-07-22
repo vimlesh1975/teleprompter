@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-function NewWindow({ children, onClose }) {
-    const newWindowRef = useRef(null);
+function NewWindow({ children, onClose, newWindowRef }) {
+    // const newWindowRef = useRef(null);
     const [container, setContainer] = useState(null);
 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', 'width=640,height=555');
+            newWindowRef.current = window.open('', '', 'width=640,height=555,left:1920');
         }
 
         // Ensure the window is still available

@@ -13,19 +13,20 @@ const scrollContainerStyle = {
     backgroundColor: '#000',
     color: '#fff'
 };
-const scrollingTextStyle = {
-    position: 'absolute',
-    top: '150px',
-    width: '100%',
-    textAlign: 'left',
-    fontWeight: 'bolder',
-    padding: '0 25px',
-    boxSizing: 'border-box',
-    fontSize: '40px'
-};
 
 
-const Scroll = ({ doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+    const scrollingTextStyle = {
+        position: 'absolute',
+        top: newPosition,
+        width: '100%',
+        textAlign: 'left',
+        fontWeight: 'bolder',
+        padding: '0 25px',
+        boxSizing: 'border-box',
+        fontSize: '40px'
+    };
+    
     const containerRef = useRef(null);
     // const textRef = useRef(null);
     const contentRefs = useRef([]);
@@ -39,7 +40,7 @@ const Scroll = ({ doubleClickedPosition, textRef, startPosition, allContent, sho
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                // console.log('Success:', data);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -48,8 +49,7 @@ const Scroll = ({ doubleClickedPosition, textRef, startPosition, allContent, sho
 
     useEffect(() => {
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle)
-    }, [currentStoryNumber])
-
+    }, [currentStoryNumber, selectedRunOrderTitle])
 
     useEffect(() => {
         let animationFrameId;

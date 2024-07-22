@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import NewWindow from './components/NewWindow';
 import Scroll from './components/Scroll';
 
+const startPosition = 150;
 export default function Home() {
   const [speed, setSpeed] = useState(0);
   const [connected, setConnected] = useState(false);
@@ -16,12 +17,13 @@ export default function Home() {
   const [allContent, setAllContent] = useState([]);
   const [newsReaderText, setNewsReaderText] = useState('Continue...');
   const [showClock, setShowClock] = useState(true);
-  const [startPosition, setStartPosition] = useState(150);
+  const [newPosition, setNewPosition] = useState(startPosition);
   const [tempSpeed, setTempSpeed] = useState(150);
   const [loggedPositions, setLoggedPositions] = useState(new Set());
   const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
+  const newWindowRef = useRef(null);
 
 
   const textRef = useRef(null);
@@ -264,12 +266,12 @@ export default function Home() {
 
         </div>
         <div>
-          {!showNewWindow && <Scroll doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+          {!showNewWindow && <Scroll newPosition={newPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
 
 
           {showNewWindow && (
-            <NewWindow onClose={handleCloseNewWindow}>
-              <Scroll doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+            <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef}>
+              <Scroll newPosition={newPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
             </NewWindow>
           )}
 
@@ -291,7 +293,13 @@ export default function Home() {
               onChange={(e) => setSpeed(e.target.value)}
               style={{ width: '60%' }}
             />
-            <button onClick={() => setShowNewWindow(true)}>Open New Window</button>
+            <button onClick={() => {
+              if (showNewWindow) {
+                newWindowRef.current.close();
+              }
+              setNewPosition(textRef.current.offsetTop)
+              setShowNewWindow(!showNewWindow);
+            }}>{showNewWindow ? 'Close New Window' : 'Open New Window'}</button>
           </div>
         </div>
       </div>
