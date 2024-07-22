@@ -8,7 +8,7 @@ function NewWindow({ children, onClose, newWindowRef }) {
     const handleTitleBarDoubleClick = () => {
         console.log('Title bar double-clicked');
         container.style.transformOrigin = '0 0';
-        container.style.transform = `scale(${newWindowRef.current.screen.width / 600}, ${newWindowRef.current.screen.height / 500} )`;
+        container.style.transform = `scale(${newWindowRef.current.screen.width / 600}, ${newWindowRef.current.screen.height / 522} )`;
     };
 
 
