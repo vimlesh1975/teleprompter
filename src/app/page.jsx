@@ -2,6 +2,9 @@
 import { useState, useEffect, useRef } from 'react';
 import NewWindow from './components/NewWindow';
 import Scroll from './components/Scroll';
+import io from 'socket.io-client';
+
+import Casparcg from './Casparcg';
 
 const startPosition = 150;
 export default function Home() {
@@ -23,6 +26,7 @@ export default function Home() {
   const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
+
   const newWindowRef = useRef(null);
 
 
@@ -31,6 +35,20 @@ export default function Home() {
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
   };
+
+  useEffect(() => {
+    const socket = io();
+    socket.on('connect', () => {
+      console.log('SOCKET CONNECTED!', socket.id);
+    });
+    socket.on('ServerConnectionStatus', (msg) => {
+      console.log(msg)
+      setConnected(msg);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [])
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -303,6 +321,8 @@ export default function Home() {
             }}>{showNewWindow ? 'Close New Window' : 'Open New Window'}</button>
           </div>
         </div>
+        <Casparcg />
+
       </div>
     </div >
   );
