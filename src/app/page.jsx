@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef , useCallback} from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import NewWindow from './components/NewWindow';
 import Scroll from './components/Scroll';
 import io from 'socket.io-client';
@@ -35,29 +35,30 @@ export default function Home() {
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
   };
+  const next1 = () => {
+    let newIndex = 10;
+    console.log(slugs.length)
+    newIndex++;
+    // if (newIndex >= slugs.length) {
+    //   newIndex = 0;
+    // }
 
-  useEffect(() => {
-    const socket = io();
-    socket.on('connect', () => {
-      console.log('SOCKET CONNECTED!', socket.id);
-    });
-    const handleButtonDown = debounce((msg) => {
-      if (msg === 14) {
-        console.log(msg);
-        previous();
-      } else if (msg === 15) {
-        console.log(msg);
-        next();
-      }
-    }, 300); // Debounce with 300ms delay
+    console.log(newIndex)
+    // setCurrentSlug((prevSlug) => {
+    //   let newIndex = prevSlug + 1;
+    //   if (newIndex >= slugs.length) {
+    //     newIndex = 0;
+    //   }
+    //   console.log("Inside setCurrentSlug:", newIndex);
+    //   setCurrentSlugName(slugs[newIndex].SlugName);
+    //   setScriptID(slugs[newIndex].ScriptID);
+    //   handleDoubleClick(newIndex);
+    //   return newIndex;
+    // });
+  };
 
-    socket.on('buttondown1', handleButtonDown);
 
-    return () => {
-      socket.off('buttondown1', handleButtonDown);
-      socket.disconnect();
-    };
-  }, [])
+
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -210,7 +211,29 @@ export default function Home() {
       return newIndex;
     });
   }, [slugs, handleDoubleClick]);
+  useEffect(() => {
+    const socket = io();
+    socket.on('connect', () => {
+      console.log('SOCKET CONNECTED!', socket.id);
+    });
+    const handleButtonDown = debounce((msg) => {
+      if (msg === 14) {
+        console.log(msg);
+        previous();
+      } else if (msg === 15) {
+        // console.log(msg);
+        next();
+        // console.log(slugs.length)
+      }
+    }, 300); // Debounce with 300ms delay
 
+    socket.on('buttondown1', handleButtonDown);
+
+    return () => {
+      socket.off('buttondown1', handleButtonDown);
+      socket.disconnect();
+    };
+  }, [next, previous])
 
   return (
     <div>
@@ -327,7 +350,13 @@ export default function Home() {
           </div>
         </div>
         <Casparcg />
+        <button onClick={() => {
+          // next1()
+          console.log(slugs.length)
+        }
 
+        }
+        >test</button>
       </div>
     </div >
   );
