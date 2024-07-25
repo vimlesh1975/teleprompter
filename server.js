@@ -45,8 +45,8 @@ app.prepare().then(async () => {
     });
 
         socket.on('ServerConnectionStatus', (data) => {
-            console.log('Received from API ::', data);
-            socket.emit('ServerConnectionStatus', data);
+            // console.log('Received from API ::', data);
+            io.emit('ServerConnectionStatus2', data);
         });
 
         const shuttle = require('shuttle-control-usb');

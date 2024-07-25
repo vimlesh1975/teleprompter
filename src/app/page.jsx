@@ -10,7 +10,6 @@ import Casparcg from './Casparcg';
 const startPosition = 150;
 export default function Home() {
   const [speed, setSpeed] = useState(0);
-  const [connected, setConnected] = useState(false);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState('');
   const [slugs, setSlugs] = useState([]);
@@ -42,11 +41,6 @@ export default function Home() {
     socket.on('connect', () => {
       console.log('SOCKET CONNECTED!', socket.id);
     });
-    socket.on('ServerConnectionStatus', (msg) => {
-      console.log(msg)
-      setConnected(msg);
-    });
-
     const handleButtonDown = debounce((msg) => {
       if (msg === 14) {
         console.log(msg);
@@ -93,18 +87,6 @@ export default function Home() {
     };
   }, [speed, tempSpeed]);
 
-  // Handle connection state
-  const endpoint = async (str) => {
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(str),
-    };
-    const response = await fetch('/api', requestOptions);
-    if (str.action === 'connect' || str.action === 'disconnect') {
-      setConnected(await response.json());
-    }
-  };
 
   // Fetch run order titles on component mount
   useEffect(() => {
