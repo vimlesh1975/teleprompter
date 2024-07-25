@@ -1,8 +1,9 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef , useCallback} from 'react';
 import NewWindow from './components/NewWindow';
 import Scroll from './components/Scroll';
 import io from 'socket.io-client';
+import debounce from 'lodash.debounce'; // Importing debounce from lodash
 
 import Casparcg from './Casparcg';
 
@@ -45,7 +46,21 @@ export default function Home() {
       console.log(msg)
       setConnected(msg);
     });
+
+    const handleButtonDown = debounce((msg) => {
+      if (msg === 14) {
+        console.log(msg);
+        previous();
+      } else if (msg === 15) {
+        console.log(msg);
+        next();
+      }
+    }, 300); // Debounce with 300ms delay
+
+    socket.on('buttondown1', handleButtonDown);
+
     return () => {
+      socket.off('buttondown1', handleButtonDown);
       socket.disconnect();
     };
   }, [])
@@ -187,6 +202,32 @@ export default function Home() {
       textRef.current.style.top = `${startPosition}px`;
     }
   };
+  const previous = () => {
+    setCurrentSlug((prevSlug) => {
+      let newIndex = prevSlug - 1;
+      if (newIndex < 0) {
+        newIndex = slugs.length - 1;
+      }
+      handleDoubleClick(newIndex);
+      setCurrentSlugName(slugs[newIndex].SlugName);
+      setScriptID(slugs[newIndex].ScriptID);
+      return newIndex;
+    });
+  };
+
+  const next = useCallback(() => {
+    setCurrentSlug((prevSlug) => {
+      let newIndex = prevSlug + 1;
+      if (newIndex >= slugs.length) {
+        newIndex = 0;
+      }
+      console.log("Inside setCurrentSlug:", newIndex);
+      setCurrentSlugName(slugs[newIndex].SlugName);
+      setScriptID(slugs[newIndex].ScriptID);
+      handleDoubleClick(newIndex);
+      return newIndex;
+    });
+  }, [slugs, handleDoubleClick]);
 
 
   return (
@@ -231,26 +272,8 @@ export default function Home() {
                 setScriptID(slugs[0].ScriptID);
               }
             }}>From Start</button>
-            <button onClick={() => {
-              let newIndex = currentSlug - 1;
-              if (newIndex < 0) {
-                newIndex = slugs.length - 1;
-              }
-              setCurrentSlug(newIndex);
-              handleDoubleClick(newIndex);
-              setCurrentSlugName(slugs[newIndex].SlugName);
-              setScriptID(slugs[newIndex].ScriptID);
-            }}>Previous</button>
-            <button onClick={() => {
-              let newIndex = currentSlug + 1;
-              if (newIndex >= slugs.length) {
-                newIndex = 0;
-              }
-              setCurrentSlug(newIndex);
-              handleDoubleClick(newIndex);
-              setCurrentSlugName(slugs[newIndex].SlugName);
-              setScriptID(slugs[newIndex].ScriptID);
-            }}>Next</button>
+            <button onClick={previous}>Previous</button>
+            <button onClick={next}>Next</button>
             <button onClick={() => {
               const lastIndex = slugs.length - 1;
               setCurrentSlug(lastIndex);
