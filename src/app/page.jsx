@@ -266,13 +266,33 @@ export default function Home() {
       }
     }, 300); // Debounce with 300ms delay
 
+    const handleJogdir = debounce((msg) => {
+      console.log(msg)
+      if (msg === 1) {
+        setSpeed(2)
+      }
+      else if (msg === -1) {
+        setSpeed(-2)
+      }
+    }, 300); // Debounce with 300ms delay
+
+    const handleShuttle = debounce((msg)  => {
+      console.log(msg)
+      setSpeed(msg)
+    }, 300); // Debounce with 300ms delay
+
+
     socket.on('buttondown1', handleButtonDown);
+    socket.on('jog-dir1', handleJogdir);
+    socket.on('shuttle1', handleShuttle);
 
     return () => {
       socket.off('buttondown1', handleButtonDown);
+      socket.off('jog-dir1', handleJogdir);
+      socket.off('shuttle1', handleShuttle);
       socket.disconnect();
     };
-  }, [next, previous, setSpeed,fromStart])
+  }, [next, previous, setSpeed, fromStart])
 
   return (
     <div>
@@ -309,7 +329,7 @@ export default function Home() {
         <div>
           <div style={{ textAlign: 'center' }}>
             <button onClick={() => {
-             fromStart()
+              fromStart()
             }}>From Start</button>
             <button onClick={previous}>Previous</button>
             <button onClick={next}>Next</button>
