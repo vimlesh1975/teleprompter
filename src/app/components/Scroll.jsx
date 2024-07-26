@@ -28,8 +28,8 @@ const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, al
     };
     
     const containerRef = useRef(null);
-    // const textRef = useRef(null);
     const contentRefs = useRef([]);
+    const preciseTopRef = useRef(newPosition); // To store precise top position
 
     const updateCurrentStory = useCallback((curstory, curbulletin) => {
         // Your API call here
@@ -49,22 +49,22 @@ const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, al
 
     useEffect(() => {
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle)
-    }, [currentStoryNumber, selectedRunOrderTitle])
+    }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory])
 
     useEffect(() => {
         let animationFrameId;
 
         const scrollText = async () => {
             if (textRef.current) {
-                const currentTop = textRef.current.offsetTop;
-                const newTop = currentTop - (speed / 60); // Assuming 60 frames per second
-                textRef.current.style.top = `${newTop}px`;
+                preciseTopRef.current -= (speed / 60); // Assuming 60 frames per second
+                // Set the top position using precise value
+                textRef.current.style.top = `${preciseTopRef.current}px`;
 
                 // Determine which div is at startPosition
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
                     if (ref) {
                         const rect = ref.getBoundingClientRect();
-                        return rect.top <= startPosition - 20 && rect.bottom > startPosition - 20;
+                        return rect.top <= startPosition && rect.bottom > startPosition;
                     }
                     return 0
                 });
@@ -87,7 +87,7 @@ const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, al
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [speed]);
+    }, [speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, setCurrentStoryNumber, textRef]);
 
     return (<div>
         <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
