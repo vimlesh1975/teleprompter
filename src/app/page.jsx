@@ -185,6 +185,15 @@ export default function Home() {
       textRef.current.style.top = `${startPosition}px`;
     }
   };
+  const fromStart = () => {
+    setCurrentSlug(0);
+    handleDoubleClick(0);
+    if (slugs.length > 0) {
+      setCurrentSlugName(slugs[0].SlugName);
+      setScriptID(slugs[0].ScriptID);
+    }
+  }
+
   const previous = () => {
     setCurrentSlug((prevSlug) => {
       let newIndex = prevSlug - 1;
@@ -218,15 +227,42 @@ export default function Home() {
     });
     const handleButtonDown = debounce((msg) => {
       console.log(msg)
-      if (msg === 14) {
-        previous();
-      } 
-      else if (msg === 1) {
+      if (msg === 1) {
         setSpeed(0)
+      }
+      else if (msg === 2) {
+        setSpeed(-3)
+      }
+      else if (msg === 3) {
+        setSpeed(val => val - 1)
+      }
+      else if (msg === 4) {
+        fromStart();
+      } else if (msg === 5) {
+        setSpeed(1);
+      } else if (msg === 6) {
+        setSpeed(2)
+      } else if (msg === 7) {
+        setSpeed(3)
+      } else if (msg === 8) {
+        setSpeed(4)
+      } else if (msg === 9) {
+        setSpeed(5)
+      } else if (msg === 10) {
+        // setSpeed(0)
+      } else if (msg === 11) {
+        // setSpeed(0)
+      } else if (msg === 12) {
+        // setSpeed(0)
+      }
+      else if (msg === 13) {
+        // setSpeed(0)
+      }
+      else if (msg === 14) {
+        previous();
       }
       else if (msg === 15) {
         next();
-        // console.log(slugs.length)
       }
     }, 300); // Debounce with 300ms delay
 
@@ -236,7 +272,7 @@ export default function Home() {
       socket.off('buttondown1', handleButtonDown);
       socket.disconnect();
     };
-  }, [next, previous])
+  }, [next, previous, setSpeed,fromStart])
 
   return (
     <div>
@@ -273,12 +309,7 @@ export default function Home() {
         <div>
           <div style={{ textAlign: 'center' }}>
             <button onClick={() => {
-              setCurrentSlug(0);
-              handleDoubleClick(0);
-              if (slugs.length > 0) {
-                setCurrentSlugName(slugs[0].SlugName);
-                setScriptID(slugs[0].ScriptID);
-              }
+             fromStart()
             }}>From Start</button>
             <button onClick={previous}>Previous</button>
             <button onClick={next}>Next</button>
