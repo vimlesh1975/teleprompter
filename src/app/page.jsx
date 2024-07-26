@@ -217,11 +217,14 @@ export default function Home() {
       console.log('SOCKET CONNECTED!', socket.id);
     });
     const handleButtonDown = debounce((msg) => {
+      console.log(msg)
       if (msg === 14) {
-        console.log(msg);
         previous();
-      } else if (msg === 15) {
-        // console.log(msg);
+      } 
+      else if (msg === 1) {
+        setSpeed(0)
+      }
+      else if (msg === 15) {
         next();
         // console.log(slugs.length)
       }
