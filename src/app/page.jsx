@@ -35,29 +35,15 @@ export default function Home() {
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
   };
-  const next1 = () => {
-    let newIndex = 10;
-    console.log(slugs.length)
-    newIndex++;
-    // if (newIndex >= slugs.length) {
-    //   newIndex = 0;
-    // }
-
-    console.log(newIndex)
-    // setCurrentSlug((prevSlug) => {
-    //   let newIndex = prevSlug + 1;
-    //   if (newIndex >= slugs.length) {
-    //     newIndex = 0;
-    //   }
-    //   console.log("Inside setCurrentSlug:", newIndex);
-    //   setCurrentSlugName(slugs[newIndex].SlugName);
-    //   setScriptID(slugs[newIndex].ScriptID);
-    //   handleDoubleClick(newIndex);
-    //   return newIndex;
-    // });
-  };
 
 
+  const onclickSlug=(val, i)=>{
+    if (i < slugs.length) {
+      setScriptID(val.ScriptID);
+      setCurrentSlug(i);
+      setCurrentSlugName(val.SlugName);
+    }
+  }
 
 
   useEffect(() => {
@@ -167,22 +153,17 @@ export default function Home() {
 
   // Handle double-click event
   const handleDoubleClick = (i) => {
-    const newSlugs = slugs.slice(i);
-    fetchAllContent(newSlugs, i);
-    setSpeed(0);
-    setCurrentStoryNumber(i + 1);
-
-    // Calculate and update skipped positions
-    const newLoggedPositions = new Set();
-    //  for (let index = 0; index < (i+1) * 3; index += 3) {
-    //    newLoggedPositions.add(index);
-    //  }
-    //  console.log(newLoggedPositions)
-    setLoggedPositions(newLoggedPositions);
-    setDoubleClickedPosition(i);
-
-    if (textRef.current) {
-      textRef.current.style.top = `${startPosition}px`;
+    if (i < slugs.length) {
+      const newSlugs = slugs.slice(i);
+      fetchAllContent(newSlugs, i);
+      setSpeed(0);
+      setCurrentStoryNumber(i + 1);
+      const newLoggedPositions = new Set();
+      setLoggedPositions(newLoggedPositions);
+      setDoubleClickedPosition(i);
+      if (textRef.current) {
+        textRef.current.style.top = `${startPosition}px`;
+      }
     }
   };
   const fromStart = () => {
@@ -249,14 +230,18 @@ export default function Home() {
       } else if (msg === 9) {
         setSpeed(5)
       } else if (msg === 10) {
-        // setSpeed(0)
+        onclickSlug(slugs[9], 9);
+        handleDoubleClick(9);
       } else if (msg === 11) {
-        // setSpeed(0)
+        onclickSlug(slugs[19], 19);
+        handleDoubleClick(19);
       } else if (msg === 12) {
-        // setSpeed(0)
+        onclickSlug(slugs[29], 29);
+        handleDoubleClick(29);
       }
       else if (msg === 13) {
-        // setSpeed(0)
+        onclickSlug(slugs[39], 39);
+        handleDoubleClick(39);
       }
       else if (msg === 14) {
         previous();
@@ -276,7 +261,7 @@ export default function Home() {
       }
     }, 300); // Debounce with 300ms delay
 
-    const handleShuttle = debounce((msg)  => {
+    const handleShuttle = debounce((msg) => {
       console.log(msg)
       setSpeed(msg)
     }, 300); // Debounce with 300ms delay
@@ -292,7 +277,9 @@ export default function Home() {
       socket.off('shuttle1', handleShuttle);
       socket.disconnect();
     };
-  }, [next, previous, setSpeed, fromStart])
+  }, [next, previous, setSpeed, fromStart, handleDoubleClick,slugs,onclickSlug])
+
+
 
   return (
     <div>
@@ -314,9 +301,11 @@ export default function Home() {
               <div
                 key={i}
                 onClick={() => {
-                  setScriptID(val.ScriptID);
-                  setCurrentSlug(i);
-                  setCurrentSlugName(val.SlugName);
+                  // setScriptID(val.ScriptID);
+                  // setCurrentSlug(i);
+                  // setCurrentSlugName(val.SlugName);
+
+                  onclickSlug(val,i)
                 }}
                 onDoubleClick={() => handleDoubleClick(i)}
                 style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}
