@@ -97,7 +97,7 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
                 <div ref={containerRef} style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>
                         {allContent.map((line, i) => (
-                            <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent' }}>
+                            <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent',  color: i % 3 === 0 ? 'yellow' : 'white' }}>
                                 {line}
                             </div>
                         ))}
