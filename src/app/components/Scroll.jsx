@@ -14,7 +14,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({ newPosition,setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const scrollingTextStyle = {
         position: 'absolute',
         top: newPosition,
@@ -70,6 +70,7 @@ const Scroll = ({ newPosition,setNewPosition, doubleClickedPosition, textRef, st
                         if (!loggedPositions.has(startPositionDivIndex)) {
                             const curstory = ((startPositionDivIndex) / 3) + 1 + doubleClickedPosition;
                             setCurrentStoryNumber(curstory);
+                            setCurrentSlug(curstory-1);
                             setLoggedPositions((prev) => new Set(prev).add(startPositionDivIndex));
                         }
                     }
