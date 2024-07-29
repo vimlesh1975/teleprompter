@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
@@ -23,12 +23,12 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
         fontWeight: 'bolder',
         padding: '0 25px',
         boxSizing: 'border-box',
-        fontSize: '40px'
+        whiteSpace: 'pre-wrap' ,
+        fontSize: '39px'
     };
     
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
-    // const [top, setTop] = useState(newPosition);
 
     const updateCurrentStory = useCallback((curstory, curbulletin) => {
         fetch('/api/currentStory', {
@@ -54,7 +54,7 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
 
         const scrollText = async () => {
             if (textRef.current) {
-                setNewPosition(prevTop => prevTop - (speed / 60));
+                setNewPosition(prevTop => prevTop - (speed/9.2));
 
                 // Determine which div is at startPosition
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
@@ -83,12 +83,6 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
     }, [speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, setCurrentStoryNumber, textRef]);
 
-    // useEffect(() => {
-    //     if (textRef.current) {
-    //         textRef.current.style.top = `${newPosition}px`;
-    //     }
-    // }, [newPosition]);
-
     return (
         <div>
             <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
@@ -109,7 +103,7 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
                         ))}
                     </div>
                 </div>
-                <div style={{ position: 'absolute', top: startPosition, scale: 1 }}>
+                <div style={{ position: 'absolute', top: startPosition+15, scale: 1 }}>
                     <Triangles />
                 </div>
             </div>

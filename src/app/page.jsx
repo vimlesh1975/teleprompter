@@ -378,14 +378,14 @@ useEffect(()=>{
           }}
             style={{ textAlign: 'center', border: '1px solid red', minHeight: 100, position: 'absolute', top: 535 }}
           >
-            <button onClick={() => setSpeed(-200)}> Speed -200</button>
+            <button onClick={() => setSpeed(-7)}> Speed -7</button>
             <button onClick={() => setSpeed(0)}> Pause</button>
-            <button onClick={() => setSpeed(200)}> Speed 200</button>
+            <button onClick={() => setSpeed(7)}> Speed 7</button>
             Speed: {speed}
             <input
               type="range"
-              min={-500}
-              max={500}
+              min={-20}
+              max={20}
               value={speed}
               onChange={(e) => setSpeed(e.target.value)}
               style={{ width: '60%' }}
