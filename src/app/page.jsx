@@ -31,13 +31,14 @@ export default function Home() {
 
 
   const textRef = useRef(null);
+  const socketRef = useRef(null);
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
   };
 
 
-  const onclickSlug=(val, i)=>{
+  const onclickSlug = (val, i) => {
     if (i < slugs.length) {
       setScriptID(val.ScriptID);
       setCurrentSlug(i);
@@ -161,9 +162,7 @@ export default function Home() {
       const newLoggedPositions = new Set();
       setLoggedPositions(newLoggedPositions);
       setDoubleClickedPosition(i);
-      if (textRef.current) {
-        textRef.current.style.top = `${startPosition}px`;
-      }
+      setNewPosition(startPosition);
     }
   };
   const fromStart = () => {
@@ -201,86 +200,103 @@ export default function Home() {
       return newIndex;
     });
   }, [slugs, handleDoubleClick]);
-  useEffect(() => {
-    const socket = io();
-    socket.on('connect', () => {
-      console.log('SOCKET CONNECTED!', socket.id);
-    });
-    const handleButtonDown = debounce((msg) => {
-      console.log(msg)
-      if (msg === 1) {
-        setSpeed(0)
-      }
-      else if (msg === 2) {
-        setSpeed(-3)
-      }
-      else if (msg === 3) {
-        setSpeed(val => val - 1)
-      }
-      else if (msg === 4) {
+  const handleButtonDown = useCallback(debounce((msg) => {
+    console.log(msg);
+    switch (msg) {
+      case 1:
+        setSpeed(0);
+        break;
+      case 2:
+        setSpeed(-3);
+        break;
+      case 3:
+        setSpeed(val => val - 1);
+        break;
+      case 4:
         fromStart();
-      } else if (msg === 5) {
+        break;
+      case 5:
         setSpeed(1);
-      } else if (msg === 6) {
-        setSpeed(2)
-      } else if (msg === 7) {
-        setSpeed(3)
-      } else if (msg === 8) {
-        setSpeed(4)
-      } else if (msg === 9) {
-        setSpeed(5)
-      } else if (msg === 10) {
+        break;
+      case 6:
+        setSpeed(2);
+        break;
+      case 7:
+        setSpeed(3);
+        break;
+      case 8:
+        setSpeed(4);
+        break;
+      case 9:
+        setSpeed(5);
+        break;
+      case 10:
         onclickSlug(slugs[9], 9);
         handleDoubleClick(9);
-      } else if (msg === 11) {
+        break;
+      case 11:
         onclickSlug(slugs[19], 19);
         handleDoubleClick(19);
-      } else if (msg === 12) {
+        break;
+      case 12:
         onclickSlug(slugs[29], 29);
         handleDoubleClick(29);
-      }
-      else if (msg === 13) {
+        break;
+      case 13:
         onclickSlug(slugs[39], 39);
         handleDoubleClick(39);
-      }
-      else if (msg === 14) {
+        break;
+      case 14:
         previous();
-      }
-      else if (msg === 15) {
+        break;
+      case 15:
         next();
-      }
-    }, 300); // Debounce with 300ms delay
+        break;
+      default:
+        break;
+    }
+  }, 300), [setSpeed, fromStart, onclickSlug, handleDoubleClick, slugs, previous, next]);
 
-    const handleJogdir = debounce((msg) => {
-      console.log(msg)
-      if (msg === 1) {
-        setSpeed(2)
-      }
-      else if (msg === -1) {
-        setSpeed(-2)
-      }
-    }, 300); // Debounce with 300ms delay
+  const handleJogdir = useCallback(debounce((msg) => {
+    console.log(msg);
+    if (msg === 1) {
+      setSpeed(2);
+    } else if (msg === -1) {
+      setSpeed(-2);
+    }
+  }, 300), [setSpeed]);
 
-    const handleShuttle = debounce((msg) => {
-      console.log(msg)
-      setSpeed(msg)
-    }, 300); // Debounce with 300ms delay
+  const handleShuttle = useCallback(debounce((msg) => {
+    console.log(msg);
+    setSpeed(msg);
+  }, 300), [setSpeed]);
 
+  useEffect(() => {
+    if (!socketRef.current) {
+      const socket = io();
+      socketRef.current = socket;
 
-    socket.on('buttondown1', handleButtonDown);
-    socket.on('jog-dir1', handleJogdir);
-    socket.on('shuttle1', handleShuttle);
+      socket.on('connect', () => {
+        console.log('SOCKET CONNECTED!', socket.id);
+      });
+      socket.on('disconnect', () => {
+        socket.off('buttondown1', handleButtonDown);
+        socket.off('jog-dir1', handleJogdir);
+        socket.off('shuttle1', handleShuttle);
+      });
 
-    return () => {
-      socket.off('buttondown1', handleButtonDown);
-      socket.off('jog-dir1', handleJogdir);
-      socket.off('shuttle1', handleShuttle);
-      socket.disconnect();
-    };
-  }, [next, previous, setSpeed, fromStart, handleDoubleClick,slugs,onclickSlug])
+      socket.on('buttondown1', handleButtonDown);
+      socket.on('jog-dir1', handleJogdir);
+      socket.on('shuttle1', handleShuttle);
 
-
-
+      return () => {
+        if (socketRef.current) {
+          socketRef.current.disconnect();
+          socketRef.current = null;
+        }
+      };
+    }
+  }, [handleButtonDown, handleJogdir, handleShuttle]);
   return (
     <div>
       <div style={{ display: 'flex' }}>
@@ -305,7 +321,7 @@ export default function Home() {
                   // setCurrentSlug(i);
                   // setCurrentSlugName(val.SlugName);
 
-                  onclickSlug(val,i)
+                  onclickSlug(val, i)
                 }}
                 onDoubleClick={() => handleDoubleClick(i)}
                 style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}
@@ -356,12 +372,12 @@ export default function Home() {
 
         </div>
         <div>
-          {!showNewWindow && <Scroll newPosition={newPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+          {!showNewWindow && <Scroll newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
 
 
           {showNewWindow && (
             <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} >
-              <Scroll newPosition={newPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+              <Scroll newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
             </NewWindow>
           )}
 
@@ -392,7 +408,7 @@ export default function Home() {
             }}>{showNewWindow ? 'Close New Window' : 'Open New Window'}</button>
           </div>
         </div>
-        <Casparcg />
+        {/* <Casparcg /> */}
         <button onClick={() => {
           // next1()
           console.log(slugs.length)

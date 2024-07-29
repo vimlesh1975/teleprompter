@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
@@ -14,8 +14,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-
-const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ newPosition,setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const scrollingTextStyle = {
         position: 'absolute',
         top: newPosition,
@@ -29,10 +28,9 @@ const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, al
     
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
-    const preciseTopRef = useRef(newPosition); // To store precise top position
+    // const [top, setTop] = useState(newPosition);
 
     const updateCurrentStory = useCallback((curstory, curbulletin) => {
-        // Your API call here
         fetch('/api/currentStory', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -48,17 +46,15 @@ const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, al
     }, []);
 
     useEffect(() => {
-        updateCurrentStory(currentStoryNumber, selectedRunOrderTitle)
-    }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory])
+        updateCurrentStory(currentStoryNumber, selectedRunOrderTitle);
+    }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory]);
 
     useEffect(() => {
         let animationFrameId;
 
         const scrollText = async () => {
             if (textRef.current) {
-                preciseTopRef.current -= (speed / 60); // Assuming 60 frames per second
-                // Set the top position using precise value
-                textRef.current.style.top = `${preciseTopRef.current}px`;
+                setNewPosition(prevTop => prevTop - (speed / 60));
 
                 // Determine which div is at startPosition
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
@@ -66,21 +62,18 @@ const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, al
                         const rect = ref.getBoundingClientRect();
                         return rect.top <= startPosition && rect.bottom > startPosition;
                     }
-                    return 0
+                    return 0;
                 });
-                // console.log(startPositionDivIndex);
 
                 if (startPositionDivIndex !== -1) {
                     if (startPositionDivIndex % 3 === 0) {
                         if (!loggedPositions.has(startPositionDivIndex)) {
                             const curstory = ((startPositionDivIndex) / 3) + 1 + doubleClickedPosition;
                             setCurrentStoryNumber(curstory);
-                            // setCurrentStoryNumber(val=>val+1);
                             setLoggedPositions((prev) => new Set(prev).add(startPositionDivIndex));
                         }
                     }
                 }
-
             }
             animationFrameId = requestAnimationFrame(scrollText);
         };
@@ -89,31 +82,38 @@ const Scroll = ({ newPosition, doubleClickedPosition, textRef, startPosition, al
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
     }, [speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, setCurrentStoryNumber, textRef]);
 
-    return (<div>
-        <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
-            <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs.length})`}</div>
-                    <div>{newsReaderText}</div>
-                    <div>{showClock ? '' : '.'}</div>
-                    <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
+    // useEffect(() => {
+    //     if (textRef.current) {
+    //         textRef.current.style.top = `${newPosition}px`;
+    //     }
+    // }, [newPosition]);
+
+    return (
+        <div>
+            <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
+                <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                        <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs.length})`}</div>
+                        <div>{newsReaderText}</div>
+                        <div>{showClock ? '' : '.'}</div>
+                        <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
+                    </div>
                 </div>
-            </div>
-            <div ref={containerRef} style={scrollContainerStyle}>
-                <div ref={textRef} style={scrollingTextStyle}>
-                    {allContent.map((line, i) => (
-                        <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent' }}>
-                            {line}
-                        </div>
-                    ))}
+                <div ref={containerRef} style={scrollContainerStyle}>
+                    <div ref={textRef} style={scrollingTextStyle}>
+                        {allContent.map((line, i) => (
+                            <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent' }}>
+                                {line}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
-            <div style={{ position: 'absolute', top: startPosition, scale: 1 }}>
-                <Triangles />
+                <div style={{ position: 'absolute', top: startPosition, scale: 1 }}>
+                    <Triangles />
+                </div>
             </div>
         </div>
+    );
+};
 
-    </div>)
-}
-
-export default Scroll
+export default Scroll;
