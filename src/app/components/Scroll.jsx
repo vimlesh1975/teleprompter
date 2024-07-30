@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
@@ -24,11 +24,13 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         padding: '0 25px',
         boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
-        fontSize: parseInt(fontSize)
+        fontSize: parseInt(fontSize),
+        lineHeight: `${fontSize*1.3 }px` // Adjust line height as needed
     };
 
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
+    const [storyLines, setStoryLines]=useState([]);
 
     const updateCurrentStory = useCallback((curstory, curbulletin) => {
         fetch('/api/currentStory', {
@@ -48,6 +50,8 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
     useEffect(() => {
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle);
     }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory]);
+
+
 
     useEffect(() => {
         let animationFrameId;
@@ -84,15 +88,49 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
     }, [speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, setCurrentStoryNumber, textRef]);
 
+
+    // Function to calculate number of lines in a given element
+    const calculateNumberOfLines = (element) => {
+        if (element) {
+            const style = getComputedStyle(element);
+            const lineHeight = parseFloat(style.lineHeight);
+            const height = element.clientHeight;
+            return Math.floor(height / lineHeight);
+        }
+        return 0;
+    };
+
+     // Group elements into stories and calculate lines
+     useEffect(() => {
+        const storiesLines = [];
+
+        for (let i = 0; i < contentRefs.current.length; i += 3) {
+            const storyLines = [
+                calculateNumberOfLines(contentRefs.current[i]),
+                calculateNumberOfLines(contentRefs.current[i + 1]),
+                calculateNumberOfLines(contentRefs.current[i + 2]),
+            ].reduce((acc, lines) => acc + lines, 0);
+
+            storiesLines.push(storyLines);
+        }
+
+
+        storiesLines.forEach((lines, index) => {
+            console.log(`Story ${index + 1} has ${lines} lines.`);
+        });
+        setStoryLines(storiesLines)
+    }, [allContent, fontSize]);
+
     return (
         <div>
             <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
-                <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
+                <div style={{ backgroundColor: 'white', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                         <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                         <div>{newsReaderText}</div>
                         <div>{showClock ? '' : '.'}</div>
                         <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
+                        <div >{storyLines[currentStoryNumber]}</div>
                     </div>
                 </div>
                 <div ref={containerRef} style={scrollContainerStyle}>
