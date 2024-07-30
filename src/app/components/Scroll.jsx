@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
@@ -14,7 +14,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const scrollingTextStyle = {
         position: 'absolute',
         top: newPosition,
@@ -23,10 +23,10 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
         fontWeight: 'bolder',
         padding: '0 25px',
         boxSizing: 'border-box',
-        whiteSpace: 'pre-wrap' ,
-        fontSize: '39px'
+        whiteSpace: 'pre-wrap',
+        fontSize: parseInt(fontSize)
     };
-    
+
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
 
@@ -54,7 +54,7 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
 
         const scrollText = async () => {
             if (textRef.current) {
-                setNewPosition(prevTop => prevTop - (speed/9.2));
+                setNewPosition(prevTop => prevTop - (speed / 9.2));
 
                 // Determine which div is at startPosition
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
@@ -70,7 +70,7 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
                         if (!loggedPositions.has(startPositionDivIndex)) {
                             const curstory = ((startPositionDivIndex) / 3) + 1 + doubleClickedPosition;
                             setCurrentStoryNumber(curstory);
-                            setCurrentSlug(curstory-1);
+                            setCurrentSlug(curstory - 1);
                             setLoggedPositions((prev) => new Set(prev).add(startPositionDivIndex));
                         }
                     }
@@ -88,7 +88,7 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
             <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
                 <div style={{ backgroundColor: 'white', color: 'red', fontSize: 18, fontWeight: 'bolder' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs.length})`}</div>
+                        <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                         <div>{newsReaderText}</div>
                         <div>{showClock ? '' : '.'}</div>
                         <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
@@ -97,15 +97,16 @@ const Scroll = ({setCurrentSlug, newPosition,setNewPosition, doubleClickedPositi
                 <div ref={containerRef} style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>
                         {allContent.map((line, i) => (
-                            <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent',  color: i % 3 === 0 ? 'yellow' : 'white' }}>
+                            <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'white' }}>
                                 {line}
                             </div>
                         ))}
                     </div>
+                    <div style={{ position: 'absolute', top: parseInt(startPosition)-20}}>
+                        <Triangles />
+                    </div>
                 </div>
-                <div style={{ position: 'absolute', top: startPosition+15, scale: 1 }}>
-                    <Triangles />
-                </div>
+
             </div>
         </div>
     );

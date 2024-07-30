@@ -7,10 +7,12 @@ import debounce from 'lodash.debounce'; // Importing debounce from lodash
 
 import Casparcg from './Casparcg';
 
-const startPosition = 150;
+// const startPosition = 150;
 const socket = io();
 
 export default function Home() {
+
+  const [startPosition, setStartPosition] = useState(150);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState('');
@@ -23,11 +25,12 @@ export default function Home() {
   const [newsReaderText, setNewsReaderText] = useState('Continue...');
   const [showClock, setShowClock] = useState(true);
   const [newPosition, setNewPosition] = useState(startPosition);
-  const [tempSpeed, setTempSpeed] = useState(150);
+  const [tempSpeed, setTempSpeed] = useState(0);
   const [loggedPositions, setLoggedPositions] = useState(new Set());
   const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
+  const [fontSize, setFontSize] = useState(39);
 
   const newWindowRef = useRef(null);
 
@@ -280,9 +283,6 @@ export default function Home() {
     };
   }, [next, previous, speed, setSpeed, fromStart, handleDoubleClick, slugs, onclickSlug])
 
-  const syncStoryToSlug = () => {
-
-  }
   useEffect(() => {
     setCurrentSlug(currentStoryNumber - 1);
     setScriptID(slugs[currentStoryNumber - 1]?.ScriptID);
@@ -304,7 +304,7 @@ export default function Home() {
             </select>
           </div>
           <div style={{ minWidth: 300, maxHeight: '90vh', overflow: 'auto' }}>
-            {slugs.map((val, i) => (
+            {slugs?.map((val, i) => (
               <div
                 key={i}
                 onClick={() => {
@@ -364,14 +364,14 @@ export default function Home() {
         </div>
         <div>
           <div>
-            {!showNewWindow && <Scroll setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+            {!showNewWindow && <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition}   allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
             {showNewWindow && (
               <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} >
-                <Scroll setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+                <Scroll  fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition}  allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
               </NewWindow>
             )}
           </div>
-          <div onContextMenu={(e) => { setSpeed(0); e.preventDefault(); }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 100, position: 'absolute', top: 535 }}>
+          <div onContextMenu={(e) => { setSpeed(0); e.preventDefault(); }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 70, position: 'absolute', top: 535 }}>
             <div>
               <button onClick={() => setSpeed(-7)}>-7</button>
               <button onClick={() => setSpeed(-6)}>-6</button>
@@ -400,17 +400,24 @@ export default function Home() {
                 style={{ width: '60%' }}
               />
             </div>
-            <button onClick={() => {
-              if (showNewWindow) {
-                newWindowRef.current.close();
-              }
-              setNewPosition(textRef.current.offsetTop)
-              setShowNewWindow(!showNewWindow);
-            }}>{showNewWindow ? 'Close New Window' : 'Open New Window'}</button>
+            <div>
+              <button onClick={() => {
+                if (showNewWindow) {
+                  newWindowRef.current.close();
+                }
+                setNewPosition(textRef.current.offsetTop)
+                setShowNewWindow(!showNewWindow);
+              }}>{showNewWindow ? 'Close New Window' : 'Open New Window'}</button>
+
+            </div>
+            <div>
+            Font Size:<input type='number' value={fontSize} style={{ width: 50 }}  onChange={e=>setFontSize(e.target.value)}/>
+            Start Position:<input type='number' value={startPosition} style={{ width: 50 }}  onChange={e=>setStartPosition(e.target.value)}/>
+           
+            </div>
           </div>
         </div>
         {/* <Casparcg /> */}
-
       </div>
     </div >
   );
