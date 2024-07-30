@@ -289,7 +289,7 @@ export default function Home() {
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
   }, [currentStoryNumber, slugs])
   return (
-    <div>
+    <div style={{overflow:'hidden'}}>
       <div style={{ display: 'flex' }}>
         <div>
           <div>
@@ -354,9 +354,9 @@ export default function Home() {
             <div style={{ backgroundColor: 'blue', color: 'white' }}>{selectedRunOrderTitle} {currentSlugName}</div>
             <textarea
               value={content}
-              rows="27"
-              cols="45"
-              style={{ fontSize: 20 }}
+              rows="13"
+              cols="30"
+              style={{ fontSize: 39 }}
               disabled
             />
           </div>

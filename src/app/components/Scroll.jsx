@@ -54,7 +54,8 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
 
         const scrollText = async () => {
             if (textRef.current) {
-                setNewPosition(prevTop => prevTop - (speed / 9.2));
+                // setNewPosition(prevTop => prevTop - (speed / 9.2));
+                setNewPosition(prevTop => prevTop - (speed / 2.2));
 
                 // Determine which div is at startPosition
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
