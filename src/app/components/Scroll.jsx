@@ -130,7 +130,7 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                         <div>{newsReaderText}</div>
                         <div>{showClock ? '' : '.'}</div>
                         <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
-                        <div >{storyLines[currentStoryNumber]}</div>
+                        <div >{storyLines[currentStoryNumber-1]}</div>
                     </div>
                 </div>
                 <div ref={containerRef} style={scrollContainerStyle}>
