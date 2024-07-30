@@ -280,14 +280,14 @@ export default function Home() {
     };
   }, [next, previous, speed, setSpeed, fromStart, handleDoubleClick, slugs, onclickSlug])
 
-const syncStoryToSlug=()=>{
+  const syncStoryToSlug = () => {
 
-}
-useEffect(()=>{
-  setCurrentSlug(currentStoryNumber-1);
-  setScriptID(slugs[currentStoryNumber-1]?.ScriptID);
-  setCurrentSlugName(slugs[currentStoryNumber-1]?.SlugName);
-},[currentStoryNumber,slugs])
+  }
+  useEffect(() => {
+    setCurrentSlug(currentStoryNumber - 1);
+    setScriptID(slugs[currentStoryNumber - 1]?.ScriptID);
+    setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
+  }, [currentStoryNumber, slugs])
   return (
     <div>
       <div style={{ display: 'flex' }}>
@@ -363,33 +363,43 @@ useEffect(()=>{
 
         </div>
         <div>
-          {!showNewWindow && <Scroll setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
-
-
-          {showNewWindow && (
-            <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} >
-              <Scroll setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
-            </NewWindow>
-          )}
-
-          <div onContextMenu={(e) => {
-            setSpeed(0);
-            e.preventDefault();
-          }}
-            style={{ textAlign: 'center', border: '1px solid red', minHeight: 100, position: 'absolute', top: 535 }}
-          >
-            <button onClick={() => setSpeed(-7)}> Speed -7</button>
-            <button onClick={() => setSpeed(0)}> Pause</button>
-            <button onClick={() => setSpeed(7)}> Speed 7</button>
-            Speed: {speed}
-            <input
-              type="range"
-              min={-20}
-              max={20}
-              value={speed}
-              onChange={(e) => setSpeed(e.target.value)}
-              style={{ width: '60%' }}
-            />
+          <div>
+            {!showNewWindow && <Scroll setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+            {showNewWindow && (
+              <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} >
+                <Scroll setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+              </NewWindow>
+            )}
+          </div>
+          <div onContextMenu={(e) => { setSpeed(0); e.preventDefault(); }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 100, position: 'absolute', top: 535 }}>
+            <div>
+              <button onClick={() => setSpeed(-7)}>-7</button>
+              <button onClick={() => setSpeed(-6)}>-6</button>
+              <button onClick={() => setSpeed(-5)}> -5</button>
+              <button onClick={() => setSpeed(-4)}> -4</button>
+              <button onClick={() => setSpeed(-3)}> -3</button>
+              <button onClick={() => setSpeed(-2)}> -2</button>
+              <button onClick={() => setSpeed(-1)}> -1</button>
+              <button onClick={() => setSpeed(0)}> Pause</button>
+              <button onClick={() => setSpeed(1)}> 1</button>
+              <button onClick={() => setSpeed(2)}> 2</button>
+              <button onClick={() => setSpeed(3)}> 3</button>
+              <button onClick={() => setSpeed(4)}> 4</button>
+              <button onClick={() => setSpeed(5)}> 5</button>
+              <button onClick={() => setSpeed(6)}>6</button>
+              <button onClick={() => setSpeed(7)}>7</button>
+            </div>
+            <div>
+              Speed: {speed}
+              <input
+                type="range"
+                min={-20}
+                max={20}
+                value={speed}
+                onChange={(e) => setSpeed(e.target.value)}
+                style={{ width: '60%' }}
+              />
+            </div>
             <button onClick={() => {
               if (showNewWindow) {
                 newWindowRef.current.close();
@@ -400,7 +410,7 @@ useEffect(()=>{
           </div>
         </div>
         {/* <Casparcg /> */}
-       
+
       </div>
     </div >
   );
