@@ -56,10 +56,10 @@ export default function Home() {
     const handleKeyDown = (event) => {
       switch (event.key) {
         case 'ArrowUp':
-          setSpeed(val => val + 20);
+          setSpeed(val => val + 1);
           break;
         case 'ArrowDown':
-          setSpeed(val => val - 20);
+          setSpeed(val => val - 1);
           break;
         case ' ':
           if (speed === 0) {
@@ -232,7 +232,7 @@ export default function Home() {
       } else if (msg === 8) {
         setSpeed(4)
       } else if (msg === 9) {
-        setSpeed(5)
+        setSpeed(val => val + 1)
       } else if (msg === 10) {
         onclickSlug(slugs[9], 9);
         handleDoubleClick(9);
@@ -373,6 +373,7 @@ export default function Home() {
           </div>
           <div onContextMenu={(e) => { setSpeed(0); e.preventDefault(); }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 70, position: 'absolute', top: 535 }}>
             <div>
+              <button onClick={() => setSpeed(val=>val-1)}>-</button>
               <button onClick={() => setSpeed(-7)}>-7</button>
               <button onClick={() => setSpeed(-6)}>-6</button>
               <button onClick={() => setSpeed(-5)}> -5</button>
@@ -380,7 +381,16 @@ export default function Home() {
               <button onClick={() => setSpeed(-3)}> -3</button>
               <button onClick={() => setSpeed(-2)}> -2</button>
               <button onClick={() => setSpeed(-1)}> -1</button>
-              <button onClick={() => setSpeed(0)}> Pause</button>
+              <button onClick={() => {
+                // setSpeed(0)
+                if (speed === 0) {
+                  setSpeed(tempSpeed);
+                }
+                else {
+                  setTempSpeed(speed);
+                  setSpeed(0);
+                }
+                }}> {speed?'Pause':'Resume'}</button>
               <button onClick={() => setSpeed(1)}> 1</button>
               <button onClick={() => setSpeed(2)}> 2</button>
               <button onClick={() => setSpeed(3)}> 3</button>
@@ -388,6 +398,7 @@ export default function Home() {
               <button onClick={() => setSpeed(5)}> 5</button>
               <button onClick={() => setSpeed(6)}>6</button>
               <button onClick={() => setSpeed(7)}>7</button>
+              <button onClick={() => setSpeed(val=>val+1)}>+1</button>
             </div>
             <div>
               Speed: {speed}
