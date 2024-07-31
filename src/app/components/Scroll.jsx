@@ -4,6 +4,15 @@ import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
+function moveZerosToFront(arr) {
+    // Filter out the zeros
+    const zeros = arr.filter(num => num === 0);
+    // Filter out the non-zero elements
+    const nonZeros = arr.filter(num => num !== 0);
+    // Concatenate zeros at the beginning and non-zero elements afterwards
+    return [...zeros, ...nonZeros];
+  }
+
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 const scrollContainerStyle = {
@@ -82,7 +91,7 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                 // Track lines that have crossed the startPosition
                 // if(speed!==0){
                     let linesCrossed = 0;
-                    const ref = contentRefs.current[(currentStoryNumber - 1)*3];
+                    const ref = contentRefs.current[(-doubleClickedPosition+currentStoryNumber - 1)*3];
                     if (ref) {
                         const rect = ref.getBoundingClientRect();
                         const style = getComputedStyle(ref);
@@ -130,12 +139,8 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
 
             storiesLines.push(storyLines);
         }
-
-
-        storiesLines.forEach((lines, index) => {
-            console.log(`Story ${index + 1} has ${lines} lines.`);
-        });
-        setStoryLines(storiesLines)
+        const result= moveZerosToFront(storiesLines);
+        setStoryLines(result)
     }, [allContent, fontSize]);
 
     // Calculate width based on lines crossed
