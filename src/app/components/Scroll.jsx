@@ -52,8 +52,6 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle);
     }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory]);
 
-
-
     useEffect(() => {
         let animationFrameId;
 
@@ -78,29 +76,31 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                             setCurrentStoryNumber(curstory);
                             setCurrentSlug(curstory - 1);
                             setLoggedPositions((prev) => new Set(prev).add(startPositionDivIndex));
-                            setCrossedLines(0); 
                         }
                     }
                 }
                 // Track lines that have crossed the startPosition
-                let linesCrossed = 0;
-                const ref = contentRefs.current[currentStoryNumber - 1];
-                if (ref) {
-                    const rect = ref.getBoundingClientRect();
-                    const style = getComputedStyle(ref);
-                    const lineHeight = parseFloat(style.lineHeight);
-                    if (rect.top < startPosition) {
-                        linesCrossed = Math.floor((startPosition - rect.top) / lineHeight);
+                // if(speed!==0){
+                    let linesCrossed = 0;
+                    const ref = contentRefs.current[(currentStoryNumber - 1)*3];
+                    if (ref) {
+                        const rect = ref.getBoundingClientRect();
+                        const style = getComputedStyle(ref);
+                        const lineHeight = parseFloat(style.lineHeight);
+                        if (rect.top < startPosition) {
+                            linesCrossed = Math.floor((startPosition - rect.top) / lineHeight);
+                        }
                     }
-                }
-                setCrossedLines(linesCrossed);
+                    setCrossedLines(linesCrossed);
+                // }
+               
             }
             animationFrameId = requestAnimationFrame(scrollText);
         };
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
+    }, [setCrossedLines,speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
 
 
     // Function to calculate number of lines in a given element
@@ -142,7 +142,7 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
     return (
         <div>
             <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
-                <div style={{ backgroundColor: 'grey', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
+                <div style={{ backgroundColor: 'white', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
                     <div style={{ backgroundColor: 'lightgreen', width: `${widthPercentage}%` }}>
                         <div style={{ display: 'flex', justifyContent: 'space-around', width: 600 }}>
                             <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
