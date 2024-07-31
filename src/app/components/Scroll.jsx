@@ -89,6 +89,9 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                         const lineHeight = parseFloat(style.lineHeight);
                         if (rect.top < startPosition) {
                             linesCrossed = Math.floor((startPosition - rect.top) / lineHeight);
+                            if (linesCrossed>storyLines[currentStoryNumber-1]){
+                                linesCrossed=storyLines[currentStoryNumber-1];
+                            }
                         }
                     }
                     setCrossedLines(linesCrossed);
