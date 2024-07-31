@@ -17,7 +17,7 @@ const scrollContainerStyle = {
 const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const scrollingTextStyle = {
         position: 'absolute',
-        top: newPosition,
+        top: parseFloat(newPosition),
         width: '100%',
         textAlign: 'left',
         fontWeight: 'bolder',
@@ -25,12 +25,13 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-        lineHeight: `${fontSize*1.3 }px` // Adjust line height as needed
+        lineHeight: `${fontSize * 1.3}px` // Adjust line height as needed
     };
 
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
-    const [storyLines, setStoryLines]=useState([]);
+    const [storyLines, setStoryLines] = useState([]);
+    const [crossedLines, setCrossedLines] = useState(0);
 
     const updateCurrentStory = useCallback((curstory, curbulletin) => {
         fetch('/api/currentStory', {
@@ -77,16 +78,29 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                             setCurrentStoryNumber(curstory);
                             setCurrentSlug(curstory - 1);
                             setLoggedPositions((prev) => new Set(prev).add(startPositionDivIndex));
+                            setCrossedLines(0); 
                         }
                     }
                 }
+                // Track lines that have crossed the startPosition
+                let linesCrossed = 0;
+                const ref = contentRefs.current[currentStoryNumber - 1];
+                if (ref) {
+                    const rect = ref.getBoundingClientRect();
+                    const style = getComputedStyle(ref);
+                    const lineHeight = parseFloat(style.lineHeight);
+                    if (rect.top < startPosition) {
+                        linesCrossed = Math.floor((startPosition - rect.top) / lineHeight);
+                    }
+                }
+                setCrossedLines(linesCrossed);
             }
             animationFrameId = requestAnimationFrame(scrollText);
         };
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, setCurrentStoryNumber, textRef]);
+    }, [speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
 
 
     // Function to calculate number of lines in a given element
@@ -100,8 +114,8 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         return 0;
     };
 
-     // Group elements into stories and calculate lines
-     useEffect(() => {
+    // Group elements into stories and calculate lines
+    useEffect(() => {
         const storiesLines = [];
 
         for (let i = 0; i < contentRefs.current.length; i += 3) {
@@ -121,17 +135,24 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         setStoryLines(storiesLines)
     }, [allContent, fontSize]);
 
+    // Calculate width based on lines crossed
+    const maxLines = storyLines[currentStoryNumber - 1];
+    const widthPercentage = Math.min((crossedLines / maxLines) * 100, 100);
+
     return (
         <div>
             <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
-                <div style={{ backgroundColor: 'white', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
-                        <div>{newsReaderText}</div>
-                        <div>{showClock ? '' : '.'}</div>
-                        <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
-                        <div >{storyLines[currentStoryNumber-1]}</div>
+                <div style={{ backgroundColor: 'grey', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
+                    <div style={{ backgroundColor: 'lightgreen', width: `${widthPercentage}%` }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-around', width: 600 }}>
+                            <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
+                            <div>{newsReaderText}</div>
+                            <div>{showClock ? '' : '.'}</div>
+                            <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
+                            <div >{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
+                        </div>
                     </div>
+
                 </div>
                 <div ref={containerRef} style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>
@@ -141,7 +162,7 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                             </div>
                         ))}
                     </div>
-                    <div style={{ position: 'absolute', top: parseInt(startPosition)-20}}>
+                    <div style={{ position: 'absolute', top: parseInt(startPosition) - 20 }}>
                         <Triangles />
                     </div>
                 </div>
