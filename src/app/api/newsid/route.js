@@ -1,10 +1,21 @@
 import pool from '../db.js';
 
-export async function GET(req, res) {
+export async function GET(req) {
   try {
-    const [rows] = await pool.query(`SELECT distinct title FROM newsid where title != '' order by title asc`);
-      return  Response.json({ data: rows })
+    const connection = await pool.getConnection();
+    try {
+      const [rows] = await connection.query(`SELECT DISTINCT title FROM newsid WHERE title != '' ORDER BY title ASC`);
+      return new Response(JSON.stringify({ data: rows }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } finally {
+      connection.release();
+    }
   } catch (error) {
-    return  Response.json({ error: error.message })
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

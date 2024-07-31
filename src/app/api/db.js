@@ -1,4 +1,3 @@
-//db.js
 import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({
@@ -6,6 +5,9 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  waitForConnections: true,
+  // connectionLimit: 10,  // You can adjust this based on your needs
+  queueLimit: 0
 });
 
 export default pool;

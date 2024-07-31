@@ -5,9 +5,21 @@ export async function GET(req) {
   const ScriptID = searchParams.get('ScriptID');
 
   try {
-    const [rows] = await pool.query(`SELECT Script FROM script where ScriptID='${ScriptID}' LIMIT 1`);
-    return  Response.json({ data: rows[0] })
+    const connection = await pool.getConnection();
+    try {
+      const query = `SELECT Script FROM script WHERE ScriptID = ? LIMIT 1`;
+      const [rows] = await connection.query(query, [ScriptID]);
+      return new Response(JSON.stringify({ data: rows[0] }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } finally {
+      connection.release();
+    }
   } catch (error) {
-    return  Response.json({ error: error.message })
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

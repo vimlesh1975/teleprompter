@@ -398,7 +398,7 @@ export default function Home() {
               <button onClick={() => setSpeed(5)}> 5</button>
               <button onClick={() => setSpeed(6)}>6</button>
               <button onClick={() => setSpeed(7)}>7</button>
-              <button onClick={() => setSpeed(val=>val+1)}>+1</button>
+              <button onClick={() => setSpeed(val=>parseInt(val)+1)}>+1</button>
             </div>
             <div>
               Speed: {speed}
