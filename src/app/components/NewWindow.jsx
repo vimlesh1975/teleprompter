@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 function NewWindow({ children, onClose, newWindowRef }) {
     // const newWindowRef = useRef(null);
     const [container, setContainer] = useState(null);
+      // State to keep track of flip status
 
     const handleTitleBarDoubleClick = () => {
         console.log('Title bar double-clicked');
@@ -11,11 +12,22 @@ function NewWindow({ children, onClose, newWindowRef }) {
         container.style.transform = `scale(${newWindowRef.current.screen.width / 600}, ${newWindowRef.current.screen.height / 522} )`;
     };
 
+    const handleRightClick = (event) => {
+        event.preventDefault(); // Prevent the default context menu from appearing
+        console.log('Right-click detected, flipping content');
+
+        // Toggle flip transformation
+        if (container.style.transform.includes('rotateY(180deg)')) {
+            container.style.transform = container.style.transform.replace('rotateY(180deg)', 'rotateY(0deg)');
+        } else {
+            container.style.transform = container.style.transform + ' rotateY(180deg)';
+        }
+    };
 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', 'width=640,height=555');
+            newWindowRef.current = window.open('', '', 'width=620,height=540');
 
         }
 
@@ -41,12 +53,14 @@ function NewWindow({ children, onClose, newWindowRef }) {
         // Add event listener to clean up on close
         newWindowRef.current.addEventListener('beforeunload', onClose);
         newWindowRef.current.addEventListener('dblclick', handleTitleBarDoubleClick);
+        newWindowRef.current.addEventListener('contextmenu', handleRightClick);
 
 
         // Cleanup function
         return () => {
             newWindowRef.current.removeEventListener('beforeunload', onClose);
             newWindowRef.current.removeEventListener('dblclick', handleTitleBarDoubleClick);
+            newWindowRef.current.removeEventListener('contextmenu', handleRightClick);
             // Do not close the window here to keep it open for future updates
         };
     }, [container, onClose, handleTitleBarDoubleClick]);
