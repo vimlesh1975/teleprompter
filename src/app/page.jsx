@@ -289,7 +289,7 @@ export default function Home() {
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
   }, [currentStoryNumber, slugs])
   return (
-    <div style={{overflow:'hidden'}}>
+    <div style={{ overflow: 'hidden' }}>
       <div style={{ display: 'flex' }}>
         <div>
           <div>
@@ -303,15 +303,11 @@ export default function Home() {
               ))}
             </select>
           </div>
-          <div style={{ minWidth: 300, maxHeight: '90vh', overflow: 'auto' }}>
+          <div style={{ minWidth: 348,maxWidth: 348, maxHeight: '90vh', overflow: 'auto' }}>
             {slugs?.map((val, i) => (
               <div
                 key={i}
                 onClick={() => {
-                  // setScriptID(val.ScriptID);
-                  // setCurrentSlug(i);
-                  // setCurrentSlugName(val.SlugName);
-
                   onclickSlug(val, i)
                 }}
                 onDoubleClick={() => handleDoubleClick(i)}
@@ -323,7 +319,10 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <div style={{ textAlign: 'center' }}>
+          <div style={{border:'1px solid red', marginBottom:10}}>  
+            <Casparcg />
+          </div>
+          <div style={{border:'1px solid red', marginBottom:10}}>  
             <button onClick={() => {
               fromStart()
             }}>From Start</button>
@@ -337,21 +336,20 @@ export default function Home() {
               setScriptID(slugs[lastIndex].ScriptID);
             }}>Go to Last</button>
           </div>
-          <div>
+          <div style={{border:'1px solid red', marginBottom:10}}>  
             <div>
               <button onClick={() => setNewsReaderText('Go Fast...')}>Go fast</button>
               <button onClick={() => setNewsReaderText('Wait...')}>Wait</button>
               <button onClick={() => setNewsReaderText('.')}>Clear</button>
-              <span> Show Clock:</span>{" "} <input checked={showClock} type="checkbox" onChange={() => setShowClock(!showClock)} />
-            </div>
-            <div>
+             <input checked={showClock} type="checkbox" onChange={() => setShowClock(!showClock)} /> <span> Show Clock:</span>{" "} 
+         
               <button onClick={() => setNewsReaderText('Go Slow...')}>Go Slow</button>
               <button onClick={() => setNewsReaderText('Continue...')}>Continue...</button>
               <button onClick={() => setNewsReaderText('Stop...')}>Stop</button>
             </div>
           </div>
           <div>
-            <div style={{ backgroundColor: 'blue', color: 'white' }}>{selectedRunOrderTitle} {currentSlugName}</div>
+            <div style={{ backgroundColor: 'blue', width:500, color: 'white' }}>{selectedRunOrderTitle} {currentSlugName}</div>
             <textarea
               value={content}
               rows="13"
@@ -364,16 +362,16 @@ export default function Home() {
         </div>
         <div>
           <div>
-            {!showNewWindow && <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition}   allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+            {!showNewWindow && <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
             {showNewWindow && (
               <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} >
-                <Scroll  fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition}  allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+                <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
               </NewWindow>
             )}
           </div>
           <div onContextMenu={(e) => { setSpeed(0); e.preventDefault(); }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 70, position: 'absolute', top: 535 }}>
             <div>
-              <button onClick={() => setSpeed(val=>val-1)}>-</button>
+              <button onClick={() => setSpeed(val => val - 1)}>-</button>
               <button onClick={() => setSpeed(-7)}>-7</button>
               <button onClick={() => setSpeed(-6)}>-6</button>
               <button onClick={() => setSpeed(-5)}> -5</button>
@@ -390,7 +388,7 @@ export default function Home() {
                   setTempSpeed(speed);
                   setSpeed(0);
                 }
-                }}> {speed?'Pause':'Resume'}</button>
+              }}> {speed ? 'Pause' : 'Resume'}</button>
               <button onClick={() => setSpeed(1)}> 1</button>
               <button onClick={() => setSpeed(2)}> 2</button>
               <button onClick={() => setSpeed(3)}> 3</button>
@@ -398,7 +396,7 @@ export default function Home() {
               <button onClick={() => setSpeed(5)}> 5</button>
               <button onClick={() => setSpeed(6)}>6</button>
               <button onClick={() => setSpeed(7)}>7</button>
-              <button onClick={() => setSpeed(val=>parseInt(val)+1)}>+1</button>
+              <button onClick={() => setSpeed(val => parseInt(val) + 1)}>+1</button>
             </div>
             <div>
               Speed: {speed}
@@ -422,13 +420,13 @@ export default function Home() {
 
             </div>
             <div>
-            Font Size:<input type='number' value={fontSize} style={{ width: 50 }}  onChange={e=>setFontSize(e.target.value)}/>
-            Start Position:<input type='number' value={startPosition} style={{ width: 50 }}  onChange={e=>setStartPosition(e.target.value)}/>
-           
+              Font Size:<input type='number' value={fontSize} style={{ width: 50 }} onChange={e => setFontSize(e.target.value)} />
+              Start Position:<input type='number' value={startPosition} style={{ width: 50 }} onChange={e => setStartPosition(e.target.value)} />
+
             </div>
           </div>
         </div>
-        {/* <Casparcg /> */}
+
       </div>
     </div >
   );
