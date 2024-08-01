@@ -68,11 +68,21 @@ export default function Home() {
           onClick={() =>
             endpoint({
               action: 'endpoint',
-              command: `play 1-1 [html] http://localhost:3000/caspar.html`,
+              command: `play 1-2 [html] http://localhost:3000/webrtc.html`,
             })
           }
         >
         Show in casparcg
+        </button>
+        <button
+          onClick={() =>
+            endpoint({
+              action: 'endpoint',
+              command: `stop 1-2`,
+            })
+          }
+        >
+        Stop
         </button>
       </div>
 
