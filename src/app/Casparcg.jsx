@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 export default function Home() {
 
   const [connected, setConnected] = useState(false);
+  const [fliped, setFliped] = useState(false);
 
   useEffect(() => {
     // const socket = io('http://localhost:3000');
@@ -83,6 +84,17 @@ export default function Home() {
           }
         >
         Stop
+        </button>
+        <button
+          onClick={() =>{
+            endpoint({
+              action: 'endpoint',
+              command: fliped?'mixer 1-2 fill 1 0 -1 1':'mixer 1-2 fill 0 0 1 1',
+            });
+            setFliped(val=>!val);
+          }}
+        >
+        Toggle Flip
         </button>
       </div>
 

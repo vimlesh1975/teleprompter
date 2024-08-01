@@ -1,31 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebRTC Screen Share</title>
     <style>
-          #localVideoContainer {
-            width: 600;
-            height: 535px ;
+        body{
+            overflow: hidden;
+        }
+        #localVideoContainer {
+            width: 601px;
+            height: 529px;
             overflow: hidden;
             position: relative;
             margin-top: -70px;
-            transform: scale(3.3,2.02); /* Scale the video to fit the container */
-            transform-origin: top left; /* Ensure scaling starts from top-left corner */
+            /* transform: scale(3.3,2.02);  */
+            transform: scale(3.2,2); 
+            transform-origin: top left; 
         }
+
         #localVideo {
             position: absolute;
-            top: -90px;  /* Adjust this value to change the crop position */
-            left: -1024px; /* Adjust this value to change the crop position */
+            top: -90px;
+            /* Adjust this value to change the crop position */
+            left: -1024px;
+            /* Adjust this value to change the crop position */
         }
     </style>
 </head>
+
 <body>
     <h1>WebRTC Screen Share</h1>
-        <div id="localVideoContainer">
-            <video id="localVideo" autoplay muted></video>
-        </div>
+    <div id="localVideoContainer">
+        <video id="localVideo" autoplay muted></video>
+    </div>
     <button id="startButton">Start Sharing</button>
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -63,7 +72,7 @@
             }
         });
 
-        const aa=async()=>{
+        const aa = async () => {
             try {
                 localStream = await navigator.mediaDevices.getDisplayMedia({
                     video: {
@@ -89,7 +98,7 @@
         }
 
         startButton.addEventListener('click', async () => {
-         await aa();
+            await aa();
         });
 
         function createPeerConnection() {
@@ -106,7 +115,8 @@
             };
         }
 
-         aa();
+        aa();
     </script>
 </body>
+
 </html>

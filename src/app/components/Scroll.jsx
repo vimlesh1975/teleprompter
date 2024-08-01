@@ -150,13 +150,13 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
     return (
         <div>
             <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
-                <div style={{ backgroundColor: 'white', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
+                <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
                     <div style={{ backgroundColor: 'lightgreen', width: `${widthPercentage}%` }}>
                         <div style={{ display: 'flex', justifyContent: 'space-around', width: 600 }}>
                             <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                             <div>{newsReaderText}</div>
                             <div>{showClock ? '' : '.'}</div>
-                            <div style={{ display: showClock ? 'inline' : 'none' }}><Clock /></div>
+                            <div style={{ display: showClock ? 'inline' : 'none', color:'red' }}><Clock /></div>
                             <div >{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
                         </div>
                     </div>
