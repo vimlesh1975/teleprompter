@@ -11,6 +11,9 @@ const Clock = dynamic(() => import('./components/Clock'), { ssr: false });
 
 // const startPosition = 150;
 const socket = io();
+socket.on('connect', () => {
+  console.log('SOCKET CONNECTED! from main page', socket.id);
+});
 
 export default function Home() {
 
@@ -209,9 +212,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('SOCKET CONNECTED!', socket.id);
-    });
+
     const handleButtonDown = debounce((msg) => {
       console.log(msg)
       if (msg === 1) {
@@ -371,7 +372,17 @@ export default function Home() {
               </NewWindow>
             )}
           </div>
-          <div onContextMenu={(e) => { setSpeed(0); e.preventDefault(); }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 70, position: 'absolute', top: 535 }}>
+          <div onContextMenu={(e) => { 
+             e.preventDefault();
+            // setSpeed(0);
+             if (speed === 0) {
+              setSpeed(tempSpeed);
+            }
+            else {
+              setTempSpeed(speed);
+              setSpeed(0);
+            }
+             }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 70, position: 'absolute', top: 535 }}>
             <div>
               <button onClick={() => setSpeed(val => val - 1)}>-</button>
               <button onClick={() => setSpeed(-7)}>-7</button>

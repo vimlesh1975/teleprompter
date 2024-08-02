@@ -12,32 +12,59 @@ app.prepare().then(async () => {
     const server = express();
     const httpServer = http.createServer(server);
     const io = socketIO(httpServer);
+
+    const shuttle = require('shuttle-control-usb');
+
+    shuttle.on('connected', (deviceInfo) => {
+        console.log('Connected to ' + deviceInfo.name);
+    });
+
+    shuttle.on('buttondown', data => {
+        io.emit('buttondown1', data);
+    });
+
+    shuttle.on('disconnected', data => {
+        console.log(data);
+    });
+
+    shuttle.on('shuttle', data => {
+        io.emit('shuttle1', data);
+    });
+
+    shuttle.on('jog-dir', (data1) => {
+        io.emit('jog-dir1', data1);
+    });
+
+    shuttle.start();
+
+
     io.on('connection', (socket) => {
-        console.log('Socket Client connected');
+        console.log('Socket Client connected', socket.id);
         socket.on('ServerConnectionStatus', (data) => {
             // console.log('Received from API ::', data);
             io.emit('ServerConnectionStatus2', data);
         });
 
-        const shuttle = require('shuttle-control-usb');
-        shuttle.on('connected', (deviceInfo) => {
-            console.log('Connected to ' + deviceInfo.name);
-        });
-        // Start after 'connect' event listener has been set up
-        shuttle.start();
-        shuttle.on('buttondown', data => {
-            socket.emit('buttondown1', data);
-        })
-        shuttle.on('disconnected', data => {
-            console.log(data)
-        })
-        console.log('Current listeners:', shuttle.listenerCount('buttondown'));
-        // Access internal `_events` property to get the number of listeners
-        const listeners = socket._events['ServerConnectionStatus'] || [];
-        console.log(`Current listeners for 'ServerConnectionStatus':`, listeners.length);
-        shuttle.on('shuttle', data => {
-            socket.emit('shuttle1', data)
-        })
+
+        // const shuttle = require('shuttle-control-usb');
+        // shuttle.on('connected', (deviceInfo) => {
+        //     console.log('Connected to ' + deviceInfo.name);
+        // });
+        // // Start after 'connect' event listener has been set up
+        // shuttle.start();
+        // shuttle.on('buttondown', data => {
+        //     socket.emit('buttondown1', data);
+        // })
+        // shuttle.on('disconnected', data => {
+        //     console.log(data)
+        // })
+
+
+
+
+        // shuttle.on('shuttle', data => {
+        //     socket.emit('shuttle1', data)
+        // })
         // shuttle.on('shuttle-trans', (data1, data2) => {
         //     console.log(data1)
         //     console.log(data2)
@@ -46,12 +73,10 @@ app.prepare().then(async () => {
         //     console.log(data1)
         // })
 
-        shuttle.on('jog-dir', (data1) => {
-            socket.emit('jog-dir1', data1);
-        })
+        // shuttle.on('jog-dir', (data1) => {
+        //     socket.emit('jog-dir1', data1);
+        // })
         //shuttleprocode
-
-
 
         //webrtc code starts
         socket.on('offer', (data) => {
@@ -67,28 +92,49 @@ app.prepare().then(async () => {
         });
         //webrtc code ends
 
-
         // Handle disconnection
         socket.on('disconnect', () => {
-            console.log('User disconnected:', socket.id);
 
-            // Remove all shuttle event listeners
-            shuttle.removeAllListeners('buttondown');
-            shuttle.removeAllListeners('shuttle');
-            shuttle.removeAllListeners('jog-dir');
-            shuttle.removeAllListeners('disconnected');
-            shuttle.removeAllListeners('connected');
+
+            // Log the number of listeners for each event
+            console.log(`Number of listeners for 'ServerConnectionStatus':`, socket.listenerCount('ServerConnectionStatus'));
+            console.log(`Number of listeners for 'offer':`, socket.listenerCount('offer'));
+            console.log(`Number of listeners for 'answer':`, socket.listenerCount('answer'));
+            console.log(`Number of listeners for 'candidate':`, socket.listenerCount('candidate'));
+            console.log(`Number of listeners for 'disconnect':`, socket.listenerCount('disconnect'));
+            console.log(`Number of listeners for 'error':`, socket.listenerCount('error'));
+
+
+            console.log('User disconnected:', socket.id);
+            shuttle.removeAllListeners();
+            socket.removeAllListeners();
 
             socket.removeAllListeners('ServerConnectionStatus');
-
-            shuttle.removeAllListeners('offer');
-            shuttle.removeAllListeners('answer');
-            shuttle.removeAllListeners('candidate');
+            socket.removeAllListeners("connect");
 
 
-            socket.removeAllListeners();
-            // Optionally, you can stop the shuttle if needed
-            // shuttle.stop(); 
+            // socket.removeAllListeners('offer');
+            // socket.removeAllListeners('answer');
+            // socket.removeAllListeners('candidate');
+
+            // socket.removeAllListeners('disconnect');
+            // socket.removeAllListeners('error');
+
+            // Get all event listeners
+            const allEvents = socket._events || {};
+
+            // Log the number of listeners for each event
+            Object.keys(allEvents).forEach(event => {
+                const listeners = allEvents[event];
+                if (Array.isArray(listeners)) {
+                    console.log(`Number of listeners for '${event}':`, listeners.length);
+                } else if (typeof listeners === 'function') {
+                    console.log(`Number of listeners for '${event}': 1`);
+                } else {
+                    console.log(`Number of listeners for '${event}': Unknown`);
+                }
+            });
+
         });
 
     });
