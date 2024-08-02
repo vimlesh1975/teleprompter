@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
+import { useEffect, useRef, useCallback,  useState } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 

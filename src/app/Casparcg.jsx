@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+const socket = io();
+
 
 export default function Home() {
 
@@ -9,20 +11,16 @@ export default function Home() {
   const [fliped, setFliped] = useState(false);
 
   useEffect(() => {
-    // const socket = io('http://localhost:3000');
-    const socket = io();
     socket.on('connect', () => {
       console.log('SOCKET CONNECTED!', socket.id);
     });
-
     socket.on('ServerConnectionStatus2', (msg) => {
       console.log(msg)
       setConnected(msg);
     });
-
-    
     return () => {
-      socket.disconnect();
+      socket.off('ServerConnectionStatus2');
+      // socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

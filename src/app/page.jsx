@@ -4,8 +4,10 @@ import NewWindow from './components/NewWindow';
 import Scroll from './components/Scroll';
 import io from 'socket.io-client';
 import debounce from 'lodash.debounce'; // Importing debounce from lodash
+import dynamic from 'next/dynamic';
 
 import Casparcg from './Casparcg';
+const Clock = dynamic(() => import('./components/Clock'), { ssr: false });
 
 // const startPosition = 150;
 const socket = io();
@@ -422,7 +424,7 @@ export default function Home() {
             <div>
               Font Size:<input type='number' value={fontSize} style={{ width: 50 }} onChange={e => setFontSize(e.target.value)} />
               Start Position:<input type='number' value={startPosition} style={{ width: 50 }} onChange={e => setStartPosition(e.target.value)} />
-
+<Clock />
             </div>
           </div>
         </div>
