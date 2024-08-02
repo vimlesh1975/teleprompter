@@ -15,11 +15,13 @@ function NewWindow({ children, onClose, newWindowRef }) {
     const handleRightClick = (event) => {
         event.preventDefault(); // Prevent the default context menu from appearing
         console.log('Right-click detected, flipping content');
-
+     
         // Toggle flip transformation
         if (container.style.transform.includes('rotateY(180deg)')) {
+            container.style.transformOrigin = '0 0'; // Center the transform origin
             container.style.transform = container.style.transform.replace('rotateY(180deg)', 'rotateY(0deg)');
         } else {
+            container.style.transformOrigin = '24% 0%'; // Center the transform origin
             container.style.transform = container.style.transform + ' rotateY(180deg)';
         }
     };
