@@ -41,7 +41,21 @@ export default function Home() {
 
 
   const textRef = useRef(null);
-  // const socketRef = useRef(null);
+
+  const endpoint = async (str) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Specify the content type as JSON
+        // You may include other headers as needed
+      },
+      body: JSON.stringify(str), // Convert the data to JSON format
+    };
+    const aa = await fetch('/api/casparcg', requestOptions);
+    if (str.action === 'connect' || str.action === 'disconnect') {
+      setConnected(await aa.json());
+    }
+  };
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
@@ -291,6 +305,46 @@ export default function Home() {
     setScriptID(slugs[currentStoryNumber - 1]?.ScriptID);
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
   }, [currentStoryNumber, slugs])
+
+
+  function replaceCRLFInArray(inputArray) {
+    // Ensure inputArray is an array of strings
+    if (!Array.isArray(inputArray)) {
+      throw new Error('Input is not an array');
+    }
+  
+    // Map over the array and replace CRLF characters in each string
+    return inputArray.map((inputString) => {
+      // Ensure each element is a string
+      if (typeof inputString !== 'string') {
+        throw new Error('Array element is not a string');
+      }
+  
+      // Replace all occurrences of \r, \n, or \r\n with an empty string
+      return inputString.replace(/(\r\n|\n|\r)/g, '');
+    });
+  }
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setStartPosition(${startPosition})`,
+    })
+  }, [startPosition])
+
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setAllContent(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
+    })
+  }, [allContent])
+
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setSpeed(${speed})`,
+    })
+  }, [speed])
+
   return (
     <div style={{ overflow: 'hidden' }}>
       <div style={{ display: 'flex' }}>
@@ -306,7 +360,7 @@ export default function Home() {
               ))}
             </select>
           </div>
-          <div style={{ minWidth: 348,maxWidth: 348, maxHeight: '90vh', overflow: 'auto' }}>
+          <div style={{ minWidth: 348, maxWidth: 348, maxHeight: '90vh', overflow: 'auto' }}>
             {slugs?.map((val, i) => (
               <div
                 key={i}
@@ -322,10 +376,10 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <div style={{border:'1px solid red', marginBottom:10}}>  
+          <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <Casparcg />
           </div>
-          <div style={{border:'1px solid red', marginBottom:10}}>  
+          <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <button onClick={() => {
               fromStart()
             }}>From Start</button>
@@ -339,20 +393,20 @@ export default function Home() {
               setScriptID(slugs[lastIndex].ScriptID);
             }}>Go to Last</button>
           </div>
-          <div style={{border:'1px solid red', marginBottom:10}}>  
+          <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <div>
               <button onClick={() => setNewsReaderText('Go Fast...')}>Go fast</button>
               <button onClick={() => setNewsReaderText('Wait...')}>Wait</button>
               <button onClick={() => setNewsReaderText('.')}>Clear</button>
-             <input checked={showClock} type="checkbox" onChange={() => setShowClock(!showClock)} /> <span> Show Clock:</span>{" "} 
-         
+              <input checked={showClock} type="checkbox" onChange={() => setShowClock(!showClock)} /> <span> Show Clock:</span>{" "}
+
               <button onClick={() => setNewsReaderText('Go Slow...')}>Go Slow</button>
               <button onClick={() => setNewsReaderText('Continue...')}>Continue...</button>
               <button onClick={() => setNewsReaderText('Stop...')}>Stop</button>
             </div>
           </div>
           <div>
-            <div style={{ backgroundColor: 'blue', width:500, color: 'white' }}>{selectedRunOrderTitle} {currentSlugName}</div>
+            <div style={{ backgroundColor: 'blue', width: 500, color: 'white' }}>{selectedRunOrderTitle} {currentSlugName}</div>
             <textarea
               value={content}
               rows="13"
@@ -372,17 +426,17 @@ export default function Home() {
               </NewWindow>
             )}
           </div>
-          <div onContextMenu={(e) => { 
-             e.preventDefault();
+          <div onContextMenu={(e) => {
+            e.preventDefault();
             // setSpeed(0);
-             if (speed === 0) {
+            if (speed === 0) {
               setSpeed(tempSpeed);
             }
             else {
               setTempSpeed(speed);
               setSpeed(0);
             }
-             }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 70, position: 'absolute', top: 535 }}>
+          }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 70, position: 'absolute', top: 535 }}>
             <div>
               <button onClick={() => setSpeed(val => val - 1)}>-</button>
               <button onClick={() => setSpeed(-7)}>-7</button>
@@ -434,8 +488,10 @@ export default function Home() {
             </div>
             <div>
               Font Size:<input type='number' value={fontSize} style={{ width: 50 }} onChange={e => setFontSize(e.target.value)} />
-              Start Position:<input type='number' value={startPosition} style={{ width: 50 }} onChange={e => setStartPosition(e.target.value)} />
-<Clock />
+              Start Position:<input type='number' value={startPosition} style={{ width: 50 }} onChange={e => {
+                setStartPosition(e.target.value);
+              }} />
+              {/* <Clock /> */}
             </div>
           </div>
         </div>

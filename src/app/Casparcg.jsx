@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import dynamic from 'next/dynamic';
+const Clock = dynamic(() => import('./components/Clock'), { ssr: false });
+
+
 const socket = io();
 socket.on('connect', () => {
   console.log('SOCKET CONNECTED! from caspar', socket.id);
@@ -73,7 +77,30 @@ export default function Home() {
             })
           }
         >
-        Show in casparcg
+          Show in casparcg Web RTC
+        </button>
+   
+ 
+        <button
+          onClick={() =>
+            endpoint({
+              action: 'endpoint',
+              command: `Play 1-2 [html] "http://localhost:3000/test"`,
+            })
+          }
+        >
+          Show React componenet
+        </button>
+        <button
+          onClick={() => {
+            endpoint({
+              action: 'endpoint',
+              command: fliped ? 'mixer 1-2 fill 1 0 -1 1' : 'mixer 1-2 fill 0 0 1 1',
+            });
+            setFliped(val => !val);
+          }}
+        >
+          Toggle Flip
         </button>
         <button
           onClick={() =>
@@ -83,18 +110,7 @@ export default function Home() {
             })
           }
         >
-        Stop
-        </button>
-        <button
-          onClick={() =>{
-            endpoint({
-              action: 'endpoint',
-              command: fliped?'mixer 1-2 fill 1 0 -1 1':'mixer 1-2 fill 0 0 1 1',
-            });
-            setFliped(val=>!val);
-          }}
-        >
-        Toggle Flip
+          Stop
         </button>
       </div>
 
