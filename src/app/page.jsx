@@ -394,6 +394,13 @@ export default function Home() {
     })
   }, [selectedRunOrderTitle])
 
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setNewPosition(${newPosition})`,
+    })
+  }, [newPosition])
+
   return (
     <div style={{ overflow: 'hidden' }}>
       <div style={{ display: 'flex' }}>

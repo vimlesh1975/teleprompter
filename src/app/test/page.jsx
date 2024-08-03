@@ -29,6 +29,7 @@ const Page = () => {
         window.setSlugs = setSlugs;
         window.setCurrentSlug = setCurrentSlug;
         window.setSelectedRunOrderTitle = setSelectedRunOrderTitle;
+        window.setNewPosition = setNewPosition;
         
 
         return () => {
@@ -42,6 +43,7 @@ const Page = () => {
             delete window.setSlugs;
             delete window.setCurrentSlug;
             delete window.setSelectedRunOrderTitle;
+            delete window.setNewPosition;
 
         };
     }, []);

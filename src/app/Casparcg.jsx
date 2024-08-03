@@ -82,11 +82,16 @@ export default function Home() {
    
  
         <button
-          onClick={() =>
+          onClick={() =>{
             endpoint({
               action: 'endpoint',
               command: `Play 1-2 [html] "http://localhost:3000/test"`,
-            })
+            });
+            endpoint({
+              action: 'endpoint',
+              command: `mixer 1-2 fill -0.02 -0.02 3.22 2.08`,
+            });
+          }
           }
         >
           Show React componenet
