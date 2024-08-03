@@ -345,6 +345,55 @@ export default function Home() {
     })
   }, [speed])
 
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setFontSize(${fontSize})`,
+    })
+  }, [fontSize])
+
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setShowClock(${showClock})`,
+    })
+  }, [showClock])
+
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setNewsReaderText('${newsReaderText}')`,
+    })
+  }, [newsReaderText])
+
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setDoubleClickedPosition(${doubleClickedPosition})`,
+    })
+  }, [doubleClickedPosition])
+  
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setSlugs(${slugs})`,
+    })
+  }, [slugs])
+
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setCurrentSlug(${currentSlug})`,
+    })
+  }, [currentSlug])
+
+  useEffect(() => {
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setSelectedRunOrderTitle(${selectedRunOrderTitle})`,
+    })
+  }, [selectedRunOrderTitle])
+
   return (
     <div style={{ overflow: 'hidden' }}>
       <div style={{ display: 'flex' }}>
