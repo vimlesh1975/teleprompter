@@ -376,7 +376,7 @@ export default function Home() {
   useEffect(() => {
     endpoint({
       action: 'endpoint',
-      command: `call 1-2 setSlugs(${slugs})`,
+      command: `call 1-2 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
     })
   }, [slugs])
 
@@ -409,7 +409,7 @@ export default function Home() {
             Run Orders:
             <select value={selectedRunOrderTitle} onChange={handleSelectionChange}>
               <option value="" disabled>Select a Run Order</option>
-              {runOrderTitles.map((runOrderTitle, i) => (
+              {runOrderTitles?.map((runOrderTitle, i) => (
                 <option key={i} value={runOrderTitle.title}>
                   {runOrderTitle.title}
                 </option>

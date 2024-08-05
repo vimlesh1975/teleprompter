@@ -40,6 +40,9 @@ const Page = () => {
     const setAllContent1 = (arrstr) => {
         setAllContent(replaceCRLFInArray(arrstr))
     }
+    const setSlugs1 = (arrstr) => {
+        setSlugs(replaceCRLFInArray(arrstr))
+    }
     useEffect(() => {
         window.setStartPosition = setStartPosition;
         window.setAllContent1 = setAllContent1;
