@@ -75,7 +75,7 @@ export default function Home() {
     const handleKeyDown = (event) => {
       switch (event.key) {
         case 'ArrowUp':
-          setSpeed(val => val + 1);
+          setSpeed(val => Number(val) + 1);
           break;
         case 'ArrowDown':
           setSpeed(val => val - 1);
