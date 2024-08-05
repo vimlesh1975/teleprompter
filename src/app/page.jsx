@@ -321,7 +321,7 @@ export default function Home() {
       }
   
       // Replace all occurrences of \r, \n, or \r\n with an empty string
-      return inputString.replace(/(\r\n|\n|\r)/g, '');
+      return inputString.replace(/(\r\n|\n|\r)/g, 'CRLF');
     });
   }
   useEffect(() => {
@@ -334,7 +334,7 @@ export default function Home() {
   useEffect(() => {
     endpoint({
       action: 'endpoint',
-      command: `call 1-2 setAllContent(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
+      command: `call 1-2 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
     })
   }, [allContent])
 

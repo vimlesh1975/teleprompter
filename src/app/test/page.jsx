@@ -1,26 +1,48 @@
 'use client'
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Scroll from '../components/Scroll';
 
 const Page = () => {
-  const [startPosition, setStartPosition] = useState(150);
-  const [speed, setSpeed] = useState(0);
-  const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState('');
-  const [slugs, setSlugs] = useState([]);
-  const [currentSlug, setCurrentSlug] = useState(0);
-  const [allContent, setAllContent] = useState([]);
-  const [newsReaderText, setNewsReaderText] = useState('Continue...');
-  const [showClock, setShowClock] = useState(true);
-  const [newPosition, setNewPosition] = useState(startPosition);
-  const [loggedPositions, setLoggedPositions] = useState(new Set());
-  const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
-  const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
-  const [fontSize, setFontSize] = useState(39);
+    const [startPosition, setStartPosition] = useState(150);
+    const [speed, setSpeed] = useState(0);
+    const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState('');
+    const [slugs, setSlugs] = useState([]);
+    const [currentSlug, setCurrentSlug] = useState(0);
+    const [allContent, setAllContent] = useState([]);
+    const [newsReaderText, setNewsReaderText] = useState('Continue...');
+    const [showClock, setShowClock] = useState(true);
+    const [newPosition, setNewPosition] = useState(startPosition);
+    const [loggedPositions, setLoggedPositions] = useState(new Set());
+    const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
+    const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
+    const [fontSize, setFontSize] = useState(39);
 
-  const textRef = useRef(null);
+    const textRef = useRef(null);
+
+    function replaceCRLFInArray(inputArray) {
+        // Ensure inputArray is an array of strings
+        if (!Array.isArray(inputArray)) {
+          throw new Error('Input is not an array');
+        }
+      
+        // Map over the array and replace CRLF characters in each string
+        return inputArray.map((inputString) => {
+          // Ensure each element is a string
+          if (typeof inputString !== 'string') {
+            throw new Error('Array element is not a string');
+          }
+      
+          // Replace all occurrences of \r, \n, or \r\n with an empty string
+          return inputString.replaceAll('CRLF', "\r\n");
+        });
+      }
+
+    const setAllContent1 = (arrstr) => {
+        setAllContent(replaceCRLFInArray(arrstr))
+    }
     useEffect(() => {
         window.setStartPosition = setStartPosition;
-        window.setAllContent = setAllContent;
+        window.setAllContent1 = setAllContent1;
         window.setSpeed = setSpeed;
         window.setFontSize = setFontSize;
         window.setShowClock = setShowClock;
@@ -30,11 +52,11 @@ const Page = () => {
         window.setCurrentSlug = setCurrentSlug;
         window.setSelectedRunOrderTitle = setSelectedRunOrderTitle;
         window.setNewPosition = setNewPosition;
-        
+
 
         return () => {
             delete window.setStartPosition;
-            delete window.setAllContent;
+            delete window.setAllContent1;
             delete window.setSpeed;
             delete window.setFontSize;
             delete window.setShowClock;
