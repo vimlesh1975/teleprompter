@@ -2,16 +2,31 @@
 
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import dynamic from 'next/dynamic';
-const Clock = dynamic(() => import('./components/Clock'), { ssr: false });
-
 
 const socket = io();
 socket.on('connect', () => {
   console.log('SOCKET CONNECTED! from caspar', socket.id);
 });
 
-export default function Home() {
+function replaceCRLFInArray(inputArray) {
+  // Ensure inputArray is an array of strings
+  if (!Array.isArray(inputArray)) {
+    throw new Error('Input is not an array');
+  }
+
+  // Map over the array and replace CRLF characters in each string
+  return inputArray.map((inputString) => {
+    // Ensure each element is a string
+    if (typeof inputString !== 'string') {
+      throw new Error('Array element is not a string');
+    }
+
+    // Replace all occurrences of \r, \n, or \r\n with an empty string
+    return inputString.replace(/(\r\n|\n|\r)/g, 'CRLF');
+  });
+}
+
+export default function Home({slugs,allContent}) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -91,7 +106,18 @@ export default function Home() {
               action: 'endpoint',
               command: `mixer 1-2 fill -0.02 -0.02 3.22 2.08`,
             });
+            setTimeout(() => {
+              endpoint({
+                action: 'endpoint',
+                command: `call 1-2 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
+              });
+              endpoint({
+                action: 'endpoint',
+                command: `call 1-2 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
+              })
+            }, 1000);
           }
+       
           }
         >
           Show React componenet

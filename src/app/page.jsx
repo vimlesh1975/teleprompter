@@ -378,7 +378,7 @@ export default function Home() {
       action: 'endpoint',
       command: `call 1-2 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
     })
-  }, [slugs])
+  }, [slugs, doubleClickedPosition])
 
   useEffect(() => {
     endpoint({
@@ -433,7 +433,7 @@ export default function Home() {
         </div>
         <div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
-            <Casparcg />
+            <Casparcg  slugs={slugs} allContent={allContent}/>
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <button onClick={() => {
