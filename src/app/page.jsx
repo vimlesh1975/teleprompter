@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import debounce from 'lodash.debounce'; // Importing debounce from lodash
 import dynamic from 'next/dynamic';
 
+
 import Casparcg from './Casparcg';
 const Clock = dynamic(() => import('./components/Clock'), { ssr: false });
 
@@ -416,7 +417,7 @@ export default function Home() {
               ))}
             </select>
           </div>
-          <div style={{ minWidth: 348, maxWidth: 348, maxHeight: '90vh', overflow: 'auto' }}>
+          <div style={{ minWidth: 348, maxWidth: 348, maxHeight: 700,minHeight: 700, overflow: 'auto' }}>
             {slugs?.map((val, i) => (
               <div
                 key={i}
@@ -454,20 +455,21 @@ export default function Home() {
               <button onClick={() => setNewsReaderText('Go Fast...')}>Go fast</button>
               <button onClick={() => setNewsReaderText('Wait...')}>Wait</button>
               <button onClick={() => setNewsReaderText('.')}>Clear</button>
-              <input checked={showClock} type="checkbox" onChange={() => setShowClock(!showClock)} /> <span> Show Clock:</span>{" "}
+              <button onClick={() => setShowClock(val=>!val)}>{showClock?'Hide Clock':'Show Clock'}</button>
 
               <button onClick={() => setNewsReaderText('Go Slow...')}>Go Slow</button>
               <button onClick={() => setNewsReaderText('Continue...')}>Continue...</button>
               <button onClick={() => setNewsReaderText('Stop...')}>Stop</button>
             </div>
           </div>
-          <div>
-            <div style={{ backgroundColor: 'blue', width: 500, color: 'white' }}>{selectedRunOrderTitle} {currentSlugName}</div>
+          <div    style={{ fontSize: `${fontSize}px`, fontWeight: 'bolder', width: 600, height:522 ,position:'absolute', top:startPosition+28}}>
+            <div style={{ backgroundColor: 'blue', color: 'yellow',padding: '0 25px',}}> {currentSlugName}</div>
             <textarea
               value={content}
-              rows="13"
-              cols="30"
-              style={{ fontSize: 39 }}
+              // rows="13"
+              // cols="29"
+              style={{ fontSize: `${fontSize}px`, width: 600, height:522 , }}
+
               disabled
             />
           </div>
@@ -492,7 +494,7 @@ export default function Home() {
               setTempSpeed(speed);
               setSpeed(0);
             }
-          }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 70, position: 'absolute', top: 535 }}>
+          }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 190, position: 'absolute', top: 535 }}>
             <div>
               <button onClick={() => setSpeed(val => val - 1)}>-</button>
               <button onClick={() => setSpeed(-7)}>-7</button>

@@ -32,8 +32,8 @@ function NewWindow({ children, onClose, newWindowRef }) {
             800: 340,
         };
     
-        // Default to a calculated or observed transform origin based on known origins
-        const transformOriginX = knownOrigins[screenWidth] || (screenWidth / 2);
+     // Calculate transform origin using the linear formula if not in known origins
+     const transformOriginX = knownOrigins[screenWidth] || (0.0893 * screenWidth + 284);
     
         // Toggle flip transformation
         if (container.style.transform.includes('rotateY(180deg)')) {
