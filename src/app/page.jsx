@@ -4,13 +4,10 @@ import NewWindow from './components/NewWindow';
 import Scroll from './components/Scroll';
 import io from 'socket.io-client';
 import debounce from 'lodash.debounce'; // Importing debounce from lodash
-import dynamic from 'next/dynamic';
 
 
-import Casparcg from './Casparcg';
-const Clock = dynamic(() => import('./components/Clock'), { ssr: false });
+// import Casparcg from './Casparcg';
 
-// const startPosition = 150;
 const socket = io();
 socket.on('connect', () => {
   console.log('SOCKET CONNECTED! from main page', socket.id);
@@ -304,12 +301,14 @@ export default function Home() {
 
   useEffect(() => {
     setCurrentSlug(currentStoryNumber - 1);
-    setScriptID(slugs[currentStoryNumber - 1]?.ScriptID);
-    setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
+    if (slugs.length > 0) {
+      setScriptID(slugs[currentStoryNumber - 1]?.ScriptID);
+      setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
+    }
   }, [currentStoryNumber, slugs])
 
   useEffect(() => {
-    if(stopAfterStoryChange){
+    if (stopAfterStoryChange) {
       setSpeed(0)
     }
   }, [currentStoryNumber])
@@ -320,14 +319,14 @@ export default function Home() {
     if (!Array.isArray(inputArray)) {
       throw new Error('Input is not an array');
     }
-  
+
     // Map over the array and replace CRLF characters in each string
     return inputArray.map((inputString) => {
       // Ensure each element is a string
       if (typeof inputString !== 'string') {
         throw new Error('Array element is not a string');
       }
-  
+
       // Replace all occurrences of \r, \n, or \r\n with an empty string
       return inputString.replace(/(\r\n|\n|\r)/g, 'CRLF');
     });
@@ -380,7 +379,7 @@ export default function Home() {
       command: `call 1-2 setDoubleClickedPosition(${doubleClickedPosition})`,
     })
   }, [doubleClickedPosition])
-  
+
   useEffect(() => {
     endpoint({
       action: 'endpoint',
@@ -402,12 +401,12 @@ export default function Home() {
     })
   }, [selectedRunOrderTitle])
 
-  useEffect(() => {
-    endpoint({
-      action: 'endpoint',
-      command: `call 1-2 setNewPosition(${newPosition})`,
-    })
-  }, [newPosition])
+  // useEffect(() => {
+  //   endpoint({
+  //     action: 'endpoint',
+  //     command: `call 1-2 setNewPosition(${newPosition})`,
+  //   })
+  // }, [newPosition])
 
   return (
     <div style={{ overflow: 'hidden' }}>
@@ -424,7 +423,7 @@ export default function Home() {
               ))}
             </select>
           </div>
-          <div style={{ minWidth: 348, maxWidth: 348, maxHeight: 700,minHeight: 700, overflow: 'auto' }}>
+          <div style={{ minWidth: 348, maxWidth: 348, maxHeight: 700, minHeight: 700, overflow: 'auto' }}>
             {slugs?.map((val, i) => (
               <div
                 key={i}
@@ -440,8 +439,8 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <div style={{ border: '1px solid red', marginBottom: 10 ,minWidth: 600, maxWidth: 600,}}>
-            <Casparcg  slugs={slugs} allContent={allContent}/>
+          <div style={{ border: '1px solid red', marginBottom: 10, minWidth: 600, maxWidth: 600, }}>
+            {/* <Casparcg  slugs={slugs} allContent={allContent}/> */}
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <button onClick={() => {
@@ -456,7 +455,7 @@ export default function Home() {
               setCurrentSlugName(slugs[lastIndex].SlugName);
               setScriptID(slugs[lastIndex].ScriptID);
             }}>Go to Last</button>
-             <label> <input checked={stopAfterStoryChange} type="checkbox" onChange={() => setStopAfterStoryChange(val=>!val)} /> <span>Stop After Story Change</span></label>  
+            <label> <input checked={stopAfterStoryChange} type="checkbox" onChange={() => setStopAfterStoryChange(val => !val)} /> <span>Stop After Story Change</span></label>
 
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
@@ -464,20 +463,20 @@ export default function Home() {
               <button onClick={() => setNewsReaderText('Go Fast...')}>Go fast</button>
               <button onClick={() => setNewsReaderText('Wait...')}>Wait</button>
               <button onClick={() => setNewsReaderText('.')}>Clear</button>
-              <button onClick={() => setShowClock(val=>!val)}>{showClock?'Hide Clock':'Show Clock'}</button>
+              <button onClick={() => setShowClock(val => !val)}>{showClock ? 'Hide Clock' : 'Show Clock'}</button>
 
               <button onClick={() => setNewsReaderText('Go Slow...')}>Go Slow</button>
               <button onClick={() => setNewsReaderText('Continue...')}>Continue...</button>
               <button onClick={() => setNewsReaderText('Stop...')}>Stop</button>
             </div>
           </div>
-          <div    style={{ fontSize: `${fontSize}px`, fontWeight: 'bolder', width: 600, height:522 ,position:'absolute', top:startPosition+28}}>
-           {slugs && slugs[currentSlug] && <div style={{ backgroundColor: 'blue', color: 'yellow', padding: '0 25px',}}>{currentSlug+1} {currentSlugName}{slugs[currentSlug]?.Media ? ' - Visual' : ' -No Visual'}</div>}
+          <div style={{ fontSize: `${fontSize}px`, fontWeight: 'bolder', width: 600, height: 522, position: 'absolute', top: startPosition + 28 }}>
+            {slugs && slugs[currentSlug] && <div style={{ backgroundColor: 'blue', color: 'yellow', padding: '0 25px', }}>{currentSlug + 1} {currentSlugName}{slugs[currentSlug]?.Media ? ' - Visual' : ' -No Visual'}</div>}
             <textarea
               value={content}
               // rows="13"
               // cols="29"
-              style={{ fontSize: `${fontSize}px`, width: 600, height:522 , }}
+              style={{ fontSize: `${fontSize}px`, width: 600, height: 522, }}
 
               disabled
             />
@@ -495,7 +494,6 @@ export default function Home() {
           </div>
           <div onContextMenu={(e) => {
             e.preventDefault();
-            // setSpeed(0);
             if (speed === 0) {
               setSpeed(tempSpeed);
             }
@@ -514,7 +512,6 @@ export default function Home() {
               <button onClick={() => setSpeed(-2)}> -2</button>
               <button onClick={() => setSpeed(-1)}> -1</button>
               <button onClick={() => {
-                // setSpeed(0)
                 if (speed === 0) {
                   setSpeed(tempSpeed);
                 }
