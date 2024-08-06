@@ -8,23 +8,43 @@ function NewWindow({ children, onClose, newWindowRef }) {
 
     const handleTitleBarDoubleClick = () => {
         console.log('Title bar double-clicked');
-        container.style.transformOrigin = '0 0';
+        container.style.transformOrigin = '5px 0';
         container.style.transform = `scale(${newWindowRef.current.screen.width / 600}, ${newWindowRef.current.screen.height / 522} )`;
     };
 
     const handleRightClick = (event) => {
         event.preventDefault(); // Prevent the default context menu from appearing
         console.log('Right-click detected, flipping content');
-     
+    
+        const screenWidth = newWindowRef.current.screen.width;
+    
+        // Define known transform origins based on testing
+        const knownOrigins = {
+            1920: 456,
+            1680: 440,
+            1600: 435,
+            1440: 422,
+            1366: 415,
+            1360: 415,
+            1280: 407,
+            1152: 393,
+            1024: 376,
+            800: 340,
+        };
+    
+        // Default to a calculated or observed transform origin based on known origins
+        const transformOriginX = knownOrigins[screenWidth] || (screenWidth / 2);
+    
         // Toggle flip transformation
         if (container.style.transform.includes('rotateY(180deg)')) {
-            container.style.transformOrigin = '0 0'; // Center the transform origin
+            container.style.transformOrigin = '5px 0';
             container.style.transform = container.style.transform.replace('rotateY(180deg)', 'rotateY(0deg)');
         } else {
-            container.style.transformOrigin = '24% 0%'; // Center the transform origin
+            container.style.transformOrigin = `${transformOriginX}px 0%`;
             container.style.transform = container.style.transform + ' rotateY(180deg)';
         }
     };
+    
 
     useEffect(() => {
         // Check if the new window exists, if not, create it
