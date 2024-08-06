@@ -37,6 +37,7 @@ export default function Home() {
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
   const [fontSize, setFontSize] = useState(39);
+  const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
 
   const newWindowRef = useRef(null);
 
@@ -307,6 +308,12 @@ export default function Home() {
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
   }, [currentStoryNumber, slugs])
 
+  useEffect(() => {
+    if(stopAfterStoryChange){
+      setSpeed(0)
+    }
+  }, [currentStoryNumber])
+
 
   function replaceCRLFInArray(inputArray) {
     // Ensure inputArray is an array of strings
@@ -449,6 +456,8 @@ export default function Home() {
               setCurrentSlugName(slugs[lastIndex].SlugName);
               setScriptID(slugs[lastIndex].ScriptID);
             }}>Go to Last</button>
+             <label> <input checked={stopAfterStoryChange} type="checkbox" onChange={() => setStopAfterStoryChange(val=>!val)} /> <span>Stop After Story Change</span></label>  
+
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <div>
@@ -463,7 +472,7 @@ export default function Home() {
             </div>
           </div>
           <div    style={{ fontSize: `${fontSize}px`, fontWeight: 'bolder', width: 600, height:522 ,position:'absolute', top:startPosition+28}}>
-            <div style={{ backgroundColor: 'blue', color: 'yellow',padding: '0 25px',}}> {currentSlugName}</div>
+           {slugs && slugs[currentSlug] && <div style={{ backgroundColor: 'blue', color: 'yellow',padding: '0 25px',}}>{currentSlug+1} {currentSlugName}{slugs[currentSlug]?.Media ? ' - Visual' : ' -No Visual'}</div>}
             <textarea
               value={content}
               // rows="13"
