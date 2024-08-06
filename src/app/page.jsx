@@ -440,7 +440,7 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <div style={{ border: '1px solid red', marginBottom: 10 }}>
+          <div style={{ border: '1px solid red', marginBottom: 10 ,minWidth: 600, maxWidth: 600,}}>
             <Casparcg  slugs={slugs} allContent={allContent}/>
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
@@ -472,7 +472,7 @@ export default function Home() {
             </div>
           </div>
           <div    style={{ fontSize: `${fontSize}px`, fontWeight: 'bolder', width: 600, height:522 ,position:'absolute', top:startPosition+28}}>
-           {slugs && slugs[currentSlug] && <div style={{ backgroundColor: 'blue', color: 'yellow',padding: '0 25px',}}>{currentSlug+1} {currentSlugName}{slugs[currentSlug]?.Media ? ' - Visual' : ' -No Visual'}</div>}
+           {slugs && slugs[currentSlug] && <div style={{ backgroundColor: 'blue', color: 'yellow', padding: '0 25px',}}>{currentSlug+1} {currentSlugName}{slugs[currentSlug]?.Media ? ' - Visual' : ' -No Visual'}</div>}
             <textarea
               value={content}
               // rows="13"

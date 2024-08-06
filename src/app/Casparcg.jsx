@@ -26,7 +26,7 @@ function replaceCRLFInArray(inputArray) {
   });
 }
 
-export default function Home({slugs,allContent}) {
+export default function Home({ slugs, allContent }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -64,85 +64,112 @@ export default function Home({slugs,allContent}) {
   return (
     <div>
       <div>
-        <button
-          style={{ backgroundColor: connected ? 'green' : 'red' }}
-          onClick={() =>
-            endpoint({
-              action: 'connect',
-            })
-          }
-        >
-          Connect
-        </button>
-        <button
-          onClick={() =>
-            endpoint({
-              action: 'disconnect',
-            })
-          }
-        >
-          DisConnect
-        </button>
-
-        <button
-          onClick={() =>
-            endpoint({
-              action: 'endpoint',
-              command: `play 1-2 [html] http://localhost:3000/webrtc.html`,
-            })
-          }
-        >
-          Show in casparcg Web RTC
-        </button>
-   
- 
-        <button
-          onClick={() =>{
-            endpoint({
-              action: 'endpoint',
-              command: `Play 1-2 [html] "http://localhost:3000/test"`,
-            });
-            endpoint({
-              action: 'endpoint',
-              command: `mixer 1-2 fill -0.02 -0.02 3.22 2.08`,
-            });
-            setTimeout(() => {
+        <div>
+          <button
+            style={{ backgroundColor: connected ? 'green' : 'red' }}
+            onClick={() =>
+              endpoint({
+                action: 'connect',
+              })
+            }
+          >
+            Connect
+          </button>
+          <button
+            onClick={() =>
+              endpoint({
+                action: 'disconnect',
+              })
+            }
+          >
+            DisConnect
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() =>{
               endpoint({
                 action: 'endpoint',
-                command: `call 1-2 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
+                command: `play 1-2 [html] http://localhost:3000/webrtc.html`,
               });
               endpoint({
                 action: 'endpoint',
-                command: `call 1-2 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
-              })
-            }, 1000);
-          }
-       
-          }
-        >
-          Show React componenet
-        </button>
+                command: fliped ? 'mixer 1-2 fill 1 0 -1 1' : 'mixer 1-2 fill 0 0 1 1',
+              });
+            }
+            }
+          >
+            Show in casparcg Web RTC
+          </button>
+          <button
+            onClick={() => {
+              endpoint({
+                action: 'endpoint',
+                command: !fliped ? 'mixer 1-2 fill 1 0 -1 1' : 'mixer 1-2 fill 0 0 1 1',
+              });
+              setFliped(val => !val);
+            }}
+          >
+            Toggle Flip Web RTC
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              endpoint({
+                action: 'endpoint',
+                command: `Play 1-2 [html] "http://localhost:3000/test"`,
+              });
+              endpoint({
+                action: 'endpoint',
+                command: !fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02':'mixer 1-2 fill 1.02 -0.015 -3.21 2.02' ,
+              });
+              setTimeout(() => {
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-2 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
+                });
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-2 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
+                })
+              }, 1000);
+            }
+
+            }
+          >
+            Show React componenet
+          </button>
+
+          <button
+            onClick={() => {
+              endpoint({
+                action: 'endpoint',
+                command: fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02':'mixer 1-2 fill 1.02 -0.015 -3.21 2.02' ,
+              });
+              setFliped(val => !val);
+            }}
+          >
+            Toggle Flip React Componenet
+          </button>
+        </div>
         <button
           onClick={() => {
             endpoint({
               action: 'endpoint',
-              command: fliped ? 'mixer 1-2 fill 1 0 -1 1' : 'mixer 1-2 fill 0 0 1 1',
+              command: `stop 1-2`,
             });
-            setFliped(val => !val);
-          }}
-        >
-          Toggle Flip
-        </button>
-        <button
-          onClick={() =>
             endpoint({
               action: 'endpoint',
-              command: `stop 1-2`,
-            })
+              command: `mixer 1-2 clear`,
+            });
+
+          }
           }
         >
-          Stop
+          Stop Caspar Output
         </button>
+        {/* {fliped.toString()} */}
       </div>
 
     </div>
