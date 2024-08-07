@@ -6,7 +6,7 @@ import io from 'socket.io-client';
 import debounce from 'lodash.debounce'; // Importing debounce from lodash
 
 
-// import Casparcg from './Casparcg';
+import Casparcg from './Casparcg';
 
 const socket = io();
 socket.on('connect', () => {
@@ -341,7 +341,7 @@ export default function Home() {
   useEffect(() => {
     endpoint({
       action: 'endpoint',
-      command: `call 1-2 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
+      command: `call 1-2 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"').replaceAll(')', 'closesmallbracket')})`,
     })
   }, [allContent])
 
@@ -440,7 +440,7 @@ export default function Home() {
         </div>
         <div>
           <div style={{ border: '1px solid red', marginBottom: 10, minWidth: 600, maxWidth: 600, }}>
-            {/* <Casparcg  slugs={slugs} allContent={allContent}/> */}
+            <Casparcg  slugs={slugs} allContent={allContent}/>
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <button onClick={() => {

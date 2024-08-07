@@ -33,7 +33,7 @@ const Page = () => {
           }
       
           // Replace all occurrences of \r, \n, or \r\n with an empty string
-          return inputString.replaceAll('CRLF', "\r\n");
+          return inputString.replaceAll('CRLF', "\r\n").replaceAll('closesmallbracket', ")");
         });
       }
 
