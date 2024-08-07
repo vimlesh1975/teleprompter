@@ -1,8 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useCallback,  useState } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
+import io from 'socket.io-client';
+const socket = io();
+socket.on('connect', () => {
+    console.log('SOCKET CONNECTED! from Scroll page', socket.id);
+});
 
 function moveZerosToFront(arr) {
     // Filter out the zeros
@@ -11,7 +16,7 @@ function moveZerosToFront(arr) {
     const nonZeros = arr.filter(num => num !== 0);
     // Concatenate zeros at the beginning and non-zero elements afterwards
     return [...zeros, ...nonZeros];
-  }
+}
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
@@ -61,6 +66,14 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle);
     }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory]);
 
+ 
+    useEffect(() => {
+        socket.emit('setCurrentStoryNumber', currentStoryNumber);
+        return () => {
+            socket.off('setCurrentStoryNumber');
+        };
+    }, [currentStoryNumber])
+
     useEffect(() => {
         let animationFrameId;
 
@@ -90,29 +103,29 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                 }
                 // Track lines that have crossed the startPosition
                 // if(speed!==0){
-                    let linesCrossed = 0;
-                    const ref = contentRefs.current[(-doubleClickedPosition+currentStoryNumber - 1)*3];
-                    if (ref) {
-                        const rect = ref.getBoundingClientRect();
-                        const style = getComputedStyle(ref);
-                        const lineHeight = parseFloat(style.lineHeight);
-                        if (rect.top < startPosition) {
-                            linesCrossed = Math.floor((startPosition - rect.top) / lineHeight);
-                            if (linesCrossed>storyLines[currentStoryNumber-1]){
-                                linesCrossed=storyLines[currentStoryNumber-1];
-                            }
+                let linesCrossed = 0;
+                const ref = contentRefs.current[(-doubleClickedPosition + currentStoryNumber - 1) * 3];
+                if (ref) {
+                    const rect = ref.getBoundingClientRect();
+                    const style = getComputedStyle(ref);
+                    const lineHeight = parseFloat(style.lineHeight);
+                    if (rect.top < startPosition) {
+                        linesCrossed = Math.floor((startPosition - rect.top) / lineHeight);
+                        if (linesCrossed > storyLines[currentStoryNumber - 1]) {
+                            linesCrossed = storyLines[currentStoryNumber - 1];
                         }
                     }
-                    setCrossedLines(linesCrossed);
+                }
+                setCrossedLines(linesCrossed);
                 // }
-               
+
             }
             animationFrameId = requestAnimationFrame(scrollText);
         };
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [setCrossedLines,speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
+    }, [setCrossedLines, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
 
 
     // Function to calculate number of lines in a given element
@@ -131,15 +144,16 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         const storiesLines = [];
 
         for (let i = 0; i < contentRefs.current.length; i += 3) {
-            const storyLines = [
+            const aa = [
                 calculateNumberOfLines(contentRefs.current[i]),
                 calculateNumberOfLines(contentRefs.current[i + 1]),
                 calculateNumberOfLines(contentRefs.current[i + 2]),
             ].reduce((acc, lines) => acc + lines, 0);
 
-            storiesLines.push(storyLines);
+            storiesLines.push(aa);
         }
-        const result= moveZerosToFront(storiesLines);
+        const result = moveZerosToFront(storiesLines);
+        console.log(result.length, result)
         setStoryLines(result)
     }, [allContent, fontSize]);
 
@@ -156,7 +170,7 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                             <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                             <div>{newsReaderText}</div>
                             <div>{showClock ? '' : '.'}</div>
-                            <div style={{ display: showClock ? 'inline' : 'none', color:'red' }}><Clock /></div>
+                            <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
                             <div >{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
                         </div>
                     </div>

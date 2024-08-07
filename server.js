@@ -45,6 +45,13 @@ app.prepare().then(async () => {
             io.emit('ServerConnectionStatus2', data);
         });
 
+        //from scroll page in caspar  start
+        socket.on('setCurrentStoryNumber', (data) => {
+            io.emit('setCurrentStoryNumber2', data);
+        });
+        //from scroll page in caspar End
+
+
         //webrtc code starts
         socket.on('offer', (data) => {
             socket.broadcast.emit('offer', data);
@@ -62,10 +69,10 @@ app.prepare().then(async () => {
         // Handle disconnection
         socket.on('disconnect', () => {
             console.log('User disconnected:', socket.id);
-            // shuttle.removeAllListeners();
             socket.removeAllListeners();
             socket.removeAllListeners('ServerConnectionStatus');
             socket.removeAllListeners("connect");
+            socket.removeAllListeners("setCurrentStoryNumber");
         });
 
     });

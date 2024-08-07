@@ -1,4 +1,8 @@
-flip new window done 02.08.2024
+flip new window done 02.08.2024✅
 
 dropped story
-too many connection with casparcg - bug 
+too many sql connection  - bug 
+too many casparcg connection- bug 
+some difference in screen and caspar output
+
+

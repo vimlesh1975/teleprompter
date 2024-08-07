@@ -3,6 +3,7 @@ import pool from '../db.js'; // Adjust the import based on your actual pool file
 export async function POST(req) {
     try {
         const { curstory, curbulletin } = await req.json();
+        if (curbulletin===null) return;
         const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?`;
         const values = [curstory, curbulletin];
         

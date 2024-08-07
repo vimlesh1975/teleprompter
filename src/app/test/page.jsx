@@ -41,6 +41,10 @@ const Page = () => {
         setAllContent(replaceCRLFInArray(arrstr))
     }
 
+    const setLoggedPositions1 = () => {
+      setLoggedPositions(new Set());
+  }
+
     useEffect(() => {
         window.setStartPosition = setStartPosition;
         window.setAllContent1 = setAllContent1;
@@ -53,7 +57,8 @@ const Page = () => {
         window.setCurrentSlug = setCurrentSlug;
         window.setSelectedRunOrderTitle = setSelectedRunOrderTitle;
         window.setNewPosition = setNewPosition;
-
+        window.setCurrentStoryNumber = setCurrentStoryNumber;
+        window.setLoggedPositions1 = setLoggedPositions1;
 
         return () => {
             delete window.setStartPosition;
@@ -67,6 +72,8 @@ const Page = () => {
             delete window.setCurrentSlug;
             delete window.setSelectedRunOrderTitle;
             delete window.setNewPosition;
+            delete window.setCurrentStoryNumber;
+            delete window.setLoggedPositions1;
 
         };
     }, []);

@@ -26,17 +26,17 @@ function replaceCRLFInArray(inputArray) {
   });
 }
 
-export default function Home({ slugs, allContent }) {
+export default function Home({ slugs, allContent,setShowReactComponent, showReactComponent }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
 
   useEffect(() => {
     socket.on('connect', () => {
-      console.log('SOCKET CONNECTED!', socket.id);
+      console.log('SOCKET CONNECTED! form casparcg connection', socket.id);
     });
     socket.on('ServerConnectionStatus2', (msg) => {
-      console.log(msg)
+      // console.log(msg)
       setConnected(msg);
     });
     return () => {
@@ -125,6 +125,7 @@ export default function Home({ slugs, allContent }) {
                 command: !fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02':'mixer 1-2 fill 1.02 -0.015 -3.21 2.02' ,
               });
               setTimeout(() => {
+                setShowReactComponent(true);
                 endpoint({
                   action: 'endpoint',
                   command: `call 1-2 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
@@ -163,7 +164,7 @@ export default function Home({ slugs, allContent }) {
               action: 'endpoint',
               command: `mixer 1-2 clear`,
             });
-
+            setShowReactComponent(false);
           }
           }
         >

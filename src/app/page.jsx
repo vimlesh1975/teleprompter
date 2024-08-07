@@ -35,6 +35,7 @@ export default function Home() {
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
   const [fontSize, setFontSize] = useState(39);
   const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
+  const [showReactComponent, setShowReactComponent] = useState(false);
 
   const newWindowRef = useRef(null);
 
@@ -291,10 +292,15 @@ export default function Home() {
     socket.on('jog-dir1', handleJogdir);
     socket.on('shuttle1', handleShuttle);
 
+    socket.on('setCurrentStoryNumber2', (data) => {
+      setCurrentStoryNumber(data)
+    });
+
     return () => {
       socket.off('buttondown1', handleButtonDown);
       socket.off('jog-dir1', handleJogdir);
       socket.off('shuttle1', handleShuttle);
+      socket.off('setCurrentStoryNumber2');
       // socket.disconnect();
     };
   }, [next, previous, speed, setSpeed, fromStart, handleDoubleClick, slugs, onclickSlug])
@@ -377,6 +383,18 @@ export default function Home() {
     endpoint({
       action: 'endpoint',
       command: `call 1-2 setDoubleClickedPosition(${doubleClickedPosition})`,
+    });
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setNewPosition(${startPosition})`,
+    });
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
+    });
+    endpoint({
+      action: 'endpoint',
+      command: `call 1-2 setLoggedPositions1()`,
     })
   }, [doubleClickedPosition])
 
@@ -387,12 +405,6 @@ export default function Home() {
     })
   }, [slugs, doubleClickedPosition])
 
-  useEffect(() => {
-    endpoint({
-      action: 'endpoint',
-      command: `call 1-2 setCurrentSlug(${currentSlug})`,
-    })
-  }, [currentSlug])
 
   useEffect(() => {
     endpoint({
@@ -413,7 +425,7 @@ export default function Home() {
       <div style={{ display: 'flex' }}>
         <div>
           <div>
-            Run Orders:
+            Buletins:
             <select value={selectedRunOrderTitle} onChange={handleSelectionChange}>
               <option value="" disabled>Select a Run Order</option>
               {runOrderTitles?.map((runOrderTitle, i) => (
@@ -422,6 +434,7 @@ export default function Home() {
                 </option>
               ))}
             </select>
+            {slugs.length} Slugs
           </div>
           <div style={{ minWidth: 348, maxWidth: 348, maxHeight: 700, minHeight: 700, overflow: 'auto' }}>
             {slugs?.map((val, i) => (
@@ -440,7 +453,7 @@ export default function Home() {
         </div>
         <div>
           <div style={{ border: '1px solid red', marginBottom: 10, minWidth: 600, maxWidth: 600, }}>
-            <Casparcg  slugs={slugs} allContent={allContent}/>
+            <Casparcg slugs={slugs} allContent={allContent} setShowReactComponent={setShowReactComponent} showReactComponent={showReactComponent} />
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <button onClick={() => {
@@ -474,10 +487,7 @@ export default function Home() {
             {slugs && slugs[currentSlug] && <div style={{ backgroundColor: 'blue', color: 'yellow', padding: '0 25px', }}>{currentSlug + 1} {currentSlugName}{slugs[currentSlug]?.Media ? ' - Visual' : ' -No Visual'}</div>}
             <textarea
               value={content}
-              // rows="13"
-              // cols="29"
-              style={{ fontSize: `${fontSize}px`, width: 600, height: 522, }}
-
+              style={{ fontSize: `${fontSize}px`, width: 600, height: 522, lineHeight: `${fontSize * 1.3}px` }}
               disabled
             />
           </div>
@@ -485,8 +495,8 @@ export default function Home() {
         </div>
         <div>
           <div>
-            {!showNewWindow && <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
-            {showNewWindow && (
+            {!showReactComponent && !showNewWindow && <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+            {!showReactComponent && showNewWindow && (
               <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} >
                 <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
               </NewWindow>
@@ -540,7 +550,8 @@ export default function Home() {
                 style={{ width: '60%' }}
               />
             </div>
-            <div>
+
+            {!showReactComponent && <div>
               <button onClick={() => {
                 if (showNewWindow) {
                   newWindowRef.current.close();
@@ -548,8 +559,8 @@ export default function Home() {
                 setNewPosition(textRef.current.offsetTop)
                 setShowNewWindow(!showNewWindow);
               }}>{showNewWindow ? 'Close New Window' : 'Open New Window'}</button>
+            </div>}
 
-            </div>
             <div>
               Font Size:<input type='number' value={fontSize} style={{ width: 50 }} onChange={e => setFontSize(e.target.value)} />
               Start Position:<input type='number' value={startPosition} style={{ width: 50 }} onChange={e => {
