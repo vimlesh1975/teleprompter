@@ -66,7 +66,7 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         updateCurrentStory(currentStoryNumber, selectedRunOrderTitle);
     }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory]);
 
- 
+
     useEffect(() => {
         socket.emit('setCurrentStoryNumber', currentStoryNumber);
         return () => {
@@ -110,7 +110,7 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
                     const style = getComputedStyle(ref);
                     const lineHeight = parseFloat(style.lineHeight);
                     if (rect.top < startPosition) {
-                        linesCrossed = Math.floor((startPosition - rect.top) / lineHeight);
+                        linesCrossed = 1 + Math.floor((startPosition - rect.top) / lineHeight);
                         if (linesCrossed > storyLines[currentStoryNumber - 1]) {
                             linesCrossed = storyLines[currentStoryNumber - 1];
                         }
@@ -134,7 +134,7 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
             const style = getComputedStyle(element);
             const lineHeight = parseFloat(style.lineHeight);
             const height = element.clientHeight;
-            return Math.floor(height / lineHeight);
+            return height / lineHeight; // Return the float value directly
         }
         return 0;
     };
@@ -144,18 +144,25 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
         const storiesLines = [];
 
         for (let i = 0; i < contentRefs.current.length; i += 3) {
-            const aa = [
-                calculateNumberOfLines(contentRefs.current[i]),
-                calculateNumberOfLines(contentRefs.current[i + 1]),
-                calculateNumberOfLines(contentRefs.current[i + 2]),
-            ].reduce((acc, lines) => acc + lines, 0);
+            // Sum up line counts for three elements first
+            const totalLines =
+                calculateNumberOfLines(contentRefs.current[i]) +
+                calculateNumberOfLines(contentRefs.current[i + 1]) +
+                calculateNumberOfLines(contentRefs.current[i + 2]);
 
-            storiesLines.push(aa);
+            // Apply Math.floor to the total
+            var flooredLines=0;
+            if (totalLines > 0) {
+                 flooredLines = 1 + Math.floor(totalLines);
+            }
+            storiesLines.push(flooredLines);
         }
+
         const result = moveZerosToFront(storiesLines);
-        console.log(result.length, result)
-        setStoryLines(result)
+        console.log(result.length, result);
+        setStoryLines(result);
     }, [allContent, fontSize]);
+
 
     // Calculate width based on lines crossed
     const maxLines = storyLines[currentStoryNumber - 1];
