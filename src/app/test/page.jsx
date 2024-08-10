@@ -2,6 +2,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Scroll from '../components/Scroll';
 
+const scrollWidth=600;
+const scrollHeight=522;
+
 const Page = () => {
     const [startPosition, setStartPosition] = useState(150);
     const [speed, setSpeed] = useState(0);
@@ -80,7 +83,7 @@ const Page = () => {
 
     return (
         <div >
-            <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+            <Scroll scrollWidth={scrollWidth} scrollHeight={scrollHeight} fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
         </div>
     );
 };

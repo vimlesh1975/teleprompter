@@ -7,6 +7,8 @@ import debounce from 'lodash.debounce'; // Importing debounce from lodash
 
 
 import Casparcg from './Casparcg';
+const scrollWidth=600;
+const scrollHeight=522;
 
 const socket = io();
 socket.on('connect', () => {
@@ -413,12 +415,6 @@ export default function Home() {
     })
   }, [selectedRunOrderTitle])
 
-  // useEffect(() => {
-  //   endpoint({
-  //     action: 'endpoint',
-  //     command: `call 1-2 setNewPosition(${newPosition})`,
-  //   })
-  // }, [newPosition])
 
   return (
     <div style={{ overflow: 'hidden' }}>
@@ -452,7 +448,7 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <div style={{ border: '1px solid red', marginBottom: 10, minWidth: 600, maxWidth: 600, }}>
+          <div style={{ border: '1px solid red', marginBottom: 10, minWidth: scrollWidth, maxWidth: scrollWidth, }}>
             <Casparcg slugs={slugs} allContent={allContent} setShowReactComponent={setShowReactComponent} showReactComponent={showReactComponent} />
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
@@ -483,11 +479,11 @@ export default function Home() {
               <button onClick={() => setNewsReaderText('Stop...')}>Stop</button>
             </div>
           </div>
-          <div style={{ fontSize: `${fontSize}px`, fontWeight: 'bolder', width: 600, height: 522, position: 'absolute', top: startPosition + 28 }}>
+          <div style={{ fontSize: `${fontSize}px`, fontWeight: 'bolder', width: scrollWidth, minHeight: scrollHeight, position: 'absolute', top: startPosition + 28 }}>
             {slugs && slugs[currentSlug] && <div style={{ backgroundColor: 'blue', color: 'yellow', padding: '0 25px', }}>{currentSlug + 1} {currentSlugName}{slugs[currentSlug]?.Media ? ' - Visual' : ' -No Visual'}</div>}
             <textarea
               value={content}
-              style={{ fontSize: `${fontSize}px`, width: 600, height: 522, lineHeight: `${fontSize * 1.3}px` }}
+              style={{ fontSize: `${fontSize}px`, width: scrollWidth, minHeight: scrollHeight-80, maxHeight: scrollHeight-80, lineHeight: `${fontSize * 1.3}px` }}
               disabled
             />
           </div>
@@ -495,10 +491,10 @@ export default function Home() {
         </div>
         <div>
           <div>
-            {!showReactComponent && !showNewWindow && <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
+            {!showReactComponent && !showNewWindow && <Scroll scrollWidth={scrollWidth} scrollHeight={scrollHeight} fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />}
             {!showReactComponent && showNewWindow && (
-              <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} >
-                <Scroll fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
+              <NewWindow onClose={handleCloseNewWindow} newWindowRef={newWindowRef} scrollWidth={scrollWidth} scrollHeight={scrollHeight}>
+                <Scroll scrollWidth={scrollWidth} scrollHeight={scrollHeight} fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} />
               </NewWindow>
             )}
           </div>
@@ -511,7 +507,7 @@ export default function Home() {
               setTempSpeed(speed);
               setSpeed(0);
             }
-          }} style={{ textAlign: 'center', border: '1px solid red', minWidth: 600, minHeight: 190, position: 'absolute', top: 535 }}>
+          }} style={{ textAlign: 'center', border: '1px solid red', minWidth: scrollWidth, minHeight: 190, position: 'absolute', top: 535 }}>
             <div>
               <button onClick={() => setSpeed(val => val - 1)}>-</button>
               <button onClick={() => setSpeed(-7)}>-7</button>

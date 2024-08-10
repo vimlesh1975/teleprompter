@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-function NewWindow({ children, onClose, newWindowRef }) {
+function NewWindow({ children, onClose, newWindowRef ,scrollWidth, scrollHeight}) {
     // const newWindowRef = useRef(null);
     const [container, setContainer] = useState(null);
       // State to keep track of flip status
@@ -9,7 +9,7 @@ function NewWindow({ children, onClose, newWindowRef }) {
     const handleTitleBarDoubleClick = () => {
         console.log('Title bar double-clicked');
         container.style.transformOrigin = '5px 0';
-        container.style.transform = `scale(${newWindowRef.current.screen.width / 600}, ${newWindowRef.current.screen.height / 522} )`;
+        container.style.transform = `scale(${newWindowRef.current.screen.width / scrollWidth}, ${newWindowRef.current.screen.height / scrollHeight} )`;
     };
 
     const handleRightClick = (event) => {
@@ -50,7 +50,6 @@ function NewWindow({ children, onClose, newWindowRef }) {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
             newWindowRef.current = window.open('', '', 'width=620,height=540');
-
         }
 
         // Ensure the window is still available

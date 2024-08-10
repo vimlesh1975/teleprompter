@@ -28,7 +28,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ scrollWidth,scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const scrollingTextStyle = {
         position: 'absolute',
         top: parseFloat(newPosition),
@@ -170,10 +170,10 @@ const Scroll = ({ fontSize, setCurrentSlug, newPosition, setNewPosition, doubleC
 
     return (
         <div>
-            <div style={{ maxWidth: 600, minWidth: 600, maxHeight: 522, minHeight: 522, border: '1px solid black' }}>
+            <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, maxHeight: scrollHeight, minHeight: scrollHeight, border: '1px solid black' }}>
                 <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
                     <div style={{ backgroundColor: 'lightgreen', width: `${widthPercentage}%` }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-around', width: 600 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
                             <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                             <div>{newsReaderText}</div>
                             <div>{showClock ? '' : '.'}</div>
