@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-function NewWindow({ children, onClose, newWindowRef ,scrollWidth, scrollHeight}) {
+function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight }) {
     // const newWindowRef = useRef(null);
     const [container, setContainer] = useState(null);
-      // State to keep track of flip status
+    // State to keep track of flip status
 
     const handleTitleBarDoubleClick = () => {
         console.log('Title bar double-clicked');
@@ -15,9 +15,9 @@ function NewWindow({ children, onClose, newWindowRef ,scrollWidth, scrollHeight}
     const handleRightClick = (event) => {
         event.preventDefault(); // Prevent the default context menu from appearing
         console.log('Right-click detected, flipping content');
-    
+
         const screenWidth = newWindowRef.current.screen.width;
-    
+
         // Define known transform origins based on testing
         const knownOrigins = {
             1920: 456,
@@ -31,10 +31,10 @@ function NewWindow({ children, onClose, newWindowRef ,scrollWidth, scrollHeight}
             1024: 376,
             800: 340,
         };
-    
-     // Calculate transform origin using the linear formula if not in known origins
-     const transformOriginX = knownOrigins[screenWidth] || (0.0893 * screenWidth + 284);
-    
+
+        // Calculate transform origin using the linear formula if not in known origins
+        const transformOriginX = knownOrigins[screenWidth] || (0.0893 * screenWidth + 284);
+
         // Toggle flip transformation
         if (container.style.transform.includes('rotateY(180deg)')) {
             container.style.transformOrigin = '5px 0';
@@ -44,12 +44,12 @@ function NewWindow({ children, onClose, newWindowRef ,scrollWidth, scrollHeight}
             container.style.transform = container.style.transform + ' rotateY(180deg)';
         }
     };
-    
+
 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', 'width=620,height=540');
+            newWindowRef.current = window.open('', '', `width=${scrollWidth+20},height=${scrollHeight+18}`);
         }
 
         // Ensure the window is still available

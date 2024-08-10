@@ -411,7 +411,7 @@ export default function Home() {
   useEffect(() => {
     endpoint({
       action: 'endpoint',
-      command: `call 1-2 setSelectedRunOrderTitle(${selectedRunOrderTitle})`,
+      command: `call 1-2 setSelectedRunOrderTitle('${selectedRunOrderTitle}')`,
     })
   }, [selectedRunOrderTitle])
 

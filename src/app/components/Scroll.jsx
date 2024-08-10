@@ -28,7 +28,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({ scrollWidth,scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const scrollingTextStyle = {
         position: 'absolute',
         top: parseFloat(newPosition),
@@ -143,7 +143,7 @@ const Scroll = ({ scrollWidth,scrollHeight, fontSize, setCurrentSlug, newPositio
     useEffect(() => {
         const storiesLines = [];
 
-        for (let i = 0; i < contentRefs.current.length; i += 3) {
+        for (let i = 0; i < slugs.length * 3; i += 3) {
             // Sum up line counts for three elements first
             const totalLines =
                 calculateNumberOfLines(contentRefs.current[i]) +
@@ -151,9 +151,9 @@ const Scroll = ({ scrollWidth,scrollHeight, fontSize, setCurrentSlug, newPositio
                 calculateNumberOfLines(contentRefs.current[i + 2]);
 
             // Apply Math.floor to the total
-            var flooredLines=0;
+            var flooredLines = 0;
             if (totalLines > 0) {
-                 flooredLines = 1 + Math.floor(totalLines);
+                flooredLines = 1 + Math.floor(totalLines);
             }
             storiesLines.push(flooredLines);
         }
