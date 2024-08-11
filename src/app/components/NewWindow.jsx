@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState ,cloneElement } from 'react';
 import ReactDOM from 'react-dom';
 
 function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight }) {
     // const newWindowRef = useRef(null);
     const [container, setContainer] = useState(null);
+    const [scaleFactor, setScaleFactor] = useState(1);
     // State to keep track of flip status
 
     const handleTitleBarDoubleClick = () => {
         console.log('Title bar double-clicked');
         container.style.transformOrigin = '5px 0';
         container.style.transform = `scale(${newWindowRef.current.screen.width / scrollWidth}, ${newWindowRef.current.screen.height / scrollHeight} )`;
+        setScaleFactor(newWindowRef.current.screen.height / scrollHeight);
     };
 
     const handleRightClick = (event) => {
@@ -86,8 +88,12 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
         };
     }, [container, onClose, handleTitleBarDoubleClick]);
 
+    const childrenWithProps = React.Children.map(children, (child) =>
+        cloneElement(child, { scaleFactor })
+    );
+
     // Render the children into the new window's container
-    return container ? ReactDOM.createPortal(children, container) : null;
+    return container ? ReactDOM.createPortal(childrenWithProps, container) : null;
 }
 
 export default NewWindow;

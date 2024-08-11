@@ -28,7 +28,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({ scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ scaleFactor=1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const scrollingTextStyle = {
         position: 'absolute',
         top: parseFloat(newPosition),
@@ -74,6 +74,8 @@ const Scroll = ({ scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPositi
         };
     }, [currentStoryNumber])
 
+
+
     useEffect(() => {
         let animationFrameId;
 
@@ -106,9 +108,13 @@ const Scroll = ({ scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPositi
                 let linesCrossed = 0;
                 const ref = contentRefs.current[(-doubleClickedPosition + currentStoryNumber - 1) * 3];
                 if (ref) {
+                    console.log(scaleFactor)
                     const rect = ref.getBoundingClientRect();
+                    // console.log(rect)
+
                     const style = getComputedStyle(ref);
-                    const lineHeight = parseFloat(style.lineHeight);
+                    var lineHeight = (parseFloat(style.lineHeight)) * scaleFactor;
+              
                     if (rect.top < startPosition) {
                         linesCrossed = 1 + Math.floor((startPosition - rect.top) / lineHeight);
                         if (linesCrossed > storyLines[currentStoryNumber - 1]) {
