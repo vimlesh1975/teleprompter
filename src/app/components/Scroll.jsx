@@ -28,7 +28,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({ scaleFactor=1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
     const scrollingTextStyle = {
         position: 'absolute',
         top: parseFloat(newPosition),
@@ -108,15 +108,20 @@ const Scroll = ({ scaleFactor=1, scrollWidth, scrollHeight, fontSize, setCurrent
                 let linesCrossed = 0;
                 const ref = contentRefs.current[(-doubleClickedPosition + currentStoryNumber - 1) * 3];
                 if (ref) {
-                    console.log(scaleFactor)
+                    // console.log(scaleFactor)
                     const rect = ref.getBoundingClientRect();
                     // console.log(rect)
 
                     const style = getComputedStyle(ref);
                     var lineHeight = (parseFloat(style.lineHeight)) * scaleFactor;
-              
+
                     if (rect.top < startPosition) {
-                        linesCrossed = 1 + Math.floor((startPosition - rect.top) / lineHeight);
+                        if (scaleFactor > 1) {
+                            linesCrossed = 1 + Math.floor((startPosition  - rect.top) / lineHeight);
+                        }
+                        else {
+                            linesCrossed = 1 + Math.floor((startPosition - rect.top) / lineHeight);
+                        }
                         if (linesCrossed > storyLines[currentStoryNumber - 1]) {
                             linesCrossed = storyLines[currentStoryNumber - 1];
                         }
@@ -131,7 +136,7 @@ const Scroll = ({ scaleFactor=1, scrollWidth, scrollHeight, fontSize, setCurrent
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [setCrossedLines, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
+    }, [scaleFactor, setCrossedLines, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
 
 
     // Function to calculate number of lines in a given element
