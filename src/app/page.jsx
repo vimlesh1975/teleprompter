@@ -7,8 +7,8 @@ import debounce from 'lodash.debounce'; // Importing debounce from lodash
 
 
 import Casparcg from './Casparcg';
-const scrollWidth=600;
-const scrollHeight=522;
+const scrollWidth = 600;
+const scrollHeight = 522;
 
 const socket = io();
 socket.on('connect', () => {
@@ -122,7 +122,7 @@ export default function Home() {
         const res = await fetch(`/api/slug?param1=${selectedRunOrderTitle}`);
         const data = await res.json();
         setSlugs(data.data);
-        fetchAllContent(data.data, 0);
+        await fetchAllContent(data.data, 0);
       } catch (error) {
         console.error(error);
       }
@@ -148,23 +148,42 @@ export default function Home() {
     }
   }, [scriptID]);
 
-  // Fetch all content for scrolling
   const fetchAllContent = async (slugs, startNumber) => {
+    if (!Array.isArray(slugs) || slugs.length === 0) {
+      console.error('Invalid slugs array');
+      return;
+    }
+
     const data1 = new Array(slugs.length * 3);
+
+    // Using Promise.allSettled to handle all promises and their outcomes
     const fetchPromises = slugs.map((slug, i) =>
       fetch(`/api/script?ScriptID=${slug.ScriptID}`)
         .then(async (res) => {
+          if (!res.ok) {
+            throw new Error(`Network response was not ok: ${res.statusText}`);
+          }
           const dd = await res.json();
-          const data = dd.data?.Script;
-          data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' -No Visual'}`;
+          const data = dd.data?.Script || 'No data';
+          data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' - No Visual'}`;
           data1[i * 3 + 1] = `${data}`;
           data1[i * 3 + 2] = `--------------`;
         })
-        .catch((error) => console.error('Error fetching content:', error))
+        .catch((error) => {
+          console.error('Error fetching content:', error);
+          // Handle error for specific slug if necessary
+          data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName} - Error`;
+          data1[i * 3 + 1] = 'Error fetching data';
+          data1[i * 3 + 2] = `--------------`;
+        })
     );
-    await Promise.all(fetchPromises);
+
+    // Use Promise.allSettled to ensure all promises are processed, even if some fail
+    await Promise.allSettled(fetchPromises);
+
     setAllContent(data1.filter((item) => item !== undefined));
   };
+
 
   // Handle selection change
   const handleSelectionChange = (e) => {
@@ -482,7 +501,7 @@ export default function Home() {
             {slugs && slugs[currentSlug] && <div style={{ backgroundColor: 'blue', color: 'yellow', padding: '0 25px', }}>{currentSlug + 1} {currentSlugName}{slugs[currentSlug]?.Media ? ' - Visual' : ' -No Visual'}</div>}
             <textarea
               value={content}
-              style={{ fontSize: `${fontSize}px`, width: scrollWidth, minHeight: scrollHeight-80, maxHeight: scrollHeight-80, lineHeight: `${fontSize * 1.3}px` }}
+              style={{ fontSize: `${fontSize}px`, width: scrollWidth, minHeight: scrollHeight - 80, maxHeight: scrollHeight - 80, lineHeight: `${fontSize * 1.3}px` }}
               disabled
             />
           </div>

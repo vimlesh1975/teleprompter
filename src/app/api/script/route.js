@@ -15,6 +15,8 @@ export async function GET(req) {
       });
     } finally {
       connection.release();
+      console.log('Connection released form scipt');
+
     }
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {

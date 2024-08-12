@@ -3,10 +3,10 @@ import pool from '../db.js'; // Adjust the import based on your actual pool file
 export async function POST(req) {
     try {
         const { curstory, curbulletin } = await req.json();
-        if (curbulletin===null) return;
+        if (curbulletin === null) return;
         const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?`;
         const values = [curstory, curbulletin];
-        
+
         const connection = await pool.getConnection();
         try {
             await connection.query(query, values);
@@ -16,6 +16,7 @@ export async function POST(req) {
             });
         } finally {
             connection.release();
+            console.log('Connection released form current story');
         }
     } catch (error) {
         console.error(error);
