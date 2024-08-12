@@ -41,7 +41,6 @@ export default function Home() {
 
   const newWindowRef = useRef(null);
 
-
   const textRef = useRef(null);
 
   const endpoint = async (str) => {
