@@ -16,7 +16,7 @@ export async function POST(req) {
             });
         } finally {
             connection.release();
-            console.log('Connection released form current story');
+            // console.log('Connection released form current story');
         }
     } catch (error) {
         console.error(error);

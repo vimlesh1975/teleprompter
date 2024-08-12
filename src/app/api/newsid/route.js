@@ -11,7 +11,7 @@ export async function GET(req) {
       });
     } finally {
       connection.release();
-  console.log('Connection released fom newsid');
+  // console.log('Connection released fom newsid');
     }
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
