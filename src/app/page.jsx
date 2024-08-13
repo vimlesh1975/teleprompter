@@ -7,6 +7,7 @@ import debounce from 'lodash.debounce'; // Importing debounce from lodash
 
 
 import Casparcg from './Casparcg';
+import Timer from './components/Timer';
 const scrollWidth = 600;
 const scrollHeight = 522;
 
@@ -62,6 +63,9 @@ export default function Home() {
     setShowNewWindow(false);
   };
 
+  const timerFunction=()=>{
+    console.log('test')
+  }
 
   const onclickSlug = (val, i) => {
     if (i < slugs.length) {
@@ -594,7 +598,7 @@ export default function Home() {
                   Right Click to Stop and Play
                 </div>
               </div>
-              {/* <Clock /> */}
+              {<Timer callback={timerFunction}/>}
             </div>
           </div>
         </div>
