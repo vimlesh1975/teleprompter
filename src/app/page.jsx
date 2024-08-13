@@ -165,13 +165,13 @@ export default function Home() {
           }
           const dd = await res.json();
           const data = dd.data?.Script || 'No data';
-          if (!slug.DropStory){
+          if (!slug.DropStory && slug.Approval ){
             data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' - No Visual'}`;
             data1[i * 3 + 1] = `${data}`;
             data1[i * 3 + 2] = `--------------`;
           }
           else{
-            data1[i * 3] = `Story Dropped`;
+            data1[i * 3] = `${startNumber + i + 1} ${slug.DropStory?'Story Dropped':'Story UnApproved'}`;
             data1[i * 3 + 1] = ` `;
             data1[i * 3 + 2] = ``;
           }
@@ -466,9 +466,9 @@ export default function Home() {
                   onclickSlug(val, i)
                 }}
                 onDoubleClick={() => handleDoubleClick(i)}
-                style={{ backgroundColor: currentSlug === i ? 'green' : val.DropStory ? '#FF8484' : '#E7DBD8', margin: 10 }}
+                style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}
               >
-                {val.DropStory} {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName}</label> <br />
+                 {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName} {val.DropStory?<span style={{color:'red', backgroundColor:'white', fontWeight:'bolder'}}>D</span>:''}{!val.Approval?<span style={{color:'red', backgroundColor:'white', fontWeight:'bolder'}}>U</span>:''}</label> <br />
               </div>
             ))}
           </div>
