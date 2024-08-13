@@ -466,9 +466,10 @@ export default function Home() {
                   onclickSlug(val, i)
                 }}
                 onDoubleClick={() => handleDoubleClick(i)}
-                style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}
+                style={{ backgroundColor: currentSlug === i ? 'green' :(val.DropStory)? '#FF999C':!val.Approval?'red':'#E7DBD8', margin: 10 }}
               >
-                 {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName} {val.DropStory?<span style={{color:'red', backgroundColor:'white', fontWeight:'bolder'}}>D</span>:''}{!val.Approval?<span style={{color:'red', backgroundColor:'white', fontWeight:'bolder'}}>U</span>:''}</label> <br />
+                {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
+                 {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
               </div>
             ))}
           </div>
