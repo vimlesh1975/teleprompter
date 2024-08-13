@@ -473,7 +473,7 @@ export default function Home() {
                 style={{ backgroundColor: currentSlug === i ? 'green' :(val.DropStory)? '#FF999C':!val.Approval?'red':'#E7DBD8', margin: 10 }}
               >
                 {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
-                 {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
+                 {i + 1} <label title={val.DropStory?'Story Dropped':!val.Approval?'Story UnApproved':''} style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
               </div>
             ))}
           </div>
