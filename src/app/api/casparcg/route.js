@@ -23,7 +23,10 @@ export async function POST(req, res) {
   const body = await req.json();
   if (body.action === 'endpoint') {
     if (aa) {
+      try {
       aa.do(new AMCP.CustomCommand(body.command));
+      } catch (error) {
+      }
     }
     return new Response('');
   }

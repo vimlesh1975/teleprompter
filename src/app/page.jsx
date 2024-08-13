@@ -165,9 +165,17 @@ export default function Home() {
           }
           const dd = await res.json();
           const data = dd.data?.Script || 'No data';
-          data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' - No Visual'}`;
-          data1[i * 3 + 1] = `${data}`;
-          data1[i * 3 + 2] = `--------------`;
+          if (!slug.DropStory){
+            data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' - No Visual'}`;
+            data1[i * 3 + 1] = `${data}`;
+            data1[i * 3 + 2] = `--------------`;
+          }
+          else{
+            data1[i * 3] = `Story Dropped`;
+            data1[i * 3 + 1] = ` `;
+            data1[i * 3 + 2] = ``;
+          }
+      
         })
         .catch((error) => {
           console.error('Error fetching content:', error);
@@ -458,9 +466,9 @@ export default function Home() {
                   onclickSlug(val, i)
                 }}
                 onDoubleClick={() => handleDoubleClick(i)}
-                style={{ backgroundColor: currentSlug === i ? 'green' : '#E7DBD8', margin: 10 }}
+                style={{ backgroundColor: currentSlug === i ? 'green' : val.DropStory ? '#FF8484' : '#E7DBD8', margin: 10 }}
               >
-                {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName}</label> <br />
+                {val.DropStory} {i + 1} <label style={{ cursor: 'pointer' }}>{val.SlugName}</label> <br />
               </div>
             ))}
           </div>
@@ -580,6 +588,11 @@ export default function Home() {
               Start Position:<input type='number' value={startPosition} style={{ width: 50 }} onChange={e => {
                 setStartPosition(e.target.value);
               }} />
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '100%' }}>
+                <div style={{ textAlign: 'right' }}>
+                  Right Click to Stop and Play
+                </div>
+              </div>
               {/* <Clock /> */}
             </div>
           </div>
