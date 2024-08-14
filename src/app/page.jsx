@@ -39,6 +39,7 @@ export default function Home() {
   const [fontSize, setFontSize] = useState(39);
   const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
   const [showReactComponent, setShowReactComponent] = useState(false);
+  const [stopOnNext, setStopOnNext] = useState(false);
 
   const newWindowRef = useRef(null);
 
@@ -63,8 +64,20 @@ export default function Home() {
     setShowNewWindow(false);
   };
 
-  const timerFunction=()=>{
+  const timerFunction = async () => {
     console.log('test')
+    try {
+      const res = await fetch(`/api/slug?param1=${selectedRunOrderTitle}`);
+      const data = await res.json();
+      setSlugs(data.data);
+
+      setTimeout(async () => {
+        const newSlugs = data.data.slice(doubleClickedPosition);
+        await fetchAllContent(newSlugs, doubleClickedPosition);
+      }, 1000);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const onclickSlug = (val, i) => {
@@ -169,17 +182,17 @@ export default function Home() {
           }
           const dd = await res.json();
           const data = dd.data?.Script || 'No data';
-          if (!slug.DropStory && slug.Approval ){
+          if (!slug.DropStory && slug.Approval) {
             data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' - No Visual'}`;
             data1[i * 3 + 1] = `${data}`;
             data1[i * 3 + 2] = `--------------`;
           }
-          else{
-            data1[i * 3] = `${startNumber + i + 1} ${slug.DropStory?'Story Dropped':'Story UnApproved'}`;
+          else {
+            data1[i * 3] = `${startNumber + i + 1} ${slug.DropStory ? 'Story Dropped' : 'Story UnApproved'}`;
             data1[i * 3 + 1] = ` `;
             data1[i * 3 + 2] = ``;
           }
-      
+
         })
         .catch((error) => {
           console.error('Error fetching content:', error);
@@ -210,6 +223,7 @@ export default function Home() {
 
   // Handle double-click event
   const handleDoubleClick = (i) => {
+    setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
       fetchAllContent(newSlugs, i);
@@ -470,10 +484,10 @@ export default function Home() {
                   onclickSlug(val, i)
                 }}
                 onDoubleClick={() => handleDoubleClick(i)}
-                style={{ backgroundColor: currentSlug === i ? 'green' :(val.DropStory)? '#FF999C':!val.Approval?'red':'#E7DBD8', margin: 10 }}
+                style={{ backgroundColor: currentSlug === i ? 'green' : (val.DropStory) ? '#FF999C' : !val.Approval ? 'red' : '#E7DBD8', margin: 10 }}
               >
                 {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
-                 {i + 1} <label title={val.DropStory?'Story Dropped':!val.Approval?'Story UnApproved':''} style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
+                {i + 1} <label title={val.DropStory ? 'Story Dropped' : !val.Approval ? 'Story UnApproved' : ''} style={{ cursor: 'pointer' }}>{val.SlugName} </label> <br />
               </div>
             ))}
           </div>
@@ -598,7 +612,7 @@ export default function Home() {
                   Right Click to Stop and Play
                 </div>
               </div>
-              {<Timer callback={timerFunction}/>}
+              <Timer callback={timerFunction} interval={10000} stopOnNext={stopOnNext} setStopOnNext={setStopOnNext} />
             </div>
           </div>
         </div>

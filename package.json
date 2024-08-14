@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "beautiful-react-hooks": "^5.0.2",
     "casparcg-connection": "^5.1.0",
     "express": "^4.19.2",
     "lodash.debounce": "^4.0.8",

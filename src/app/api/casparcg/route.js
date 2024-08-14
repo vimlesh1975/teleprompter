@@ -21,6 +21,7 @@ aa.onConnected = () => {
 export async function POST(req, res) {
   socket.emit('ServerConnectionStatus', aa.connected);
   const body = await req.json();
+  // console.log(body)
   if (body.action === 'endpoint') {
     if (aa) {
       try {
