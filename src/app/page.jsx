@@ -152,7 +152,8 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch(`/api/script?ScriptID=${scriptID}`);
+        // const res = await fetch(`/api/script?ScriptID=${scriptID}`);
+        const res = await fetch(`/api/script?ScriptID=${encodeURIComponent(scriptID)}&NewsId=${encodeURIComponent(selectedRunOrderTitle)}`);
         const data = await res.json();
         setContent(data.data?.Script);
       } catch (error) {
@@ -164,99 +165,53 @@ export default function Home() {
     }
   }, [scriptID]);
 
-  // const fetchAllContent = async (slugs, startNumber) => {
-  //   if (!Array.isArray(slugs) || slugs.length === 0) {
-  //     console.error('Invalid slugs array');
-  //     return;
-  //   }
-
-  //   const data1 = new Array(slugs.length * 3);
-
-  //   // Using Promise.allSettled to handle all promises and their outcomes
-  //   const fetchPromises = slugs.map((slug, i) =>
-  //     fetch(`/api/script?ScriptID=${slug.ScriptID}`)
-  //       .then(async (res) => {
-  //         if (!res.ok) {
-  //           throw new Error(`Network response was not ok: ${res.statusText}`);
-  //         }
-  //         const dd = await res.json();
-  //         const data = dd.data?.Script || 'No data';
-  //         if (!slug.DropStory && slug.Approval) {
-  //           data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' - No Visual'}`;
-  //           data1[i * 3 + 1] = `${data}`;
-  //           data1[i * 3 + 2] = `--------------`;
-  //         }
-  //         else {
-  //           data1[i * 3] = `${startNumber + i + 1} ${slug.DropStory ? 'Story Dropped' : 'Story UnApproved'}`;
-  //           data1[i * 3 + 1] = ` `;
-  //           data1[i * 3 + 2] = ``;
-  //         }
-
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error fetching content:', error);
-  //         // Handle error for specific slug if necessary
-  //         data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName} - Error`;
-  //         data1[i * 3 + 1] = 'Error fetching data';
-  //         data1[i * 3 + 2] = `--------------`;
-  //       })
-  //   );
-
-  //   // Use Promise.allSettled to ensure all promises are processed, even if some fail
-  //   await Promise.allSettled(fetchPromises);
-
-  //   setAllContent(data1.filter((item) => item !== undefined));
-  // };
-
-
-  // Handle selection change
- 
   const fetchAllContent = async (slugs, startNumber) => {
     if (!Array.isArray(slugs) || slugs.length === 0) {
       console.error('Invalid slugs array');
       return;
     }
-  
+
     const data1 = new Array(slugs.length * 3);
-  
-    const scriptIDs = slugs.map(slug => slug.ScriptID);
-    if (scriptIDs.length > 0) {
-      try {
-        const url = `/api/allScript?${scriptIDs.map(id => `ScriptID[]=${encodeURIComponent(id)}`).join('&')}`;
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`Network response was not ok: ${res.statusText}`);
-        }
-        const dd = await res.json();
-        const data = dd.data || [];
-  
-        data.forEach((script, i) => {
-          if (!slugs[i]?.DropStory && slugs[i]?.Approval) {
-            data1[i * 3] = `${startNumber + i + 1} ${slugs[i]?.SlugName}${slugs[i]?.Media ? ' - Visual' : ' - No Visual'}`;
-            data1[i * 3 + 1] = `${script.Script}`;
+
+    // Using Promise.allSettled to handle all promises and their outcomes
+    const fetchPromises = slugs.map((slug, i) =>
+      // fetch(`/api/script?ScriptID=${slug.ScriptID}`)
+    fetch(`/api/script?ScriptID=${encodeURIComponent(slug.ScriptID)}&NewsId=${encodeURIComponent(selectedRunOrderTitle)}`)
+        .then(async (res) => {
+          if (!res.ok) {
+            throw new Error(`Network response was not ok: ${res.statusText}`);
+          }
+          const dd = await res.json();
+          const data = dd.data?.Script || 'No data';
+          if (!slug.DropStory && slug.Approval) {
+            data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName}${slug.Media ? ' - Visual' : ' - No Visual'}`;
+            data1[i * 3 + 1] = `${data}`;
             data1[i * 3 + 2] = `--------------`;
-          } else {
-            data1[i * 3] = `${startNumber + i + 1} ${slugs[i]?.DropStory ? 'Story Dropped' : 'Story UnApproved'}`;
+          }
+          else {
+            data1[i * 3] = `${startNumber + i + 1} ${slug.DropStory ? 'Story Dropped' : 'Story UnApproved'}`;
             data1[i * 3 + 1] = ` `;
             data1[i * 3 + 2] = ``;
           }
-        });
-  
-        setAllContent(data1.filter((item) => item !== undefined));
-      } catch (error) {
-        console.error('Error fetching content:', error);
-        scriptIDs.forEach((id, i) => {
-          data1[i * 3] = `${startNumber + i + 1} ${slugs[i]?.SlugName} - Error`;
+
+        })
+        .catch((error) => {
+          console.error('Error fetching content:', error);
+          // Handle error for specific slug if necessary
+          data1[i * 3] = `${startNumber + i + 1} ${slug.SlugName} - Error`;
           data1[i * 3 + 1] = 'Error fetching data';
           data1[i * 3 + 2] = `--------------`;
-        });
-        setAllContent(data1.filter((item) => item !== undefined));
-      }
-    } else {
-      console.error('No ScriptIDs to fetch');
-    }
+        })
+    );
+
+    // Use Promise.allSettled to ensure all promises are processed, even if some fail
+    await Promise.allSettled(fetchPromises);
+
+    setAllContent(data1.filter((item) => item !== undefined));
   };
-  
+
+
+
  
   const handleSelectionChange = (e) => {
     const value = e.target.value;

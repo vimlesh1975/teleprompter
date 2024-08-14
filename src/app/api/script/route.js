@@ -3,12 +3,13 @@ import pool from '../db.js';
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const ScriptID = searchParams.get('ScriptID');
+  const NewsId = searchParams.get('NewsId');
 
   try {
     const connection = await pool.getConnection();
     try {
-      const query = `SELECT Script FROM script WHERE ScriptID = ? LIMIT 1`;
-      const [rows] = await connection.query(query, [ScriptID]);
+      const query = `SELECT Script FROM script WHERE ScriptID = ? AND NewsId = ? LIMIT 1`;
+      const [rows] = await connection.query(query, [ScriptID, NewsId]);
       return new Response(JSON.stringify({ data: rows[0] }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
