@@ -31,4 +31,4 @@ async function logConnectionMetrics() {
 // Call this function at regular intervals
 
 
-setInterval(logConnectionMetrics, 5000); // Logs every 5 seconds
+// setInterval(logConnectionMetrics, 5000); // Logs every 5 seconds
