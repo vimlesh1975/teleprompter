@@ -165,7 +165,7 @@ export default function Home() {
     }
   }, [scriptID]);
 
-  const fetchAllContent = async (slugs, startNumber) => {
+  const fetchAllContent2 = async (slugs, startNumber) => {
     if (!Array.isArray(slugs) || slugs.length === 0) {
       console.error('Invalid slugs array');
       return;
@@ -210,8 +210,55 @@ export default function Home() {
     setAllContent(data1.filter((item) => item !== undefined));
   };
 
-
-
+  const fetchAllContent = async (slugs, startNumber) => {
+    if (!Array.isArray(slugs) || slugs.length === 0) {
+      console.error('Invalid slugs array');
+      return;
+    }
+  
+    const data1 = new Array(slugs.length * 3);
+  
+    const scriptIDs = slugs.map(slug => slug.ScriptID);
+    if (scriptIDs.length > 0) {
+      try {
+        // Construct the URL with scriptIDs and selectedRunOrderTitle (NewsId)
+        const url = `/api/allScript?${scriptIDs.map(id => `ScriptID[]=${encodeURIComponent(id)}`).join('&')}&NewsId=${encodeURIComponent(selectedRunOrderTitle)}`;
+        const res = await fetch(url);
+  
+        if (!res.ok) {
+          throw new Error(`Network response was not ok: ${res.statusText}`);
+        }
+  
+        const dd = await res.json();
+        const data = dd.data || [];
+  
+        data.forEach((script, i) => {
+          if (!slugs[i]?.DropStory && slugs[i]?.Approval) {
+            data1[i * 3] = `${startNumber + i + 1} ${slugs[i]?.SlugName}${slugs[i]?.Media ? ' - Visual' : ' - No Visual'}`;
+            data1[i * 3 + 1] = `${script.Script}`;
+            data1[i * 3 + 2] = `--------------`;
+          } else {
+            data1[i * 3] = `${startNumber + i + 1} ${slugs[i]?.DropStory ? 'Story Dropped' : 'Story UnApproved'}`;
+            data1[i * 3 + 1] = ` `;
+            data1[i * 3 + 2] = ``;
+          }
+        });
+  
+        setAllContent(data1.filter((item) => item !== undefined));
+      } catch (error) {
+        console.error('Error fetching content:', error);
+        scriptIDs.forEach((id, i) => {
+          data1[i * 3] = `${startNumber + i + 1} ${slugs[i]?.SlugName} - Error`;
+          data1[i * 3 + 1] = 'Error fetching data';
+          data1[i * 3 + 2] = `--------------`;
+        });
+        setAllContent(data1.filter((item) => item !== undefined));
+      }
+    } else {
+      console.error('No ScriptIDs to fetch');
+    }
+  };
+  
  
   const handleSelectionChange = (e) => {
     const value = e.target.value;
