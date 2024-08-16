@@ -79,6 +79,8 @@ export default function Home() {
         setLatestDate(newLatestDate)
         setSlugs(data.data);
         fetchAllContent(newSlugs, doubleClickedPosition);
+        console.log(`'There is Update at ${newLatestDate}'`)
+
       }
       else {
         console.log('No update')
@@ -465,7 +467,7 @@ export default function Home() {
                 </option>
               ))}
             </select>
-            {slugs.length} Slugs
+            {slugs?.length} Slugs
           </div>
           <div style={{ minWidth: 348, maxWidth: 348, maxHeight: 700, minHeight: 700, overflow: 'auto' }}>
             {slugs?.map((val, i) => (
@@ -602,9 +604,9 @@ export default function Home() {
                 <div style={{ textAlign: 'right' }}>
                   Right Click to Stop and Play
                 </div>
-                <h1>Last Update: {latestDate?.toLocaleString()}</h1>
+                <h3>Last Update: {latestDate?.toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h3>
               </div>
-              <Timer callback={timerFunction} interval={10000} stopOnNext={stopOnNext} setStopOnNext={setStopOnNext} />
+              <Timer callback={timerFunction} interval={5000} stopOnNext={stopOnNext} setStopOnNext={setStopOnNext} />
             </div>
           </div>
         </div>
