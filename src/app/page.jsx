@@ -66,14 +66,11 @@ export default function Home() {
 
   const timerFunction = async () => {
     try {
-      const res = await fetch(`/api/slug?NewsId=${selectedRunOrderTitle}`);
+      const res = await fetch(`/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}`);
       const data = await res.json();
       setSlugs(data.data);
-
-      setTimeout(async () => {
         const newSlugs = data.data.slice(doubleClickedPosition);
-        await fetchAllContent(newSlugs, doubleClickedPosition);
-      }, 1000);
+         fetchAllContent(newSlugs, doubleClickedPosition);
     } catch (error) {
       console.error(error);
     }
@@ -135,10 +132,10 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch(`/api/slug?param1=${selectedRunOrderTitle}`);
+        const res = await fetch(`/api/ShowRunOrder?param1=${selectedRunOrderTitle}`);
         const data = await res.json();
         setSlugs(data.data);
-        await fetchAllContent(data.data, 0);
+         fetchAllContent(data.data, 0);
       } catch (error) {
         console.error(error);
       }
@@ -165,16 +162,11 @@ export default function Home() {
 
 
 
-  const fetchAllContent = async (slicedSlugs, startNumber) => {
+  const fetchAllContent =  (slicedSlugs, startNumber) => {
     if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
-      console.error('Invalid slicedSlugs array');
       return;
     }
-
     const data1 = new Array(slicedSlugs.length * 3);
-
-    const scriptIDs = slicedSlugs.map(slug => slug.ScriptID);
-    if (scriptIDs.length > 0) {
       try {
         slicedSlugs.forEach((slug, i) => {
           if (!slug?.DropStory && slug?.Approval) {
@@ -192,9 +184,6 @@ export default function Home() {
       } catch (error) {
         console.error('Error fetching content:', error);
       }
-    } else {
-      console.error('No ScriptIDs to fetch');
-    }
   };
 
 
