@@ -40,6 +40,7 @@ export default function Home() {
   const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
   const [showReactComponent, setShowReactComponent] = useState(false);
   const [stopOnNext, setStopOnNext] = useState(false);
+  const [latestDate, setLatestDate] = useState(null);
 
   const newWindowRef = useRef(null);
 
@@ -68,9 +69,24 @@ export default function Home() {
     try {
       const res = await fetch(`/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}`);
       const data = await res.json();
-      setSlugs(data.data);
-        const newSlugs = data.data.slice(doubleClickedPosition);
-         fetchAllContent(newSlugs, doubleClickedPosition);
+
+      const newSlugs = data.data.slice(doubleClickedPosition);
+
+      const LastModifiedTime = newSlugs.map((slug) => slug.LastModifiedTime)
+      const ScriptLastModifiedTime = newSlugs.map((slug) => slug.ScriptLastModifiedTime)
+      const dateArray = [...LastModifiedTime, ...ScriptLastModifiedTime]
+      const newLatestDate = new Date(Math.max(...dateArray.map(date => new Date(date))));
+
+      if (latestDate === null || newLatestDate > latestDate || data.data.length !== slugs.length) {
+        setLatestDate(newLatestDate)
+        setSlugs(data.data);
+        console.log(latestDate?.toISOString()); // Outputs the latest date in ISO format
+        fetchAllContent(newSlugs, doubleClickedPosition);
+      }
+      else {
+        console.log('No update')
+      }
+
     } catch (error) {
       console.error(error);
     }
@@ -135,7 +151,7 @@ export default function Home() {
         const res = await fetch(`/api/ShowRunOrder?param1=${selectedRunOrderTitle}`);
         const data = await res.json();
         setSlugs(data.data);
-         fetchAllContent(data.data, 0);
+        fetchAllContent(data.data, 0);
       } catch (error) {
         console.error(error);
       }
@@ -162,28 +178,30 @@ export default function Home() {
 
 
 
-  const fetchAllContent =  (slicedSlugs, startNumber) => {
+  const fetchAllContent = (slicedSlugs, startNumber) => {
     if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
       return;
     }
-    const data1 = new Array(slicedSlugs.length * 3);
-      try {
-        slicedSlugs.forEach((slug, i) => {
-          if (!slug?.DropStory && slug?.Approval) {
-            data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${slug?.Media ? ' - Visual' : ' - No Visual'}`;
-            data1[i * 3 + 1] = `${slug.Script}`;
-            data1[i * 3 + 2] = `--------------`;
-          } else {
-            data1[i * 3] = `${startNumber + i + 1} ${slug?.DropStory ? 'Story Dropped' : 'Story UnApproved'}`;
-            data1[i * 3 + 1] = ` `;
-            data1[i * 3 + 2] = ``;
-          }
-        });
 
-        setAllContent(data1.filter((item) => item !== undefined));
-      } catch (error) {
-        console.error('Error fetching content:', error);
-      }
+
+    const data1 = new Array(slicedSlugs.length * 3);
+    try {
+      slicedSlugs.forEach((slug, i) => {
+        if (!slug?.DropStory && slug?.Approval) {
+          data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${slug?.Media ? ' - Visual' : ' - No Visual'}`;
+          data1[i * 3 + 1] = `${slug.Script}`;
+          data1[i * 3 + 2] = `--------------`;
+        } else {
+          data1[i * 3] = `${startNumber + i + 1} ${slug?.DropStory ? 'Story Dropped' : 'Story UnApproved'}`;
+          data1[i * 3 + 1] = ` `;
+          data1[i * 3 + 2] = ``;
+        }
+      });
+
+      setAllContent(data1.filter((item) => item !== undefined));
+    } catch (error) {
+      console.error('Error fetching content:', error);
+    }
   };
 
 
