@@ -47,17 +47,15 @@ export default function Home() {
   const textRef = useRef(null);
 
   const endpoint = async (str) => {
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', // Specify the content type as JSON
-        // You may include other headers as needed
-      },
-      body: JSON.stringify(str), // Convert the data to JSON format
-    };
-    const aa = await fetch('/api/casparcg', requestOptions);
-    if (str.action === 'connect' || str.action === 'disconnect') {
-      setConnected(await aa.json());
+    if (showReactComponent) {
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Specify the content type as JSON
+        },
+        body: JSON.stringify(str), // Convert the data to JSON format
+      };
+      const aa = await fetch('/api/casparcg', requestOptions);
     }
   };
 
@@ -80,7 +78,6 @@ export default function Home() {
       if (latestDate === null || newLatestDate > latestDate || data.data.length !== slugs.length) {
         setLatestDate(newLatestDate)
         setSlugs(data.data);
-        console.log(latestDate?.toISOString()); // Outputs the latest date in ISO format
         fetchAllContent(newSlugs, doubleClickedPosition);
       }
       else {
@@ -605,6 +602,7 @@ export default function Home() {
                 <div style={{ textAlign: 'right' }}>
                   Right Click to Stop and Play
                 </div>
+                <h1>Last Update: {latestDate?.toLocaleString()}</h1>
               </div>
               <Timer callback={timerFunction} interval={10000} stopOnNext={stopOnNext} setStopOnNext={setStopOnNext} />
             </div>
