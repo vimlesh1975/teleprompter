@@ -75,6 +75,13 @@ export default function Home() {
       const dateArray = [...LastModifiedTime, ...ScriptLastModifiedTime]
       const newLatestDate = new Date(Math.max(...dateArray.map(date => new Date(date))));
 
+
+      if (slugs[currentStoryNumber-1]?.DropStory===1){
+        console.log('current story dropped')
+        handleDoubleClick(currentStoryNumber);
+        return
+      }
+
       if (latestDate === null || newLatestDate > latestDate || data.data.length !== slugs.length) {
         setLatestDate(newLatestDate)
         setSlugs(data.data);
