@@ -66,7 +66,7 @@ export default function Home() {
 
   const timerFunction = async () => {
     try {
-      const res = await fetch(`/api/slug?param1=${selectedRunOrderTitle}`);
+      const res = await fetch(`/api/slug?NewsId=${selectedRunOrderTitle}`);
       const data = await res.json();
       setSlugs(data.data);
 

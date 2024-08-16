@@ -2,12 +2,12 @@ import pool from '../db.js';
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
-  const param1 = searchParams.get('param1');
+  const NewsId = searchParams.get('NewsId');
   
   try {
     const connection = await pool.getConnection();
     try {
-      const [rows] = await connection.query(`CALL show_runorder(?)`, [param1]);
+      const [rows] = await connection.query(`CALL show_runorder(?)`, [NewsId]);
       return new Response(JSON.stringify({ data: rows[0] }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
