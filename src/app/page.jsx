@@ -306,18 +306,18 @@ export default function Home() {
       } else if (msg === 9) {
         setSpeed(val => val + 1)
       } else if (msg === 10) {
+        onclickSlug(slugs[4], 4);
+        handleDoubleClick(4);
+      } else if (msg === 11) {
         onclickSlug(slugs[9], 9);
         handleDoubleClick(9);
-      } else if (msg === 11) {
-        onclickSlug(slugs[19], 19);
-        handleDoubleClick(19);
       } else if (msg === 12) {
-        onclickSlug(slugs[29], 29);
-        handleDoubleClick(29);
+        onclickSlug(slugs[14], 14);
+        handleDoubleClick(14);
       }
       else if (msg === 13) {
-        onclickSlug(slugs[39], 39);
-        handleDoubleClick(39);
+        onclickSlug(slugs[currentStoryNumber + 4], currentStoryNumber + 4);
+        handleDoubleClick(currentStoryNumber + 4);
       }
       else if (msg === 14) {
         previous();
@@ -503,7 +503,7 @@ export default function Home() {
         </div>
         <div>
           <div style={{ border: '1px solid red', marginBottom: 10, minWidth: scrollWidth, maxWidth: scrollWidth, }}>
-            <Casparcg slugs={slugs} allContent={allContent} setShowReactComponent={setShowReactComponent} showReactComponent={showReactComponent} />
+            <Casparcg slugs={slugs} allContent={allContent} setShowReactComponent={setShowReactComponent} showReactComponent={showReactComponent} startPosition={startPosition} fontSize={fontSize} doubleClickedPosition={doubleClickedPosition}newPosition={newPosition} currentStoryNumber={currentStoryNumber}/>
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <button onClick={() => {

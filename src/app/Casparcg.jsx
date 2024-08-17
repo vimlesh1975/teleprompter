@@ -26,7 +26,7 @@ function replaceCRLFInArray(inputArray) {
   });
 }
 
-export default function Home({ slugs, allContent,setShowReactComponent, showReactComponent }) {
+export default function Home({ slugs, allContent, setShowReactComponent, showReactComponent, startPosition, fontSize ,doubleClickedPosition,newPosition, currentStoryNumber}) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -87,7 +87,7 @@ export default function Home({ slugs, allContent,setShowReactComponent, showReac
         </div>
         <div>
           <button
-            onClick={() =>{
+            onClick={() => {
               endpoint({
                 action: 'endpoint',
                 command: `play 1-2 [html] http://localhost:3000/webrtc.html`,
@@ -118,11 +118,11 @@ export default function Home({ slugs, allContent,setShowReactComponent, showReac
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: `Play 1-2 [html] "http://localhost:3000/test"`,
+                command: `Play 1-2 [html] "http://localhost:3000/CasparcgOutput"`,
               });
               endpoint({
                 action: 'endpoint',
-                command: !fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02':'mixer 1-2 fill 1.02 -0.015 -3.21 2.02' ,
+                command: !fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02' : 'mixer 1-2 fill 1.02 -0.015 -3.21 2.02',
               });
               setTimeout(() => {
                 setShowReactComponent(true);
@@ -133,7 +133,34 @@ export default function Home({ slugs, allContent,setShowReactComponent, showReac
                 endpoint({
                   action: 'endpoint',
                   command: `call 1-2 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
-                })
+                });
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-2 setStartPosition(${startPosition})`,
+                });
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-2 setFontSize(${fontSize})`,
+                });
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-2 setDoubleClickedPosition(${doubleClickedPosition})`,
+                });
+
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-2 setLoggedPositions1()`,
+                });
+
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-2 setNewPosition(${newPosition})`,
+                });
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-2 setCurrentStoryNumber(${currentStoryNumber})`,
+                });
+
               }, 1000);
             }
 
@@ -146,7 +173,7 @@ export default function Home({ slugs, allContent,setShowReactComponent, showReac
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02':'mixer 1-2 fill 1.02 -0.015 -3.21 2.02' ,
+                command: fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02' : 'mixer 1-2 fill 1.02 -0.015 -3.21 2.02',
               });
               setFliped(val => !val);
             }}
