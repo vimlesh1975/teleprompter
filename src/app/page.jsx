@@ -75,19 +75,17 @@ export default function Home() {
       const dateArray = [...LastModifiedTime, ...ScriptLastModifiedTime]
       const newLatestDate = new Date(Math.max(...dateArray.map(date => new Date(date))));
 
-
-      if (slugs[currentStoryNumber-1]?.DropStory===1){
-        console.log('current story dropped')
-        handleDoubleClick(currentStoryNumber);
-        return
-      }
-
       if (latestDate === null || newLatestDate > latestDate || data.data.length !== slugs.length) {
+        console.log(`'There is Update at ${newLatestDate}'`)
         setLatestDate(newLatestDate)
         setSlugs(data.data);
-        fetchAllContent(newSlugs, doubleClickedPosition);
-        console.log(`'There is Update at ${newLatestDate}'`)
-
+        if ((data.data[currentStoryNumber - 1]?.DropStory === 1) || (data.data[currentStoryNumber - 1]?.Approval === 0)) {
+          console.log('current story dropped or not disapproved')
+          handleDoubleClick(currentStoryNumber);
+        }
+        else {
+          fetchAllContent(newSlugs, doubleClickedPosition);
+        }
       }
       else {
         console.log('No update')
