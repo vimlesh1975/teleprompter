@@ -67,19 +67,29 @@ export default function Home() {
     try {
       const res = await fetch(`/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}`);
       const data = await res.json();
-      setSlugs(data.data);
+
+      const newSlugsTotal = data.data;
+      const LastModifiedTimeTotal = newSlugsTotal.map((slug) => slug.LastModifiedTime)
+      const ScriptLastModifiedTimeTotal = newSlugsTotal.map((slug) => slug.ScriptLastModifiedTime)
+      const dateArrayTotal = [...LastModifiedTimeTotal, ...ScriptLastModifiedTimeTotal]
+      const newLatestDateTotal = new Date(Math.max(...dateArrayTotal.map(date => new Date(date))));
+
+      if (latestDate === null || newLatestDateTotal > latestDate || data.data.length !== slugs.length) {
+        console.log(`'There is Update at ${newLatestDateTotal.toLocaleString()}'`)
+        setLatestDate(newLatestDateTotal)
+        setSlugs(data.data);
+      }
+      else {
+        console.log(`'No Update at all'`)
+      }
 
       const newSlugs = data.data.slice(doubleClickedPosition);
-
       const LastModifiedTime = newSlugs.map((slug) => slug.LastModifiedTime)
       const ScriptLastModifiedTime = newSlugs.map((slug) => slug.ScriptLastModifiedTime)
       const dateArray = [...LastModifiedTime, ...ScriptLastModifiedTime]
       const newLatestDate = new Date(Math.max(...dateArray.map(date => new Date(date))));
 
       if (latestDate === null || newLatestDate > latestDate || data.data.length !== slugs.length) {
-        console.log(`'There is Update at ${newLatestDate}'`)
-        setLatestDate(newLatestDate)
-        // setSlugs(data.data);
         if ((data.data[currentStoryNumber - 1]?.DropStory === 1) || (data.data[currentStoryNumber - 1]?.Approval === 0)) {
           console.log('current story dropped or not disapproved')
           handleDoubleClick(currentStoryNumber);
@@ -89,7 +99,7 @@ export default function Home() {
         }
       }
       else {
-        console.log('No update')
+        console.log('No update below current story')
       }
 
     } catch (error) {
