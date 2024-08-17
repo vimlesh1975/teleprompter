@@ -67,6 +67,7 @@ export default function Home() {
     try {
       const res = await fetch(`/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}`);
       const data = await res.json();
+      setSlugs(data.data);
 
       const newSlugs = data.data.slice(doubleClickedPosition);
 
@@ -78,7 +79,7 @@ export default function Home() {
       if (latestDate === null || newLatestDate > latestDate || data.data.length !== slugs.length) {
         console.log(`'There is Update at ${newLatestDate}'`)
         setLatestDate(newLatestDate)
-        setSlugs(data.data);
+        // setSlugs(data.data);
         if ((data.data[currentStoryNumber - 1]?.DropStory === 1) || (data.data[currentStoryNumber - 1]?.Approval === 0)) {
           console.log('current story dropped or not disapproved')
           handleDoubleClick(currentStoryNumber);
