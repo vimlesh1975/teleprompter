@@ -43,8 +43,39 @@ export default function Home() {
   const [latestDate, setLatestDate] = useState(null);
 
   const newWindowRef = useRef(null);
-
   const textRef = useRef(null);
+
+//  // Effect for initializing fontSize from localStorage (only runs once)
+// useEffect(() => {
+//   const savedData = localStorage.getItem('WebTelePrompter');
+//   if (savedData) {
+//     const dataObject = JSON.parse(savedData);
+//     if (dataObject.fontSize) {
+//       // Set fontSize from saved data
+//       setFontSize(dataObject.fontSize);
+//     }
+//   } else {
+//     // If no data exists, initialize it with the current fontSize
+//     localStorage.setItem('WebTelePrompter', JSON.stringify({ fontSize }));
+//   }
+//   console.log('Initialized fontSize from localStorage');
+// }, []); // Empty dependency array to run only once on mount
+
+// // Effect for updating localStorage when fontSize changes
+// useEffect(() => {
+//   const savedData = localStorage.getItem('WebTelePrompter');
+//   if (savedData) {
+//     const dataObject = JSON.parse(savedData);
+//     // Update the existing dataObject with the new fontSize
+//     localStorage.setItem('WebTelePrompter', JSON.stringify({ ...dataObject, fontSize }));
+//   } else {
+//     // Initialize localStorage with the new fontSize
+//     localStorage.setItem('WebTelePrompter', JSON.stringify({ fontSize }));
+//   }
+//   console.log('Updated fontSize in localStorage');
+// }, [fontSize]); // Dependency array to update localStorage when fontSize changes
+
+  
 
   const endpoint = async (str) => {
     if (showReactComponent) {
@@ -163,7 +194,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch(`/api/ShowRunOrder?param1=${selectedRunOrderTitle}`);
+        const res = await fetch(`/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}`);
         const data = await res.json();
         setSlugs(data.data);
         fetchAllContent(data.data, 0);
@@ -503,7 +534,7 @@ export default function Home() {
         </div>
         <div>
           <div style={{ border: '1px solid red', marginBottom: 10, minWidth: scrollWidth, maxWidth: scrollWidth, }}>
-            <Casparcg slugs={slugs} allContent={allContent} setShowReactComponent={setShowReactComponent} showReactComponent={showReactComponent} startPosition={startPosition} fontSize={fontSize} doubleClickedPosition={doubleClickedPosition}newPosition={newPosition} currentStoryNumber={currentStoryNumber}/>
+            <Casparcg slugs={slugs} allContent={allContent} setShowReactComponent={setShowReactComponent} showReactComponent={showReactComponent} startPosition={startPosition} fontSize={fontSize} doubleClickedPosition={doubleClickedPosition} newPosition={newPosition} currentStoryNumber={currentStoryNumber} />
           </div>
           <div style={{ border: '1px solid red', marginBottom: 10 }}>
             <button onClick={() => {

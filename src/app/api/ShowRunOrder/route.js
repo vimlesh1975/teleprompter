@@ -3,6 +3,12 @@ import pool from '../db.js';
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const NewsId = searchParams.get('NewsId');
+  if (NewsId===''){
+    return new Response(JSON.stringify({ error: '' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
   
   try {
     const connection = await pool.getConnection();
