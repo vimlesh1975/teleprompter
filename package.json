@@ -11,6 +11,7 @@
   "dependencies": {
     "beautiful-react-hooks": "^5.0.2",
     "casparcg-connection": "^5.1.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "lodash.debounce": "^4.0.8",
     "mysql2": "^3.11.0",

@@ -40,9 +40,45 @@ export default function Home() {
   const [stopOnNext, setStopOnNext] = useState(false);
   const [latestDate, setLatestDate] = useState(null);
   const [allowUnApproved, setAllowUnApproved] = useState(true);
+  const [DB_NAME, setDB_NAME] = useState('c1news');
 
   const newWindowRef = useRef(null);
   const textRef = useRef(null);
+
+  const changeDB_NAME = async () => {
+    try {
+      const str = { DB_NAME }
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Specify the content type as JSON
+        },
+        body: JSON.stringify(str), // Convert the data to JSON format
+      };
+      await fetch("/api/setdbname", requestOptions);
+      setTimeout(() => {
+        fetchNewsId()
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getDB_NAME = async () => {
+    try {
+      const res = await fetch('/api/setdbname')
+      const data = await res.json();
+      setDB_NAME(data.DB_NAME)
+    } catch (error) {
+      console.error(error);
+      setDB_NAME('not set')
+    }
+  }
+
+
+  useEffect(() => {
+    getDB_NAME();
+  }, [])
 
   useEffect(() => {
     const savedData = localStorage.getItem("WebTelePrompter");
@@ -655,7 +691,7 @@ export default function Home() {
               <span>Allow UnApproved</span>
             </label>
 
-            
+
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
             <div>
@@ -853,18 +889,30 @@ export default function Home() {
               <input
                 type="number"
                 value={fontSize}
-                style={{ width: 50 }}
+                style={{ width: 40 }}
                 onChange={(e) => setFontSize(e.target.value)}
               />
               Start Position:
               <input
                 type="number"
                 value={startPosition}
-                style={{ width: 50 }}
+                style={{ width: 40 }}
                 onChange={(e) => {
                   setStartPosition(e.target.value);
                 }}
               />
+
+              DB_NAME:
+              <input
+                type="text"
+                value={DB_NAME}
+                style={{ width: 100 }}
+                onChange={(e) => {
+                  setDB_NAME(e.target.value);
+                }}
+              />
+              <button onClick={changeDB_NAME}>Set</button>
+
               <div
                 style={{
                   display: "flex",
