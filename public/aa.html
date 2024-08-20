@@ -47,7 +47,7 @@
         let peerConnection;
 
         const iceServers = {
-            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+            iceServers: [{ urls: 'stun:localhost:3478' }]
         };
 
         socket.on('offer', async (data) => {
@@ -77,7 +77,6 @@
                 localStream = await navigator.mediaDevices.getDisplayMedia({
                     video: {
                         cursor: "always",
-                        // displaySurface: "browser" // Can be "monitor", "window", "application", or "browser"
                         displaySurface: "monitor" // Can be "monitor", "window", "application", or "browser"
                     }
                 });
