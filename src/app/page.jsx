@@ -70,7 +70,7 @@ export default function Home() {
         "WebTelePrompter",
         JSON.stringify({ ...dataObject, fontSize, startPosition })
       );
-    }, 1000); 
+    }, 1000);
   }, [fontSize, startPosition]);
 
   const endpoint = async (str) => {
@@ -194,17 +194,18 @@ export default function Home() {
   }, [speed, tempSpeed]);
 
   // Fetch run order titles on component mount
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch("/api/newsid");
-        const data = await res.json();
-        setRunOrderTitles(data.data);
-      } catch (error) {
-        console.error(error);
-      }
+
+  const fetchNewsId = async () => {
+    try {
+      const res = await fetch("/api/newsid");
+      const data = await res.json();
+      setRunOrderTitles(data.data);
+    } catch (error) {
+      console.error(error);
     }
-    fetchData();
+  }
+  useEffect(() => {
+    fetchNewsId()
   }, []);
 
   // Fetch slugs based on selected run order title
@@ -254,15 +255,13 @@ export default function Home() {
     try {
       slicedSlugs.forEach((slug, i) => {
         if (!slug?.DropStory && slug?.Approval) {
-          data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${
-            slug?.Media ? " - Visual" : " - No Visual"
-          }`;
+          data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${slug?.Media ? " - Visual" : " - No Visual"
+            }`;
           data1[i * 3 + 1] = `${slug.Script}`;
           data1[i * 3 + 2] = `--------------`;
         } else {
-          data1[i * 3] = `${startNumber + i + 1} ${
-            slug?.DropStory ? "Story Dropped" : "Story UnApproved"
-          }`;
+          data1[i * 3] = `${startNumber + i + 1} ${slug?.DropStory ? "Story Dropped" : "Story UnApproved"
+            }`;
           data1[i * 3 + 1] = ` `;
           data1[i * 3 + 2] = ``;
         }
@@ -530,7 +529,7 @@ export default function Home() {
       <div style={{ display: "flex" }}>
         <div>
           <div>
-            Buletins:
+            RO
             <select
               value={selectedRunOrderTitle}
               onChange={handleSelectionChange}
@@ -544,7 +543,7 @@ export default function Home() {
                 </option>
               ))}
             </select>
-            {slugs?.length} Slugs
+            {slugs?.length} Slugs <button onClick={fetchNewsId}>Refresh</button>
           </div>
           <div
             style={{
@@ -567,10 +566,10 @@ export default function Home() {
                     currentSlug === i
                       ? "green"
                       : val.DropStory
-                      ? "#FF999C"
-                      : !val.Approval
-                      ? "red"
-                      : "#E7DBD8",
+                        ? "#FF999C"
+                        : !val.Approval
+                          ? "red"
+                          : "#E7DBD8",
                   margin: 10,
                 }}
               >
@@ -581,8 +580,8 @@ export default function Home() {
                     val.DropStory
                       ? "Story Dropped"
                       : !val.Approval
-                      ? "Story UnApproved"
-                      : ""
+                        ? "Story UnApproved"
+                        : ""
                   }
                   style={{ cursor: "pointer" }}
                 >
