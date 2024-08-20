@@ -41,13 +41,14 @@ export default function Home() {
   const [latestDate, setLatestDate] = useState(null);
   const [allowUnApproved, setAllowUnApproved] = useState(true);
   const [DB_NAME, setDB_NAME] = useState('c1news');
+  const [DB_HOST, setDB_HOST] = useState('localhost');
 
   const newWindowRef = useRef(null);
   const textRef = useRef(null);
 
   const changeDB_NAME = async () => {
     try {
-      const str = { DB_NAME }
+      const str = { DB_NAME, DB_HOST }
       const requestOptions = {
         method: "POST",
         headers: {
@@ -68,10 +69,12 @@ export default function Home() {
     try {
       const res = await fetch('/api/setdbname')
       const data = await res.json();
-      setDB_NAME(data.DB_NAME)
+      setDB_NAME(data.DB_NAME);
+      setDB_HOST(data.DB_HOST);
     } catch (error) {
       console.error(error);
-      setDB_NAME('not set')
+      setDB_NAME('not set');
+      setDB_HOST('not set');
     }
   }
 
@@ -902,17 +905,36 @@ export default function Home() {
                 }}
               />
 
-              DB_NAME:
-              <input
-                type="text"
-                value={DB_NAME}
-                style={{ width: 100 }}
-                onChange={(e) => {
-                  setDB_NAME(e.target.value);
-                }}
-              />
-              <button onClick={changeDB_NAME}>Set</button>
+              <div style={{ display: 'flex', border:'1px solid red' }}>
+                <div>
+                  DB_HOST:
+                  <input
+                    type="text"
+                    value={DB_HOST}
+                    style={{ width: 100 }}
+                    onChange={(e) => {
+                      setDB_HOST(e.target.value);
+                    }}
+                  />
+                </div>
+                <div>
+                  DB_NAME:
+                  <input
+                    type="text"
+                    value={DB_NAME}
+                    style={{ width: 100 }}
+                    onChange={(e) => {
+                      setDB_NAME(e.target.value);
+                    }}
+                  />
+                    <button onClick={changeDB_NAME}>Set</button>
+                </div>
 
+              </div>
+
+
+
+            
               <div
                 style={{
                   display: "flex",

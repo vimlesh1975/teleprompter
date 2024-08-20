@@ -7,8 +7,8 @@ dotenv.config({ path: '.env.local' });
 export async function GET(req) {
     try {
         const DB_NAME = process.env.DB_NAME;
-        console.log('DB_NAME:', DB_NAME);
-        return new Response(JSON.stringify({ DB_NAME }), {
+        const DB_HOST = process.env.DB_HOST;
+        return new Response(JSON.stringify({ DB_NAME , DB_HOST}), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
@@ -23,43 +23,50 @@ export async function GET(req) {
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { DB_NAME } = body;
+        const { DB_NAME, DB_HOST } = body;
+        console.log(body)
 
-        // Log the received DB_NAME
-        console.log(DB_NAME);
-
-        // Path to the .env file
         const envFilePath = path.resolve(process.cwd(), '.env.local');
 
-        // Read the existing content of the .env file
+        // Read the existing content of the .env.local file
         let envContent = fs.existsSync(envFilePath)
             ? fs.readFileSync(envFilePath, 'utf-8')
             : '';
 
-        // Split the content into lines and update the DB_NAME
+        // Split the content into lines and update DB_NAME and DB_HOST
         let lines = envContent.split('\n');
-        let updated = false;
+        let dbNameUpdated = false;
+        let dbHostUpdated = false;
 
         lines = lines.map(line => {
             if (line.startsWith('DB_NAME=')) {
-                updated = true;
+                dbNameUpdated = true;
                 return `DB_NAME=${DB_NAME}`;
+            }
+            if (line.startsWith('DB_HOST=')) {
+                dbHostUpdated = true;
+                return `DB_HOST=${DB_HOST}`;
             }
             return line;
         });
 
         // If DB_NAME wasn't found, add it to the end of the file
-        if (!updated) {
+        if (!dbNameUpdated) {
             lines.push(`DB_NAME=${DB_NAME}`);
+        }
+
+        // If DB_HOST wasn't found, add it to the end of the file
+        if (!dbHostUpdated) {
+            lines.push(`DB_HOST=${DB_HOST}`);
         }
 
         // Join the lines back into a string
         envContent = lines.join('\n');
 
-        // Write the updated content back to the .env file
+        // Write the updated content back to the .env.local file
         fs.writeFileSync(envFilePath, envContent, 'utf-8');
 
-        return new Response(JSON.stringify({ message: 'DB_NAME updated in .env.local file' }), {
+        return new Response(JSON.stringify({ message: 'DB_NAME and DB_HOST updated in .env.local file' }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
