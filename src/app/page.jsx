@@ -39,6 +39,7 @@ export default function Home() {
   const [showReactComponent, setShowReactComponent] = useState(false);
   const [stopOnNext, setStopOnNext] = useState(false);
   const [latestDate, setLatestDate] = useState(null);
+  const [allowUnApproved, setAllowUnApproved] = useState(true);
 
   const newWindowRef = useRef(null);
   const textRef = useRef(null);
@@ -254,7 +255,7 @@ export default function Home() {
     const data1 = new Array(slicedSlugs.length * 3);
     try {
       slicedSlugs.forEach((slug, i) => {
-        if (!slug?.DropStory && slug?.Approval) {
+        if (!slug?.DropStory && (slug?.Approval || allowUnApproved)) {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${slug?.Media ? " - Visual" : " - No Visual"
             }`;
           data1[i * 3 + 1] = `${slug.Script}`;
@@ -641,8 +642,20 @@ export default function Home() {
                 type="checkbox"
                 onChange={() => setStopAfterStoryChange((val) => !val)}
               />{" "}
-              <span>Stop After Story Change</span>
+              <span>Stop After Story</span>
             </label>
+
+            <label>
+              {" "}
+              <input
+                checked={allowUnApproved}
+                type="checkbox"
+                onChange={() => setAllowUnApproved((val) => !val)}
+              />{" "}
+              <span>Allow UnApproved</span>
+            </label>
+
+            
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
             <div>
