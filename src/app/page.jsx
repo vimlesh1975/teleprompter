@@ -7,6 +7,7 @@ import debounce from "lodash.debounce"; // Importing debounce from lodash
 
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
+import GraphicsAndVideo from './components/GraphicsAndVideo'
 const scrollWidth = 600;
 const scrollHeight = 522;
 
@@ -744,14 +745,21 @@ export default function Home() {
               style={{
                 fontSize: `${fontSize}px`,
                 width: scrollWidth,
-                minHeight: scrollHeight - 80,
-                maxHeight: scrollHeight - 80,
+                // minHeight: scrollHeight - 80,
+                // maxHeight: scrollHeight - 80,
+                minHeight: scrollHeight - 275,
+                maxHeight: scrollHeight - 275,
                 lineHeight: `${fontSize * 1.3}px`,
               }}
               disabled
             />
+            <div style={{fontSize:16}}>
+              <GraphicsAndVideo scriptID={scriptID}/>
+            </div>
           </div>
+
         </div>
+
         <div>
           <div>
             {!showReactComponent && !showNewWindow && (
@@ -808,6 +816,7 @@ export default function Home() {
               </NewWindow>
             )}
           </div>
+
           <div
             onContextMenu={(e) => {
               e.preventDefault();
