@@ -42,6 +42,7 @@ export default function Home() {
   const [allowUnApproved, setAllowUnApproved] = useState(true);
   const [DB_NAME, setDB_NAME] = useState('c1news');
   const [DB_HOST, setDB_HOST] = useState('localhost');
+  const [showSettings, setShowSettings] = useState(false);
 
   const newWindowRef = useRef(null);
   const textRef = useRef(null);
@@ -870,6 +871,26 @@ export default function Home() {
                 style={{ width: "60%" }}
               />
             </div>
+            <div style={{ textAlign: "right" }}>
+              Right Click to Stop and Play
+            </div>
+            <Timer
+              callback={timerFunction}
+              interval={5000}
+              stopOnNext={stopOnNext}
+              setStopOnNext={setStopOnNext}
+            />
+            <h3>
+              Last Update:{" "}
+              {latestDate?.toLocaleString(undefined, {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+              })}
+            </h3>
 
             {!showReactComponent && (
               <div>
@@ -886,85 +907,67 @@ export default function Home() {
                 </button>
               </div>
             )}
+            <button onClick={() => setShowSettings(val => !val)}>{showSettings ? 'Hide Setting' : 'Show Setting'}</button>
+            <div style={{ display: showSettings ? '' : 'none' }}>
+              <div>
+                Font Size:
+                <input
+                  type="number"
+                  value={fontSize}
+                  style={{ width: 40 }}
+                  onChange={(e) => setFontSize(e.target.value)}
+                />
+                Start Position:
+                <input
+                  type="number"
+                  value={startPosition}
+                  style={{ width: 40 }}
+                  onChange={(e) => {
+                    setStartPosition(e.target.value);
+                  }}
+                />
 
-            <div>
-              Font Size:
-              <input
-                type="number"
-                value={fontSize}
-                style={{ width: 40 }}
-                onChange={(e) => setFontSize(e.target.value)}
-              />
-              Start Position:
-              <input
-                type="number"
-                value={startPosition}
-                style={{ width: 40 }}
-                onChange={(e) => {
-                  setStartPosition(e.target.value);
-                }}
-              />
-
-              <div style={{ display: 'flex', border:'1px solid red' }}>
-                <div>
-                  DB_HOST:
-                  <input
-                    type="text"
-                    value={DB_HOST}
-                    style={{ width: 100 }}
-                    onChange={(e) => {
-                      setDB_HOST(e.target.value);
-                    }}
-                  />
-                </div>
-                <div>
-                  DB_NAME:
-                  <input
-                    type="text"
-                    value={DB_NAME}
-                    style={{ width: 100 }}
-                    onChange={(e) => {
-                      setDB_NAME(e.target.value);
-                    }}
-                  />
+                <div style={{ display: 'flex', border: '1px solid red' }}>
+                  <div>
+                    DB_HOST:
+                    <input
+                      type="text"
+                      value={DB_HOST}
+                      style={{ width: 100 }}
+                      onChange={(e) => {
+                        setDB_HOST(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div>
+                    DB_NAME:
+                    <input
+                      type="text"
+                      value={DB_NAME}
+                      style={{ width: 100 }}
+                      onChange={(e) => {
+                        setDB_NAME(e.target.value);
+                      }}
+                    />
                     <button onClick={changeDB_NAME}>Set</button>
+                  </div>
+
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    height: "100%",
+                  }}
+                >
+
+
                 </div>
 
               </div>
-
-
-
-            
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  height: "100%",
-                }}
-              >
-                <div style={{ textAlign: "right" }}>
-                  Right Click to Stop and Play
-                </div>
-                <h3>
-                  Last Update:{" "}
-                  {latestDate?.toLocaleString(undefined, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    second: "numeric",
-                  })}
-                </h3>
-              </div>
-              <Timer
-                callback={timerFunction}
-                interval={5000}
-                stopOnNext={stopOnNext}
-                setStopOnNext={setStopOnNext}
-              />
             </div>
+
           </div>
         </div>
       </div>
