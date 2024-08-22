@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
   const [useAutoPlay, setuseAutoPlay] = useState(false)
+  const [videoChannel2, setVideoChannel2] = useState(false)
   const endpoint = async (str) => {
     const requestOptions = {
       method: "POST",
@@ -23,16 +24,16 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
 
     endpoint({
       action: "endpoint",
-      command: `play 1-1 tr wipe 10 left`,
+      command: `play ${videoChannel2?2:1}-1 tr wipe 10 left`,
     });
     endpoint({
       action: "endpoint",
-      command: `stop 1-96`,
+      command: `stop ${videoChannel2?2:1}-96`,
     });
     setTimeout(() => {
       endpoint({
         action: "endpoint",
-        command: `play 1-1 "newsmediac1/${slugs[currentStoryNumber - 1]?.Media}" wipe 10 left`,
+        command: `play ${videoChannel2?2:1}-1 "newsmediac1/${slugs[currentStoryNumber - 1]?.Media}" wipe 10 left`,
       });
       const data = (slugs[currentStoryNumber - 1]?.OneLinerText)?.split("\n")
       if (data && data[0]) {
@@ -43,7 +44,7 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
         const templateName = 'oneliner2';
         endpoint({
           action: "endpoint",
-          command: `cg 1-96 add 96 "${templateName}" 1 ${xml}`
+          command: `cg ${videoChannel2?2:1}-96 add 96 "${templateName}" 1 ${xml}`
         });
       }
     }, 400);
@@ -52,25 +53,35 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
   const stopGraphics = () => {
     endpoint({
       action: "endpoint",
-      command: `stop 1-96`,
+      command: `stop ${videoChannel2?2:1}-96`,
     });
     endpoint({
       action: "endpoint",
-      command: `stop 1-1`,
+      command: `stop ${videoChannel2?2:1}-1`,
     });
   }
 
   return (
     <div>
-      <h5>Graphics And Video</h5>
+      <p>Graphics And Video</p>
       <label>
               {" "}
               <input
                 checked={useAutoPlay}
                 type="checkbox"
-                onChange={() => setuseAutoPlay((val) => !val)}
+                onChange={() => setuseAutoPlay(val => !val)}
               />{" "}
               <span>Auto Play on Next</span>
+            </label>
+
+            <label>
+              {" "}
+              <input
+                checked={videoChannel2}
+                type="checkbox"
+                onChange={() => setVideoChannel2(val => !val)}
+              />{" "}
+              <span>Video on 2nd Channel</span>
             </label>
       {(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("\n").map((val, i) => <div>Line {i + 1} {val}</div>)}
       <div>

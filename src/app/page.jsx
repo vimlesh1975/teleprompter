@@ -764,7 +764,7 @@ export default function Home() {
               }}
               disabled
             />
-            <div style={{fontSize:16}}>
+            <div style={{fontSize:16, fontWeight: "normal",}}>
               <GraphicsAndVideo scriptID={scriptID} slugs={slugs} currentStoryNumber={currentStoryNumber}/>
             </div>
           </div>
