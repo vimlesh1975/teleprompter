@@ -77,7 +77,7 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
             <label>
               {" "}
               <input
-                checked={videoChannel2?2:1}
+                checked={videoChannel2}
                 type="checkbox"
                 onChange={() => setVideoChannel2(val => !val)}
               />{" "}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
+import Count from './Count';
 const socket = io();
 socket.on('connect', () => {
     console.log('SOCKET CONNECTED! from Scroll page', socket.id);
@@ -187,6 +188,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                         <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
                             <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                             <div>{newsReaderText}</div>
+                            <div><Count currentStoryNumber={currentStoryNumber}/></div>
                             <div>{showClock ? '' : '.'}</div>
                             <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
                             <div >{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>

@@ -90,11 +90,11 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: `play 1-2 [html] http://localhost:3000/webrtc.html`,
+                command: `play 1-97 [html] http://localhost:3000/webrtc.html`,
               });
               endpoint({
                 action: 'endpoint',
-                command: fliped ? 'mixer 1-2 fill 1 0 -1 1' : 'mixer 1-2 fill 0 0 1 1',
+                command: fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
               });
             }
             }
@@ -105,7 +105,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: !fliped ? 'mixer 1-2 fill 1 0 -1 1' : 'mixer 1-2 fill 0 0 1 1',
+                command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
               });
               setFliped(val => !val);
             }}
@@ -118,47 +118,47 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: `Play 1-2 [html] "http://localhost:3000/CasparcgOutput"`,
+                command: `Play 1-97 [html] "http://localhost:3000/CasparcgOutput"`,
               });
               endpoint({
                 action: 'endpoint',
-                command: !fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02' : 'mixer 1-2 fill 1.02 -0.015 -3.21 2.02',
+                command: !fliped ? 'mixer 1-97 fill -0.02 -0.015 3.21 2.02' : 'mixer 1-97 fill 1.02 -0.015 -3.21 2.02',
               });
               setTimeout(() => {
                 setShowReactComponent(true);
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-2 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
+                  command: `call 1-97 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
                 });
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-2 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
+                  command: `call 1-97 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
                 });
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-2 setStartPosition(${startPosition})`,
+                  command: `call 1-97 setStartPosition(${startPosition})`,
                 });
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-2 setFontSize(${fontSize})`,
+                  command: `call 1-97 setFontSize(${fontSize})`,
                 });
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-2 setDoubleClickedPosition(${doubleClickedPosition})`,
-                });
-
-                endpoint({
-                  action: 'endpoint',
-                  command: `call 1-2 setLoggedPositions1()`,
+                  command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
                 });
 
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-2 setNewPosition(${newPosition})`,
+                  command: `call 1-97 setLoggedPositions1()`,
+                });
+
+                endpoint({
+                  action: 'endpoint',
+                  command: `call 1-97 setNewPosition(${newPosition})`,
                 });
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-2 setCurrentStoryNumber(${currentStoryNumber})`,
+                  command: `call 1-97 setCurrentStoryNumber(${currentStoryNumber})`,
                 });
 
               }, 1000);
@@ -173,7 +173,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: fliped ? 'mixer 1-2 fill -0.02 -0.015 3.21 2.02' : 'mixer 1-2 fill 1.02 -0.015 -3.21 2.02',
+                command: fliped ? 'mixer 1-97 fill -0.02 -0.015 3.21 2.02' : 'mixer 1-97 fill 1.02 -0.015 -3.21 2.02',
               });
               setFliped(val => !val);
             }}
@@ -185,11 +185,11 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
           onClick={() => {
             endpoint({
               action: 'endpoint',
-              command: `stop 1-2`,
+              command: `stop 1-97`,
             });
             endpoint({
               action: 'endpoint',
-              command: `mixer 1-2 clear`,
+              command: `mixer 1-97 clear`,
             });
             setShowReactComponent(false);
           }

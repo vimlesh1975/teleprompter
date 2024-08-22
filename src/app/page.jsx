@@ -499,14 +499,14 @@ export default function Home() {
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setStartPosition(${startPosition})`,
+      command: `call 1-97 setStartPosition(${startPosition})`,
     });
   }, [startPosition]);
 
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setAllContent1(${JSON.stringify(
+      command: `call 1-97 setAllContent1(${JSON.stringify(
         replaceCRLFInArray(allContent)
       )
         .replaceAll('"', '\\"')
@@ -517,54 +517,54 @@ export default function Home() {
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setSpeed(${speed})`,
+      command: `call 1-97 setSpeed(${speed})`,
     });
   }, [speed]);
 
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setFontSize(${fontSize})`,
+      command: `call 1-97 setFontSize(${fontSize})`,
     });
   }, [fontSize]);
 
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setShowClock(${showClock})`,
+      command: `call 1-97 setShowClock(${showClock})`,
     });
   }, [showClock]);
 
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setNewsReaderText('${newsReaderText}')`,
+      command: `call 1-97 setNewsReaderText('${newsReaderText}')`,
     });
   }, [newsReaderText]);
 
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setDoubleClickedPosition(${doubleClickedPosition})`,
+      command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
     });
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setNewPosition(${startPosition})`,
+      command: `call 1-97 setNewPosition(${startPosition})`,
     });
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
+      command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
     });
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setLoggedPositions1()`,
+      command: `call 1-97 setLoggedPositions1()`,
     });
   }, [doubleClickedPosition]);
 
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setSlugs(${JSON.stringify(
+      command: `call 1-97 setSlugs(${JSON.stringify(
         slugs.map((item) => item.SlugName)
       )})`,
     });
@@ -573,7 +573,7 @@ export default function Home() {
   useEffect(() => {
     endpoint({
       action: "endpoint",
-      command: `call 1-2 setSelectedRunOrderTitle('${selectedRunOrderTitle}')`,
+      command: `call 1-97 setSelectedRunOrderTitle('${selectedRunOrderTitle}')`,
     });
   }, [selectedRunOrderTitle]);
 
