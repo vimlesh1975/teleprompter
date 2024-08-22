@@ -159,13 +159,11 @@ export default function Home() {
         newLatestDateTotal > latestDate ||
         data.data.length !== slugs.length
       ) {
-        console.log(
-          `'There is Update at ${newLatestDateTotal.toLocaleString()}'`
-        );
+        // console.log( `'There is Update at ${newLatestDateTotal.toLocaleString()}'`   );
         setLatestDate(newLatestDateTotal);
         setSlugs(data.data);
       } else {
-        console.log(`'No Update at all'`);
+        // console.log(`'No Update at all'`);
       }
 
       const newSlugs = data.data.slice(doubleClickedPosition);
@@ -187,13 +185,13 @@ export default function Home() {
           data.data[currentStoryNumber - 1]?.DropStory === 1 ||
           data.data[currentStoryNumber - 1]?.Approval === 0
         ) {
-          console.log("current story dropped or not disapproved");
+          // console.log("current story dropped or not disapproved");
           handleDoubleClick(currentStoryNumber);
         } else {
           fetchAllContent(newSlugs, doubleClickedPosition);
         }
       } else {
-        console.log("No update below current story");
+        // console.log("No update below current story");
       }
     } catch (error) {
       console.error(error);
