@@ -354,6 +354,9 @@ export default function Home() {
       }
       while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved )){
         newIndex--;
+        if (newIndex < 0) {
+          newIndex = slugs.length - 1;
+        }
       };
       handleDoubleClick(newIndex);
       setCurrentSlugName(slugs[newIndex].SlugName);
@@ -370,6 +373,9 @@ export default function Home() {
       }
       while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved )){
         newIndex++;
+        if (newIndex >= slugs.length) {
+          newIndex = 0;
+        }
       };
     
       setCurrentSlugName(slugs[newIndex].SlugName);
