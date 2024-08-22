@@ -352,7 +352,7 @@ export default function Home() {
       if (newIndex < 0) {
         newIndex = slugs.length - 1;
       }
-      while (slugs[newIndex]?.DropStory || (!slugs[newIndex].Approval && !allowUnApproved )){
+      while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved )){
         newIndex--;
       };
       handleDoubleClick(newIndex);
@@ -368,7 +368,7 @@ export default function Home() {
       if (newIndex >= slugs.length) {
         newIndex = 0;
       }
-      while (slugs[newIndex]?.DropStory || (!slugs[newIndex].Approval && !allowUnApproved )){
+      while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved )){
         newIndex++;
       };
     
