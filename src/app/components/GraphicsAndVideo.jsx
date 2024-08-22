@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
+  const [useAutoPlay, setuseAutoPlay] = useState(false)
   const endpoint = async (str) => {
     const requestOptions = {
       method: "POST",
@@ -13,7 +14,9 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
   };
 
   useEffect(() => {
-    sendGraphics();
+    if (useAutoPlay) {
+      sendGraphics();
+    }
   }, [currentStoryNumber])
 
   const sendGraphics = () => {
@@ -46,16 +49,37 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
     }, 400);
   }
 
+  const stopGraphics = () => {
+    endpoint({
+      action: "endpoint",
+      command: `stop 1-96`,
+    });
+    endpoint({
+      action: "endpoint",
+      command: `stop 1-1`,
+    });
+  }
+
   return (
     <div>
       <h5>Graphics And Video</h5>
-      {(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("\n").map((val, i) => <div>Line {i+1} {val}</div>)}
+      <label>
+              {" "}
+              <input
+                checked={useAutoPlay}
+                type="checkbox"
+                onChange={() => setuseAutoPlay((val) => !val)}
+              />{" "}
+              <span>Auto Play on Next</span>
+            </label>
+      {(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("\n").map((val, i) => <div>Line {i + 1} {val}</div>)}
       <div>
-       Video File: {scriptID}{slugs[currentStoryNumber - 1]?.Media}
-       <div>
-       <button onClick={sendGraphics}>Play</button>
+        Video File: {scriptID}{slugs[currentStoryNumber - 1]?.Media}
+        <div>
+          <button onClick={sendGraphics}>Play</button>
+          <button onClick={stopGraphics}>Stop</button>
 
-       </div>
+        </div>
       </div>
     </div>
   )
