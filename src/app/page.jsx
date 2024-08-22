@@ -352,6 +352,9 @@ export default function Home() {
       if (newIndex < 0) {
         newIndex = slugs.length - 1;
       }
+      while (slugs[newIndex]?.DropStory || (!slugs[newIndex].Approval && !allowUnApproved )){
+        newIndex--;
+      };
       handleDoubleClick(newIndex);
       setCurrentSlugName(slugs[newIndex].SlugName);
       setScriptID(slugs[newIndex].ScriptID);
@@ -365,6 +368,10 @@ export default function Home() {
       if (newIndex >= slugs.length) {
         newIndex = 0;
       }
+      while (slugs[newIndex]?.DropStory || (!slugs[newIndex].Approval && !allowUnApproved )){
+        newIndex++;
+      };
+    
       setCurrentSlugName(slugs[newIndex].SlugName);
       setScriptID(slugs[newIndex].ScriptID);
       handleDoubleClick(newIndex);
