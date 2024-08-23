@@ -26,6 +26,12 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
       action: "endpoint",
       command: `play ${videoChannel2?2:1}-1 tr wipe 10 left`,
     });
+
+    endpoint({
+      action: "endpoint",
+      command: `mixer ${videoChannel2?2:1}-1 fill 0.238487 0.049438 0.710526 0.705618`,
+    });
+
     endpoint({
       action: "endpoint",
       command: `stop ${videoChannel2?2:1}-96`,
@@ -33,10 +39,12 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
     setTimeout(() => {
       endpoint({
         action: "endpoint",
-        command: `play ${videoChannel2?2:1}-1 "newsmediac1/${slugs[currentStoryNumber - 1]?.Media}" wipe 10 left`,
+        command: `play ${videoChannel2?2:1}-1 "newsmediac1/${slugs[currentStoryNumber - 1]?.Media}" loop wipe 10 left`,
       });
-      const data = (slugs[currentStoryNumber - 1]?.OneLinerText)?.split("\n")
-      if (data && data[0]) {
+      var data = (slugs[currentStoryNumber - 1]?.OneLinerText)?.split("\n")
+      if(!data){
+        data=['']
+      }
         let xml = '';
         xml += `<componentData id=\\"${'ccg_f0'}\\"><data id=\\"text\\" value=\\"${data[0] ?? ''}\\" /></componentData>`
         xml += `<componentData id=\\"${'ccg_f1'}\\"><data id=\\"text\\" value=\\"${currentStoryNumber ?? ''}\\" /></componentData>`
@@ -46,7 +54,6 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
           action: "endpoint",
           command: `cg ${videoChannel2?2:1}-96 add 96 "${templateName}" 1 ${xml}`
         });
-      }
     }, 400);
   }
 
@@ -79,7 +86,13 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
               <input
                 checked={videoChannel2}
                 type="checkbox"
-                onChange={() => setVideoChannel2(val => !val)}
+                onChange={() => {
+                  setVideoChannel2(val => !val);
+                  endpoint({
+                    action: "endpoint",
+                    command: `play ${videoChannel2?2:1}-0 express_loop loop`,
+                  });
+                }}
               />{" "}
               <span>Video on 2nd Channel</span>
             </label>
