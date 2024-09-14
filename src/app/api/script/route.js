@@ -1,12 +1,13 @@
-import pool from '../db.js';
+import mysql from 'mysql2/promise';
+import {config} from '../db.js';
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const ScriptID = searchParams.get('ScriptID');
   const NewsId = searchParams.get('NewsId');
-
+  let connection;
   try {
-    const connection = await pool.getConnection();
+    connection = await mysql.createConnection(config);
     try {
       const query = `SELECT Script FROM script WHERE ScriptID = ? AND NewsId = ? LIMIT 1`;
       const [rows] = await connection.query(query, [ScriptID, NewsId]);
@@ -15,8 +16,9 @@ export async function GET(req) {
         headers: { 'Content-Type': 'application/json' },
       });
     } finally {
-      connection.release();
-      // console.log('Connection released form scipt');
+      if (connection) {
+        await connection.end(); // Close the database connection
+    }
 
     }
   } catch (error) {

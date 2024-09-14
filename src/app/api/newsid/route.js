@@ -1,8 +1,10 @@
-import pool from '../db.js';
+import mysql from 'mysql2/promise';
+import {config} from '../db.js';
 
 export async function GET(req) {
+  let connection;
   try {
-    const connection = await pool.getConnection();
+    connection = await mysql.createConnection(config);
     try {
       const [rows] = await connection.query(`SELECT DISTINCT title FROM newsid WHERE title != '' ORDER BY title ASC`);
       return new Response(JSON.stringify({ data: rows }), {
@@ -10,8 +12,9 @@ export async function GET(req) {
         headers: { 'Content-Type': 'application/json' },
       });
     } finally {
-      connection.release();
-  // console.log('Connection released fom newsid');
+      if (connection) {
+        await connection.end(); // Close the database connection
+      }
     }
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {

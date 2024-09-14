@@ -1,4 +1,5 @@
-import pool from '../db.js';
+import mysql from 'mysql2/promise';
+import {config} from '../db.js';
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -9,9 +10,11 @@ export async function GET(req) {
       headers: { 'Content-Type': 'application/json' },
     });
   }
+  let connection;
   
   try {
-    const connection = await pool.getConnection();
+    connection = await mysql.createConnection(config);
+
     try {
       const [rows] = await connection.query(`CALL show_runorder(?)`, [NewsId]);
       return new Response(JSON.stringify({ data: rows[0] }), {
@@ -19,8 +22,9 @@ export async function GET(req) {
         headers: { 'Content-Type': 'application/json' },
       });
     } finally {
-      connection.release();
-      // console.log('Connection released form runorders');
+      if (connection) {
+        await connection.end(); // Close the database connection
+      }
 
     }
   } catch (error) {

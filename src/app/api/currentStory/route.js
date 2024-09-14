@@ -1,13 +1,17 @@
-import pool from '../db.js'; // Adjust the import based on your actual pool file location
+import mysql from 'mysql2/promise';
+import {config} from '../db.js';
 
 export async function POST(req) {
+  let connection;
+
     try {
         const { curstory, curbulletin } = await req.json();
         if (curbulletin === null) return;
         const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?`;
         const values = [curstory, curbulletin];
 
-        const connection = await pool.getConnection();
+        connection = await mysql.createConnection(config);
+
         try {
             await connection.query(query, values);
             return new Response(JSON.stringify({ message: 'Content updated successfully' }), {
@@ -15,8 +19,9 @@ export async function POST(req) {
                 headers: { 'Content-Type': 'application/json' },
             });
         } finally {
-            connection.release();
-            // console.log('Connection released form current story');
+            if (connection) {
+                await connection.end(); // Close the database connection
+              }
         }
     } catch (error) {
         console.error(error);
