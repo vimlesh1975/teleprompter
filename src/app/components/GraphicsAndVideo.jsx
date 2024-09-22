@@ -96,7 +96,7 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
               />{" "}
               <span>Video on 2nd Channel</span>
             </label>
-      {(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("\n").map((val, i) => <div>Line {i + 1} {val}</div>)}
+      {(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("\n").map((val, i) => <div key={i}>Line {i + 1} {val}</div>)}
       <div>
         Video File: {scriptID}{slugs[currentStoryNumber - 1]?.Media}
         <div>
