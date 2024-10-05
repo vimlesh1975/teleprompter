@@ -43,6 +43,7 @@ export default function Home() {
   const [allowUnApproved, setAllowUnApproved] = useState(true);
   const [DB_NAME, setDB_NAME] = useState('c1news');
   const [DB_HOST, setDB_HOST] = useState('localhost');
+  const [CASPAR_HOST, setCASPAR_HOST] = useState('127.0.0.1');
   const [showSettings, setShowSettings] = useState(false);
 
   const newWindowRef = useRef(null);
@@ -50,7 +51,7 @@ export default function Home() {
 
   const changeDB_NAME = async () => {
     try {
-      const str = { DB_NAME, DB_HOST }
+      const str = { DB_NAME, DB_HOST, CASPAR_HOST }
       const requestOptions = {
         method: "POST",
         headers: {
@@ -953,7 +954,7 @@ export default function Home() {
                     <input
                       type="text"
                       value={DB_HOST}
-                      style={{ width: 100 }}
+                      style={{ width: 120 }}
                       onChange={(e) => {
                         setDB_HOST(e.target.value);
                       }}
@@ -969,9 +970,19 @@ export default function Home() {
                         setDB_NAME(e.target.value);
                       }}
                     />
+                  </div>
+                  <div>
+                  CASPAR_HOST:
+                    <input
+                      type="text"
+                      value={CASPAR_HOST}
+                      style={{ width: 100 }}
+                      onChange={(e) => {
+                        setCASPAR_HOST(e.target.value);
+                      }}
+                    />
                     <button onClick={changeDB_NAME}>Set</button>
                   </div>
-
                 </div>
                 <div
                   style={{

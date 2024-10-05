@@ -3,7 +3,7 @@ import { CasparCG, Options, AMCP } from 'casparcg-connection';
 import io from 'socket.io-client';
 const socket = io('http://localhost:3000');
 var aa=null;
-if (aa===null){aa = new CasparCG('127.0.0.1', 5250);}
+if (aa===null){aa = new CasparCG(process.env.CASPAR_HOST, 5250);}
 aa.queueMode = Options.QueueMode.SEQUENTIAL;
 aa.onConnectionChanged = () => {
   socket.emit('ServerConnectionStatus', aa.connected);

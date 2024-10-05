@@ -8,7 +8,8 @@ export async function GET(req) {
     try {
         const DB_NAME = process.env.DB_NAME;
         const DB_HOST = process.env.DB_HOST;
-        return new Response(JSON.stringify({ DB_NAME , DB_HOST}), {
+        const CASPAR_HOST = process.env.CASPAR_HOST;
+        return new Response(JSON.stringify({ DB_NAME , DB_HOST, CASPAR_HOST}), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
@@ -23,7 +24,7 @@ export async function GET(req) {
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { DB_NAME, DB_HOST } = body;
+        const { DB_NAME, DB_HOST , CASPAR_HOST} = body;
         console.log(body)
 
         const envFilePath = path.resolve(process.cwd(), '.env.local');
@@ -37,6 +38,7 @@ export async function POST(req) {
         let lines = envContent.split('\n');
         let dbNameUpdated = false;
         let dbHostUpdated = false;
+        let casparHostUpdated = false;
 
         lines = lines.map(line => {
             if (line.startsWith('DB_NAME=')) {
@@ -46,6 +48,10 @@ export async function POST(req) {
             if (line.startsWith('DB_HOST=')) {
                 dbHostUpdated = true;
                 return `DB_HOST=${DB_HOST}`;
+            }
+            if (line.startsWith('CASPAR_HOST=')) {
+                casparHostUpdated = true;
+                return `CASPAR_HOST=${CASPAR_HOST}`;
             }
             return line;
         });
@@ -59,14 +65,16 @@ export async function POST(req) {
         if (!dbHostUpdated) {
             lines.push(`DB_HOST=${DB_HOST}`);
         }
-
+        if (!casparHostUpdated) {
+            lines.push(`CASPAR_HOST=${CASPAR_HOST}`);
+        }
         // Join the lines back into a string
         envContent = lines.join('\n');
 
         // Write the updated content back to the .env.local file
         fs.writeFileSync(envFilePath, envContent, 'utf-8');
 
-        return new Response(JSON.stringify({ message: 'DB_NAME and DB_HOST updated in .env.local file' }), {
+        return new Response(JSON.stringify({ message: 'DB_NAME , DB_HOST and CASPAR_HOST updated in .env.local file' }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
