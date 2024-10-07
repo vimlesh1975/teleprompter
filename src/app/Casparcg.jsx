@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+const IP=process.env.NEXT_PUBLIC_IP;
 
 const socket = io();
 socket.on('connect', () => {
@@ -90,7 +91,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: `play 1-97 [html] http://localhost:3000/webrtc.html`,
+                command: `play 1-97 [html] http://${IP}:3000/webrtc.html`,
               });
               endpoint({
                 action: 'endpoint',
@@ -118,7 +119,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: `Play 1-97 [html] "http://localhost:3000/CasparcgOutput"`,
+                command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
               endpoint({
                 action: 'endpoint',

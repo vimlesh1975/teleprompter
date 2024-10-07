@@ -59,12 +59,10 @@ export default function Home() {
         setKeyPressed('');
       }
       else{
-        console.log(!isNaN(event.key))
         if (!isNaN(event.key)){
           setKeyPressed(val=> val+event.key);
         }
       }
-      console.log(`Key pressed: ${event.key}`);
     };
 
     // Add event listener on mount
