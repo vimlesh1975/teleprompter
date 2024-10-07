@@ -46,8 +46,35 @@ export default function Home() {
   const [CASPAR_HOST, setCASPAR_HOST] = useState('127.0.0.1');
   const [showSettings, setShowSettings] = useState(false);
 
+  const [keyPressed, setKeyPressed] = useState('');
+
   const newWindowRef = useRef(null);
   const textRef = useRef(null);
+
+  useEffect(() => {
+    // Event listener function
+    const handleKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        handleDoubleClick(parseInt(keyPressed)-1);
+        setKeyPressed('');
+      }
+      else{
+        console.log(!isNaN(event.key))
+        if (!isNaN(event.key)){
+          setKeyPressed(val=> val+event.key);
+        }
+      }
+      console.log(`Key pressed: ${event.key}`);
+    };
+
+    // Add event listener on mount
+    window.addEventListener('keydown', handleKeyPress);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [keyPressed]); // Empty dependency array ensures it runs only once when component mounts
 
   const changeDB_NAME = async () => {
     try {
@@ -326,7 +353,7 @@ export default function Home() {
 
   // Handle double-click event
   const handleDoubleClick = (i) => {
-
+console.log('handleDoubleClick called' , i)
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
@@ -856,6 +883,7 @@ export default function Home() {
             }}
           >
             <div>
+          
               <button onClick={() => setSpeed((val) => val - 1)}>-</button>
               <button onClick={() => setSpeed(-7)}>-7</button>
               <button onClick={() => setSpeed(-6)}>-6</button>
@@ -887,6 +915,7 @@ export default function Home() {
               <button onClick={() => setSpeed((val) => parseInt(val) + 1)}>
                 +1
               </button>
+             
             </div>
             <div>
               Speed: {speed}
@@ -900,7 +929,8 @@ export default function Home() {
               />
             </div>
             <div style={{ textAlign: "right" }}>
-              Right Click to Stop and Play
+            {/* {'keyPressed' + keyPressed}  */}
+            Right Click to Stop and Play
             </div>
             <Timer
               callback={timerFunction}
