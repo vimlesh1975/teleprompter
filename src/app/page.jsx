@@ -101,10 +101,12 @@ export default function Home() {
       const data = await res.json();
       setDB_NAME(data.DB_NAME);
       setDB_HOST(data.DB_HOST);
+      setCASPAR_HOST(data.CASPAR_HOST);
     } catch (error) {
       console.error(error);
       setDB_NAME('not set');
       setDB_HOST('not set');
+      setCASPAR_HOST('not set');
     }
   }
 
