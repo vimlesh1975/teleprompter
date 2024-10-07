@@ -326,6 +326,7 @@ export default function Home() {
 
   // Handle double-click event
   const handleDoubleClick = (i) => {
+
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
@@ -336,6 +337,10 @@ export default function Home() {
       setLoggedPositions(newLoggedPositions);
       setDoubleClickedPosition(i);
       setNewPosition(startPosition);
+      endpoint({
+        action: "endpoint",
+        command: `call 1-97 setNewPosition(${startPosition})`,
+      });
     }
   };
   const fromStart = () => {
@@ -577,6 +582,8 @@ export default function Home() {
       command: `call 1-97 setSelectedRunOrderTitle('${selectedRunOrderTitle}')`,
     });
   }, [selectedRunOrderTitle]);
+
+
 
   return (
     <div style={{ overflow: "hidden" }}>
