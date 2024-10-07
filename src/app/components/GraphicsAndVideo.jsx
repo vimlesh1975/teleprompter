@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
+const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , currentSlug}) => {
   const [useAutoPlay, setuseAutoPlay] = useState(false)
   const [videoChannel2, setVideoChannel2] = useState(false)
   const endpoint = async (str) => {
@@ -60,11 +60,42 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
   const stopGraphics = () => {
     endpoint({
       action: "endpoint",
-      command: `stop ${videoChannel2?2:1}-96`,
+      command: `stop ${1}-96`,
     });
     endpoint({
       action: "endpoint",
-      command: `stop ${videoChannel2?2:1}-1`,
+      command: `stop ${1}-1`,
+    });
+    endpoint({
+      action: "endpoint",
+      command: `stop ${1}-0`,
+    });
+
+
+
+    endpoint({
+      action: "endpoint",
+      command: `stop ${2}-96`,
+    });
+    endpoint({
+      action: "endpoint",
+      command: `stop ${2}-1`,
+    });
+    endpoint({
+      action: "endpoint",
+      command: `stop ${2}-0`,
+    });
+  }
+
+  const sendGraphcsNews=()=>{
+    let xml = '';
+    xml += `<componentData id=\\"${'f0'}\\"><data id=\\"text\\" value=\\"${slugs[currentSlug]?.SlugName}\\" /></componentData>`
+    xml += `<componentData id=\\"${'f1'}\\"><data id=\\"text\\" value=\\"${content}\\" /></componentData>`
+    xml = `"<templateData>${xml}</templateData>"`
+    const templateName = 'graphics_news';
+    endpoint({
+      action: "endpoint",
+      command: `cg ${videoChannel2?2:1}-96 add 96 "${templateName}" 1 ${xml}`
     });
   }
 
@@ -102,7 +133,10 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber }) => {
         <div>
           <button onClick={sendGraphics}>Play</button>
           <button onClick={stopGraphics}>Stop</button>
-
+        </div>
+        <div>
+        <p>Graphics news</p>
+        <button onClick={sendGraphcsNews}>Play Graphics news</button>
         </div>
       </div>
     </div>

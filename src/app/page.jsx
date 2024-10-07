@@ -635,7 +635,7 @@ export default function Home() {
                 }}
               >
                 {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
-                {i + 1}{" "}
+                <span style={{fontSize:30}}>{i+1}</span>{" "}
                 <label
                   title={
                     val.DropStory
@@ -773,7 +773,7 @@ export default function Home() {
               disabled
             />
             <div style={{fontSize:16, fontWeight: "normal",}}>
-              <GraphicsAndVideo scriptID={scriptID} slugs={slugs} currentStoryNumber={currentStoryNumber}/>
+              <GraphicsAndVideo scriptID={scriptID} slugs={slugs} currentStoryNumber={currentStoryNumber} content={content} currentSlug={currentSlug}/>
             </div>
           </div>
 
@@ -961,7 +961,7 @@ export default function Home() {
                     <input
                       type="text"
                       value={DB_HOST}
-                      style={{ width: 120 }}
+                      style={{ width: 100 }}
                       onChange={(e) => {
                         setDB_HOST(e.target.value);
                       }}
