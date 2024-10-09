@@ -99,6 +99,40 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , curren
     });
   }
 
+  const playScroll=()=>{
+    const templateName = 'ng2022/template/news/scroll/1920_1080';
+    endpoint({
+      action: "endpoint",
+      command: `stop ${videoChannel2?2:1}-96 `
+    });
+    endpoint({
+      action: "endpoint",
+      command: `cg ${videoChannel2?2:1}-96 add 96 "${templateName}" 1 `
+    });
+
+    endpoint({
+      action: "endpoint",
+      command: `call ${videoChannel2?2:1}-96 "_speed=300" `
+    });
+    endpoint({
+      action: "endpoint",
+      command: `call ${videoChannel2?2:1}-96 "_ltr=false" `
+    });
+    endpoint({
+      action: "endpoint",
+      command: `call ${videoChannel2?2:1}-96 "messages=['${content}']" `
+    });
+    endpoint({
+      action: "endpoint",
+      command: `call ${videoChannel2?2:1}-96 "putImage=false"`
+    });
+    endpoint({
+      action: "endpoint",
+      command: `call ${videoChannel2?2:1}-96 window.start() `
+    });
+
+  }
+
   return (
     <div>
       <p>Graphics And Video</p>
@@ -137,6 +171,7 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , curren
         <div>
         <p>Graphics news</p>
         <button onClick={sendGraphcsNews}>Play Graphics news</button>
+        <button onClick={playScroll}>Play Scroll</button>
         </div>
       </div>
     </div>
