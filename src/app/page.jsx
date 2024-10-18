@@ -161,6 +161,9 @@ export default function Home() {
   };
 
   const timerFunction = async () => {
+    if (selectedRunOrderTitle===''){
+      return;
+    }
     try {
       const res = await fetch(
         `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}`
