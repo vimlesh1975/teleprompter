@@ -13,6 +13,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
+//ff
 const SrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, crossedLines , storyLines, scrollWidth, slugs, newsReaderText, showClock , startPosition   }) => {
 
     const scrollingTextStyle = {
