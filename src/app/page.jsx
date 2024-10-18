@@ -634,7 +634,7 @@ console.log('handleDoubleClick called' , i)
                 </option>
               ))}
             </select>
-            {slugs?.length} Slugs <button onClick={fetchNewsId}>Refresh</button>
+            {slugs?.length} Slugs <button onClick={fetchNewsId}>Refresh RO</button>
           </div>
           <div
             style={{
