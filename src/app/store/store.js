@@ -1,45 +1,38 @@
 // store/store.js
-import { applyMiddleware, combineReducers, legacy_createStore as createStore } from 'redux';
-import {thunk} from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-// Reducer
-const initialstoryLines= { storyLines: [] };
-const storyLinesReducer = (state = initialstoryLines, action) => {
-    switch (action.type) {
-        case 'CHANGE_STORYLINES':
-            return {
-                ...state,
-                storyLines: action.payload,
-            };
-        default:
-            return state;
-    }
-};
-
-const initialcrossedLines= { crossedLines: 0 };
-const crossedLinesReducer = (state = initialcrossedLines, action) => {
-    switch (action.type) {
-        case 'CHANGE_crossedLines':
-            return {
-                ...state,
-                crossedLines: action.payload,
-            };
-        default:
-            return state;
-    }
-};
-
-
-// Combine reducers
-const rootReducer = combineReducers({
-    storyLinesReducer,crossedLinesReducer
+// Slice for storyLines
+const storyLinesSlice = createSlice({
+  name: 'storyLines',
+  initialState: { storyLines: [] },
+  reducers: {
+    changeStoryLines: (state, action) => {
+      state.storyLines = action.payload;
+    },
+  },
 });
 
-// Create the Redux store
-const store = createStore(
-    rootReducer,
-    composeWithDevTools(applyMiddleware(thunk))
-);
+// Slice for crossedLines
+const crossedLinesSlice = createSlice({
+  name: 'crossedLines',
+  initialState: { crossedLines: 0 },
+  reducers: {
+    changeCrossedLines: (state, action) => {
+      state.crossedLines = action.payload;
+    },
+  },
+});
+
+// Export the actions from each slice
+export const { changeStoryLines } = storyLinesSlice.actions;
+export const { changeCrossedLines } = crossedLinesSlice.actions;
+
+// Configure the store
+const store = configureStore({
+  reducer: {
+    storyLinesReducer: storyLinesSlice.reducer,
+    crossedLinesReducer: crossedLinesSlice.reducer,
+  },
+});
 
 export default store;
