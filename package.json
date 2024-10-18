@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.3.0",
     "beautiful-react-hooks": "^5.0.2",
     "casparcg-connection": "^5.1.0",
     "dotenv": "^16.4.5",
@@ -16,8 +17,13 @@
     "lodash.debounce": "^4.0.8",
     "mysql2": "^3.11.0",
     "next": "14.2.5",
+    "next-redux-wrapper": "^8.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-redux": "^9.1.2",
+    "redux": "^5.0.1",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^3.1.0",
     "shuttle-control-usb": "^1.5.0",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5"

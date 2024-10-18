@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
 import Count from './Count';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 const socket = io();
 socket.on('connect', () => {
     console.log('SOCKET CONNECTED! from Scroll page', socket.id);
@@ -30,6 +33,12 @@ const scrollContainerStyle = {
 };
 
 const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+    const dispatch = useDispatch();
+    const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
+    const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
+    // const [storyLines, setStoryLines] = useState([]);
+    // const [crossedLines, setCrossedLines] = useState(0);
+
     const scrollingTextStyle = {
         position: 'absolute',
         top: parseFloat(newPosition),
@@ -45,8 +54,8 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
-    const [storyLines, setStoryLines] = useState([]);
-    const [crossedLines, setCrossedLines] = useState(0);
+
+
 
     const updateCurrentStory = useCallback((curstory, curbulletin) => {
         fetch('/api/currentStory', {
@@ -74,6 +83,20 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
             socket.off('setCurrentStoryNumber');
         };
     }, [currentStoryNumber])
+
+    useEffect(() => {
+        socket.emit('crossedLines', crossedLines);
+        return () => {
+            socket.off('crossedLines');
+        };
+    }, [crossedLines])
+
+    useEffect(() => {
+        socket.emit('newPosition', newPosition);
+        return () => {
+            socket.off('newPosition');
+        };
+    }, [newPosition])
 
 
 
@@ -118,7 +141,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
                     if (rect.top < startPosition) {
                         if (scaleFactor > 1) {
-                            linesCrossed = 1 + Math.floor((startPosition  - rect.top) / lineHeight);
+                            linesCrossed = 1 + Math.floor((startPosition - rect.top) / lineHeight);
                         }
                         else {
                             linesCrossed = 1 + Math.floor((startPosition - rect.top) / lineHeight);
@@ -128,7 +151,9 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                         }
                     }
                 }
-                setCrossedLines(linesCrossed);
+                // setCrossedLines(linesCrossed);
+                dispatch({ type: 'CHANGE_crossedLines', payload: linesCrossed });
+
                 // }
 
             }
@@ -137,7 +162,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [scaleFactor, setCrossedLines, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
+    }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
 
 
     // Function to calculate number of lines in a given element
@@ -172,7 +197,8 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
         const result = moveZerosToFront(storiesLines);
         console.log(result.length, result);
-        setStoryLines(result);
+        // setStoryLines(result);
+        dispatch({ type: 'CHANGE_STORYLINES', payload: result });
     }, [allContent, fontSize]);
 
 
@@ -188,13 +214,12 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                         <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
                             <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                             <div>{newsReaderText}</div>
-                            <div><Count currentStoryNumber={currentStoryNumber}/></div>
+                            <div><Count currentStoryNumber={currentStoryNumber} /></div>
                             <div>{showClock ? '' : '.'}</div>
                             <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
                             <div >{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
                         </div>
                     </div>
-
                 </div>
                 <div ref={containerRef} style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>

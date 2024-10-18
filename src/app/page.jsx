@@ -1,4 +1,6 @@
 "use client";
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useState, useEffect, useRef, useCallback } from "react";
 import NewWindow from "./components/NewWindow";
 import Scroll from "./components/Scroll";
@@ -8,6 +10,8 @@ import debounce from "lodash.debounce"; // Importing debounce from lodash
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
 import GraphicsAndVideo from './components/GraphicsAndVideo'
+import SrollView from './components/SrollView';
+
 const scrollWidth = 600;
 const scrollHeight = 522;
 
@@ -17,6 +21,10 @@ socket.on("connect", () => {
 });
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
+  const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
+
   const [startPosition, setStartPosition] = useState(150);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
@@ -55,12 +63,12 @@ export default function Home() {
     // Event listener function
     const handleKeyPress = (event) => {
       if (event.key === 'Enter') {
-        handleDoubleClick(parseInt(keyPressed)-1);
+        handleDoubleClick(parseInt(keyPressed) - 1);
         setKeyPressed('');
       }
-      else{
-        if (!isNaN(event.key)){
-          setKeyPressed(val=> val+event.key);
+      else {
+        if (!isNaN(event.key)) {
+          setKeyPressed(val => val + event.key);
         }
       }
     };
@@ -161,7 +169,7 @@ export default function Home() {
   };
 
   const timerFunction = async () => {
-    if (selectedRunOrderTitle===''){
+    if (selectedRunOrderTitle === '') {
       return;
     }
     try {
@@ -356,7 +364,7 @@ export default function Home() {
 
   // Handle double-click event
   const handleDoubleClick = (i) => {
-console.log('handleDoubleClick called' , i)
+    console.log('handleDoubleClick called', i)
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
@@ -388,7 +396,7 @@ console.log('handleDoubleClick called' , i)
       if (newIndex < 0) {
         newIndex = slugs.length - 1;
       }
-      while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved )){
+      while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
         newIndex--;
         if (newIndex < 0) {
           newIndex = slugs.length - 1;
@@ -407,13 +415,13 @@ console.log('handleDoubleClick called' , i)
       if (newIndex >= slugs.length) {
         newIndex = 0;
       }
-      while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved )){
+      while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
         newIndex++;
         if (newIndex >= slugs.length) {
           newIndex = 0;
         }
       };
-    
+
       setCurrentSlugName(slugs[newIndex].SlugName);
       setScriptID(slugs[newIndex].ScriptID);
       handleDoubleClick(newIndex);
@@ -483,11 +491,27 @@ console.log('handleDoubleClick called' , i)
       setCurrentStoryNumber(data);
     });
 
+    socket.on("crossedLines2", (data) => {
+      if (showReactComponent) {
+        dispatch({ type: 'CHANGE_crossedLines', payload: data });
+      }
+    });
+
+    socket.on("newPosition2", (data) => {
+      if (showReactComponent) {
+      setNewPosition(data);
+      }
+    });
+
+
+
     return () => {
       socket.off("buttondown1", handleButtonDown);
       socket.off("jog-dir1", handleJogdir);
       socket.off("shuttle1", handleShuttle);
       socket.off("setCurrentStoryNumber2");
+      socket.off("crossedLines2");
+      socket.off("newPosition2");
       // socket.disconnect();
     };
   }, [
@@ -665,7 +689,7 @@ console.log('handleDoubleClick called' , i)
                 }}
               >
                 {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
-                <span style={{fontSize:30}}>{i+1}</span>{" "}
+                <span style={{ fontSize: 30 }}>{i + 1}</span>{" "}
                 <label
                   title={
                     val.DropStory
@@ -802,8 +826,8 @@ console.log('handleDoubleClick called' , i)
               }}
               disabled
             />
-            <div style={{fontSize:16, fontWeight: "normal",}}>
-              <GraphicsAndVideo scriptID={scriptID} slugs={slugs} currentStoryNumber={currentStoryNumber} content={content} currentSlug={currentSlug}/>
+            <div style={{ fontSize: 16, fontWeight: "normal", }}>
+              <GraphicsAndVideo scriptID={scriptID} slugs={slugs} currentStoryNumber={currentStoryNumber} content={content} currentSlug={currentSlug} />
             </div>
           </div>
 
@@ -811,6 +835,14 @@ console.log('handleDoubleClick called' , i)
 
         <div>
           <div>
+            {(showReactComponent || showNewWindow) &&
+              <div>
+                {/* <h1>{crossedLines}/{storyLines[currentStoryNumber - 1]}</h1> */}
+                <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, maxHeight: scrollHeight, minHeight: scrollHeight, border: '1px solid black' }}>
+                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines ={crossedLines } storyLines={storyLines} scrollWidth={scrollWidth} slugs ={slugs }newsReaderText={newsReaderText}showClock ={showClock } startPosition ={startPosition }/>
+                </div>
+              </div>
+            }
             {!showReactComponent && !showNewWindow && (
               <Scroll
                 scrollWidth={scrollWidth}
@@ -886,7 +918,7 @@ console.log('handleDoubleClick called' , i)
             }}
           >
             <div>
-          
+
               <button onClick={() => setSpeed((val) => val - 1)}>-</button>
               <button onClick={() => setSpeed(-7)}>-7</button>
               <button onClick={() => setSpeed(-6)}>-6</button>
@@ -918,7 +950,7 @@ console.log('handleDoubleClick called' , i)
               <button onClick={() => setSpeed((val) => parseInt(val) + 1)}>
                 +1
               </button>
-             
+
             </div>
             <div>
               Speed: {speed}
@@ -932,8 +964,9 @@ console.log('handleDoubleClick called' , i)
               />
             </div>
             <div style={{ textAlign: "right" }}>
-            {/* {'keyPressed' + keyPressed}  */}
-            Right Click to Stop and Play
+              {/* {'keyPressed' + keyPressed}  */}
+
+              Right Click to Stop and Play
             </div>
             <Timer
               callback={timerFunction}
@@ -1012,7 +1045,7 @@ console.log('handleDoubleClick called' , i)
                     />
                   </div>
                   <div>
-                  CASPAR_HOST:
+                    CASPAR_HOST:
                     <input
                       type="text"
                       value={CASPAR_HOST}

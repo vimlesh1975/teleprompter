@@ -49,6 +49,17 @@ app.prepare().then(async () => {
         socket.on('setCurrentStoryNumber', (data) => {
             io.emit('setCurrentStoryNumber2', data);
         });
+
+        socket.on('crossedLines', (data) => {
+            io.emit('crossedLines2', data);
+        });
+
+        socket.on('newPosition', (data) => {
+            io.emit('newPosition2', data);
+        });
+
+        
+
         //from scroll page in caspar End
 
 
@@ -73,6 +84,8 @@ app.prepare().then(async () => {
             socket.removeAllListeners('ServerConnectionStatus');
             socket.removeAllListeners("connect");
             socket.removeAllListeners("setCurrentStoryNumber");
+            socket.removeAllListeners("crossedLines");
+            socket.removeAllListeners("newPosition");
         });
 
     });
