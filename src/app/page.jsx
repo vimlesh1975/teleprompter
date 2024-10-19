@@ -35,7 +35,7 @@ export default function Home() {
   const [scriptID, setScriptID] = useState("");
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
-  const [content, setContent] = useState("");
+  // const [content, setContent] = useState("");
   const [allContent, setAllContent] = useState([]);
   const [newsReaderText, setNewsReaderText] = useState("Continue...");
   const [showClock, setShowClock] = useState(true);
@@ -308,24 +308,7 @@ export default function Home() {
     }
   }, [selectedRunOrderTitle]);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch(
-          `/api/script?ScriptID=${encodeURIComponent(
-            scriptID
-          )}&NewsId=${encodeURIComponent(selectedRunOrderTitle)}`
-        );
-        const data = await res.json();
-        setContent(data.data?.Script);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    if (scriptID) {
-      fetchData();
-    }
-  }, [scriptID]);
+  const content=slugs[currentSlug]?.Script;
 
   const fetchAllContent = (slicedSlugs, startNumber) => {
     if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {

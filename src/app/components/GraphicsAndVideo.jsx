@@ -49,7 +49,7 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , curren
         xml += `<componentData id=\\"${'ccg_f0'}\\"><data id=\\"text\\" value=\\"${data[0] ?? ''}\\" /></componentData>`
         xml += `<componentData id=\\"${'ccg_f1'}\\"><data id=\\"text\\" value=\\"${currentStoryNumber ?? ''}\\" /></componentData>`
         xml = `"<templateData>${xml}</templateData>"`
-        const templateName = 'oneliner2';
+        const templateName = 'tp/oneliner2';
         endpoint({
           action: "endpoint",
           command: `cg ${videoChannel2?2:1}-96 add 96 "${templateName}" 1 ${xml}`
@@ -92,7 +92,7 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , curren
     xml += `<componentData id=\\"${'f0'}\\"><data id=\\"text\\" value=\\"${slugs[currentSlug]?.SlugName}\\" /></componentData>`
     xml += `<componentData id=\\"${'f1'}\\"><data id=\\"text\\" value=\\"${content}\\" /></componentData>`
     xml = `"<templateData>${xml}</templateData>"`
-    const templateName = 'graphics_news';
+    const templateName = 'tp/graphics_news';
     endpoint({
       action: "endpoint",
       command: `cg ${videoChannel2?2:1}-96 add 96 "${templateName}" 1 ${xml}`
@@ -100,7 +100,7 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , curren
   }
 
   const playScroll=()=>{
-    const templateName = 'ng2022/template/news/scroll/1920_1080';
+    const templateName = 'tp/scroll/1920_1080';
     endpoint({
       action: "endpoint",
       command: `stop ${videoChannel2?2:1}-96 `
@@ -128,16 +128,31 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , curren
     });
     endpoint({
       action: "endpoint",
-      command: `call ${videoChannel2?2:1}-96 window.start() `
+      command: `call ${videoChannel2?2:1}-96 window.start()`
     });
 
   }
   const updateScroll=()=>{
     endpoint({
       action: "endpoint",
+      command: `call ${videoChannel2?2:1}-96 "clearAndRestartTicker()" `
+    });
+
+    endpoint({
+      action: "endpoint",
       command: `call ${videoChannel2?2:1}-96 "messages=['${content}']" `
     });
+
+    endpoint({
+      action: "endpoint",
+      command: `call ${videoChannel2?2:1}-96 window.start()`
+    });
   }
+
+  useEffect(() => {
+    updateScroll()
+  }, [content])
+  
   
 
   return (
