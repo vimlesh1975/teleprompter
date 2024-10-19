@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
 import Count from './Count';
+import { changeStoryLines, changeCrossedLines } from '../store/store'; // Adjust the path as needed
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -92,6 +93,14 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     }, [crossedLines])
 
     useEffect(() => {
+        socket.emit('storyLines', storyLines);
+        return () => {
+            socket.off('storyLines');
+        };
+    }, [storyLines])
+
+
+    useEffect(() => {
         socket.emit('newPosition', newPosition);
         return () => {
             socket.off('newPosition');
@@ -152,7 +161,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                     }
                 }
                 // setCrossedLines(linesCrossed);
-                dispatch({ type: 'CHANGE_crossedLines', payload: linesCrossed });
+                dispatch(changeCrossedLines(linesCrossed));
 
                 // }
 
@@ -198,7 +207,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         const result = moveZerosToFront(storiesLines);
         console.log(result.length, result);
         // setStoryLines(result);
-        dispatch({ type: 'CHANGE_STORYLINES', payload: result });
+        dispatch(changeStoryLines(result));
     }, [allContent, fontSize]);
 
 

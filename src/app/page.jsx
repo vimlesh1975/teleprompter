@@ -11,6 +11,8 @@ import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
 import GraphicsAndVideo from './components/GraphicsAndVideo'
 import SrollView from './components/SrollView';
+import {  changeStoryLines, changeCrossedLines } from './store/store'; // Adjust the path as needed
+
 
 const scrollWidth = 600;
 const scrollHeight = 522;
@@ -493,7 +495,13 @@ export default function Home() {
 
     socket.on("crossedLines2", (data) => {
       if (showReactComponent) {
-        dispatch({ type: 'CHANGE_crossedLines', payload: data });
+        dispatch(changeCrossedLines(data));
+      }
+    });
+
+    socket.on("storyLines2", (data) => {
+      if (showReactComponent) {
+        dispatch(changeStoryLines(data));
       }
     });
 
@@ -511,6 +519,7 @@ export default function Home() {
       socket.off("shuttle1", handleShuttle);
       socket.off("setCurrentStoryNumber2");
       socket.off("crossedLines2");
+      socket.off("storyLines2");
       socket.off("newPosition2");
       // socket.disconnect();
     };

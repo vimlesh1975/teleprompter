@@ -54,6 +54,10 @@ app.prepare().then(async () => {
             io.emit('crossedLines2', data);
         });
 
+        socket.on('storyLines', (data) => {
+            io.emit('storyLines2', data);
+        });
+
         socket.on('newPosition', (data) => {
             io.emit('newPosition2', data);
         });
@@ -85,6 +89,7 @@ app.prepare().then(async () => {
             socket.removeAllListeners("connect");
             socket.removeAllListeners("setCurrentStoryNumber");
             socket.removeAllListeners("crossedLines");
+            socket.removeAllListeners("storyLines");
             socket.removeAllListeners("newPosition");
         });
 
