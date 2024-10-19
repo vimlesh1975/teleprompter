@@ -132,6 +132,13 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , curren
     });
 
   }
+  const updateScroll=()=>{
+    endpoint({
+      action: "endpoint",
+      command: `call ${videoChannel2?2:1}-96 "messages=['${content}']" `
+    });
+  }
+  
 
   return (
     <div>
@@ -172,6 +179,7 @@ const GraphicsAndVideo = ({ scriptID, slugs, currentStoryNumber,content , curren
         <p>Graphics news</p>
         <button onClick={sendGraphcsNews}>Play Graphics news</button>
         <button onClick={playScroll}>Play Scroll</button>
+        <button onClick={updateScroll}>Update Scroll</button>
         </div>
       </div>
     </div>
