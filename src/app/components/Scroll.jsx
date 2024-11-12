@@ -58,11 +58,15 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
 
 
-    const updateCurrentStory = useCallback((curstory, curbulletin) => {
+    const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID) => {
+        // console.log('lof from scroll ',curstory, curbulletin, ScriptID);
+        if (curbulletin === null) return;
+        if (!ScriptID) return;
+
         fetch('/api/currentStory', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ curstory, curbulletin }),
+            body: JSON.stringify({ curstory, curbulletin , ScriptID}),
         })
             .then(response => response.json())
             .then(data => {
@@ -74,8 +78,8 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     }, []);
 
     useEffect(() => {
-        updateCurrentStory(currentStoryNumber, selectedRunOrderTitle);
-    }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory]);
+        updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber]?.ScriptID);
+    }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs]);
 
 
     useEffect(() => {

@@ -11,16 +11,13 @@ import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
 import GraphicsAndVideo from './components/GraphicsAndVideo'
 import SrollView from './components/SrollView';
-import {  changeStoryLines, changeCrossedLines } from './store/store'; // Adjust the path as needed
+import { changeStoryLines, changeCrossedLines } from './store/store'; // Adjust the path as needed
 
 
 const scrollWidth = 600;
 const scrollHeight = 522;
+var socket;
 
-const socket = io();
-socket.on("connect", () => {
-  console.log("SOCKET CONNECTED! from main page", socket.id);
-});
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -60,6 +57,39 @@ export default function Home() {
 
   const newWindowRef = useRef(null);
   const textRef = useRef(null);
+
+  const [serverAlive, setServerAlive] = useState(false);
+
+
+  useEffect(() => {
+     socket = io();
+    socket.on("connect", () => {
+      console.log("SOCKET CONNECTED! from main page", socket.id);
+    });
+
+    socket.on('connect', () => {
+      console.log('Connected to server');
+      setServerAlive(true);
+
+    });
+
+    socket.on('connect_error', (error) => {
+      setServerAlive(false);
+      // connectbutton.current.style.backgroundColor = "red";
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+      setServerAlive(false);
+      // connectbutton.current.style.backgroundColor = "red";
+    });
+
+    return () => {
+      socket.disconnect();
+      socket.close();
+    }
+  }, [])
+
 
   useEffect(() => {
     // Event listener function
@@ -308,7 +338,7 @@ export default function Home() {
     }
   }, [selectedRunOrderTitle]);
 
-  const content=slugs[currentSlug]?.Script;
+  const content = slugs[currentSlug]?.Script;
 
   const fetchAllContent = (slicedSlugs, startNumber) => {
     if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
@@ -490,7 +520,7 @@ export default function Home() {
 
     socket.on("newPosition2", (data) => {
       if (showReactComponent) {
-      setNewPosition(data);
+        setNewPosition(data);
       }
     });
 
@@ -617,7 +647,7 @@ export default function Home() {
     endpoint({
       action: "endpoint",
       command: `call 1-97 setSlugs(${JSON.stringify(
-        slugs.map((item) => item.SlugName)
+        slugs.map(item => ({ ScriptID:item.ScriptID, SlugName:item.SlugName }))
       )})`,
     });
   }, [slugs, doubleClickedPosition]);
@@ -651,6 +681,8 @@ export default function Home() {
               ))}
             </select>
             {slugs?.length} Slugs <button onClick={fetchNewsId}>Refresh RO</button>
+            <span title="Socket Server Status"> {serverAlive ? '🟢' : '🔴'}</span>
+
           </div>
           <div
             style={{
@@ -718,6 +750,7 @@ export default function Home() {
               doubleClickedPosition={doubleClickedPosition}
               newPosition={newPosition}
               currentStoryNumber={currentStoryNumber}
+              selectedRunOrderTitle ={selectedRunOrderTitle }
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
@@ -831,7 +864,7 @@ export default function Home() {
               <div>
                 {/* <h1>{crossedLines}/{storyLines[currentStoryNumber - 1]}</h1> */}
                 <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, maxHeight: scrollHeight, minHeight: scrollHeight, border: '1px solid black' }}>
-                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines ={crossedLines } storyLines={storyLines} scrollWidth={scrollWidth} slugs ={slugs }newsReaderText={newsReaderText}showClock ={showClock } startPosition ={startPosition }/>
+                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
                 </div>
               </div>
             }

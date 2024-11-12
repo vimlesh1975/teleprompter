@@ -5,10 +5,11 @@ export async function POST(req) {
   let connection;
 
     try {
-        const { curstory, curbulletin } = await req.json();
-        if (curbulletin === null) return;
-        const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?`;
-        const values = [curstory, curbulletin];
+        const { curstory, curbulletin , ScriptID} = await req.json();
+     
+        const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?, ScriptID = ?`;
+        const values = [curstory, curbulletin, ScriptID];
+        console.log(values);
 
         connection = await mysql.createConnection(config);
 

@@ -27,7 +27,7 @@ function replaceCRLFInArray(inputArray) {
   });
 }
 
-export default function Home({ slugs, allContent, setShowReactComponent, showReactComponent, startPosition, fontSize ,doubleClickedPosition,newPosition, currentStoryNumber}) {
+export default function Home({ slugs, allContent, setShowReactComponent,  startPosition, fontSize ,doubleClickedPosition,newPosition, currentStoryNumber,selectedRunOrderTitle  }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -37,9 +37,19 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
       console.log('SOCKET CONNECTED! form casparcg connection', socket.id);
     });
     socket.on('ServerConnectionStatus2', (msg) => {
-      // console.log(msg)
       setConnected(msg);
     });
+
+    socket.on('connect_error', (error) => {
+      setConnected(false);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+      setConnected(false);
+    });
+
+
     return () => {
       socket.off('ServerConnectionStatus2');
       // socket.disconnect();
@@ -160,6 +170,11 @@ export default function Home({ slugs, allContent, setShowReactComponent, showRea
                 endpoint({
                   action: 'endpoint',
                   command: `call 1-97 setCurrentStoryNumber(${currentStoryNumber})`,
+                });
+
+                endpoint({
+                  action: "endpoint",
+                  command: `call 1-97 setSelectedRunOrderTitle('${selectedRunOrderTitle}')`,
                 });
 
               }, 1000);
