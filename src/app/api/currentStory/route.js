@@ -1,12 +1,33 @@
 import mysql from 'mysql2/promise';
-import {config} from '../db.js';
+import { config } from '../db.js';
+
+import io from 'socket.io-client';
+// const socket = io('http://localhost:3000');
+
+const socket = io('http://localhost:3000', {
+    transports: ['websocket'],
+});
+
+socket.on('connect', () => {
+    console.log('Socket currentStory connected:', socket.id);
+});
+
+socket.on('disconnect', () => {
+    console.log('Socket currentStory disconnected');
+});
+
+socket.on('connect_error', (err) => {
+    console.log('Socket currentStory connection error:', err);
+});
 
 export async function POST(req) {
-  let connection;
+    const { curstory, curbulletin, ScriptID } = await req.json();
+
+    socket.emit('currentStory1', {curstory});
+
+    let connection;
 
     try {
-        const { curstory, curbulletin , ScriptID} = await req.json();
-     
         const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?, ScriptID = ?`;
         const values = [curstory, curbulletin, ScriptID];
         console.log(values);
@@ -22,7 +43,7 @@ export async function POST(req) {
         } finally {
             if (connection) {
                 await connection.end(); // Close the database connection
-              }
+            }
         }
     } catch (error) {
         console.error(error);

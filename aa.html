@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socket.IO Client</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #storyContainer {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      max-width: 600px;
+    }
+    #storyContainer h2 {
+      font-size: 24px;
+    }
+    #storyContainer p {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Socket.IO Client</h1>
+  <div id="storyContainer">
+    <h2>Current Story Update</h2>
+    <p id="storyData">Waiting for updates...</p>
+  </div>
+
+  <script>
+    // Connect to the Socket.IO server
+    const socket = io('http://localhost:3000');
+
+    // Listen for the 'newStoryUpdate' event from the server
+    socket.on('currentStoryBroadcast', (data) => {
+      console.log('Received new story update:', data);
+
+      // Update the content on the webpage with the new data
+      document.getElementById('storyData').innerText = `
+        Story: ${data.curstory}
+        Bulletin: ${data.curbulletin}
+        Script ID: ${data.ScriptID}
+      `;
+    });
+
+    // Optional: Handle connection and disconnection events
+    socket.on('connect', () => {
+      console.log('Connected to the server');
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+  </script>
+</body>
+</html>

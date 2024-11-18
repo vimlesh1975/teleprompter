@@ -11,7 +11,18 @@ const handle = app.getRequestHandler();
 app.prepare().then(async () => {
     const server = express();
     const httpServer = http.createServer(server);
-    const io = socketIO(httpServer);
+
+    // const io = socketIO(httpServer);
+
+ 
+    const io = socketIO(httpServer, {
+        cors: {
+            origin: "http://127.0.0.1:5500", // Allow this origin
+            methods: ["GET", "POST"], // Allow these methods
+            allowedHeaders: ["my-custom-header"], // If needed, add custom headers
+            credentials: true // Allow cookies if necessary
+        }
+    });
 
     const shuttle = require('shuttle-control-usb');
 
@@ -45,6 +56,14 @@ app.prepare().then(async () => {
             io.emit('ServerConnectionStatus2', data);
         });
 
+        // Handle the 'currentStory' event from currentstory route
+        socket.on('currentStory1', (data) => {
+            console.log('Received currentStory:', data);
+
+            // Broadcast the 'currentStory' data to all connected clients
+            io.emit('currentStoryBroadcast', data);  // Broadcast to all clients
+        });
+
         //from scroll page in caspar  start
         socket.on('setCurrentStoryNumber', (data) => {
             io.emit('setCurrentStoryNumber2', data);
@@ -62,7 +81,7 @@ app.prepare().then(async () => {
             io.emit('newPosition2', data);
         });
 
-        
+
 
         //from scroll page in caspar End
 
@@ -81,6 +100,8 @@ app.prepare().then(async () => {
         });
         //webrtc code ends
 
+
+
         // Handle disconnection
         socket.on('disconnect', () => {
             console.log('User disconnected:', socket.id);
@@ -91,6 +112,7 @@ app.prepare().then(async () => {
             socket.removeAllListeners("crossedLines");
             socket.removeAllListeners("storyLines");
             socket.removeAllListeners("newPosition");
+            socket.removeAllListeners("currentStory1");
         });
 
     });

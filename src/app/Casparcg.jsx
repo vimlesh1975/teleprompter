@@ -31,6 +31,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
+  const [socketcurrentstory, setSocketcurrentstory] = useState('not set');
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -38,6 +39,11 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
     });
     socket.on('ServerConnectionStatus2', (msg) => {
       setConnected(msg);
+    });
+
+    socket.on('currentStoryBroadcast', (data) => {
+      // setSocketcurrentstory(JSON.parse(data).curstory)
+      setSocketcurrentstory(data.curstory);
     });
 
     socket.on('connect_error', (error) => {
@@ -95,6 +101,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
           >
             DisConnect
           </button>
+          <span>{socketcurrentstory}</span>
         </div>
         <div>
           <button

@@ -59,7 +59,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
 
     const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID) => {
-        // console.log('lof from scroll ',curstory, curbulletin, ScriptID);
+        console.log('lof from scroll ',curstory, curbulletin, ScriptID);
         if (curbulletin === null) return;
         if (!ScriptID) return;
 
