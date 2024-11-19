@@ -43,7 +43,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
 
     socket.on('currentStoryBroadcast', (data) => {
       // setSocketcurrentstory(JSON.parse(data).curstory)
-      setSocketcurrentstory(data.curstory);
+      setSocketcurrentstory(data);
     });
 
     socket.on('connect_error', (error) => {
@@ -101,7 +101,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
           >
             DisConnect
           </button>
-          <span>{socketcurrentstory}</span>
+          <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID }</span>
         </div>
         <div>
           <button

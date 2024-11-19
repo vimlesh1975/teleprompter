@@ -10,18 +10,21 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(async () => {
     const server = express();
+
     const httpServer = http.createServer(server);
 
     // const io = socketIO(httpServer);
 
- 
+
     const io = socketIO(httpServer, {
         cors: {
-            origin: "http://127.0.0.1:5500", // Allow this origin
+            origin: "*", // Allow this origin
             methods: ["GET", "POST"], // Allow these methods
             allowedHeaders: ["my-custom-header"], // If needed, add custom headers
             credentials: true // Allow cookies if necessary
-        }
+        },
+        // maxHttpBufferSize: 1e8,
+        // pingTimeout: 60000
     });
 
     const shuttle = require('shuttle-control-usb');
@@ -56,11 +59,7 @@ app.prepare().then(async () => {
             io.emit('ServerConnectionStatus2', data);
         });
 
-        // Handle the 'currentStory' event from currentstory route
         socket.on('currentStory1', (data) => {
-            console.log('Received currentStory:', data);
-
-            // Broadcast the 'currentStory' data to all connected clients
             io.emit('currentStoryBroadcast', data);  // Broadcast to all clients
         });
 

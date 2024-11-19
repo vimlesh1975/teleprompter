@@ -5,8 +5,9 @@ import io from 'socket.io-client';
 // const socket = io('http://localhost:3000');
 
 const socket = io('http://localhost:3000', {
-    transports: ['websocket'],
+    transports: ['polling'],
 });
+
 
 socket.on('connect', () => {
     console.log('Socket currentStory connected:', socket.id);
@@ -21,16 +22,16 @@ socket.on('connect_error', (err) => {
 });
 
 export async function POST(req) {
-    const { curstory, curbulletin, ScriptID } = await req.json();
-
-    socket.emit('currentStory1', {curstory});
+    const payload = await req.json();
+    const { curstory, curbulletin, ScriptID } = payload;
+    const data = {curstory, curbulletin, ScriptID  }; // Your payload
+    socket.emit('currentStory1', data);
 
     let connection;
 
     try {
         const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?, ScriptID = ?`;
         const values = [curstory, curbulletin, ScriptID];
-        console.log(values);
 
         connection = await mysql.createConnection(config);
 
