@@ -99,7 +99,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
               })
             }
           >
-            DisConnect
+            DisConnect 
           </button>
           <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID }</span>
         </div>
