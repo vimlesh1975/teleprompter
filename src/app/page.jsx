@@ -10,8 +10,13 @@ import debounce from "lodash.debounce"; // Importing debounce from lodash
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
 import GraphicsAndVideo from './components/GraphicsAndVideo'
+import TTS from './components/TTS.jsx'
 import SrollView from './components/SrollView';
 import { changeStoryLines, changeCrossedLines } from './store/store'; // Adjust the path as needed
+
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import 'react-tabs/style/react-tabs.css';
+
 
 
 const scrollWidth = 600;
@@ -62,7 +67,7 @@ export default function Home() {
 
 
   useEffect(() => {
-     socket = io();
+    socket = io();
     socket.on("connect", () => {
       console.log("SOCKET CONNECTED! from main page", socket.id);
     });
@@ -647,7 +652,7 @@ export default function Home() {
     endpoint({
       action: "endpoint",
       command: `call 1-97 setSlugs(${JSON.stringify(
-        slugs.map(item => ({ ScriptID:item.ScriptID, SlugName:item.SlugName }))
+        slugs.map(item => ({ ScriptID: item.ScriptID, SlugName: item.SlugName }))
       )})`,
     });
   }, [slugs, doubleClickedPosition]);
@@ -659,7 +664,9 @@ export default function Home() {
     });
   }, [selectedRunOrderTitle]);
 
+  const onTabChange = () => {
 
+  }
 
   return (
     <div style={{ overflow: "hidden" }}>
@@ -750,7 +757,7 @@ export default function Home() {
               doubleClickedPosition={doubleClickedPosition}
               newPosition={newPosition}
               currentStoryNumber={currentStoryNumber}
-              selectedRunOrderTitle ={selectedRunOrderTitle }
+              selectedRunOrderTitle={selectedRunOrderTitle}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
@@ -851,9 +858,33 @@ export default function Home() {
               }}
               disabled
             />
-            <div style={{ fontSize: 16, fontWeight: "normal", }}>
-              <GraphicsAndVideo scriptID={scriptID} slugs={slugs} currentStoryNumber={currentStoryNumber} content={content} currentSlug={currentSlug} />
-            </div>
+
+<div style={{ fontSize: 16, fontWeight: "normal", }}>
+                  <TTS content={content} />
+                </div>
+
+            {/* <Tabs
+              selectedTabClassName="selectedTab"
+              forceRenderTabPanel={true}
+              onSelect={(index, prevIndex) => onTabChange(index, prevIndex)}
+            >
+              <TabList>
+                <Tab>GraphicsAndVideo</Tab>
+                <Tab>TTS</Tab>
+              </TabList>
+              <TabPanel>
+                <div style={{ fontSize: 16, fontWeight: "normal", }}>
+                  <GraphicsAndVideo scriptID={scriptID} slugs={slugs} currentStoryNumber={currentStoryNumber} content={content} currentSlug={currentSlug} />
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div style={{ fontSize: 16, fontWeight: "normal", }}>
+                  <TTS content={content} />
+                </div>
+              </TabPanel>
+            </Tabs> */}
+
+
           </div>
 
         </div>
