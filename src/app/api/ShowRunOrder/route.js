@@ -19,6 +19,7 @@ export async function GET(req) {
     const query = newdatabase ? `SELECT *, 
     slno AS RunOrder, 
     createdtime AS CreatedTime, 
+    scriptmodifiedtime as ScriptLastModifiedTime,
     approved AS Approval, 
     graphicsid as MediaInsert,
     dropstory AS DropStory
