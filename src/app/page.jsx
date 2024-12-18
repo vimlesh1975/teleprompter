@@ -12,7 +12,7 @@ import Timer from "./components/Timer";
 import GraphicsAndVideo from './components/GraphicsAndVideo'
 import TTS from './components/TTS.jsx'
 import SrollView from './components/SrollView';
-import { changeStoryLines, changeCrossedLines } from './store/store'; // Adjust the path as needed
+import { changeStoryLines, changeCrossedLines, changenewdatabase } from './store/store'; // Adjust the path as needed
 
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import 'react-tabs/style/react-tabs.css';
@@ -65,13 +65,24 @@ export default function Home() {
   const textRef = useRef(null);
 
   const [serverAlive, setServerAlive] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('2024-12-05');
 
+
+  const handleDateChange = (event) => {
+    const date = event.target.value;
+    setSelectedDate(date)
+  };
 
   useEffect(() => {
     socket = io();
     socket.on("connect", () => {
       console.log("SOCKET CONNECTED! from main page", socket.id);
     });
+    socket.on("newdatabase", (data) => {
+      dispatch(changenewdatabase(data));
+    });
+
+
 
     socket.on('connect', () => {
       console.log('Connected to server');
@@ -674,6 +685,19 @@ export default function Home() {
       <div style={{ display: "flex" }}>
         <div>
           gg{newdatabase.toString()}
+          <div>
+              {newdatabase &&
+                <div>
+                  <label htmlFor="date-selector">Select a date: </label>
+                  <input
+                    id="date-selector"
+                    type="date"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                  />
+                </div>
+              }
+            </div>
           <div>
             RO
             <select

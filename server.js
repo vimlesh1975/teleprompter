@@ -9,7 +9,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 var newdatabase = true;
- newdatabase = false;
+//  newdatabase = false;
 
 app.prepare().then(async () => {
     const server = express();
