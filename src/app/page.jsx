@@ -684,7 +684,7 @@ export default function Home() {
     <div style={{ overflow: "hidden" }}>
       <div style={{ display: "flex" }}>
         <div>
-          gg{newdatabase.toString()}
+       
           <div>
               {newdatabase &&
                 <div>
