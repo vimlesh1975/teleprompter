@@ -1,9 +1,11 @@
 import mysql from 'mysql2/promise';
-import {config} from '../db.js';
+import {config, newdatabase} from '../db.js';
+console.log(newdatabase)
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const NewsId = searchParams.get('NewsId');
+  const date = searchParams.get('date');
   if (NewsId===''){
     return new Response(JSON.stringify({ error: '' }), {
       status: 500,
@@ -14,10 +16,20 @@ export async function GET(req) {
   
   try {
     connection = await mysql.createConnection(config);
+    const query = newdatabase ? `SELECT *, 
+    slno AS RunOrder, 
+    createdtime AS CreatedTime, 
+    approved AS Approval, 
+    graphicsid as MediaInsert,
+    dropstory AS DropStory
+    FROM script 
+    WHERE bulletinname = ? AND bulletindate = ? 
+    ORDER BY RunOrder;`: `CALL show_runorder(?)`
+
 
     try {
-      const [rows] = await connection.query(`CALL show_runorder(?)`, [NewsId]);
-      return new Response(JSON.stringify({ data: rows[0] }), {
+      const [rows] = await connection.query(query, [NewsId, date]);
+      return new Response(JSON.stringify({ data: newdatabase ? rows : rows[0] }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });

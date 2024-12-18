@@ -7,6 +7,8 @@ export const config = {
   database: process.env.DB_NAME,
 };
 
+export const newdatabase=process.env.NEWDATABASE
+
 // async function logConnectionMetrics() {
 //   let connection;
 //   try {

@@ -223,7 +223,7 @@ export default function Home() {
     }
     try {
       const res = await fetch(
-        `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}`
+           `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
       );
       const data = await res.json();
 
@@ -341,7 +341,7 @@ export default function Home() {
     async function fetchData() {
       try {
         const res = await fetch(
-          `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}`
+          `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
         );
         const data = await res.json();
         setSlugs(data.data);
@@ -353,7 +353,7 @@ export default function Home() {
     if (selectedRunOrderTitle) {
       fetchData();
     }
-  }, [selectedRunOrderTitle]);
+  }, [selectedRunOrderTitle,selectedDate]);
 
   const content = slugs[currentSlug]?.Script;
 
