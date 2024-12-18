@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise';
 import {config, newdatabase} from '../db.js';
-console.log(newdatabase)
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);

@@ -1,15 +1,18 @@
 import mysql from 'mysql2/promise';
-import {config} from '../db.js';
+import {config, newdatabase} from '../db.js';
 
 export async function GET(req) {
+  console.log('first')
   const { searchParams } = new URL(req.url);
   const ScriptID = searchParams.get('ScriptID');
   const NewsId = searchParams.get('NewsId');
   let connection;
   try {
     connection = await mysql.createConnection(config);
+
+
     try {
-      const query = `SELECT Script FROM script WHERE ScriptID = ? AND NewsId = ? LIMIT 1`;
+       const query = newdatabase ? `SELECT Script FROM script WHERE ScriptID=?`: `SELECT Script FROM script WHERE ScriptID=? AND NewsId=?`;
       const [rows] = await connection.query(query, [ScriptID, NewsId]);
       return new Response(JSON.stringify({ data: rows[0] }), {
         status: 200,
