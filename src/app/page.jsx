@@ -28,6 +28,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
   const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
+  const newdatabase = useSelector((state) => state.newdatabaseReducer.newdatabase);
 
   const [startPosition, setStartPosition] = useState(150);
   const [speed, setSpeed] = useState(0);
@@ -672,6 +673,7 @@ export default function Home() {
     <div style={{ overflow: "hidden" }}>
       <div style={{ display: "flex" }}>
         <div>
+          gg{newdatabase.toString()}
           <div>
             RO
             <select
