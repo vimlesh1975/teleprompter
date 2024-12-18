@@ -7,8 +7,9 @@ const socketIO = require('socket.io');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
-var newdatabase = true;
+require('dotenv').config({path:'./.env.local'});
+var newdatabase = process.env.NEWDATABASE;
+console.log(process.env.NEWDATABASE)
 //  newdatabase = false;
 
 app.prepare().then(async () => {

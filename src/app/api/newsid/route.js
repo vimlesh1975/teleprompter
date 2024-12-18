@@ -1,12 +1,14 @@
 import mysql from 'mysql2/promise';
-import {config} from '../db.js';
+import {config, newdatabase} from '../db.js';
 
 export async function GET(req) {
   let connection;
   try {
     connection = await mysql.createConnection(config);
+    const query = newdatabase ? `SELECT distinct bulletinname as title FROM bulletin where bulletinname != '' order by bulletintime asc` : `SELECT distinct title FROM newsid where title != '' order by title asc`
+
     try {
-      const [rows] = await connection.query(`SELECT DISTINCT title FROM newsid WHERE title != '' ORDER BY title ASC`);
+      const [rows] = await connection.query(query);
       return new Response(JSON.stringify({ data: rows }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
