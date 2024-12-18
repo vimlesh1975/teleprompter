@@ -8,6 +8,9 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+var newdatabase = true;
+ newdatabase = false;
+
 app.prepare().then(async () => {
     const server = express();
 
@@ -58,6 +61,7 @@ app.prepare().then(async () => {
             // console.log('Received from API ::', data);
             io.emit('ServerConnectionStatus2', data);
         });
+        socket.emit("newdatabase", newdatabase);
 
         socket.on('currentStory1', (data) => {
             io.emit('currentStoryBroadcast', data);  // Broadcast to all clients

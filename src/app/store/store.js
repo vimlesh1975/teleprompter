@@ -23,15 +23,28 @@ const crossedLinesSlice = createSlice({
   },
 });
 
+// Slice for crossedLines
+const newdatabaseSlice = createSlice({
+  name: 'newdatabase',
+  initialState: { newdatabase: false},
+  reducers: {
+    changenewdatabase: (state, action) => {
+      state.newdatabase = action.payload;
+    },
+  },
+});
+
 // Export the actions from each slice
 export const { changeStoryLines } = storyLinesSlice.actions;
 export const { changeCrossedLines } = crossedLinesSlice.actions;
+export const { changenewdatabase } = newdatabaseSlice.actions;
 
 // Configure the store
 const store = configureStore({
   reducer: {
     storyLinesReducer: storyLinesSlice.reducer,
     crossedLinesReducer: crossedLinesSlice.reducer,
+    newdatabaseReducer: newdatabaseSlice.reducer,
   },
 });
 
