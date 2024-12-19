@@ -8,8 +8,8 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 require('dotenv').config({path:'./.env.local'});
-var newdatabase = process.env.NEWDATABASE;
-console.log(process.env.NEWDATABASE)
+var newdatabase = process.env.NEWDATABASE==="true";
+console.log(newdatabase)
 //  newdatabase = false;
 
 app.prepare().then(async () => {

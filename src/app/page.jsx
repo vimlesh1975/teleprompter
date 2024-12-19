@@ -223,7 +223,7 @@ export default function Home() {
     }
     try {
       const res = await fetch(
-           `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
+        `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
       );
       const data = await res.json();
 
@@ -353,9 +353,16 @@ export default function Home() {
     if (selectedRunOrderTitle) {
       fetchData();
     }
-  }, [selectedRunOrderTitle,selectedDate]);
+  }, [selectedRunOrderTitle, selectedDate]);
 
   const content = slugs[currentSlug]?.Script;
+
+  const isVideoPresent=(slug)=>{
+    const aa = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
+    const allValid = aa.some(item => item !== null && item !== "");
+    const isVideoPresent =newdatabase? allValid:slug?.Media;
+    return isVideoPresent;
+  }
 
   const fetchAllContent = (slicedSlugs, startNumber) => {
     if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
@@ -365,8 +372,13 @@ export default function Home() {
     const data1 = new Array(slicedSlugs.length * 3);
     try {
       slicedSlugs.forEach((slug, i) => {
+        
+        // const aa = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
+        // const allValid = aa.some(item => item !== null && item !== "");
+        // const isVideoPresent =newdatabase? allValid:slug?.Media;
+
         if (!slug?.DropStory && (slug?.Approval || allowUnApproved)) {
-          data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${slug?.Media ? " - Visual" : " - No Visual"
+          data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoPresent(slug) ? " - Visual" : " - No Visual"
             }`;
           data1[i * 3 + 1] = `${slug.Script}`;
           data1[i * 3 + 2] = `--------------`;
@@ -684,20 +696,20 @@ export default function Home() {
     <div style={{ overflow: "hidden" }}>
       <div style={{ display: "flex" }}>
         <div>
-       
+
           <div>
-              {newdatabase &&
-                <div>
-                  <label htmlFor="date-selector">Select a date: </label>
-                  <input
-                    id="date-selector"
-                    type="date"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                  />
-                </div>
-              }
-            </div>
+            {newdatabase &&
+              <div>
+                <label htmlFor="date-selector">Select a date: </label>
+                <input
+                  id="date-selector"
+                  type="date"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                />
+              </div>
+            }
+          </div>
           <div>
             RO
             <select
@@ -868,7 +880,7 @@ export default function Home() {
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
-                {slugs[currentSlug]?.Media ? " - Visual" : " -No Visual"}
+                {isVideoPresent(slugs[currentSlug])? " - Visual" : " -No Visual"}
               </div>
             )}
             <textarea
@@ -885,9 +897,9 @@ export default function Home() {
               disabled
             />
 
-<div style={{ fontSize: 16, fontWeight: "normal", }}>
-                  <TTS content={content} />
-                </div>
+            <div style={{ fontSize: 16, fontWeight: "normal", }}>
+              <TTS content={content} />
+            </div>
 
             {/* <Tabs
               selectedTabClassName="selectedTab"
