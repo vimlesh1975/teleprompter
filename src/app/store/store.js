@@ -26,7 +26,7 @@ const crossedLinesSlice = createSlice({
 // Slice for crossedLines
 const newdatabaseSlice = createSlice({
   name: 'newdatabase',
-  initialState: { newdatabase: false},
+  initialState: { newdatabase: true},
   reducers: {
     changenewdatabase: (state, action) => {
       state.newdatabase = action.payload;
