@@ -884,7 +884,7 @@ export default function Home() {
               </div>
             )}
             <textarea
-              value={content}
+              value={scriptID + content}
               style={{
                 fontSize: `${fontSize}px`,
                 width: scrollWidth,
