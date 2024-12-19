@@ -59,7 +59,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
 
     const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID) => {
-        console.log('log from scroll ', curstory, curbulletin, ScriptID);
+        // console.log('log from scroll ', curstory, curbulletin, ScriptID);
         if (curbulletin === null) return;
         if (!ScriptID) return;
 
@@ -209,7 +209,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         }
 
         const result = moveZerosToFront(storiesLines);
-        console.log(result.length, result);
+        // console.log(result.length, result);
         // setStoryLines(result);
         dispatch(changeStoryLines(result));
     }, [allContent, fontSize]);

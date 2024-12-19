@@ -859,6 +859,7 @@ export default function Home() {
                 Continue...
               </button>
               <button onClick={() => setNewsReaderText("Stop...")}>Stop</button>
+              {/* {scriptID && 'scriptID-' + scriptID} */}
             </div>
           </div>
           <div
@@ -884,7 +885,7 @@ export default function Home() {
               </div>
             )}
             <textarea
-              value={scriptID + content}
+              value={ content}
               style={{
                 fontSize: `${fontSize}px`,
                 width: scrollWidth,
