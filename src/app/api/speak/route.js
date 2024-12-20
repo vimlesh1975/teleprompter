@@ -12,10 +12,21 @@ function splitText(text, maxBytes = 4900) {
   const chunks = [];
   let currentChunk = '';
 
-  text.split(/(?<=\.)/g).forEach((sentence) => {
-    if (new TextEncoder().encode(currentChunk + sentence).length > maxBytes) {
+  const splitAndAddChunk = (sentence) => {
+    // If the sentence itself is too large, split further
+    while (new TextEncoder().encode(sentence).length > maxBytes) {
+      const part = sentence.slice(0, Math.floor(maxBytes / 2));
+      chunks.push(part);
+      sentence = sentence.slice(Math.floor(maxBytes / 2));
+    }
+    return sentence;
+  };
+
+  text.split(/(?<=\.)|(?<=\n)/g).forEach((sentence) => {
+    const encodedChunk = new TextEncoder().encode(currentChunk + sentence);
+    if (encodedChunk.length > maxBytes) {
       chunks.push(currentChunk);
-      currentChunk = sentence;
+      currentChunk = splitAndAddChunk(sentence);
     } else {
       currentChunk += sentence;
     }
