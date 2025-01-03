@@ -138,10 +138,10 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
                 action: 'endpoint',
                 command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
-              endpoint({
-                action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill -0.02 -0.015 3.21 2.02' : 'mixer 1-97 fill 1.02 -0.015 -3.21 2.02',
-              });
+              // endpoint({
+              //   action: 'endpoint',
+              //   command: !fliped ? 'mixer 1-97 fill -0.02 -0.015 3.21 2.02' : 'mixer 1-97 fill 1.02 -0.015 -3.21 2.02',
+              // });
               setTimeout(() => {
                 setShowReactComponent(true);
                 endpoint({

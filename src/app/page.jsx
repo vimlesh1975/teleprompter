@@ -784,8 +784,9 @@ export default function Home() {
             style={{
               border: "1px solid red",
               marginBottom: 10,
-              minWidth: scrollWidth,
-              maxWidth: scrollWidth,
+              minWidth: scrollWidth/3.2,
+              maxWidth: scrollWidth/3.2,
+              // scale: 0.4,
             }}
           >
             <Casparcg
@@ -869,10 +870,12 @@ export default function Home() {
             style={{
               fontSize: `${fontSize}px`,
               fontWeight: "bolder",
-              width: scrollWidth,
-              minHeight: scrollHeight,
+              width: scrollWidth/3.2,
+              minHeight: scrollHeight/2.07,
               position: "absolute",
               top: startPosition + 28,
+              // scale: 0.4,
+
             }}
           >
             {slugs && slugs[currentSlug] && (
@@ -891,11 +894,11 @@ export default function Home() {
               value={ content}
               style={{
                 fontSize: `${fontSize}px`,
-                width: scrollWidth,
+                width: scrollWidth/3.2,
                 // minHeight: scrollHeight - 80,
                 // maxHeight: scrollHeight - 80,
-                minHeight: scrollHeight - 275,
-                maxHeight: scrollHeight - 275,
+                minHeight: scrollHeight/2.07 - 275,
+                maxHeight: scrollHeight/2.07 - 275,
                 lineHeight: `${fontSize * 1.3}px`,
               }}
               disabled
@@ -936,16 +939,16 @@ export default function Home() {
             {(showReactComponent || showNewWindow) &&
               <div>
                 {/* <h1>{crossedLines}/{storyLines[currentStoryNumber - 1]}</h1> */}
-                <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, maxHeight: scrollHeight, minHeight: scrollHeight, border: '1px solid black' }}>
-                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <div style={{ maxWidth: scrollWidth/3.2, minWidth: scrollWidth/3.2, maxHeight: scrollHeight/2.07, minHeight: scrollHeight/2.07, border: '1px solid black' }}>
+                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize/2.07} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
                 </div>
               </div>
             }
             {!showReactComponent && !showNewWindow && (
               <Scroll
-                scrollWidth={scrollWidth}
-                scrollHeight={scrollHeight}
-                fontSize={fontSize}
+                scrollWidth={scrollWidth/3.2}
+                scrollHeight={scrollHeight/2.07}
+                fontSize={fontSize/2.07}
                 setCurrentSlug={setCurrentSlug}
                 newPosition={newPosition}
                 setNewPosition={setNewPosition}
@@ -1009,7 +1012,7 @@ export default function Home() {
             style={{
               textAlign: "center",
               border: "1px solid red",
-              minWidth: scrollWidth,
+              minWidth: scrollWidth/3.2,
               minHeight: 190,
               position: "absolute",
               top: 535,
