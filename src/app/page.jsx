@@ -19,8 +19,11 @@ import 'react-tabs/style/react-tabs.css';
 
 
 
-const scrollWidth = 600;
-const scrollHeight = 522;
+// const scrollWidth = 600;
+// const scrollHeight = 522;
+
+const scrollWidth = 1920;
+const scrollHeight = 1080;
 var socket;
 
 

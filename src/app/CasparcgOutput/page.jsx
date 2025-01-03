@@ -2,8 +2,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Scroll from '../components/Scroll';
 
-const scrollWidth=600;
-const scrollHeight=522;
+// const scrollWidth=600;
+// const scrollHeight=522;
+
+const scrollWidth=1920;
+const scrollHeight=1080;
 
 const Page = () => {
     const [startPosition, setStartPosition] = useState(150);
