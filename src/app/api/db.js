@@ -5,6 +5,7 @@ export const config = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  connectTimeout: 20000, // 20 seconds
 };
 
 export const newdatabase=process.env.NEWDATABASE==="true"
