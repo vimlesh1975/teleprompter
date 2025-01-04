@@ -10,8 +10,24 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
     const handleTitleBarDoubleClick = () => {
         console.log('Title bar double-clicked');
         container.style.transformOrigin = '5px 0';
-        container.style.transform = `scale(${newWindowRef.current.screen.width / scrollWidth}, ${newWindowRef.current.screen.height / scrollHeight} )`;
-        setScaleFactor(newWindowRef.current.screen.height / scrollHeight);
+        const screenHeight = newWindowRef.current.screen.height;
+
+        const knownOrigins = {
+            1080: 270,
+            1050: 267,
+            1024: 265,
+            960: 253,
+            900: 242,
+            864: 238,
+            800: 230,
+            768: 220,
+            720: 215,
+            664: 205,
+            600: 195,
+        };
+        const sf= (screenHeight-knownOrigins[screenHeight]) / scrollHeight;
+        container.style.transform = `scale(${newWindowRef.current.screen.width / scrollWidth}, ${sf} )`;
+        setScaleFactor(sf);
     };
 
     const handleRightClick = (event) => {
@@ -21,17 +37,31 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
         const screenWidth = newWindowRef.current.screen.width;
 
         // Define known transform origins based on testing
+        // const knownOrigins = {
+        //     1920: 456,
+        //     1680: 440,
+        //     1600: 435,
+        //     1440: 422,
+        //     1366: 415,
+        //     1360: 415,
+        //     1280: 407,
+        //     1152: 393,
+        //     1024: 376,
+        //     800: 340,
+        // };
+
         const knownOrigins = {
-            1920: 456,
-            1680: 440,
-            1600: 435,
-            1440: 422,
-            1366: 415,
-            1360: 415,
-            1280: 407,
-            1152: 393,
-            1024: 376,
-            800: 340,
+            1920: 555,
+            1680: 530,
+            1600: 523,
+            1440: 505,
+            1366: 495,
+            1360: 495,
+            1280: 483,
+            1176: 466,
+            1152: 462,
+            1024: 440,
+            800: 392,
         };
 
         // Calculate transform origin using the linear formula if not in known origins
@@ -51,7 +81,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', `width=${scrollWidth+20},height=${scrollHeight+18}`);
+            newWindowRef.current = window.open('', '', `width=${scrollWidth+20},height=${scrollHeight+100}`);
         }
 
         // Ensure the window is still available

@@ -19,8 +19,10 @@ import 'react-tabs/style/react-tabs.css';
 
 
 
-const scrollWidth = 600;
-const scrollHeight = 522;
+// const scrollWidth = 600;
+const scrollHeight = 440;
+const scrollWidth = scrollHeight * 16 / 9;
+
 var socket;
 
 
@@ -357,10 +359,10 @@ export default function Home() {
 
   const content = slugs[currentSlug]?.Script;
 
-  const isVideoPresent=(slug)=>{
+  const isVideoPresent = (slug) => {
     const aa = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
     const allValid = aa.some(item => item !== null && item !== "");
-    const isVideoPresent =newdatabase? allValid:slug?.Media;
+    const isVideoPresent = newdatabase ? allValid : slug?.Media;
     return isVideoPresent;
   }
 
@@ -372,7 +374,7 @@ export default function Home() {
     const data1 = new Array(slicedSlugs.length * 3);
     try {
       slicedSlugs.forEach((slug, i) => {
-        
+
         // const aa = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
         // const allValid = aa.some(item => item !== null && item !== "");
         // const isVideoPresent =newdatabase? allValid:slug?.Media;
@@ -733,8 +735,8 @@ export default function Home() {
             style={{
               minWidth: 348,
               maxWidth: 348,
-              maxHeight: 700,
-              minHeight: 700,
+              maxHeight: 875,
+              minHeight: 875,
               overflow: "auto",
             }}
           >
@@ -865,9 +867,10 @@ export default function Home() {
           <div
             style={{
               fontSize: `${fontSize}px`,
-              fontWeight: "bolder",
+              // fontWeight: "bolder",
               width: scrollWidth,
               minHeight: scrollHeight,
+              maxHeight: scrollHeight,
               position: "absolute",
               top: startPosition + 28,
             }}
@@ -881,19 +884,19 @@ export default function Home() {
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
-                {isVideoPresent(slugs[currentSlug])? " - Visual" : " -No Visual"}
+                {isVideoPresent(slugs[currentSlug]) ? " - Visual" : " -No Visual"}
               </div>
             )}
             <textarea
-              value={ content}
+              value={content}
               style={{
                 fontSize: `${fontSize}px`,
                 width: scrollWidth,
                 // minHeight: scrollHeight - 80,
                 // maxHeight: scrollHeight - 80,
-                minHeight: scrollHeight - 275,
-                maxHeight: scrollHeight - 275,
-                lineHeight: `${fontSize * 1.3}px`,
+                minHeight: 600,
+                maxHeight: 600,
+                lineHeight: `${fontSize * 1.5}px`,
               }}
               disabled
             />
@@ -1058,7 +1061,7 @@ export default function Home() {
                 style={{ width: "60%" }}
               />
             </div>
-            <div style={{ textAlign: "right" }}>
+            <div style={{ textAlign: "left" }}>
               {/* {'keyPressed' + keyPressed}  */}
 
               Right Click to Stop and Play
