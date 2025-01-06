@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback , useState} from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
@@ -33,12 +33,10 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, selectedRunOrderTitle, slugs, newsReaderText }) => {
+const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber,  slugs, newsReaderText }) => {
     const dispatch = useDispatch();
     const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
     const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
-    // const [storyLines, setStoryLines] = useState([]);
-    // const [crossedLines, setCrossedLines] = useState(0);
 
     const scrollingTextStyle = {
         position: 'absolute',
@@ -59,28 +57,28 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
 
 
-    const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID) => {
-        // console.log('log from scroll ', curstory, curbulletin, ScriptID);
-        if (curbulletin === null) return;
-        if (!ScriptID) return;
+    // const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory) => {
+    //     // console.log('log from scroll ', curstory, curbulletin, ScriptID);
+    //     if (curbulletin === null) return;
+    //     if (!ScriptID) return;
 
-        fetch('/api/currentStory', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ curstory, curbulletin, ScriptID }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                // console.log('Success:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }, []);
+    //     fetch('/api/currentStory', {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory }),
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // console.log('Success:', data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //         });
+    // }, []);
 
-    useEffect(() => {
-        updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber-1]?.ScriptID);
-    }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs]);
+    // useEffect(() => {
+    //     updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber-1]?.ScriptID, usedStory);
+    // }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory]);
 
 
     useEffect(() => {
@@ -89,6 +87,8 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
             socket.off('setCurrentStoryNumber');
         };
     }, [currentStoryNumber])
+
+ 
 
     useEffect(() => {
         socket.emit('crossedLines', crossedLines);

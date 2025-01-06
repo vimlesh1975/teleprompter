@@ -65,6 +65,7 @@ app.prepare().then(async () => {
         socket.emit("newdatabase", newdatabase);
 
         socket.on('currentStory1', (data) => {
+            // console.log(data)
             io.emit('currentStoryBroadcast', data);  // Broadcast to all clients
         });
 

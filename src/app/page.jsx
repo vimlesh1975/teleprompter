@@ -72,6 +72,30 @@ export default function Home() {
   const [usedStory, setUsedStory] = useState([]);
 
 
+  const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory) => {
+    // console.log('log from scroll ', curstory, curbulletin, ScriptID);
+    if (curbulletin === null) return;
+    if (!ScriptID) return;
+
+    fetch('/api/currentStory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory);
+  }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory]);
+
+
   const handleDateChange = (event) => {
     const date = event.target.value;
     setSelectedDate(date)
@@ -601,8 +625,7 @@ export default function Home() {
     const updatedStories = [slugs[0]?.ScriptID, ...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
 
     // Ensure uniqueness by filtering out duplicate values
-    const uniqueStories = [...new Set(updatedStories)];
-
+    const uniqueStories = [...new Set(updatedStories.filter((item) => item !== null))];
     // Update state with the unique story numbers
     setUsedStory(uniqueStories);
     return () => {
@@ -778,7 +801,7 @@ export default function Home() {
                 }}
               >
                 {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
-                <span style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID)?'✅':' ' }
+                <span style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
                 <label
                   title={
                     val.DropStory
@@ -795,6 +818,7 @@ export default function Home() {
               </div>
             ))}
           </div>
+          <button onClick={() => { setUsedStory([]) }}>Reset used story status</button>
         </div>
         <div>
           <div
