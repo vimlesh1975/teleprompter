@@ -69,6 +69,8 @@ export default function Home() {
   const [serverAlive, setServerAlive] = useState(false);
   const [selectedDate, setSelectedDate] = useState('2024-12-05');
 
+  const [usedStory, setUsedStory] = useState([]);
+
 
   const handleDateChange = (event) => {
     const date = event.target.value;
@@ -590,7 +592,23 @@ export default function Home() {
     if (stopAfterStoryChange) {
       setSpeed(0);
     }
+
   }, [currentStoryNumber]);
+
+
+  useEffect(() => {
+    // First, unconditionally add the currentStoryNumber to the array
+    const updatedStories = [slugs[0]?.ScriptID, ...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
+
+    // Ensure uniqueness by filtering out duplicate values
+    const uniqueStories = [...new Set(updatedStories)];
+
+    // Update state with the unique story numbers
+    setUsedStory(uniqueStories);
+    return () => {
+      setUsedStory([]);
+    }
+  }, [currentStoryNumber, slugs]);
 
   function replaceCRLFInArray(inputArray) {
     // Ensure inputArray is an array of strings
@@ -760,7 +778,7 @@ export default function Home() {
                 }}
               >
                 {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
-                <span style={{ fontSize: 30 }}>{i + 1}</span>{" "}
+                <span style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID)?'✅':' ' }
                 <label
                   title={
                     val.DropStory
@@ -1169,8 +1187,12 @@ export default function Home() {
 
               </div>
             </div>
+            {/* {usedStory.map((val, i) => {
+              return <div key={i}>{val}</div>
+            })} */}
 
           </div>
+
         </div>
       </div>
     </div>
