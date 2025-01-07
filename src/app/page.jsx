@@ -47,7 +47,7 @@ export default function Home() {
   const [newPosition, setNewPosition] = useState(startPosition);
   const [tempSpeed, setTempSpeed] = useState(0);
   const [loggedPositions, setLoggedPositions] = useState(new Set());
-  const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
+  const [currentStoryNumber, setCurrentStoryNumber] = useState(-1);
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
   const [fontSize, setFontSize] = useState(39);
@@ -373,6 +373,7 @@ export default function Home() {
         );
         const data = await res.json();
         setSlugs(data.data);
+        setUsedStory([data.data[0]?.ScriptID]);
         fetchAllContent(data.data, 0);
       } catch (error) {
         console.error(error);
@@ -380,6 +381,7 @@ export default function Home() {
     }
     if (selectedRunOrderTitle) {
       fetchData();
+      setCurrentStoryNumber(1);
     }
   }, [selectedRunOrderTitle, selectedDate]);
 
@@ -622,7 +624,7 @@ export default function Home() {
 
   useEffect(() => {
     // First, unconditionally add the currentStoryNumber to the array
-    const updatedStories = [slugs[0]?.ScriptID, ...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
+    const updatedStories = [ ...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
 
     // Ensure uniqueness by filtering out duplicate values
     const uniqueStories = [...new Set(updatedStories.filter((item) => item !== null))];
@@ -631,7 +633,7 @@ export default function Home() {
     return () => {
       setUsedStory([]);
     }
-  }, [currentStoryNumber, slugs]);
+  }, [currentStoryNumber]);
 
   function replaceCRLFInArray(inputArray) {
     // Ensure inputArray is an array of strings
@@ -801,7 +803,7 @@ export default function Home() {
                 }}
               >
                 {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
-                <span style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
+                <span title={val.ScriptID} style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
                 <label
                   title={
                     val.DropStory
@@ -1211,9 +1213,9 @@ export default function Home() {
 
               </div>
             </div>
-            {/* {usedStory.map((val, i) => {
+            {usedStory.map((val, i) => {
               return <div key={i}>{val}</div>
-            })} */}
+            })}
 
           </div>
 

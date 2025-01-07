@@ -33,7 +33,8 @@ export async function POST(req) {
         const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?, ScriptID = ?`;
         const values = [curstory, curbulletin, ScriptID];
 
-        connection = await mysql.createConnection(config);
+        // connection = await mysql.createConnection(config);
+        connection = await mysql.createPool(config);
 
         try {
             await connection.query(query, values);
