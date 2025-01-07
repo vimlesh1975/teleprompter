@@ -385,7 +385,7 @@ export default function Home() {
     }
   }, [selectedRunOrderTitle, selectedDate]);
 
-  const content = slugs[currentSlug]?.Script;
+  // const content = slugs[currentSlug]?.Script;
 
   const isVideoPresent = (slug) => {
     const aa = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
@@ -932,7 +932,7 @@ export default function Home() {
               </div>
             )}
             <textarea
-              value={content}
+              value={slugs[currentSlug]?.Script}
               style={{
                 fontSize: `${fontSize}px`,
                 width: scrollWidth,
@@ -946,7 +946,7 @@ export default function Home() {
             />
 
             <div style={{ fontSize: 16, fontWeight: "normal", }}>
-              <TTS content={content} />
+              <TTS content={slugs[currentSlug]?.Script} />
             </div>
 
             {/* <Tabs
