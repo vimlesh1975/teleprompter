@@ -9,12 +9,12 @@ import debounce from "lodash.debounce"; // Importing debounce from lodash
 
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
-import GraphicsAndVideo from './components/GraphicsAndVideo'
+// import GraphicsAndVideo from './components/GraphicsAndVideo'
 import TTS from './components/TTS.jsx'
 import SrollView from './components/SrollView';
 import { changeStoryLines, changeCrossedLines, changenewdatabase } from './store/store'; // Adjust the path as needed
 
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+// import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import 'react-tabs/style/react-tabs.css';
 
 
@@ -99,6 +99,9 @@ export default function Home() {
   const handleDateChange = (event) => {
     const date = event.target.value;
     setSelectedDate(date)
+
+    setSpeed(0);
+    setDoubleClickedPosition(0);
   };
 
   useEffect(() => {
@@ -427,6 +430,8 @@ export default function Home() {
   };
 
   const handleSelectionChange = (e) => {
+    setSpeed(0);
+    setDoubleClickedPosition(0);
     const value = e.target.value;
     setSelectedRunOrderTitle(value);
     setCurrentSlug(0);
@@ -439,6 +444,8 @@ export default function Home() {
   // Handle double-click event
   const handleDoubleClick = (i) => {
     console.log('handleDoubleClick called', i)
+    
+    sendtoCasparafterDoubleClick(i)
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
@@ -698,15 +705,12 @@ export default function Home() {
     });
   }, [newsReaderText]);
 
-  useEffect(() => {
+  const sendtoCasparafterDoubleClick=(doubleClickedPosition)=>{
     endpoint({
       action: "endpoint",
       command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
     });
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setNewPosition(${startPosition})`,
-    });
+
     endpoint({
       action: "endpoint",
       command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
@@ -715,6 +719,23 @@ export default function Home() {
       action: "endpoint",
       command: `call 1-97 setLoggedPositions1()`,
     });
+  }
+
+  useEffect(() => {
+    // endpoint({
+    //   action: "endpoint",
+    //   command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
+    // });
+
+    // endpoint({
+    //   action: "endpoint",
+    //   command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
+    // });
+    // endpoint({
+    //   action: "endpoint",
+    //   command: `call 1-97 setLoggedPositions1()`,
+    // });
+    sendtoCasparafterDoubleClick(doubleClickedPosition);
   }, [doubleClickedPosition]);
 
   useEffect(() => {
@@ -733,9 +754,9 @@ export default function Home() {
     });
   }, [selectedRunOrderTitle]);
 
-  const onTabChange = () => {
+  // const onTabChange = () => {
 
-  }
+  // }
 
   return (
     <div style={{ overflow: "hidden" }}>
@@ -1193,9 +1214,9 @@ export default function Home() {
 
               </div>
             </div>
-            {usedStory.map((val, i) => {
+            {/* {usedStory.map((val, i) => {
               return <div key={i}>{val}</div>
-            })}
+            })} */}
 
           </div>
 
