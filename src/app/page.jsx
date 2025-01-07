@@ -624,7 +624,7 @@ export default function Home() {
 
   useEffect(() => {
     // First, unconditionally add the currentStoryNumber to the array
-    const updatedStories = [ ...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
+    const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
 
     // Ensure uniqueness by filtering out duplicate values
     const uniqueStories = [...new Set(updatedStories.filter((item) => item !== null))];
@@ -822,6 +822,8 @@ export default function Home() {
           </div>
           <button onClick={() => { setUsedStory([]) }}>Reset used story status</button>
         </div>
+
+        {/* second column */}
         <div>
           <div
             style={{
@@ -913,10 +915,11 @@ export default function Home() {
               fontSize: `${fontSize}px`,
               // fontWeight: "bolder",
               width: scrollWidth,
-              minHeight: scrollHeight,
-              maxHeight: scrollHeight,
+              minHeight: 600,
+              maxHeight: 600,
               position: "absolute",
               top: startPosition + 28,
+              overflow: "scroll",
             }}
           >
             {slugs && slugs[currentSlug] && (
@@ -931,50 +934,22 @@ export default function Home() {
                 {isVideoPresent(slugs[currentSlug]) ? " - Visual" : " -No Visual"}
               </div>
             )}
-            <textarea
-              value={slugs[currentSlug]?.Script}
-              style={{
-                fontSize: `${fontSize}px`,
-                width: scrollWidth,
-                // minHeight: scrollHeight - 80,
-                // maxHeight: scrollHeight - 80,
-                minHeight: 600,
-                maxHeight: 600,
-                lineHeight: `${fontSize * 1.5}px`,
-              }}
-              disabled
-            />
 
-            <div style={{ fontSize: 16, fontWeight: "normal", }}>
-              <TTS content={slugs[currentSlug]?.Script} />
+            <div style={{
+              fontSize: `${fontSize}px`,
+              lineHeight: `${fontSize * 1.5}px`,
+            }}>
+              {slugs && slugs[currentSlug]?.Script}
             </div>
-
-            {/* <Tabs
-              selectedTabClassName="selectedTab"
-              forceRenderTabPanel={true}
-              onSelect={(index, prevIndex) => onTabChange(index, prevIndex)}
-            >
-              <TabList>
-                <Tab>GraphicsAndVideo</Tab>
-                <Tab>TTS</Tab>
-              </TabList>
-              <TabPanel>
-                <div style={{ fontSize: 16, fontWeight: "normal", }}>
-                  <GraphicsAndVideo scriptID={scriptID} slugs={slugs} currentStoryNumber={currentStoryNumber} content={content} currentSlug={currentSlug} />
-                </div>
-              </TabPanel>
-              <TabPanel>
-                <div style={{ fontSize: 16, fontWeight: "normal", }}>
-                  <TTS content={content} />
-                </div>
-              </TabPanel>
-            </Tabs> */}
 
 
           </div>
-
+          <div style={{ fontSize: 16, fontWeight: "normal",position:'absolute', top: 830, }}>
+            <TTS content={slugs[currentSlug]?.Script} />
+          </div>
         </div>
 
+        {/* Third column */}
         <div>
           <div>
             {(showReactComponent || showNewWindow) &&
@@ -1089,7 +1064,7 @@ export default function Home() {
               <button onClick={() => setSpeed(5)}> 5</button>
               <button onClick={() => setSpeed(6)}>6</button>
               <button onClick={() => setSpeed(7)}>7</button>
-              <button title='Increase speed by 1' onClick={() => setSpeed((val) => parseInt(val) +1)}>
+              <button title='Increase speed by 1' onClick={() => setSpeed((val) => parseInt(val) + 1)}>
                 ++1
               </button>
 
