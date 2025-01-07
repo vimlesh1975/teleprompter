@@ -913,6 +913,7 @@ export default function Home() {
           <div
             style={{
               fontSize: `${fontSize}px`,
+              lineHeight: `${fontSize * 1.5}px`,
               // fontWeight: "bolder",
               width: scrollWidth,
               minHeight: 600,
@@ -920,6 +921,9 @@ export default function Home() {
               position: "absolute",
               top: startPosition + 28,
               overflow: "scroll",
+              padding: '0 25px',
+              boxSizing: 'border-box',
+              whiteSpace: 'pre-wrap',
             }}
           >
             {slugs && slugs[currentSlug] && (
@@ -927,7 +931,7 @@ export default function Home() {
                 style={{
                   backgroundColor: "blue",
                   color: "yellow",
-                  padding: "0 25px",
+                  width: 732.22,
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
@@ -938,6 +942,7 @@ export default function Home() {
             <div style={{
               fontSize: `${fontSize}px`,
               lineHeight: `${fontSize * 1.5}px`,
+              width: 732.22,
             }}>
               {slugs && slugs[currentSlug]?.Script}
             </div>
