@@ -44,7 +44,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         width: '100%',
         textAlign: 'left',
         // fontWeight: 'bolder',
-        padding: '0 25px',
+        padding: '0 40px',
         boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),

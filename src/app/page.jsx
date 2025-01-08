@@ -71,6 +71,9 @@ export default function Home() {
 
   const [usedStory, setUsedStory] = useState([]);
 
+  const [sendUsedStory, setSendUsedStory] = useState(false);
+
+
 
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory) => {
     // console.log('log from scroll ', curstory, curbulletin, ScriptID);
@@ -80,7 +83,7 @@ export default function Home() {
     fetch('/api/currentStory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory }),
+      body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [] }),
     })
       .then(response => response.json())
       .then(data => {
@@ -89,7 +92,7 @@ export default function Home() {
       .catch(error => {
         console.error('Error:', error);
       });
-  }, []);
+  }, [sendUsedStory]);
 
   useEffect(() => {
     updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory);
@@ -842,6 +845,18 @@ export default function Home() {
             ))}
           </div>
           <button onClick={() => { setUsedStory([]) }}>Reset used story status</button>
+          <label>
+              {" "}
+              <input
+                checked={sendUsedStory}
+                type="checkbox"
+                onChange={() => setSendUsedStory((val) => {
+                setUsedStory([]);
+                 return !val
+                })}
+              />{" "}
+              <span>Send Used Story</span>
+            </label>
         </div>
 
         {/* second column */}
@@ -952,7 +967,7 @@ export default function Home() {
                 style={{
                   backgroundColor: "blue",
                   color: "yellow",
-                  width: 732.22,
+                  width: 702.22,
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
@@ -963,7 +978,7 @@ export default function Home() {
             <div style={{
               fontSize: `${fontSize}px`,
               lineHeight: `${fontSize * 1.5}px`,
-              width: 732.22,
+              width: 702.22,
             }}>
               {slugs && slugs[currentSlug]?.Script}
             </div>

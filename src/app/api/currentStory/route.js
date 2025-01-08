@@ -26,6 +26,7 @@ export async function POST(req) {
     const { curstory, curbulletin, ScriptID, usedStory } = payload;
     const data = { curstory, curbulletin, ScriptID, usedStory }; // Your payload
     socket.emit('currentStory1', data);
+    // console.log(data)
 
     let connection;
 
