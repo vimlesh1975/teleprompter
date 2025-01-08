@@ -82,7 +82,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
     <div>
       <div>
         <div>
-          <button
+         For Casparcg Output <button
             style={{ backgroundColor: connected ? 'green' : 'red' }}
             onClick={() =>
               endpoint({
@@ -104,7 +104,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
           <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID }</span>
         </div>
         <div>
-          <button
+        Method 1:  <button
             onClick={() => {
               endpoint({
                 action: 'endpoint',
@@ -117,7 +117,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
             }
             }
           >
-            Show in casparcg Web RTC
+            Show in casparcg (Web RTC method)
           </button>
           <button
             onClick={() => {
@@ -128,11 +128,11 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
               setFliped(val => !val);
             }}
           >
-            Toggle Flip Web RTC
+            Toggle Flip
           </button>
         </div>
         <div>
-          <button
+        Method 2: <button
             onClick={() => {
               endpoint({
                 action: 'endpoint',
@@ -189,7 +189,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
 
             }
           >
-            Show React componenet
+            Show in Casparcg (React componenet method)
           </button>
 
           <button
@@ -202,7 +202,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
               setFliped(val => !val);
             }}
           >
-            Toggle Flip React Componenet
+            Toggle Flip
           </button>
         </div>
         <button

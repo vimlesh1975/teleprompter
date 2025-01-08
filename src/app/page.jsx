@@ -1131,7 +1131,7 @@ export default function Home() {
 
             {!showReactComponent && (
               <div>
-                <button
+            For HDMI or VGA output <button
                   onClick={() => {
                     if (showNewWindow) {
                       newWindowRef.current.close();
