@@ -444,7 +444,7 @@ export default function Home() {
   // Handle double-click event
   const handleDoubleClick = (i) => {
     console.log('handleDoubleClick called', i)
-    
+
     sendtoCasparafterDoubleClick(i)
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
@@ -705,7 +705,7 @@ export default function Home() {
     });
   }, [newsReaderText]);
 
-  const sendtoCasparafterDoubleClick=(doubleClickedPosition)=>{
+  const sendtoCasparafterDoubleClick = (doubleClickedPosition) => {
     endpoint({
       action: "endpoint",
       command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
@@ -970,8 +970,8 @@ export default function Home() {
 
 
           </div>
-          <div style={{ fontSize: 16, fontWeight: "normal",position:'absolute', top: 830, }}>
-            <TTS content={slugs[currentSlug]?.Script} />
+          <div style={{ fontSize: 16, fontWeight: "normal", position: 'absolute', top: 770, }}>
+            <TTS content={slugs ? slugs[currentSlug]?.Script : ''} />
           </div>
         </div>
 
@@ -1131,7 +1131,7 @@ export default function Home() {
 
             {!showReactComponent && (
               <div>
-            For HDMI or VGA output <button
+                For HDMI or VGA output <button
                   onClick={() => {
                     if (showNewWindow) {
                       newWindowRef.current.close();
