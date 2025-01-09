@@ -556,9 +556,9 @@ export default function Home() {
     const handleJogdir = debounce((msg) => {
       console.log(msg);
       if (msg === 1) {
-        setSpeed(2);
+        setSpeed(1);
       } else if (msg === -1) {
-        setSpeed(-2);
+        setSpeed(-1);
       }
     }, 300); // Debounce with 300ms delay
 
