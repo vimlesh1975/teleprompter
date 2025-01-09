@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-const IP=process.env.NEXT_PUBLIC_IP;
+const IP = process.env.NEXT_PUBLIC_IP;
 
 const socket = io();
 socket.on('connect', () => {
@@ -27,7 +27,7 @@ function replaceCRLFInArray(inputArray) {
   });
 }
 
-export default function Home({ slugs, allContent, setShowReactComponent,  startPosition, fontSize ,doubleClickedPosition,newPosition, currentStoryNumber,selectedRunOrderTitle  }) {
+export default function Home({ slugs, allContent, setShowReactComponent, startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -82,7 +82,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
     <div>
       <div>
         <div>
-         For Casparcg Output <button
+          For Casparcg Output <button
             style={{ backgroundColor: connected ? 'green' : 'red' }}
             onClick={() =>
               endpoint({
@@ -99,12 +99,12 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
               })
             }
           >
-            DisConnect 
+            DisConnect
           </button>
-          <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID }</span>
+          <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID}</span>
         </div>
         <div>
-        Method 1:  <button
+          Method 1:  <button
             onClick={() => {
               endpoint({
                 action: 'endpoint',
@@ -117,7 +117,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
             }
             }
           >
-            Show in casparcg (Web RTC method)
+            <span>Screen Capture Method</span>
           </button>
           <button
             onClick={() => {
@@ -132,7 +132,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
           </button>
         </div>
         <div>
-        Method 2: <button
+          Method 2: <button
             onClick={() => {
               endpoint({
                 action: 'endpoint',
@@ -189,7 +189,7 @@ export default function Home({ slugs, allContent, setShowReactComponent,  startP
 
             }
           >
-            Show in Casparcg (React componenet method)
+            <span>Normal Method</span>
           </button>
 
           <button

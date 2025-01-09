@@ -802,8 +802,8 @@ export default function Home() {
             style={{
               minWidth: 348,
               maxWidth: 348,
-              maxHeight: 800,
-              minHeight: 800,
+              maxHeight: 725,
+              minHeight: 725,
               overflow: "scroll",
             }}
           >
@@ -1070,9 +1070,10 @@ export default function Home() {
             }}
             style={{
               textAlign: "center",
-              border: "1px solid red",
               minWidth: scrollWidth,
-              minHeight: 190,
+              minHeight: 243,
+              maxHeight: 243,
+              overflow: "scroll",
               position: "absolute",
               top: 535,
             }}
