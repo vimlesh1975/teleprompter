@@ -883,6 +883,7 @@ export default function Home() {
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
+            <span>Quick Methods: </span>
             <button
               onClick={() => {
                 fromStart();
@@ -927,7 +928,8 @@ export default function Home() {
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
             <div>
-              <button onClick={() => setNewsReaderText("Go Fast...")}>
+            <span>News Reader Messages:</span>
+            <button onClick={() => setNewsReaderText("Go Fast...")}>
                 Go fast
               </button>
               <button onClick={() => setNewsReaderText("Wait...")}>Wait</button>
