@@ -802,9 +802,9 @@ export default function Home() {
             style={{
               minWidth: 348,
               maxWidth: 348,
-              maxHeight: 875,
-              minHeight: 875,
-              overflow: "auto",
+              maxHeight: 800,
+              minHeight: 800,
+              overflow: "scroll",
             }}
           >
             {slugs?.map((val, i) => (
