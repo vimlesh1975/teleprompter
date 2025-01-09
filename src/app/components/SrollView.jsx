@@ -7,7 +7,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 const scrollContainerStyle = {
     position: 'relative',
-    height: '500px',
+    height: '440px',
     overflow: 'hidden',
     backgroundColor: '#000',
     color: '#fff'

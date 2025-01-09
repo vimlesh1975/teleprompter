@@ -21,7 +21,7 @@ import 'react-tabs/style/react-tabs.css';
 
 // const scrollWidth = 600;
 const scrollHeight = 440;
-const scrollWidth = scrollHeight * 16 / 9;
+const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 
 var socket;
 
@@ -969,7 +969,7 @@ export default function Home() {
                 style={{
                   backgroundColor: "blue",
                   color: "yellow",
-                  width: 702.22,
+                  width: 702,
                 }}
               >
                 {currentSlug + 1} {currentSlugName}

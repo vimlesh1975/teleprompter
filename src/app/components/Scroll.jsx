@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback , useState} from 'react';
+import { useEffect, useRef} from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
@@ -27,7 +27,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 const scrollContainerStyle = {
     position: 'relative',
-    height: '500px',
+    height: '440px',
     overflow: 'hidden',
     backgroundColor: '#000',
     color: '#fff'

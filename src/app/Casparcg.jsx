@@ -140,7 +140,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
               });
               endpoint({
                 action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill -0.01 -0.02 2.45 2.04' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.02',
+                command: !fliped ? 'mixer 1-97 fill -0.01 -0.02 2.45 2.35' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.35',
               });
               setTimeout(() => {
                 setShowReactComponent(true);
@@ -196,7 +196,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill -0.01 -0.02 2.45 2.04' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.02',
+                command: !fliped ? 'mixer 1-97 fill -0.01 -0.02 2.45 2.35' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.35',
 
               });
               setFliped(val => !val);
