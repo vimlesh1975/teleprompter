@@ -25,7 +25,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
             664: 145,
             600: 130,
         };
-        const sf= (screenHeight-knownOrigins[screenHeight]) / scrollHeight;
+        const sf= (screenHeight-(knownOrigins[screenHeight] || 150)) / scrollHeight;
         container.style.transform = `scale(${newWindowRef.current.screen.width / scrollWidth}, ${sf} )`;
         setScaleFactor(sf);
     };
