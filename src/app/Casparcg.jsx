@@ -114,10 +114,11 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
                 action: 'endpoint',
                 command: fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
               });
+              setShowReactComponent(false);
             }
             }
           >
-            <span>Screen Capture Method</span>
+          Screen Capture Method
           </button>
           <button
             onClick={() => {
@@ -130,6 +131,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
           >
             Toggle Flip
           </button>
+    
         </div>
         <div>
           Method 2: <button
@@ -189,7 +191,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
 
             }
           >
-            <span>Normal Method</span>
+           Normal Method
           </button>
 
           <button
@@ -205,6 +207,28 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
             Toggle Flip
           </button>
         </div>
+
+        <button onClick={()=>{
+            endpoint({
+              action: 'endpoint',
+              command: `play 2-97 route://1`
+            });
+            endpoint({
+              action: 'endpoint',
+              command: `mixer 2-97 fill 0 0 1 1`
+            });
+          }}>Play 2nd channel </button>
+          <button onClick={()=>{
+             endpoint({
+              action: 'endpoint',
+              command: `play 2-97 route://1`
+            });
+            endpoint({
+              action: 'endpoint',
+              command: `mixer 2-97 fill 1 0 -1 1`
+            });
+          }}>Play 2nd channel flip mode</button>
+
         <button
           onClick={() => {
             endpoint({
