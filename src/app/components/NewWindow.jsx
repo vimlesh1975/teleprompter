@@ -36,20 +36,6 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
 
         const screenWidth = newWindowRef.current.screen.width;
 
-        // Define known transform origins based on testing
-        // const knownOrigins = {
-        //     1920: 456,
-        //     1680: 440,
-        //     1600: 435,
-        //     1440: 422,
-        //     1366: 415,
-        //     1360: 415,
-        //     1280: 407,
-        //     1152: 393,
-        //     1024: 376,
-        //     800: 340,
-        // };
-
         const knownOrigins = {
             1920: 555,
             1680: 530,
@@ -81,7 +67,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', `width=${scrollWidth+20},height=${scrollHeight+100}`);
+            newWindowRef.current = window.open('', '', `width=${scrollWidth+20},height=${scrollHeight+40}`);
         }
 
         // Ensure the window is still available
