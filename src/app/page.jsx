@@ -49,6 +49,7 @@ export default function Home() {
   const [loggedPositions, setLoggedPositions] = useState(new Set());
   const [currentStoryNumber, setCurrentStoryNumber] = useState(-1);
   const [showNewWindow, setShowNewWindow] = useState(false);
+  const [showNewWindow2, setShowNewWindow2] = useState(false);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
   const [fontSize, setFontSize] = useState(39);
   const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
@@ -64,6 +65,7 @@ export default function Home() {
   const [keyPressed, setKeyPressed] = useState('');
 
   const newWindowRef = useRef(null);
+  const newWindowRef2 = useRef(null);
   const textRef = useRef(null);
 
   const [serverAlive, setServerAlive] = useState(false);
@@ -249,6 +251,10 @@ export default function Home() {
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
+  };
+
+  const handleCloseNewWindow2 = () => {
+    setShowNewWindow2(false);
   };
 
   const timerFunction = async () => {
@@ -802,8 +808,8 @@ export default function Home() {
             style={{
               minWidth: 348,
               maxWidth: 348,
-              maxHeight:newdatabase? 725: 748,
-              minHeight: newdatabase? 725: 748,
+              maxHeight: newdatabase ? 725 : 748,
+              minHeight: newdatabase ? 725 : 748,
               overflow: "scroll",
             }}
           >
@@ -846,17 +852,17 @@ export default function Home() {
           </div>
           <button onClick={() => { setUsedStory([]) }}>Reset used story status</button>
           <label>
-              {" "}
-              <input
-                checked={sendUsedStory}
-                type="checkbox"
-                onChange={() => setSendUsedStory((val) => {
+            {" "}
+            <input
+              checked={sendUsedStory}
+              type="checkbox"
+              onChange={() => setSendUsedStory((val) => {
                 setUsedStory([]);
-                 return !val
-                })}
-              />{" "}
-              <span>Send Used Story</span>
-            </label>
+                return !val
+              })}
+            />{" "}
+            <span>Send Used Story</span>
+          </label>
         </div>
 
         {/* second column */}
@@ -928,8 +934,8 @@ export default function Home() {
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
             <div>
-            <span>News Reader Messages:</span>
-            <button onClick={() => setNewsReaderText("Go Fast...")}>
+              <span>News Reader Messages:</span>
+              <button onClick={() => setNewsReaderText("Go Fast...")}>
                 Go fast
               </button>
               <button onClick={() => setNewsReaderText("Wait...")}>Wait</button>
@@ -995,15 +1001,14 @@ export default function Home() {
         {/* Third column */}
         <div>
           <div>
-            {(showReactComponent || showNewWindow) &&
+            {(showReactComponent) &&
               <div>
-                {/* <h1>{crossedLines}/{storyLines[currentStoryNumber - 1]}</h1> */}
                 <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, maxHeight: scrollHeight, minHeight: scrollHeight, border: '1px solid black' }}>
                   <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
                 </div>
               </div>
             }
-            {!showReactComponent && !showNewWindow && (
+            {!showReactComponent &&(
               <Scroll
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
@@ -1025,6 +1030,7 @@ export default function Home() {
                 slugs={slugs}
                 newsReaderText={newsReaderText}
               />
+
             )}
             {!showReactComponent && showNewWindow && (
               <NewWindow
@@ -1033,7 +1039,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <Scroll
+                {/* <Scroll
                   scrollWidth={scrollWidth}
                   scrollHeight={scrollHeight}
                   fontSize={fontSize}
@@ -1053,7 +1059,41 @@ export default function Home() {
                   selectedRunOrderTitle={selectedRunOrderTitle}
                   slugs={slugs}
                   newsReaderText={newsReaderText}
-                />
+                /> */}
+                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+              </NewWindow>
+            )}
+
+            {!showReactComponent && showNewWindow2 && (
+              <NewWindow
+                onClose={handleCloseNewWindow2}
+                newWindowRef={newWindowRef2}
+                scrollWidth={scrollWidth}
+                scrollHeight={scrollHeight}
+              >
+                {/* <Scroll
+                  scrollWidth={scrollWidth}
+                  scrollHeight={scrollHeight}
+                  fontSize={fontSize}
+                  setCurrentSlug={setCurrentSlug}
+                  newPosition={newPosition}
+                  setNewPosition={setNewPosition}
+                  doubleClickedPosition={doubleClickedPosition}
+                  textRef={textRef}
+                  startPosition={startPosition}
+                  allContent={allContent}
+                  showClock={showClock}
+                  loggedPositions={loggedPositions}
+                  setLoggedPositions={setLoggedPositions}
+                  currentStoryNumber={currentStoryNumber}
+                  setCurrentStoryNumber={setCurrentStoryNumber}
+                  speed={speed}
+                  selectedRunOrderTitle={selectedRunOrderTitle}
+                  slugs={slugs}
+                  newsReaderText={newsReaderText}
+                /> */}
+                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+
               </NewWindow>
             )}
           </div>
@@ -1154,11 +1194,23 @@ export default function Home() {
                     if (showNewWindow) {
                       newWindowRef.current.close();
                     }
-                    setNewPosition(textRef.current.offsetTop);
+                    { textRef && textRef.current &&  setNewPosition(textRef.current.offsetTop);}
                     setShowNewWindow(!showNewWindow);
                   }}
                 >
                   {showNewWindow ? "Close New Window" : "Open New Window"}
+                </button>
+
+                <button
+                  onClick={() => {
+                    if (showNewWindow2) {
+                      newWindowRef2.current.close();
+                    }
+                   { textRef && textRef.current &&  setNewPosition(textRef.current.offsetTop);}
+                    setShowNewWindow2(!showNewWindow2);
+                  }}
+                >
+                  {showNewWindow2 ? "Close New Window2" : "Open New Window2"}
                 </button>
               </div>
             )}
