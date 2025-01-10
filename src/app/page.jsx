@@ -802,8 +802,8 @@ export default function Home() {
             style={{
               minWidth: 348,
               maxWidth: 348,
-              maxHeight: 725,
-              minHeight: 725,
+              maxHeight:newdatabase? 725: 748,
+              minHeight: newdatabase? 725: 748,
               overflow: "scroll",
             }}
           >
