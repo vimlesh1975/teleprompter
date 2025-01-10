@@ -104,7 +104,8 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
           <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID}</span>
         </div>
         <div>
-          Method 1:  <button
+          Method 1:
+          <button
             onClick={() => {
               endpoint({
                 action: 'endpoint',
@@ -118,7 +119,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
             }
             }
           >
-          Screen Capture Method
+            Screen Capture Method
           </button>
           <button
             onClick={() => {
@@ -131,10 +132,11 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
           >
             Toggle Flip
           </button>
-    
+
         </div>
         <div>
-          Method 2: <button
+          Method 2:
+          <button
             onClick={() => {
               endpoint({
                 action: 'endpoint',
@@ -191,7 +193,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
 
             }
           >
-           Normal Method
+            Normal Method
           </button>
 
           <button
@@ -207,45 +209,59 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
             Toggle Flip
           </button>
         </div>
-
-        <button onClick={()=>{
-            endpoint({
-              action: 'endpoint',
-              command: `play 2-97 route://1`
-            });
-            endpoint({
-              action: 'endpoint',
-              command: `mixer 2-97 fill 0 0 1 1`
-            });
-          }}>Play 2nd channel </button>
-          <button onClick={()=>{
-             endpoint({
-              action: 'endpoint',
-              command: `play 2-97 route://1`
-            });
-            endpoint({
-              action: 'endpoint',
-              command: `mixer 2-97 fill 1 0 -1 1`
-            });
-          }}>Play 2nd channel flip mode</button>
-
-        <button
-          onClick={() => {
-            endpoint({
-              action: 'endpoint',
-              command: `stop 1-97`,
-            });
-            endpoint({
-              action: 'endpoint',
-              command: `mixer 1-97 clear`,
-            });
-            setShowReactComponent(false);
-          }
-          }
-        >
-          Stop Caspar Output
-        </button>
-        {/* {fliped.toString()} */}
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div>
+            <button
+              onClick={() => {
+                endpoint({
+                  action: 'endpoint',
+                  command: `stop 1-97`,
+                });
+                endpoint({
+                  action: 'endpoint',
+                  command: `mixer 1-97 clear`,
+                });
+                setShowReactComponent(false);
+              }
+              }
+            >
+              Stop Caspar Output
+            </button>
+          </div>
+          <div >
+            <button onClick={() => {
+              endpoint({
+                action: 'endpoint',
+                command: `play 2-97 route://1`
+              });
+              endpoint({
+                action: 'endpoint',
+                command: `mixer 2-97 fill 0 0 1 1`
+              });
+            }}>Play 2nd channel </button>
+            <button onClick={() => {
+              endpoint({
+                action: 'endpoint',
+                command: `play 2-97 route://1`
+              });
+              endpoint({
+                action: 'endpoint',
+                command: `mixer 2-97 fill 1 0 -1 1`
+              });
+            }}>Play 2nd channel flip mode</button>
+            <button onClick={()=>{
+              endpoint({
+                action: 'endpoint',
+                command: `stop 2-97`
+              });
+              endpoint({
+                action: 'endpoint',
+                command: `mixer 2-97 clear`
+              });
+            }}>Stop 2nd Channel</button>
+          </div>
+         
+        </div>
       </div>
 
     </div>
