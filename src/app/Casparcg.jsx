@@ -78,6 +78,17 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
     }
   };
 
+  const playOnSecondChannelinFlippedMode = () => {
+    endpoint({
+      action: 'endpoint',
+      command: `play 2-97 route://1`
+    });
+    endpoint({
+      action: 'endpoint',
+      command: `mixer 2-97 fill 1 0 -1 1`
+    });
+  }
+
   return (
     <div>
       <div>
@@ -115,6 +126,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
                 action: 'endpoint',
                 command: fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
               });
+              playOnSecondChannelinFlippedMode();
               setShowReactComponent(false);
             }
             }
@@ -146,6 +158,8 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
                 action: 'endpoint',
                 command: !fliped ? 'mixer 1-97 fill -0.01 -0.02 2.45 2.35' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.35',
               });
+
+              playOnSecondChannelinFlippedMode();
               setTimeout(() => {
                 setShowReactComponent(true);
                 endpoint({
@@ -210,7 +224,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
           </button>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>
+          <div>
             <button
               onClick={() => {
                 endpoint({
@@ -240,16 +254,9 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
               });
             }}>Play 2nd channel </button>
             <button onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: `play 2-97 route://1`
-              });
-              endpoint({
-                action: 'endpoint',
-                command: `mixer 2-97 fill 1 0 -1 1`
-              });
+              playOnSecondChannelinFlippedMode();
             }}>Play 2nd channel flip mode</button>
-            <button onClick={()=>{
+            <button onClick={() => {
               endpoint({
                 action: 'endpoint',
                 command: `stop 2-97`
@@ -260,7 +267,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
               });
             }}>Stop 2nd Channel</button>
           </div>
-         
+
         </div>
       </div>
 
