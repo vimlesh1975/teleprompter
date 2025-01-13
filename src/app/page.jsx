@@ -1111,11 +1111,11 @@ export default function Home() {
             style={{
               textAlign: "center",
               minWidth: scrollWidth,
-              minHeight: 243,
-              maxHeight: 243,
+              minHeight: 305,
+              maxHeight: 305,
               overflow: "scroll",
               position: "absolute",
-              top: 535,
+              top: 475,
             }}
           >
             <div>
