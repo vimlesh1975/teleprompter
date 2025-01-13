@@ -19,11 +19,12 @@ const SrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, cros
     const scrollingTextStyle = {
         position: 'absolute',
         top: parseFloat(newPosition),
-        width: '100%',
+        minWidth: 702,
+        maxWidth: 702,
         textAlign: 'left',
         // fontWeight: 'bolder',
         padding: '0 40px',
-        boxSizing: 'border-box',
+        // boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
         // lineHeight: `${fontSize * 1.3}px` // Adjust line height as needed
