@@ -676,13 +676,15 @@ export default function Home() {
   }, [startPosition]);
 
   useEffect(() => {
+    const aa= JSON.stringify(
+      replaceCRLFInArray(allContent)
+    )
+      .replaceAll('"', '\\"')
+      .replaceAll(")", "closesmallbracket");
+      const bb = aa.replace(/ /g, 'space1');
     endpoint({
       action: "endpoint",
-      command: `call 1-97 setAllContent1(${JSON.stringify(
-        replaceCRLFInArray(allContent)
-      )
-        .replaceAll('"', '\\"')
-        .replaceAll(")", "closesmallbracket")})`,
+      command: `call 1-97 setAllContent1(${bb})`,
     });
   }, [allContent]);
 
