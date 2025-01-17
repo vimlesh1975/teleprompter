@@ -85,7 +85,7 @@ export default function Home() {
     fetch('/api/currentStory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [] }),
+      body: JSON.stringify({ curstory, curbulletin, ScriptID:sendUsedStory?ScriptID:'xyz', usedStory: sendUsedStory ? usedStory : [] }),
     })
       .then(response => response.json())
       .then(data => {
