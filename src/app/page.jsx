@@ -639,12 +639,11 @@ export default function Home() {
 
 
   useEffect(() => {
-    // First, unconditionally add the currentStoryNumber to the array
+    if (slugs[currentStoryNumber - 1]?.DropStory){
+      return;
+    }
     const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
-
-    // Ensure uniqueness by filtering out duplicate values
     const uniqueStories = [...new Set(updatedStories.filter((item) => item !== null))];
-    // Update state with the unique story numbers
     setUsedStory(uniqueStories);
     return () => {
       setUsedStory([]);
@@ -1286,9 +1285,9 @@ export default function Home() {
 
               </div>
             </div>
-            {/* {usedStory.map((val, i) => {
+          {/* {usedStory.map((val, i) => {
               return <div key={i}>{val}</div>
-            })} */}
+            })}  */}
 
           </div>
 
