@@ -57,7 +57,7 @@ export default function Home() {
   const [stopOnNext, setStopOnNext] = useState(false);
   const [latestDate, setLatestDate] = useState(null);
   const [allowUnApproved, setAllowUnApproved] = useState(true);
-  const [DB_NAME, setDB_NAME] = useState('c1news');
+  const [DB_NAME, setDB_NAME] = useState('nrcsnew');
   const [DB_HOST, setDB_HOST] = useState('localhost');
   const [CASPAR_HOST, setCASPAR_HOST] = useState('127.0.0.1');
   const [showSettings, setShowSettings] = useState(false);
@@ -69,7 +69,16 @@ export default function Home() {
   const textRef = useRef(null);
 
   const [serverAlive, setServerAlive] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('2024-12-05');
+  // const [selectedDate, setSelectedDate] = useState('2024-12-05');
+
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  });
+  
 
   const [usedStory, setUsedStory] = useState([]);
 
