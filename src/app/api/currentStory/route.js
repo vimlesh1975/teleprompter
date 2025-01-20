@@ -24,7 +24,7 @@ socket.on('connect_error', (err) => {
 export async function POST(req) {
     const payload = await req.json();
     const { curstory, curbulletin, ScriptID, usedStory } = payload;
-    const data = { curstory, curbulletin, ScriptID, usedStory }; // Your payload
+    // const data = { curstory, curbulletin, ScriptID, usedStory }; // Your payload
   
     var emittedData;
     if (usedStory.length===0){
