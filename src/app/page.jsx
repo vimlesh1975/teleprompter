@@ -461,6 +461,9 @@ export default function Home() {
 
   // Handle double-click event
   const handleDoubleClick = (i) => {
+    if (i===0) {
+      setUsedStory(val => [...val, slugs[0]?.ScriptID]);
+    }
     console.log('handleDoubleClick called', i)
 
     sendtoCasparafterDoubleClick(i)
@@ -654,9 +657,6 @@ export default function Home() {
     const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
     const uniqueStories = [...new Set(updatedStories.filter((item) => item !== null))];
     setUsedStory(uniqueStories);
-    return () => {
-      setUsedStory([]);
-    }
   }, [currentStoryNumber]);
 
   function replaceCRLFInArray(inputArray) {
