@@ -431,11 +431,12 @@ export default function Home() {
         if (!slug?.DropStory && (slug?.Approval || allowUnApproved)) {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoPresent(slug) ? " - Visual" : " - No Visual"
             }`;
-          data1[i * 3 + 1] = `${slug.Script}`;
+          // data1[i * 3 + 1] = `${slug.Script}`;
+          data1[i * 3 + 1] =`${slug.Script?.split('$$$$')[0]}`;
           data1[i * 3 + 2] = `--------------`;
         } else {
-          data1[i * 3] = `${startNumber + i + 1} ${slug?.DropStory ? "Story Dropped" : "Story UnApproved"
-            }`;
+          data1[i * 3] = `${startNumber + i + 1} ${slug?.DropStory ? "Story Dropped" : "Story UnApproved" }`;
+           
           data1[i * 3 + 1] = ` `;
           data1[i * 3 + 2] = ``;
         }
