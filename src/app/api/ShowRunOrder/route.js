@@ -23,7 +23,7 @@ export async function GET(req) {
     graphicsid as MediaInsert,
     dropstory AS DropStory
     FROM script 
-    WHERE bulletinname = ? AND bulletindate = ? 
+    WHERE deleted = 0 AND bulletinname = ? AND bulletindate = ? 
     ORDER BY RunOrder;`: `CALL show_runorder(?)`
 
 
