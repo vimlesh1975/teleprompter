@@ -14,7 +14,7 @@ const scrollContainerStyle = {
 };
 
 //ff
-const SrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, crossedLines , storyLines, scrollWidth, slugs, newsReaderText, showClock , startPosition   }) => {
+const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, crossedLines , storyLines, scrollWidth, slugs, newsReaderText, showClock , startPosition   }) => {
 
     const scrollingTextStyle = {
         position: 'absolute',
@@ -65,4 +65,4 @@ const SrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, cros
     )
 }
 
-export default SrollView
+export default ScrollView

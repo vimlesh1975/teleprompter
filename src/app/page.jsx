@@ -11,7 +11,7 @@ import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
 // import GraphicsAndVideo from './components/GraphicsAndVideo'
 import TTS from './components/TTS.jsx'
-import SrollView from './components/SrollView';
+import ScrollView from './components/ScrollView';
 import { changeStoryLines, changeCrossedLines, changenewdatabase } from './store/store'; // Adjust the path as needed
 
 // import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -1015,7 +1015,7 @@ export default function Home() {
             {(showReactComponent) &&
               <div>
                 <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, maxHeight: scrollHeight, minHeight: scrollHeight, border: '1px solid black' }}>
-                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                  <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
                 </div>
               </div>
             }
@@ -1071,7 +1071,7 @@ export default function Home() {
                   slugs={slugs}
                   newsReaderText={newsReaderText}
                 /> */}
-                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                  <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
 
@@ -1103,7 +1103,7 @@ export default function Home() {
                   slugs={slugs}
                   newsReaderText={newsReaderText}
                 /> */}
-                  <SrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                  <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
 
               </NewWindow>
             )}
