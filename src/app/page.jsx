@@ -590,38 +590,10 @@ export default function Home() {
     socket.on("jog-dir1", handleJogdir);
     socket.on("shuttle1", handleShuttle);
 
-    socket.on("setCurrentStoryNumber2", (data) => {
-      setCurrentStoryNumber(data);
-    });
-
-    socket.on("crossedLines2", (data) => {
-      if (showReactComponent) {
-        dispatch(changeCrossedLines(data));
-      }
-    });
-
-    socket.on("storyLines2", (data) => {
-      if (showReactComponent) {
-        dispatch(changeStoryLines(data));
-      }
-    });
-
-    socket.on("newPosition2", (data) => {
-      if (showReactComponent) {
-        setNewPosition(data);
-      }
-    });
-
-
-
     return () => {
       socket.off("buttondown1", handleButtonDown);
       socket.off("jog-dir1", handleJogdir);
       socket.off("shuttle1", handleShuttle);
-      socket.off("setCurrentStoryNumber2");
-      socket.off("crossedLines2");
-      socket.off("storyLines2");
-      socket.off("newPosition2");
       // socket.disconnect();
     };
   }, [

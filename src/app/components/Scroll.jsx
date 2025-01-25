@@ -58,30 +58,6 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
 
 
-    // const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory) => {
-    //     // console.log('log from scroll ', curstory, curbulletin, ScriptID);
-    //     if (curbulletin === null) return;
-    //     if (!ScriptID) return;
-
-    //     fetch('/api/currentStory', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory }),
-    //     })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             // console.log('Success:', data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //         });
-    // }, []);
-
-    // useEffect(() => {
-    //     updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber-1]?.ScriptID, usedStory);
-    // }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory]);
-
-
     useEffect(() => {
         socket.emit('setCurrentStoryNumber', currentStoryNumber);
         return () => {
@@ -214,6 +190,9 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         // console.log(result.length, result);
         // setStoryLines(result);
         dispatch(changeStoryLines(result));
+
+        socket.emit('storyLines', result);
+
     }, [allContent, fontSize]);
 
 

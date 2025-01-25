@@ -161,7 +161,7 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
-                setShowReactComponent(true);
+                // setShowReactComponent(true);
                 endpoint({
                   action: 'endpoint',
                   command: `call 1-97 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,

@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Count from './Count';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
+import io from 'socket.io-client';
+
+
+const socket = io();
+socket.on('connect', () => {
+    console.log('SOCKET CONNECTED! from Scrollviewforcasparcg page', socket.id);
+});
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
@@ -14,7 +21,37 @@ const scrollContainerStyle = {
 };
 
 //ff
-const ScrollViewforcasparcg = ({ allContent, newPosition, fontSize, currentStoryNumber, crossedLines , storyLines, scrollWidth, slugs, newsReaderText, showClock , startPosition   }) => {
+const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
+
+    const [crossedLines, setCrossedLines] = useState(0);
+    const [storyLines, setStoryLines] = useState(0);
+    const [newPosition, setNewPosition] = useState(150);
+    const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
+
+    useEffect(() => {
+        socket.on("crossedLines2", (data) => {
+            setCrossedLines(data);
+        });
+        socket.on("storyLines2", (data) => {
+            setStoryLines(data);
+            console.log(data);
+        });
+        socket.on("newPosition2", (data) => {
+            setNewPosition(data);
+        });
+        socket.on("setCurrentStoryNumber2", (data) => {
+            setCurrentStoryNumber(data);
+            console.log(data);
+        })
+        return () => {
+            socket.off("crossedLines2");
+            socket.off("storyLines2");
+            socket.off("newPosition2");
+            socket.off("setCurrentStoryNumber2");
+        }
+
+    }, [])
+
 
     const scrollingTextStyle = {
         position: 'absolute',
@@ -57,8 +94,8 @@ const ScrollViewforcasparcg = ({ allContent, newPosition, fontSize, currentStory
                 ))}
             </div>
             <div style={{ position: 'absolute', top: parseInt(startPosition) - 20 }}>
-                        <Triangles />
-                    </div>
+                <Triangles />
+            </div>
         </div>
     </div>
 
