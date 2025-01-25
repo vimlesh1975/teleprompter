@@ -24,7 +24,7 @@ const scrollContainerStyle = {
 const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
 
     const [crossedLines, setCrossedLines] = useState(0);
-    const [storyLines, setStoryLines] = useState(0);
+    const [storyLines, setStoryLines] = useState([]);
     const [newPosition, setNewPosition] = useState(150);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
 
@@ -34,14 +34,12 @@ const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsR
         });
         socket.on("storyLines2", (data) => {
             setStoryLines(data);
-            console.log(data);
         });
         socket.on("newPosition2", (data) => {
             setNewPosition(data);
         });
         socket.on("setCurrentStoryNumber2", (data) => {
             setCurrentStoryNumber(data);
-            console.log(data);
         })
         return () => {
             socket.off("crossedLines2");

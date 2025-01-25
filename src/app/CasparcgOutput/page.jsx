@@ -21,6 +21,9 @@ const Page = () => {
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
   const [fontSize, setFontSize] = useState(39);
 
+  const [storyLines, setStoryLines] = useState([]);
+
+
   const textRef = useRef(null);
 
   function replaceCRLFInArray(inputArray) {
@@ -63,6 +66,7 @@ const Page = () => {
     window.setNewPosition = setNewPosition;
     window.setCurrentStoryNumber = setCurrentStoryNumber;
     window.setLoggedPositions1 = setLoggedPositions1;
+    window.setStoryLines = setStoryLines;
 
     return () => {
       delete window.setStartPosition;
@@ -78,14 +82,14 @@ const Page = () => {
       delete window.setNewPosition;
       delete window.setCurrentStoryNumber;
       delete window.setLoggedPositions1;
+      delete window.setStoryLines;
 
     };
   }, []);
 
   return (
     <div >
-      <ScrollViewforcasparcg allContent={allContent}  fontSize={fontSize} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
-      {/* <Scroll scrollWidth={scrollWidth} scrollHeight={scrollHeight} fontSize={fontSize} setCurrentSlug={setCurrentSlug} newPosition={newPosition} setNewPosition={setNewPosition} doubleClickedPosition={doubleClickedPosition} textRef={textRef} startPosition={startPosition} allContent={allContent} showClock={showClock} loggedPositions={loggedPositions} setLoggedPositions={setLoggedPositions} currentStoryNumber={currentStoryNumber} setCurrentStoryNumber={setCurrentStoryNumber} speed={speed} selectedRunOrderTitle={selectedRunOrderTitle} slugs={slugs} newsReaderText={newsReaderText} /> */}
+      <ScrollViewforcasparcg allContent={allContent} fontSize={fontSize} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
     </div>
   );
 };

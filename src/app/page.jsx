@@ -697,38 +697,25 @@ export default function Home() {
     });
   }, [newsReaderText]);
 
-  const sendtoCasparafterDoubleClick = (doubleClickedPosition) => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
-    });
+  // const sendtoCasparafterDoubleClick = (doubleClickedPosition) => {
+  //   endpoint({
+  //     action: "endpoint",
+  //     command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
+  //   });
 
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
-    });
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setLoggedPositions1()`,
-    });
-  }
+  //   endpoint({
+  //     action: "endpoint",
+  //     command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
+  //   });
+  //   endpoint({
+  //     action: "endpoint",
+  //     command: `call 1-97 setLoggedPositions1()`,
+  //   });
+  // }
 
-  useEffect(() => {
-    // endpoint({
-    //   action: "endpoint",
-    //   command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
-    // });
-
-    // endpoint({
-    //   action: "endpoint",
-    //   command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
-    // });
-    // endpoint({
-    //   action: "endpoint",
-    //   command: `call 1-97 setLoggedPositions1()`,
-    // });
-    sendtoCasparafterDoubleClick(doubleClickedPosition);
-  }, [doubleClickedPosition]);
+  // useEffect(() => {
+  //   sendtoCasparafterDoubleClick(doubleClickedPosition);
+  // }, [doubleClickedPosition]);
 
   useEffect(() => {
     endpoint({
@@ -869,6 +856,7 @@ export default function Home() {
               newPosition={newPosition}
               currentStoryNumber={currentStoryNumber}
               selectedRunOrderTitle={selectedRunOrderTitle}
+              storyLines={storyLines}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
