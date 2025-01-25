@@ -15,14 +15,10 @@ const Page = () => {
   const [allContent, setAllContent] = useState([]);
   const [newsReaderText, setNewsReaderText] = useState('Continue...');
   const [showClock, setShowClock] = useState(true);
-  const [newPosition, setNewPosition] = useState(startPosition);
   const [loggedPositions, setLoggedPositions] = useState(new Set());
   const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
   const [fontSize, setFontSize] = useState(39);
-
-  const [storyLines, setStoryLines] = useState([]);
-
 
   const textRef = useRef(null);
 
@@ -63,10 +59,8 @@ const Page = () => {
     window.setSlugs = setSlugs;
     window.setCurrentSlug = setCurrentSlug;
     window.setSelectedRunOrderTitle = setSelectedRunOrderTitle;
-    window.setNewPosition = setNewPosition;
     window.setCurrentStoryNumber = setCurrentStoryNumber;
     window.setLoggedPositions1 = setLoggedPositions1;
-    window.setStoryLines = setStoryLines;
 
     return () => {
       delete window.setStartPosition;
@@ -79,10 +73,8 @@ const Page = () => {
       delete window.setSlugs;
       delete window.setCurrentSlug;
       delete window.setSelectedRunOrderTitle;
-      delete window.setNewPosition;
       delete window.setCurrentStoryNumber;
       delete window.setLoggedPositions1;
-      delete window.setStoryLines;
 
     };
   }, []);

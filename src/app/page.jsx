@@ -40,7 +40,6 @@ export default function Home() {
   const [scriptID, setScriptID] = useState("");
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
-  // const [content, setContent] = useState("");
   const [allContent, setAllContent] = useState([]);
   const [newsReaderText, setNewsReaderText] = useState("Continue...");
   const [showClock, setShowClock] = useState(true);
@@ -69,7 +68,6 @@ export default function Home() {
   const textRef = useRef(null);
 
   const [serverAlive, setServerAlive] = useState(false);
-  // const [selectedDate, setSelectedDate] = useState('2024-12-05');
 
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
@@ -296,7 +294,6 @@ export default function Home() {
         newLatestDateTotal > latestDate ||
         data.data.length !== slugs.length
       ) {
-        // console.log( `'There is Update at ${newLatestDateTotal.toLocaleString()}'`   );
         setLatestDate(newLatestDateTotal);
         setSlugs(data.data);
       } else {
@@ -370,8 +367,6 @@ export default function Home() {
     };
   }, [speed, tempSpeed]);
 
-  // Fetch run order titles on component mount
-
   const fetchNewsId = async () => {
     try {
       const res = await fetch("/api/newsid");
@@ -385,7 +380,6 @@ export default function Home() {
     fetchNewsId()
   }, []);
 
-  // Fetch slugs based on selected run order title
   useEffect(() => {
     async function fetchData() {
       try {
@@ -423,10 +417,6 @@ export default function Home() {
     const data1 = new Array(slicedSlugs.length * 3);
     try {
       slicedSlugs.forEach((slug, i) => {
-
-        // const aa = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
-        // const allValid = aa.some(item => item !== null && item !== "");
-        // const isVideoPresent =newdatabase? allValid:slug?.Media;
 
         if (!slug?.DropStory && (slug?.Approval || allowUnApproved)) {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoPresent(slug) ? " - Visual" : " - No Visual"
@@ -467,7 +457,6 @@ export default function Home() {
     }
     console.log('handleDoubleClick called', i)
 
-    sendtoCasparafterDoubleClick(i)
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
@@ -857,6 +846,7 @@ export default function Home() {
               currentStoryNumber={currentStoryNumber}
               selectedRunOrderTitle={selectedRunOrderTitle}
               storyLines={storyLines}
+              crossedLines={crossedLines}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>

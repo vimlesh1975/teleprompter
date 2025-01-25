@@ -25,14 +25,18 @@ const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsR
 
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
-    const [newPosition, setNewPosition] = useState(150);
+    const [newPosition, setNewPosition] = useState(startPosition);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
+
+    window.setNewPosition = setNewPosition;
+    window.setStoryLines = setStoryLines;
 
     useEffect(() => {
         socket.on("crossedLines2", (data) => {
             setCrossedLines(data);
         });
         socket.on("storyLines2", (data) => {
+            console.log(data)
             setStoryLines(data);
         });
         socket.on("newPosition2", (data) => {
@@ -66,8 +70,8 @@ const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsR
 
     return (<div>
 
-        <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder', width:scrollWidth }}>
-        <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
+        <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder', width: scrollWidth }}>
+            <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                     <div>{newsReaderText}</div>
