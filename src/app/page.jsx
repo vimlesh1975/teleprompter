@@ -246,7 +246,7 @@ export default function Home() {
   }, [fontSize, startPosition]);
 
   const endpoint = async (str) => {
-    if (showReactComponent) {
+  
       const requestOptions = {
         method: "POST",
         headers: {
@@ -255,7 +255,7 @@ export default function Home() {
         body: JSON.stringify(str), // Convert the data to JSON format
       };
       const aa = await fetch("/api/casparcg", requestOptions);
-    }
+   
   };
 
   const handleCloseNewWindow = () => {

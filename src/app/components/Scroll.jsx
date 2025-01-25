@@ -44,13 +44,10 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         minWidth: 702,
         maxWidth: 702,
         textAlign: 'left',
-        // fontWeight: 'bolder',
         padding: '0 40px',
-        // boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-        // lineHeight: `${fontSize * 1.3}px` // Adjust line height as needed
-        lineHeight: `${fontSize * 1.5}px` // Adjust line height as needed
+        lineHeight: `${fontSize * 1.5}px` 
     };
 
     const containerRef = useRef(null);
