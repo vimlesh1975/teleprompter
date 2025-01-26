@@ -27,7 +27,7 @@ function replaceCRLFInArray(inputArray) {
   });
 }
 
-export default function Home({ slugs, allContent, setShowReactComponent, startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle }) {
+export default function Home({ slugs, allContent, setShowReactComponent, startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle, storyLines, crossedLines }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -161,14 +161,13 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
-                setShowReactComponent(true);
                 endpoint({
                   action: 'endpoint',
                   command: `call 1-97 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
                 });
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-97 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"')})`,
+                  command: `call 1-97 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"').replaceAll(")", "closesmallbracket").replace(/ /g, 'space1')})`,
                 });
                 endpoint({
                   action: 'endpoint',
@@ -178,31 +177,13 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
                   action: 'endpoint',
                   command: `call 1-97 setFontSize(${fontSize})`,
                 });
-                endpoint({
-                  action: 'endpoint',
-                  command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
-                });
 
-                endpoint({
-                  action: 'endpoint',
-                  command: `call 1-97 setLoggedPositions1()`,
-                });
+                socket.emit('newPosition', newPosition);
+                socket.emit('setCurrentStoryNumber', currentStoryNumber);
+                socket.emit('storyLines', storyLines);
+                socket.emit('crossedLines', crossedLines);
 
-                endpoint({
-                  action: 'endpoint',
-                  command: `call 1-97 setNewPosition(${newPosition})`,
-                });
-                endpoint({
-                  action: 'endpoint',
-                  command: `call 1-97 setCurrentStoryNumber(${currentStoryNumber})`,
-                });
-
-                endpoint({
-                  action: "endpoint",
-                  command: `call 1-97 setSelectedRunOrderTitle('${selectedRunOrderTitle}')`,
-                });
-
-              }, 1000);
+              }, 3000);
             }
 
             }

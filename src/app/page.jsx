@@ -40,7 +40,6 @@ export default function Home() {
   const [scriptID, setScriptID] = useState("");
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
-  // const [content, setContent] = useState("");
   const [allContent, setAllContent] = useState([]);
   const [newsReaderText, setNewsReaderText] = useState("Continue...");
   const [showClock, setShowClock] = useState(true);
@@ -69,7 +68,6 @@ export default function Home() {
   const textRef = useRef(null);
 
   const [serverAlive, setServerAlive] = useState(false);
-  // const [selectedDate, setSelectedDate] = useState('2024-12-05');
 
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
@@ -78,7 +76,7 @@ export default function Home() {
     const dd = String(today.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   });
-  
+
 
   const [usedStory, setUsedStory] = useState([]);
 
@@ -246,7 +244,7 @@ export default function Home() {
   }, [fontSize, startPosition]);
 
   const endpoint = async (str) => {
-    if (showReactComponent) {
+  
       const requestOptions = {
         method: "POST",
         headers: {
@@ -255,7 +253,7 @@ export default function Home() {
         body: JSON.stringify(str), // Convert the data to JSON format
       };
       const aa = await fetch("/api/casparcg", requestOptions);
-    }
+   
   };
 
   const handleCloseNewWindow = () => {
@@ -296,7 +294,6 @@ export default function Home() {
         newLatestDateTotal > latestDate ||
         data.data.length !== slugs.length
       ) {
-        // console.log( `'There is Update at ${newLatestDateTotal.toLocaleString()}'`   );
         setLatestDate(newLatestDateTotal);
         setSlugs(data.data);
       } else {
@@ -370,8 +367,6 @@ export default function Home() {
     };
   }, [speed, tempSpeed]);
 
-  // Fetch run order titles on component mount
-
   const fetchNewsId = async () => {
     try {
       const res = await fetch("/api/newsid");
@@ -385,7 +380,6 @@ export default function Home() {
     fetchNewsId()
   }, []);
 
-  // Fetch slugs based on selected run order title
   useEffect(() => {
     async function fetchData() {
       try {
@@ -424,19 +418,15 @@ export default function Home() {
     try {
       slicedSlugs.forEach((slug, i) => {
 
-        // const aa = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
-        // const allValid = aa.some(item => item !== null && item !== "");
-        // const isVideoPresent =newdatabase? allValid:slug?.Media;
-
         if (!slug?.DropStory && (slug?.Approval || allowUnApproved)) {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoPresent(slug) ? " - Visual" : " - No Visual"
             }`;
           // data1[i * 3 + 1] = `${slug.Script}`;
-          data1[i * 3 + 1] =`${slug.Script?.split('$$$$')[0]}`;
+          data1[i * 3 + 1] = `${slug.Script?.split('$$$$')[0]}`;
           data1[i * 3 + 2] = `--------------`;
         } else {
-          data1[i * 3] = `${startNumber + i + 1} ${slug?.DropStory ? "Story Dropped" : "Story UnApproved" }`;
-           
+          data1[i * 3] = `${startNumber + i + 1} ${slug?.DropStory ? "Story Dropped" : "Story UnApproved"}`;
+
           data1[i * 3 + 1] = ` `;
           data1[i * 3 + 2] = ``;
         }
@@ -462,12 +452,11 @@ export default function Home() {
 
   // Handle double-click event
   const handleDoubleClick = (i) => {
-    if (i===0) {
+    if (i === 0) {
       setUsedStory(val => [...val, slugs[0]?.ScriptID]);
     }
     console.log('handleDoubleClick called', i)
 
-    sendtoCasparafterDoubleClick(i)
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
@@ -590,38 +579,10 @@ export default function Home() {
     socket.on("jog-dir1", handleJogdir);
     socket.on("shuttle1", handleShuttle);
 
-    socket.on("setCurrentStoryNumber2", (data) => {
-      setCurrentStoryNumber(data);
-    });
-
-    socket.on("crossedLines2", (data) => {
-      if (showReactComponent) {
-        dispatch(changeCrossedLines(data));
-      }
-    });
-
-    socket.on("storyLines2", (data) => {
-      if (showReactComponent) {
-        dispatch(changeStoryLines(data));
-      }
-    });
-
-    socket.on("newPosition2", (data) => {
-      if (showReactComponent) {
-        setNewPosition(data);
-      }
-    });
-
-
-
     return () => {
       socket.off("buttondown1", handleButtonDown);
       socket.off("jog-dir1", handleJogdir);
       socket.off("shuttle1", handleShuttle);
-      socket.off("setCurrentStoryNumber2");
-      socket.off("crossedLines2");
-      socket.off("storyLines2");
-      socket.off("newPosition2");
       // socket.disconnect();
     };
   }, [
@@ -652,7 +613,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (slugs[currentStoryNumber - 1]?.DropStory){
+    if (slugs[currentStoryNumber - 1]?.DropStory) {
       return;
     }
     const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
@@ -685,12 +646,12 @@ export default function Home() {
   }, [startPosition]);
 
   useEffect(() => {
-    const aa= JSON.stringify(
+    const aa = JSON.stringify(
       replaceCRLFInArray(allContent)
     )
       .replaceAll('"', '\\"')
       .replaceAll(")", "closesmallbracket");
-      const bb = aa.replace(/ /g, 'space1');
+    const bb = aa.replace(/ /g, 'space1');
     endpoint({
       action: "endpoint",
       command: `call 1-97 setAllContent1(${bb})`,
@@ -725,38 +686,25 @@ export default function Home() {
     });
   }, [newsReaderText]);
 
-  const sendtoCasparafterDoubleClick = (doubleClickedPosition) => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
-    });
+  // const sendtoCasparafterDoubleClick = (doubleClickedPosition) => {
+  //   endpoint({
+  //     action: "endpoint",
+  //     command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
+  //   });
 
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
-    });
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setLoggedPositions1()`,
-    });
-  }
+  //   endpoint({
+  //     action: "endpoint",
+  //     command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
+  //   });
+  //   endpoint({
+  //     action: "endpoint",
+  //     command: `call 1-97 setLoggedPositions1()`,
+  //   });
+  // }
 
-  useEffect(() => {
-    // endpoint({
-    //   action: "endpoint",
-    //   command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
-    // });
-
-    // endpoint({
-    //   action: "endpoint",
-    //   command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
-    // });
-    // endpoint({
-    //   action: "endpoint",
-    //   command: `call 1-97 setLoggedPositions1()`,
-    // });
-    sendtoCasparafterDoubleClick(doubleClickedPosition);
-  }, [doubleClickedPosition]);
+  // useEffect(() => {
+  //   sendtoCasparafterDoubleClick(doubleClickedPosition);
+  // }, [doubleClickedPosition]);
 
   useEffect(() => {
     endpoint({
@@ -897,6 +845,8 @@ export default function Home() {
               newPosition={newPosition}
               currentStoryNumber={currentStoryNumber}
               selectedRunOrderTitle={selectedRunOrderTitle}
+              storyLines={storyLines}
+              crossedLines={crossedLines}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
@@ -1012,37 +962,28 @@ export default function Home() {
         {/* Third column */}
         <div>
           <div>
-            {(showReactComponent) &&
-              <div>
-                <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, maxHeight: scrollHeight, minHeight: scrollHeight, border: '1px solid black' }}>
-                  <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
-                </div>
-              </div>
-            }
-            {!showReactComponent &&(
-              <Scroll
-                scrollWidth={scrollWidth}
-                scrollHeight={scrollHeight}
-                fontSize={fontSize}
-                setCurrentSlug={setCurrentSlug}
-                newPosition={newPosition}
-                setNewPosition={setNewPosition}
-                doubleClickedPosition={doubleClickedPosition}
-                textRef={textRef}
-                startPosition={startPosition}
-                allContent={allContent}
-                showClock={showClock}
-                loggedPositions={loggedPositions}
-                setLoggedPositions={setLoggedPositions}
-                currentStoryNumber={currentStoryNumber}
-                setCurrentStoryNumber={setCurrentStoryNumber}
-                speed={speed}
-                selectedRunOrderTitle={selectedRunOrderTitle}
-                slugs={slugs}
-                newsReaderText={newsReaderText}
-              />
 
-            )}
+            <Scroll
+              scrollWidth={scrollWidth}
+              scrollHeight={scrollHeight}
+              fontSize={fontSize}
+              setCurrentSlug={setCurrentSlug}
+              newPosition={newPosition}
+              setNewPosition={setNewPosition}
+              doubleClickedPosition={doubleClickedPosition}
+              textRef={textRef}
+              startPosition={startPosition}
+              allContent={allContent}
+              showClock={showClock}
+              loggedPositions={loggedPositions}
+              setLoggedPositions={setLoggedPositions}
+              currentStoryNumber={currentStoryNumber}
+              setCurrentStoryNumber={setCurrentStoryNumber}
+              speed={speed}
+              selectedRunOrderTitle={selectedRunOrderTitle}
+              slugs={slugs}
+              newsReaderText={newsReaderText}
+            />
             {!showReactComponent && showNewWindow && (
               <NewWindow
                 onClose={handleCloseNewWindow}
@@ -1050,28 +991,8 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                {/* <Scroll
-                  scrollWidth={scrollWidth}
-                  scrollHeight={scrollHeight}
-                  fontSize={fontSize}
-                  setCurrentSlug={setCurrentSlug}
-                  newPosition={newPosition}
-                  setNewPosition={setNewPosition}
-                  doubleClickedPosition={doubleClickedPosition}
-                  textRef={textRef}
-                  startPosition={startPosition}
-                  allContent={allContent}
-                  showClock={showClock}
-                  loggedPositions={loggedPositions}
-                  setLoggedPositions={setLoggedPositions}
-                  currentStoryNumber={currentStoryNumber}
-                  setCurrentStoryNumber={setCurrentStoryNumber}
-                  speed={speed}
-                  selectedRunOrderTitle={selectedRunOrderTitle}
-                  slugs={slugs}
-                  newsReaderText={newsReaderText}
-                /> */}
-                  <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+
+                <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
 
@@ -1082,29 +1003,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                {/* <Scroll
-                  scrollWidth={scrollWidth}
-                  scrollHeight={scrollHeight}
-                  fontSize={fontSize}
-                  setCurrentSlug={setCurrentSlug}
-                  newPosition={newPosition}
-                  setNewPosition={setNewPosition}
-                  doubleClickedPosition={doubleClickedPosition}
-                  textRef={textRef}
-                  startPosition={startPosition}
-                  allContent={allContent}
-                  showClock={showClock}
-                  loggedPositions={loggedPositions}
-                  setLoggedPositions={setLoggedPositions}
-                  currentStoryNumber={currentStoryNumber}
-                  setCurrentStoryNumber={setCurrentStoryNumber}
-                  speed={speed}
-                  selectedRunOrderTitle={selectedRunOrderTitle}
-                  slugs={slugs}
-                  newsReaderText={newsReaderText}
-                /> */}
-                  <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
-
+                <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
@@ -1205,7 +1104,7 @@ export default function Home() {
                     if (showNewWindow) {
                       newWindowRef.current.close();
                     }
-                    { textRef && textRef.current &&  setNewPosition(textRef.current.offsetTop);}
+                    { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
                     setShowNewWindow(!showNewWindow);
                   }}
                 >
@@ -1217,7 +1116,7 @@ export default function Home() {
                     if (showNewWindow2) {
                       newWindowRef2.current.close();
                     }
-                   { textRef && textRef.current &&  setNewPosition(textRef.current.offsetTop);}
+                    { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
                     setShowNewWindow2(!showNewWindow2);
                   }}
                 >
@@ -1295,7 +1194,7 @@ export default function Home() {
 
               </div>
             </div>
-          {/* {usedStory.map((val, i) => {
+            {/* {usedStory.map((val, i) => {
               return <div key={i}>{val}</div>
             })}  */}
 
