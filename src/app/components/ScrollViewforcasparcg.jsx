@@ -64,7 +64,8 @@ const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsR
         padding: '0 40px',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-        lineHeight: `${fontSize * 1.5}px`
+          // lineHeight: `${fontSize * 1.5}px` 
+          lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
     };
 
 

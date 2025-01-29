@@ -27,8 +27,8 @@ const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, cro
         // boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-        // lineHeight: `${fontSize * 1.3}px` // Adjust line height as needed
-        lineHeight: `${fontSize * 1.5}px` // Adjust line height as needed
+          // lineHeight: `${fontSize * 1.5}px` 
+          lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
     };
 
 
