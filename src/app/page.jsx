@@ -12,7 +12,7 @@ import Timer from "./components/Timer";
 // import GraphicsAndVideo from './components/GraphicsAndVideo'
 import TTS from './components/TTS.jsx'
 import ScrollView from './components/ScrollView';
-import { changeStoryLines, changeCrossedLines, changenewdatabase } from './store/store'; // Adjust the path as needed
+import { changenewdatabase } from './store/store'; // Adjust the path as needed
 
 // import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import 'react-tabs/style/react-tabs.css';
@@ -27,6 +27,8 @@ var socket;
 
 
 export default function Home() {
+  const [useDB, setUseDB] = useState(false);
+
   const dispatch = useDispatch();
   const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
   const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
@@ -244,16 +246,16 @@ export default function Home() {
   }, [fontSize, startPosition]);
 
   const endpoint = async (str) => {
-  
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Specify the content type as JSON
-        },
-        body: JSON.stringify(str), // Convert the data to JSON format
-      };
-      const aa = await fetch("/api/casparcg", requestOptions);
-   
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Specify the content type as JSON
+      },
+      body: JSON.stringify(str), // Convert the data to JSON format
+    };
+    const aa = await fetch("/api/casparcg", requestOptions);
+
   };
 
   const handleCloseNewWindow = () => {
@@ -268,6 +270,10 @@ export default function Home() {
     if (selectedRunOrderTitle === '') {
       return;
     }
+    if (!useDB) {
+      return
+    }
+
     try {
       const res = await fetch(
         `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
@@ -726,6 +732,90 @@ export default function Home() {
 
   // }
 
+
+  const readFile = (selectedFile) => {
+    console.log(slugs)
+
+    if (!selectedFile) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      const aa= content.split('ZCZC')
+      const fixdata={
+        "ScriptID": "202502071223160",
+        "id": 636,
+        "bulletinname": "simnews1",
+        "bulletinlock": 0,
+        "bulletindate": "2025-02-06T18:30:00.000Z",
+        "bulletintype": "",
+        "rowid": "202502071223160",
+        "slno": 1,
+        "SlugName": "binoy news demo 1 ",
+        "Script": "BPF leader Kampa Borgoyary to Join UPPL\n\nKokrajhar, February 7: Former BTC Deputy Chief and senior Bodoland People\\\\\\'s Front (BPF) leader Kampa Borgoyary is set to join the United People\\\\\\'s Party Liberal (UPPL).\n\nAddressing reporters at his residence in Kokrajhar, Borgoyary announced that he would formally join UPPL at an event in Taikajora, Chirang tomorrow. He cited the lack of collective decision-making among the BPF leadership as a key reason for his decision.\n\nBorgoyary’s move marks a significant political shift in Bodoland politics, as he was a longtime associate of BPF and played a crucial role in the Bodoland Territorial Council (BTC) administration during his tenure as Deputy Chief. His entry into UPPL is expected to have political implications ahead of upcoming elections.\n\n\n\nFrom Preetam Brahma Choudhury, Kokrajhar\n\n7 February 2025",
+        "scriptmodifiedtime": "2025-02-07T06:55:51.000Z",
+        "createdtime": "2025-02-07T06:53:16.000Z",
+        "createdby": "binoy",
+        "currentuser": "rajeev",
+        "LastModifiedTime": "2025-02-07T11:46:46.000Z",
+        "lastmodifiedby": null,
+        "Lockscript": 0,
+        "lockedby": null,
+        "WordsCount": 1.31,
+        "EditCode": "0",
+        "autosavestatus": 0,
+        "OneLinerText": null,
+        "onelinermodifiedtime": null,
+        "importedscriptid": null,
+        "importedbulletinname": null,
+        "media1": null,
+        "media2": null,
+        "media3": null,
+        "media4": null,
+        "media5": null,
+        "media1duration": "00:00:00",
+        "media2duration": "00:00:00",
+        "media3duration": "00:00:00",
+        "media4duration": "00:00:00",
+        "media5duration": "00:00:00",
+        "mediamodifiedtime": null,
+        "mediamodifiedby": null,
+        "source": null,
+        "dropstory": 0,
+        "archivestatus": 0,
+        "graphicsid": null,
+        "reporter1": null,
+        "reporter2": null,
+        "location": null,
+        "repeated": 0,
+        "approved": 1,
+        "deleted": 0,
+        "voiceover": 0,
+        "RunOrder": 1,
+        "CreatedTime": "2025-02-07T06:53:16.000Z",
+        "ScriptLastModifiedTime": "2025-02-07T06:55:51.000Z",
+        "Approval": 1,
+        "MediaInsert": null,
+        "DropStory": 0
+    }
+      const bb = aa.map((item) => {
+        const [SlugName, Script] = item.split("ZXZX");
+        return {...fixdata, SlugName, Script};
+      });
+      console.log(bb)
+      // const cc=[...bb, ]
+      setSlugs(bb);
+
+    };
+    reader.readAsText(selectedFile);
+  };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    readFile(selectedFile);
+  };
+
+
+
   return (
     <div style={{ overflow: "hidden" }}>
       <div style={{ display: "flex" }}>
@@ -744,6 +834,8 @@ export default function Home() {
               </div>
             }
           </div>
+
+
           <div>
             RO
             <select
@@ -822,6 +914,28 @@ export default function Home() {
             />{" "}
             <span>Send Used Story</span>
           </label>
+
+          <div>
+            <label>
+              {" "}
+              <input
+                checked={useDB}
+                type="checkbox"
+                onChange={() => setUseDB((val) => {
+                  // setSlugs([]);
+                  return !val
+                })}
+              />{" "}
+              <span>Use DB</span>
+              {!useDB &&
+                <input
+                  type="file"
+                  accept=".txt"
+                  onChange={handleFileChange}
+                />
+              }
+            </label>
+          </div>
         </div>
 
         {/* second column */}
