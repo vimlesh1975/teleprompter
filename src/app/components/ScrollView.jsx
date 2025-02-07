@@ -14,7 +14,7 @@ const scrollContainerStyle = {
 };
 
 //ff
-const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, crossedLines , storyLines, scrollWidth, slugs, newsReaderText, showClock , startPosition   }) => {
+const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
 
     const scrollingTextStyle = {
         position: 'absolute',
@@ -27,14 +27,14 @@ const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, cro
         // boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-          // lineHeight: `${fontSize * 1.5}px` 
-          lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
+        // lineHeight: `${fontSize * 1.5}px` 
+        lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
     };
 
 
     return (<div>
 
-        <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
+        <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
             <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
@@ -57,8 +57,8 @@ const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, cro
                 ))}
             </div>
             <div style={{ position: 'absolute', top: parseInt(startPosition) - 20 }}>
-                        <Triangles />
-                    </div>
+                <Triangles />
+            </div>
         </div>
     </div>
 
