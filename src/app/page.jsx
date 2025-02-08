@@ -87,8 +87,9 @@ export default function Home() {
 
 
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory) => {
-    // console.log('log from scroll ', curstory, curbulletin, ScriptID);
-    if (curbulletin === null) return;
+    console.log('log from scroll ', curstory, curbulletin, ScriptID);
+    console.log('log from scroll ',  curbulletin);
+    if (!curbulletin) return;
     if (!ScriptID) return;
 
     fetch('/api/currentStory', {
