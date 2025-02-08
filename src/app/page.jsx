@@ -740,8 +740,8 @@ export default function Home() {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target.result;
-      const aa= content.split('ZCZC')
-      const fixdata={
+      const aa = content.split('ZCZC')
+      const fixdata = {
         "ScriptID": "202502071223160",
         "id": 636,
         "bulletinname": "simnews1",
@@ -750,8 +750,8 @@ export default function Home() {
         "bulletintype": "",
         "rowid": "202502071223160",
         "slno": 1,
-        "SlugName": "binoy news demo 1 ",
-        "Script": "BPF leader Kampa Borgoyary to Join UPPL\n\nKokrajhar, February 7: Former BTC Deputy Chief and senior Bodoland People\\\\\\'s Front (BPF) leader Kampa Borgoyary is set to join the United People\\\\\\'s Party Liberal (UPPL).\n\nAddressing reporters at his residence in Kokrajhar, Borgoyary announced that he would formally join UPPL at an event in Taikajora, Chirang tomorrow. He cited the lack of collective decision-making among the BPF leadership as a key reason for his decision.\n\nBorgoyary’s move marks a significant political shift in Bodoland politics, as he was a longtime associate of BPF and played a crucial role in the Bodoland Territorial Council (BTC) administration during his tenure as Deputy Chief. His entry into UPPL is expected to have political implications ahead of upcoming elections.\n\n\n\nFrom Preetam Brahma Choudhury, Kokrajhar\n\n7 February 2025",
+        "SlugName": "No Slug Name",
+        "Script": "No Script",
         "scriptmodifiedtime": "2025-02-07T06:55:51.000Z",
         "createdtime": "2025-02-07T06:53:16.000Z",
         "createdby": "binoy",
@@ -796,11 +796,12 @@ export default function Home() {
         "Approval": 1,
         "MediaInsert": null,
         "DropStory": 0
-    }
+      }
       const bb = aa.map((item) => {
-        const [SlugName, Script] = item.split("ZXZX");
-        return {...fixdata, SlugName, Script};
+        const [SlugName, Script] = item.split("ZXZX").map(str => str.trim().replace(/\r?\n/g, ''));
+        return { ...fixdata, SlugName, Script };
       });
+
       console.log(bb)
       // const cc=[...bb, ]
       setSlugs(bb);
