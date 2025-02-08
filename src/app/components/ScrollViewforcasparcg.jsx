@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
 
-
 const socket = io();
 socket.on('connect', () => {
     console.log('SOCKET CONNECTED! from Scrollviewforcasparcg page', socket.id);
@@ -20,9 +19,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-//ff
 const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
-
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
     const [newPosition, setNewPosition] = useState(startPosition);
@@ -36,7 +33,6 @@ const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsR
             setCrossedLines(data);
         });
         socket.on("storyLines2", (data) => {
-            console.log(data)
             setStoryLines(data);
         });
         socket.on("newPosition2", (data) => {
@@ -51,9 +47,7 @@ const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsR
             socket.off("newPosition2");
             socket.off("setCurrentStoryNumber2");
         }
-
     }, [])
-
 
     const scrollingTextStyle = {
         position: 'absolute',
