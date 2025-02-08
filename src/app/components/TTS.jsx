@@ -4,41 +4,18 @@ import { useState, useRef, useEffect } from 'react';
 import {list_voices} from './list-voices'
 
 export default function Home({content}) {
-  // const [text, setText] = useState(
-  //   `भारत आणि पोलंड यांच्यातल्या घनिष्ट राजनैतिक संबंधांना ७० वर्षे पूर्ण होत  असतांना आपली पोलंड भेट विशेष महत्वाची असेल, असं पंतप्रधान नरेंद्र मोदी यांनी म्हटलं आहे.`
-  // );
   const [language, setLanguage] = useState('mr-IN');
   const [name, setName] = useState('mr-IN-Standard-A');
   const [audioUrl, setAudioUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [autoPlay, setAutoPlay] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
-  const [languages, setLanguages] = useState(list_voices);
-  const [languagesLoading, setLanguagesLoading] = useState(false);
   const audioRef = useRef(null);
-
-  // Fetch languages on component mount
-  // useEffect(() => {
-  //   const fetchLanguages = async () => {
-  //     try {
-  //       const response = await fetch('/api/list-voices');
-  //       if (!response.ok) {
-  //         throw new Error('Failed to fetch languages.');
-  //       }
-  //       const data = await response.json();
-  //       setLanguages(data.languages);
-  //     } catch (error) {
-  //       console.error('Error fetching languages:', error);
-  //     } finally {
-  //       setLanguagesLoading(false);
-  //     }
-  //   };
-  //   fetchLanguages();
-  // }, []);
+  const languages=list_voices;
+  const languagesLoading=false;
 
   const handleSpeak = async () => {
     if (!content.trim()) {
-      // alert('Please enter some text!');
       return;
     }
     setLoading(true);
@@ -74,18 +51,7 @@ export default function Home({content}) {
 
   return (
     <div style={{ padding: '20px' }}>
-      {/* <h1>Text-to-Speech</h1> */}
-
-      {/* <textarea
-        rows="10"
-        cols="50"
-        placeholder="Enter text to speak..."
-        value={content}
-        onChange={(e) => setText(e.target.value)}
-        style={{ marginBottom: '10px' }}
-      /> */}
-
-      {/* Language Selector Section */}
+     
       <div style={{ marginBottom: '10px' }}>
         <label htmlFor="language-select">Language:</label>
         <select

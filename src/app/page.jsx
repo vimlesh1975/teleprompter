@@ -27,7 +27,7 @@ var socket;
 
 
 export default function Home() {
-  const [useDB, setUseDB] = useState(false);
+  const [useDB, setUseDB] = useState(true);
 
   const dispatch = useDispatch();
   const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
