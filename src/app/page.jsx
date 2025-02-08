@@ -39,7 +39,7 @@ export default function Home() {
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("");
   const [slugs, setSlugs] = useState([]);
-  const [scriptID, setScriptID] = useState("");
+  // const [scriptID, setScriptID] = useState("");
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
   const [allContent, setAllContent] = useState([]);
@@ -340,7 +340,7 @@ export default function Home() {
 
   const onclickSlug = (val, i) => {
     if (i < slugs.length) {
-      setScriptID(val.ScriptID);
+      // setScriptID(val.ScriptID);
       setCurrentSlug(i);
       setCurrentSlugName(val.SlugName);
     }
@@ -452,7 +452,7 @@ export default function Home() {
     setCurrentSlug(0);
     if (slugs.length > 0) {
       setCurrentSlugName(slugs[0].SlugName);
-      setScriptID(slugs[0].ScriptID);
+      // setScriptID(slugs[0].ScriptID);
     }
   };
 
@@ -484,7 +484,7 @@ export default function Home() {
     handleDoubleClick(0);
     if (slugs.length > 0) {
       setCurrentSlugName(slugs[0].SlugName);
-      setScriptID(slugs[0].ScriptID);
+      // setScriptID(slugs[0].ScriptID);
     }
   };
 
@@ -502,7 +502,7 @@ export default function Home() {
       };
       handleDoubleClick(newIndex);
       setCurrentSlugName(slugs[newIndex].SlugName);
-      setScriptID(slugs[newIndex].ScriptID);
+      // setScriptID(slugs[newIndex].ScriptID);
       return newIndex;
     });
   };
@@ -521,7 +521,7 @@ export default function Home() {
       };
 
       setCurrentSlugName(slugs[newIndex].SlugName);
-      setScriptID(slugs[newIndex].ScriptID);
+      // setScriptID(slugs[newIndex].ScriptID);
       handleDoubleClick(newIndex);
       return newIndex;
     });
@@ -605,7 +605,7 @@ export default function Home() {
   useEffect(() => {
     setCurrentSlug(currentStoryNumber - 1);
     if (slugs.length > 0) {
-      setScriptID(slugs[currentStoryNumber - 1]?.ScriptID);
+      // setScriptID(slugs[currentStoryNumber - 1]?.ScriptID);
       setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
     }
   }, [currentStoryNumber, slugs]);
@@ -980,7 +980,7 @@ export default function Home() {
                 setCurrentSlug(lastIndex);
                 handleDoubleClick(lastIndex);
                 setCurrentSlugName(slugs[lastIndex].SlugName);
-                setScriptID(slugs[lastIndex].ScriptID);
+                // setScriptID(slugs[lastIndex].ScriptID);
               }}
             >
               Go to Last
