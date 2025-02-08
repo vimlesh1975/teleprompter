@@ -148,17 +148,6 @@ export default function Home({content}) {
             autoPlay={autoPlay}
             ref={audioRef}
           ></audio>
-          <button
-            onClick={() => {
-              const a = document.createElement('a');
-              a.href = audioUrl;
-              a.download = 'speech.mp3';
-              a.click();
-            }}
-          >
-            Download
-          </button>
-
         </div>
       )}
     </div>

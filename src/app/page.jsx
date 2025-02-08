@@ -39,7 +39,6 @@ export default function Home() {
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("");
   const [slugs, setSlugs] = useState([]);
-  // const [scriptID, setScriptID] = useState("");
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
   const [allContent, setAllContent] = useState([]);
@@ -79,16 +78,11 @@ export default function Home() {
     return `${yyyy}-${mm}-${dd}`;
   });
 
-
   const [usedStory, setUsedStory] = useState([]);
 
   const [sendUsedStory, setSendUsedStory] = useState(false);
 
-
-
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory) => {
-    console.log('log from scroll ', curstory, curbulletin, ScriptID);
-    console.log('log from scroll ',  curbulletin);
     if (!curbulletin) return;
     if (!ScriptID) return;
 
@@ -341,7 +335,6 @@ export default function Home() {
 
   const onclickSlug = (val, i) => {
     if (i < slugs.length) {
-      // setScriptID(val.ScriptID);
       setCurrentSlug(i);
       setCurrentSlugName(val.SlugName);
     }
@@ -407,8 +400,6 @@ export default function Home() {
     }
   }, [selectedRunOrderTitle, selectedDate]);
 
-  // const content = slugs[currentSlug]?.Script;
-
   const isVideoPresent = (slug) => {
     const aa = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
     const allValid = aa.some(item => item !== null && item !== "");
@@ -453,17 +444,13 @@ export default function Home() {
     setCurrentSlug(0);
     if (slugs.length > 0) {
       setCurrentSlugName(slugs[0].SlugName);
-      // setScriptID(slugs[0].ScriptID);
     }
   };
 
-  // Handle double-click event
   const handleDoubleClick = (i) => {
     if (i === 0) {
       setUsedStory(val => [...val, slugs[0]?.ScriptID]);
     }
-    console.log('handleDoubleClick called', i)
-
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
@@ -485,7 +472,6 @@ export default function Home() {
     handleDoubleClick(0);
     if (slugs.length > 0) {
       setCurrentSlugName(slugs[0].SlugName);
-      // setScriptID(slugs[0].ScriptID);
     }
   };
 
@@ -503,7 +489,6 @@ export default function Home() {
       };
       handleDoubleClick(newIndex);
       setCurrentSlugName(slugs[newIndex].SlugName);
-      // setScriptID(slugs[newIndex].ScriptID);
       return newIndex;
     });
   };
@@ -522,7 +507,6 @@ export default function Home() {
       };
 
       setCurrentSlugName(slugs[newIndex].SlugName);
-      // setScriptID(slugs[newIndex].ScriptID);
       handleDoubleClick(newIndex);
       return newIndex;
     });
@@ -606,7 +590,6 @@ export default function Home() {
   useEffect(() => {
     setCurrentSlug(currentStoryNumber - 1);
     if (slugs.length > 0) {
-      // setScriptID(slugs[currentStoryNumber - 1]?.ScriptID);
       setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
     }
   }, [currentStoryNumber, slugs]);
@@ -693,26 +676,6 @@ export default function Home() {
     });
   }, [newsReaderText]);
 
-  // const sendtoCasparafterDoubleClick = (doubleClickedPosition) => {
-  //   endpoint({
-  //     action: "endpoint",
-  //     command: `call 1-97 setDoubleClickedPosition(${doubleClickedPosition})`,
-  //   });
-
-  //   endpoint({
-  //     action: "endpoint",
-  //     command: `call 1-97 setCurrentStoryNumber(${doubleClickedPosition + 1})`,
-  //   });
-  //   endpoint({
-  //     action: "endpoint",
-  //     command: `call 1-97 setLoggedPositions1()`,
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   sendtoCasparafterDoubleClick(doubleClickedPosition);
-  // }, [doubleClickedPosition]);
-
   useEffect(() => {
     endpoint({
       action: "endpoint",
@@ -729,13 +692,7 @@ export default function Home() {
     });
   }, [selectedRunOrderTitle]);
 
-  // const onTabChange = () => {
-
-  // }
-
-
   const readFile = (selectedFile) => {
-    console.log(slugs)
 
     if (!selectedFile) return;
     const reader = new FileReader();
@@ -802,11 +759,7 @@ export default function Home() {
         const [SlugName, Script] = item.split("ZXZX").map(str => str.trim().replace(/\r?\n/g, ''));
         return { ...fixdata, SlugName, Script };
       });
-
-      console.log(bb)
-      // const cc=[...bb, ]
       setSlugs(bb);
-
     };
     reader.readAsText(selectedFile);
   };
@@ -815,8 +768,6 @@ export default function Home() {
     const selectedFile = event.target.files[0];
     readFile(selectedFile);
   };
-
-
 
   return (
     <div style={{ overflow: "hidden" }}>
@@ -836,7 +787,6 @@ export default function Home() {
               </div>
             }
           </div>
-
 
           <div>
             RO
@@ -885,7 +835,6 @@ export default function Home() {
                   margin: 10,
                 }}
               >
-                {/* <span style={{}}>{val.DropStory?'❌':'✅'}</span><span style={{ backgroundColor:'black',color:'white'}}>{!val.Approval?'👎':'👍'}</span> */}
                 <span title={val.ScriptID} style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
                 <label
                   title={
@@ -982,7 +931,6 @@ export default function Home() {
                 setCurrentSlug(lastIndex);
                 handleDoubleClick(lastIndex);
                 setCurrentSlugName(slugs[lastIndex].SlugName);
-                // setScriptID(slugs[lastIndex].ScriptID);
               }}
             >
               Go to Last
@@ -1028,7 +976,6 @@ export default function Home() {
                 Continue...
               </button>
               <button onClick={() => setNewsReaderText("Stop...")}>Stop</button>
-              {/* {scriptID && 'scriptID-' + scriptID} */}
             </div>
           </div>
           <div
@@ -1145,7 +1092,6 @@ export default function Home() {
             }}
           >
             <div>
-
               <button title='Decrease speed by 1' onClick={() => setSpeed((val) => val - 1)}>--1</button>
               <button onClick={() => setSpeed(-7)}>-7</button>
               <button onClick={() => setSpeed(-6)}>-6</button>
@@ -1191,8 +1137,6 @@ export default function Home() {
               />
             </div>
             <div style={{ textAlign: "left" }}>
-              {/* {'keyPressed' + keyPressed}  */}
-
               Right Click to Stop and Play
             </div>
             <Timer
@@ -1304,18 +1248,10 @@ export default function Home() {
                     height: "100%",
                   }}
                 >
-
-
                 </div>
-
               </div>
             </div>
-            {/* {usedStory.map((val, i) => {
-              return <div key={i}>{val}</div>
-            })}  */}
-
           </div>
-
         </div>
       </div>
     </div>
