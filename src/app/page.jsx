@@ -866,10 +866,22 @@ export default function Home() {
             <span>Send Used Story</span>
           </label>
 
-          <div>
+          <div  title={useDB?'Data from database':`Text file should be like this
+          Slugname1
+ZXZX
+Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 
+ZCZC
+Slugname2
+ZXZX
+Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 
+ZCZC
+Slugname3
+ZXZX
+Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 `}>
             <label>
               {" "}
               <input
+             
                 checked={useDB}
                 type="checkbox"
                 onChange={() => setUseDB((val) => {
