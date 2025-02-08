@@ -25,9 +25,6 @@ const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsR
     const [newPosition, setNewPosition] = useState(startPosition);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
 
-    window.setNewPosition = setNewPosition;
-    window.setStoryLines = setStoryLines;
-
     useEffect(() => {
         socket.on("crossedLines2", (data) => {
             setCrossedLines(data);
