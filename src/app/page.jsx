@@ -693,12 +693,15 @@ export default function Home() {
   }, [selectedRunOrderTitle]);
 
   const readFile = (selectedFile) => {
-
     if (!selectedFile) return;
     const reader = new FileReader();
+
     reader.onload = (e) => {
       const content = e.target.result;
-      const aa = content.split(/ZCZC/i);
+
+      // Check if "ZXZX" (case-insensitive) exists in the content
+      const hasZXZX = /ZXZX/i.test(content);
+      const dummyScriptid = 202502071223160;
       const fixdata = {
         "ScriptID": "202502071223160",
         "id": 636,
@@ -754,13 +757,39 @@ export default function Home() {
         "Approval": 1,
         "MediaInsert": null,
         "DropStory": 0
+      };
+
+      let bb = [];
+
+      if (hasZXZX) {
+        // If "ZXZX" exists, process normally
+        const aa = content.split(/ZCZC/i);
+        bb = aa.map((item, index) => {
+          const [SlugName, Script] = item.split(/ZXZX/i).map(str => str.trim().replace(/\r?\n/g, ''));
+          return {
+            ...fixdata,
+            ScriptID: dummyScriptid + index,
+            Approval: SlugName.includes('(Story UnApproved)') ? 0 : 1,
+            DropStory: SlugName.includes('(Story Dropped)') ? 1 : 0,
+            SlugName,
+            Script
+          };
+        });
+      } else {
+        // If "ZXZX" does not exist, split by new lines and assign Slug1, Slug2, etc.
+        const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line !== ""); // Remove empty lines
+
+        bb = lines.map((line, index) => ({
+          ...fixdata,
+          ScriptID: dummyScriptid + index,
+          SlugName: `Slug${index + 1}`,
+          Script: line
+        }));
       }
-      const bb = aa.map((item) => {
-        const [SlugName, Script] = item.split(/ZXZX/i).map(str => str.trim().replace(/\r?\n/g, ''));
-        return { ...fixdata, Approval: SlugName.includes('(Story UnApproved)') ? 0 : 1, DropStory: SlugName.includes('(Story Dropped)') ? 1 : 0, SlugName, Script };
-      });
+
       setSlugs(bb);
     };
+
     reader.readAsText(selectedFile);
   };
 
