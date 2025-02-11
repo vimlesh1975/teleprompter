@@ -801,7 +801,7 @@ export default function Home() {
   const exportScript = () => {
     let text = '';
     slugs.forEach((item) => {
-      text += `Slugname: ${item.SlugName}${item.DropStory ? '(Story Dropped)' : ''}${!item.approved ? '(Story UnApproved)' : ''}\nZXZX\n${item.Script}\nZCZC\n`;
+      text += `${item.SlugName}${item.DropStory ? '(Story Dropped)' : ''}${!item.approved ? '(Story UnApproved)' : ''}\nZXZX\n${item.Script}\nZCZC\n`;
     });
     // Remove the last occurrence of "ZCZC\n"
     text = text.replace(/ZCZC\n$/, '');
@@ -819,7 +819,7 @@ export default function Home() {
         <div>
 
           <div>
-            {newdatabase &&
+            {newdatabase && 
               <div>
                 <label htmlFor="date-selector">Select a date: </label>
                 <input
@@ -827,6 +827,7 @@ export default function Home() {
                   type="date"
                   value={selectedDate}
                   onChange={handleDateChange}
+                  disabled={!useDB}
                 />
               </div>
             }
@@ -837,6 +838,7 @@ export default function Home() {
             <select
               value={selectedRunOrderTitle}
               onChange={handleSelectionChange}
+              disabled={!useDB}
             >
               <option value="" disabled>
                 Select a Run Order
