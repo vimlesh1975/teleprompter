@@ -33,7 +33,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber,  slugs, newsReaderText }) => {
+const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber,  slugs, newsReaderText,setSpeed }) => {
     const dispatch = useDispatch();
     const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
     const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
@@ -55,16 +55,12 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
 
-
-
     useEffect(() => {
         socket.emit('setCurrentStoryNumber', currentStoryNumber);
         return () => {
             socket.off('setCurrentStoryNumber');
         };
     }, [currentStoryNumber])
-
- 
 
     useEffect(() => {
         socket.emit('crossedLines', crossedLines);
@@ -80,7 +76,6 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         };
     }, [storyLines])
 
-
     useEffect(() => {
         socket.emit('newPosition', newPosition);
         return () => {
@@ -88,14 +83,18 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         };
     }, [newPosition])
 
-
-
     useEffect(() => {
         let animationFrameId;
 
         const scrollText = async () => {
             if (textRef.current) {
                 // setNewPosition(prevTop => prevTop - (speed / 9.2));
+                const { top, height } = textRef.current.getBoundingClientRect();
+                if (top < -height) {
+                  setSpeed(0); // Stop the movement
+                  return;
+                }
+
                 setNewPosition(prevTop => prevTop - (speed / 2.2));
 
                 // Determine which div is at startPosition
@@ -141,11 +140,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                         }
                     }
                 }
-                // setCrossedLines(linesCrossed);
                 dispatch(changeCrossedLines(linesCrossed));
-
-                // }
-
             }
             animationFrameId = requestAnimationFrame(scrollText);
         };
@@ -153,7 +148,6 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
     }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
-
 
     // Function to calculate number of lines in a given element
     const calculateNumberOfLines = (element) => {
@@ -186,15 +180,9 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         }
 
         const result = moveZerosToFront(storiesLines);
-        // console.log(result.length, result);
-        // setStoryLines(result);
         dispatch(changeStoryLines(result));
-
         socket.emit('storyLines', result);
-
     }, [allContent, fontSize]);
-
-
     // Calculate width based on lines crossed
     const maxLines = storyLines[currentStoryNumber - 1];
     const widthPercentage = Math.min((crossedLines / maxLines) * 100, 100);
