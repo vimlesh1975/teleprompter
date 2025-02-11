@@ -757,7 +757,7 @@ export default function Home() {
       }
       const bb = aa.map((item) => {
         const [SlugName, Script] = item.split("ZXZX").map(str => str.trim().replace(/\r?\n/g, ''));
-        return { ...fixdata, SlugName, Script };
+        return { ...fixdata, Approval: SlugName.includes('(Story UnApproved)') ? 0 : 1, DropStory: SlugName.includes('(Story Dropped)') ? 1 : 0, SlugName, Script };
       });
       setSlugs(bb);
     };
@@ -768,6 +768,21 @@ export default function Home() {
     const selectedFile = event.target.files[0];
     readFile(selectedFile);
   };
+
+  const exportScript = () => {
+    let text = '';
+    slugs.forEach((item) => {
+      text += `Slugname: ${item.SlugName}${item.DropStory ? '(Story Dropped)' : ''}${!item.approved ? '(Story UnApproved)' : ''}\nZXZX\n${item.Script}\nZCZC\n`;
+    });
+    // Remove the last occurrence of "ZCZC\n"
+    text = text.replace(/ZCZC\n$/, '');
+    const element = document.createElement("a");
+    const file = new Blob([text], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = selectedDate + '_' + selectedRunOrderTitle + "_script.txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  }
 
   return (
     <div style={{ overflow: "hidden" }}>
@@ -866,22 +881,22 @@ export default function Home() {
             <span>Send Used Story</span>
           </label>
 
-          <div  title={useDB?'Data from database':`Text file should be like this
-          Slugname1
-ZXZX
-Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 
-ZCZC
-Slugname2
-ZXZX
-Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 
-ZCZC
-Slugname3
-ZXZX
-Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 `}>
+          <div title={useDB ? 'Data from database' : `Text file should be like this
+            Slugname1
+            ZXZX
+            Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 
+            ZCZC
+            Slugname2
+            ZXZX
+            Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 Story2 
+            ZCZC
+            Slugname3
+            ZXZX
+            Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 `}>
             <label>
               {" "}
               <input
-             
+
                 checked={useDB}
                 type="checkbox"
                 onChange={() => setUseDB((val) => {
@@ -899,6 +914,7 @@ Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Sto
               }
             </label>
           </div>
+          <div><button onClick={exportScript}>Export Script</button></div>
         </div>
 
         {/* second column */}
