@@ -813,6 +813,21 @@ export default function Home() {
     element.click();
   }
 
+  useEffect(() => {
+    const checkPosition = () => {
+      if (textRef.current) {
+        const { top, height } = textRef.current.getBoundingClientRect();
+        if (top < -height) {
+          setSpeed(0); // Stop the movement
+        }
+      }
+      requestAnimationFrame(checkPosition);
+    };
+    requestAnimationFrame(checkPosition); // Start loop
+    return () => cancelAnimationFrame(checkPosition);
+  }, [])
+
+
   return (
     <div style={{ overflow: "hidden" }}>
       <div style={{ display: "flex" }}>
@@ -944,6 +959,12 @@ export default function Home() {
             </label>
           </div>
           <div><button onClick={exportScript}>Export Script</button></div>
+          {/* <div>
+            {JSON.stringify(textRef?.current?.getBoundingClientRect().top,)}
+          </div>
+          <div>
+            {JSON.stringify(textRef?.current?.getBoundingClientRect().height)}
+          </div> */}
         </div>
 
         {/* second column */}
