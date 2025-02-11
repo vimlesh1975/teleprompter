@@ -698,7 +698,7 @@ export default function Home() {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target.result;
-      const aa = content.split('ZCZC')
+      const aa = content.split(/ZCZC/i);
       const fixdata = {
         "ScriptID": "202502071223160",
         "id": 636,
@@ -756,7 +756,7 @@ export default function Home() {
         "DropStory": 0
       }
       const bb = aa.map((item) => {
-        const [SlugName, Script] = item.split("ZXZX").map(str => str.trim().replace(/\r?\n/g, ''));
+        const [SlugName, Script] = item.split(/ZXZX/i).map(str => str.trim().replace(/\r?\n/g, ''));
         return { ...fixdata, Approval: SlugName.includes('(Story UnApproved)') ? 0 : 1, DropStory: SlugName.includes('(Story Dropped)') ? 1 : 0, SlugName, Script };
       });
       setSlugs(bb);
