@@ -56,7 +56,7 @@ export default function Home() {
   const [showReactComponent, setShowReactComponent] = useState(false);
   const [stopOnNext, setStopOnNext] = useState(false);
   const [latestDate, setLatestDate] = useState(null);
-  const [allowUnApproved, setAllowUnApproved] = useState(true);
+  const [allowUnApproved, setAllowUnApproved] = useState(false);
   const [DB_NAME, setDB_NAME] = useState('nrcsnew');
   const [DB_HOST, setDB_HOST] = useState('localhost');
   const [CASPAR_HOST, setCASPAR_HOST] = useState('127.0.0.1');
