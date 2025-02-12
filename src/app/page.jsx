@@ -779,12 +779,16 @@ export default function Home() {
         // If "ZXZX" does not exist, split by new lines and assign Slug1, Slug2, etc.
         const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line !== ""); // Remove empty lines
 
-        bb = lines.map((line, index) => ({
-          ...fixdata,
-          ScriptID: dummyScriptid + index,
-          SlugName: `Slug${index + 1}`,
-          Script: line
-        }));
+        bb = lines.map((line, index) => {
+          const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
+          return {
+            ...fixdata,
+            ScriptID: dummyScriptid + index,
+            SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
+            Script: line
+          };
+        });
+        
       }
 
       setSlugs(bb);
