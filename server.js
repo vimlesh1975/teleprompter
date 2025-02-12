@@ -9,17 +9,10 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 require('dotenv').config({path:'./.env.local'});
 var newdatabase = process.env.NEWDATABASE==="true";
-console.log(newdatabase)
-//  newdatabase = false;
 
 app.prepare().then(async () => {
     const server = express();
-
     const httpServer = http.createServer(server);
-
-    // const io = socketIO(httpServer);
-
-
     const io = socketIO(httpServer, {
         cors: {
             origin: "*", // Allow this origin
@@ -27,8 +20,6 @@ app.prepare().then(async () => {
             allowedHeaders: ["my-custom-header"], // If needed, add custom headers
             credentials: true // Allow cookies if necessary
         },
-        // maxHttpBufferSize: 1e8,
-        // pingTimeout: 60000
     });
 
     const shuttle = require('shuttle-control-usb');
@@ -59,13 +50,11 @@ app.prepare().then(async () => {
     io.on('connection', (socket) => {
         console.log('Socket Client connected', socket.id);
         socket.on('ServerConnectionStatus', (data) => {
-            // console.log('Received from API ::', data);
             io.emit('ServerConnectionStatus2', data);
         });
         socket.emit("newdatabase", newdatabase);
 
         socket.on('currentStory1', (data) => {
-            // console.log(data)
             io.emit('currentStoryBroadcast', data);  // Broadcast to all clients
         });
 
@@ -93,13 +82,7 @@ app.prepare().then(async () => {
         socket.on('setSlugs', (data) => {
             io.emit('setSlugs2', data);
         });
-        // socket.on('speed', (data) => {
-        //     io.emit('speed2', data);
-        // });
-        //from scroll page in caspar End
-
-
-        //webrtc code starts
+      
         socket.on('offer', (data) => {
             socket.broadcast.emit('offer', data);
         });
@@ -128,7 +111,6 @@ app.prepare().then(async () => {
             socket.removeAllListeners("currentStory1");
             socket.removeAllListeners("allContent");
             socket.removeAllListeners("setSlugs");
-            // socket.removeAllListeners("speed");
         });
 
     });

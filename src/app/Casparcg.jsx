@@ -9,23 +9,23 @@ socket.on('connect', () => {
   console.log('SOCKET CONNECTED! from caspar', socket.id);
 });
 
-function replaceCRLFInArray(inputArray) {
-  // Ensure inputArray is an array of strings
-  if (!Array.isArray(inputArray)) {
-    throw new Error('Input is not an array');
-  }
+// function replaceCRLFInArray(inputArray) {
+//   // Ensure inputArray is an array of strings
+//   if (!Array.isArray(inputArray)) {
+//     throw new Error('Input is not an array');
+//   }
 
-  // Map over the array and replace CRLF characters in each string
-  return inputArray.map((inputString) => {
-    // Ensure each element is a string
-    if (typeof inputString !== 'string') {
-      throw new Error('Array element is not a string');
-    }
+//   // Map over the array and replace CRLF characters in each string
+//   return inputArray.map((inputString) => {
+//     // Ensure each element is a string
+//     if (typeof inputString !== 'string') {
+//       throw new Error('Array element is not a string');
+//     }
 
-    // Replace all occurrences of \r, \n, or \r\n with an empty string
-    return inputString.replace(/(\r\n|\n|\r)/g, 'CRLF');
-  });
-}
+//     // Replace all occurrences of \r, \n, or \r\n with an empty string
+//     return inputString.replace(/(\r\n|\n|\r)/g, 'CRLF');
+//   });
+// }
 
 export default function Home({ slugs, allContent, setShowReactComponent, startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle, storyLines, crossedLines, speed }) {
 

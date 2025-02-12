@@ -461,10 +461,6 @@ export default function Home() {
       setLoggedPositions(newLoggedPositions);
       setDoubleClickedPosition(i);
       setNewPosition(startPosition);
-      endpoint({
-        action: "endpoint",
-        command: `call 1-97 setNewPosition(${startPosition})`,
-      });
     }
   };
   const fromStart = () => {
@@ -611,23 +607,6 @@ export default function Home() {
     setUsedStory(uniqueStories);
   }, [currentStoryNumber]);
 
-  function replaceCRLFInArray(inputArray) {
-    // Ensure inputArray is an array of strings
-    if (!Array.isArray(inputArray)) {
-      throw new Error("Input is not an array");
-    }
-
-    // Map over the array and replace CRLF characters in each string
-    return inputArray.map((inputString) => {
-      // Ensure each element is a string
-      if (typeof inputString !== "string") {
-        throw new Error("Array element is not a string");
-      }
-
-      // Replace all occurrences of \r, \n, or \r\n with an empty string
-      return inputString.replace(/(\r\n|\n|\r)/g, "CRLF");
-    });
-  }
   useEffect(() => {
     endpoint({
       action: "endpoint",
