@@ -19,11 +19,13 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
+const ScrollViewforcasparcg = ({  fontSize, scrollWidth,  newsReaderText, showClock, startPosition }) => {
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
     const [newPosition, setNewPosition] = useState(startPosition);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
+    const [allContent, setAllContent] = useState([]);
+    const [slugs, setSlugs] = useState([]);
 
     useEffect(() => {
         socket.on("crossedLines2", (data) => {
@@ -38,11 +40,21 @@ const ScrollViewforcasparcg = ({ allContent, fontSize, scrollWidth, slugs, newsR
         socket.on("setCurrentStoryNumber2", (data) => {
             setCurrentStoryNumber(data);
         })
+
+        socket.on("allContent2", (data) => {
+            setAllContent(data);
+        })
+
+        socket.on("setSlugs2", (data) => {
+            setSlugs(data);
+        })
         return () => {
             socket.off("crossedLines2");
             socket.off("storyLines2");
             socket.off("newPosition2");
             socket.off("setCurrentStoryNumber2");
+            socket.off("allContent2");
+            socket.off("setSlugs2");
         }
     }, [])
 

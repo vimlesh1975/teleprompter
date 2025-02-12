@@ -6,7 +6,6 @@ const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 
 const Page = () => {
   const [startPosition, setStartPosition] = useState(150);
-  const [speed, setSpeed] = useState(0);
   const [slugs, setSlugs] = useState([]);
   const [allContent, setAllContent] = useState([]);
   const [newsReaderText, setNewsReaderText] = useState('Continue...');
@@ -33,7 +32,6 @@ const Page = () => {
   useEffect(() => {
     window.setStartPosition = setStartPosition;
     window.setAllContent1 = setAllContent1;
-    window.setSpeed = setSpeed;
     window.setFontSize = setFontSize;
     window.setShowClock = setShowClock;
     window.setNewsReaderText = setNewsReaderText;
@@ -42,7 +40,6 @@ const Page = () => {
     return () => {
       delete window.setStartPosition;
       delete window.setAllContent1;
-      delete window.setSpeed;
       delete window.setFontSize;
       delete window.setShowClock;
       delete window.setNewsReaderText;

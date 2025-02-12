@@ -27,7 +27,7 @@ function replaceCRLFInArray(inputArray) {
   });
 }
 
-export default function Home({ slugs, allContent, setShowReactComponent, startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle, storyLines, crossedLines }) {
+export default function Home({ slugs, allContent, setShowReactComponent, startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle, storyLines, crossedLines, speed }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -163,14 +163,6 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
               setTimeout(() => {
                 endpoint({
                   action: 'endpoint',
-                  command: `call 1-97 setSlugs(${JSON.stringify(slugs.map(item => item.SlugName))})`,
-                });
-                endpoint({
-                  action: 'endpoint',
-                  command: `call 1-97 setAllContent1(${JSON.stringify(replaceCRLFInArray(allContent)).replaceAll('"', '\\"').replaceAll(")", "closesmallbracket").replace(/ /g, 'space1')})`,
-                });
-                endpoint({
-                  action: 'endpoint',
                   command: `call 1-97 setStartPosition(${startPosition})`,
                 });
                 endpoint({
@@ -182,6 +174,10 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
                 socket.emit('setCurrentStoryNumber', currentStoryNumber);
                 socket.emit('storyLines', storyLines);
                 socket.emit('crossedLines', crossedLines);
+                socket.emit('allContent', allContent);
+                socket.emit('setSlugs', JSON.stringify(slugs.map(item => item.SlugName)));
+                // socket.emit('speed', speed);
+
 
               }, 3000);
             }

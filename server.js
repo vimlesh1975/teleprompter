@@ -86,8 +86,16 @@ app.prepare().then(async () => {
             io.emit('newPosition2', data);
         });
 
+        socket.on('allContent', (data) => {
+            io.emit('allContent2', data);
+        });
 
-
+        socket.on('setSlugs', (data) => {
+            io.emit('setSlugs2', data);
+        });
+        // socket.on('speed', (data) => {
+        //     io.emit('speed2', data);
+        // });
         //from scroll page in caspar End
 
 
@@ -118,6 +126,9 @@ app.prepare().then(async () => {
             socket.removeAllListeners("storyLines");
             socket.removeAllListeners("newPosition");
             socket.removeAllListeners("currentStory1");
+            socket.removeAllListeners("allContent");
+            socket.removeAllListeners("setSlugs");
+            // socket.removeAllListeners("speed");
         });
 
     });

@@ -636,23 +636,17 @@ export default function Home() {
   }, [startPosition]);
 
   useEffect(() => {
-    const aa = JSON.stringify(
-      replaceCRLFInArray(allContent)
-    )
-      .replaceAll('"', '\\"')
-      .replaceAll(")", "closesmallbracket");
-    const bb = aa.replace(/ /g, 'space1');
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setAllContent1(${bb})`,
-    });
-  }, [allContent]);
+    socket.emit('allContent', allContent);
+    return () => {
+      socket.off('allContent');
+    };
+  }, [allContent])
 
   useEffect(() => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setSpeed(${speed})`,
-    });
+    socket.emit('speed', speed);
+    return () => {
+      socket.off('speed');
+    };
   }, [speed]);
 
   useEffect(() => {
@@ -677,20 +671,9 @@ export default function Home() {
   }, [newsReaderText]);
 
   useEffect(() => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setSlugs(${JSON.stringify(
-        slugs.map(item => ({ ScriptID: item.ScriptID, SlugName: item.SlugName }))
-      )})`,
-    });
-  }, [slugs, doubleClickedPosition]);
+    socket.emit('setSlugs', JSON.stringify(slugs.map(item => item.SlugName)));
+  }, [slugs]);
 
-  useEffect(() => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setSelectedRunOrderTitle('${selectedRunOrderTitle}')`,
-    });
-  }, [selectedRunOrderTitle]);
 
   const readFile = (selectedFile) => {
     if (!selectedFile) return;
@@ -788,7 +771,7 @@ export default function Home() {
             Script: line
           };
         });
-        
+
       }
 
       setSlugs(bb);
@@ -823,7 +806,7 @@ export default function Home() {
         <div>
 
           <div>
-            {newdatabase && 
+            {newdatabase &&
               <div>
                 <label htmlFor="date-selector">Select a date: </label>
                 <input
@@ -981,6 +964,7 @@ export default function Home() {
               selectedRunOrderTitle={selectedRunOrderTitle}
               storyLines={storyLines}
               crossedLines={crossedLines}
+              speed={speed}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
