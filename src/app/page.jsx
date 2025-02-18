@@ -918,6 +918,7 @@ export default function Home() {
           <div>
             {JSON.stringify(textRef?.current?.getBoundingClientRect().height)}
           </div> */}
+          {/* {JSON.stringify(usedStory)} */}
         </div>
 
         {/* second column */}
