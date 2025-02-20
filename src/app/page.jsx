@@ -663,7 +663,7 @@ export default function Home() {
 
       // Check if "ZXZX" (case-insensitive) exists in the content
       const hasZXZX = /ZXZX/i.test(content);
-      const dummyScriptid = 202502071223160;
+      const dummyScriptid = 200502071223160;
       const fixdata = {
         "ScriptID": "202502071223160",
         "id": 636,
@@ -847,7 +847,31 @@ export default function Home() {
                   margin: 10,
                 }}
               >
-                <span title={val.ScriptID} style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
+                <input
+                title={!val.DropStory?'Uncheck to Drop':'Check to Include'}
+                  type="checkbox"
+                  checked={!val.DropStory}
+                  onChange={(e) => {
+                    // Correctly updating the array
+                    const updatedSlugs = [...slugs]; // Create a copy of the array
+                    updatedSlugs[i] = { ...updatedSlugs[i], DropStory: !val.DropStory }; // Modify the object at index i
+                    setSlugs(updatedSlugs); // Update state with the modified array
+                    fetch('/api/setDropedStory', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ dropstory: !val.DropStory , ScriptID:val.ScriptID}),
+                    })
+                      .then(response => response.json())
+                      .then(data => {
+                        console.log('Success:', data);
+                      })
+                      .catch(error => {
+                        console.error('Error:', error);
+                      });
+
+                  }}
+                />
+                <span title={'ScriptID:-' + val.ScriptID} style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
                 <label
                   title={
                     val.DropStory
