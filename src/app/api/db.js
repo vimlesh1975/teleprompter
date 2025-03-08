@@ -1,5 +1,10 @@
-import readCredentials from './readCredentials.js';
-const { mysqlConfig } = await readCredentials();
+
+var mysqlConfig={};
+if (process.env.credentialsfromenv !== '1'){
+  const readCredentials = await import('./readCredentials.js');
+  mysqlConfig  = await readCredentials.mysqlConfig;
+}
+
  const configFromEnvFile = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
