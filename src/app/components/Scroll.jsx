@@ -15,12 +15,7 @@ socket.on('connect', () => {
 });
 
 function moveZerosToFront(arr) {
-    // Filter out the zeros
-    const zeros = arr.filter(num => num === 0);
-    // Filter out the non-zero elements
-    const nonZeros = arr.filter(num => num !== 0);
-    // Concatenate zeros at the beginning and non-zero elements afterwards
-    return [...zeros, ...nonZeros];
+    return arr.sort((a, b) => (a === 0 ? -1 : 1));
 }
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
