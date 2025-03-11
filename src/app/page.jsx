@@ -9,12 +9,10 @@ import debounce from "lodash.debounce"; // Importing debounce from lodash
 
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
-// import GraphicsAndVideo from './components/GraphicsAndVideo'
 import TTS from './components/TTS.jsx'
 import ScrollView from './components/ScrollView';
 import { changenewdatabase } from './store/store'; // Adjust the path as needed
 
-// import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import 'react-tabs/style/react-tabs.css';
 
 
@@ -53,7 +51,6 @@ export default function Home() {
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
   const [fontSize, setFontSize] = useState(39);
   const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
-  const [showReactComponent, setShowReactComponent] = useState(false);
   const [stopOnNext, setStopOnNext] = useState(false);
   const [latestDate, setLatestDate] = useState(null);
   const [allowUnApproved, setAllowUnApproved] = useState(false);
@@ -848,7 +845,7 @@ export default function Home() {
                 }}
               >
                 <input
-                title={!val.DropStory?'Uncheck to Drop':'Check to Include'}
+                  title={!val.DropStory ? 'Uncheck to Drop' : 'Check to Include'}
                   type="checkbox"
                   checked={!val.DropStory}
                   onChange={(e) => {
@@ -859,7 +856,7 @@ export default function Home() {
                     fetch('/api/setDropedStory', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ dropstory: !val.DropStory , ScriptID:val.ScriptID}),
+                      body: JSON.stringify({ dropstory: !val.DropStory, ScriptID: val.ScriptID }),
                     })
                       .then(response => response.json())
                       .then(data => {
@@ -958,8 +955,6 @@ export default function Home() {
             <Casparcg
               slugs={slugs}
               allContent={allContent}
-              setShowReactComponent={setShowReactComponent}
-              showReactComponent={showReactComponent}
               startPosition={startPosition}
               fontSize={fontSize}
               doubleClickedPosition={doubleClickedPosition}
@@ -1105,7 +1100,7 @@ export default function Home() {
               newsReaderText={newsReaderText}
               setSpeed={setSpeed}
             />
-            {!showReactComponent && showNewWindow && (
+            {showNewWindow && (
               <NewWindow
                 onClose={handleCloseNewWindow}
                 newWindowRef={newWindowRef}
@@ -1115,9 +1110,9 @@ export default function Home() {
 
                 <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
-            )}
 
-            {!showReactComponent && showNewWindow2 && (
+            )}
+            {showNewWindow2 && (
               <NewWindow
                 onClose={handleCloseNewWindow2}
                 newWindowRef={newWindowRef2}
@@ -1215,33 +1210,33 @@ export default function Home() {
               })}
             </h3>
 
-            {!showReactComponent && (
-              <div>
-                For HDMI or VGA output <button
-                  onClick={() => {
-                    if (showNewWindow) {
-                      newWindowRef.current.close();
-                    }
-                    { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
-                    setShowNewWindow(!showNewWindow);
-                  }}
-                >
-                  {showNewWindow ? "Close New Window" : "Open New Window"}
-                </button>
 
-                <button
-                  onClick={() => {
-                    if (showNewWindow2) {
-                      newWindowRef2.current.close();
-                    }
-                    { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
-                    setShowNewWindow2(!showNewWindow2);
-                  }}
-                >
-                  {showNewWindow2 ? "Close New Window2" : "Open New Window2"}
-                </button>
-              </div>
-            )}
+            <div>
+              For HDMI or VGA output <button
+                onClick={() => {
+                  if (showNewWindow) {
+                    newWindowRef.current.close();
+                  }
+                  { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
+                  setShowNewWindow(!showNewWindow);
+                }}
+              >
+                {showNewWindow ? "Close New Window" : "Open New Window"}
+              </button>
+
+              <button
+                onClick={() => {
+                  if (showNewWindow2) {
+                    newWindowRef2.current.close();
+                  }
+                  { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
+                  setShowNewWindow2(!showNewWindow2);
+                }}
+              >
+                {showNewWindow2 ? "Close New Window2" : "Open New Window2"}
+              </button>
+            </div>
+
             <button onClick={() => setShowSettings(val => !val)}>{showSettings ? 'Hide Setting' : 'Show Setting'}</button>
             <div style={{ display: showSettings ? '' : 'none' }}>
               <div>

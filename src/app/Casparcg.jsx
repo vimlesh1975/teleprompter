@@ -9,25 +9,7 @@ socket.on('connect', () => {
   console.log('SOCKET CONNECTED! from caspar', socket.id);
 });
 
-// function replaceCRLFInArray(inputArray) {
-//   // Ensure inputArray is an array of strings
-//   if (!Array.isArray(inputArray)) {
-//     throw new Error('Input is not an array');
-//   }
-
-//   // Map over the array and replace CRLF characters in each string
-//   return inputArray.map((inputString) => {
-//     // Ensure each element is a string
-//     if (typeof inputString !== 'string') {
-//       throw new Error('Array element is not a string');
-//     }
-
-//     // Replace all occurrences of \r, \n, or \r\n with an empty string
-//     return inputString.replace(/(\r\n|\n|\r)/g, 'CRLF');
-//   });
-// }
-
-export default function Home({ slugs, allContent, setShowReactComponent, startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle, storyLines, crossedLines, speed }) {
+export default function Home({ slugs, allContent,  startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle, storyLines, crossedLines, speed }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -127,7 +109,6 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
                 command: fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
               });
               playOnSecondChannelinFlippedMode();
-              setShowReactComponent(false);
             }
             }
           >
@@ -212,7 +193,6 @@ export default function Home({ slugs, allContent, setShowReactComponent, startPo
                   action: 'endpoint',
                   command: `mixer 1-97 clear`,
                 });
-                setShowReactComponent(false);
               }
               }
             >
