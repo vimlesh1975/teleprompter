@@ -135,7 +135,10 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                         }
                     }
                 }
-                dispatch(changeCrossedLines(linesCrossed));
+                // dispatch(changeCrossedLines(linesCrossed));
+                if (linesCrossed !== crossedLines) {
+                    dispatch(changeCrossedLines(linesCrossed));
+                }
             }
             animationFrameId = requestAnimationFrame(scrollText);
         };
