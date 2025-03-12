@@ -7,7 +7,10 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
     const [scaleFactor, setScaleFactor] = useState(1);
     // State to keep track of flip status
 
-    const handleTitleBarDoubleClick = () => {
+    const handleTitleBarDoubleClick = (e) => {
+        newWindowRef.current.resizeTo(newWindowRef.current.screen.availWidth, newWindowRef.current.screen.availHeight);
+        newWindowRef.current.moveTo(0, 0);
+
         console.log('Title bar double-clicked');
         container.style.transformOrigin = '5px 0';
         const screenHeight = newWindowRef.current.screen.height;
