@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
@@ -32,7 +32,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
 
-    const scrollingTextStyle = {
+    const scrollingTextStyle = useMemo(() => ({
         position: 'absolute',
         top: parseFloat(newPosition),
         minWidth: 702,
@@ -41,10 +41,9 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         padding: '0 40px',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-        // lineHeight: `${fontSize * 1.5}px` 
-        lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
+        lineHeight: `${Math.floor(fontSize * 1.5)}px`
+    }), [newPosition, fontSize]);
 
-    };
 
     const socketRef = useRef(null);
 
@@ -64,11 +63,11 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     useEffect(() => {
         if (!socketRef.current) return;
 
-            socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
-            return () => {
-                socketRef.current?.off('setCurrentStoryNumber');
-            };
-        
+        socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
+        return () => {
+            socketRef.current?.off('setCurrentStoryNumber');
+        };
+
     }, [currentStoryNumber])
 
     useEffect(() => {
@@ -82,63 +81,45 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
     useEffect(() => {
         if (!socketRef.current) return;
-            socketRef.current.emit('storyLines', storyLines);
-            return () => {
-                socketRef.current?.off('storyLines');
-            };
-        
+        socketRef.current.emit('storyLines', storyLines);
+        return () => {
+            socketRef.current?.off('storyLines');
+        };
+
     }, [storyLines])
 
     useEffect(() => {
         if (!socketRef.current) return;
-    
+
         socketRef.current.emit('newPosition', newPosition);
-    
+
         return () => {
             socketRef.current?.off('newPosition');
         };
     }, [newPosition]);
-    
 
-    // useEffect(() => {
-    //     if (!socketRef.current) {
-    //         socketRef.current = io();
-    //     }
-
-    //     socketRef.current.on('connect', () => {
-    //         console.log('SOCKET CONNECTED! from Scroll page', socketRef.current.id);
-    //     });
-
-    //     // Emit events when dependencies change
-    //     socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
-    //     socketRef.current.emit('crossedLines', crossedLines);
-    //     socketRef.current.emit('storyLines', storyLines);
-    //     socketRef.current.emit('newPosition', newPosition);
-
-    //     // Cleanup function to remove listeners
-    //     return () => {
-    //         socketRef.current.off('setCurrentStoryNumber');
-    //         socketRef.current.off('crossedLines');
-    //         socketRef.current.off('storyLines');
-    //         socketRef.current.off('newPosition');
-    //         socketRef.current.disconnect();
-    //     };
-    // }, [currentStoryNumber, crossedLines, storyLines, newPosition]);
-
-
+    const newPositionRef = useRef(newPosition);
     useEffect(() => {
         let animationFrameId;
 
         const scrollText = async () => {
             if (textRef.current) {
-                // setNewPosition(prevTop => prevTop - (speed / 9.2));
                 const { top, height } = textRef.current.getBoundingClientRect();
                 if (top < -height) {
                     setSpeed(0); // Stop the movement
                     return;
                 }
 
-                setNewPosition(prevTop => prevTop - (speed / 2.2));
+                // setNewPosition(prevTop => prevTop - (speed / 2.2));
+
+                newPositionRef.current -= (speed / 2.2);
+                if (Math.abs(newPositionRef.current - newPosition) > 1) {
+                    setNewPosition(newPositionRef.current);
+                    if (newPosition === startPosition) {
+                        newPositionRef.current = startPosition;
+                    }
+                }
+
 
                 // Determine which div is at startPosition
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
@@ -193,7 +174,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef]);
+    }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef, newPosition, setNewPosition]);
 
     // Function to calculate number of lines in a given element
     const calculateNumberOfLines = (element) => {
@@ -230,7 +211,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         socketRef.current.emit('storyLines', result);
     }, [allContent, fontSize]);
     // Calculate width based on lines crossed
-    const maxLines = storyLines[currentStoryNumber - 1];
+    const maxLines = storyLines[currentStoryNumber - 1] || 1;
     const widthPercentage = Math.min((crossedLines / maxLines) * 100, 100);
 
     return (
