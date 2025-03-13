@@ -14,7 +14,7 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const ScrollViewforcasparcg = ({  fontSize, scrollWidth,  newsReaderText, showClock, startPosition }) => {
+const ScrollViewforcasparcg = ({ fontSize, scrollWidth, newsReaderText, showClock, startPosition }) => {
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
     const [newPosition, setNewPosition] = useState(startPosition);
@@ -31,14 +31,8 @@ const ScrollViewforcasparcg = ({  fontSize, scrollWidth,  newsReaderText, showCl
             console.log('SOCKET CONNECTED! from Scrollviewforcasparcg page', socketRef.current.id);
         });
 
-        return () => {
-            socketRef.current.disconnect();
-        };
-    }, []);
-
-    useEffect(() => {
         socketRef.current.on("crossedLines2", (data) => {
-           
+
             setCrossedLines(data);
         });
         socketRef.current.on("storyLines2", (data) => {
@@ -58,15 +52,19 @@ const ScrollViewforcasparcg = ({  fontSize, scrollWidth,  newsReaderText, showCl
         socketRef.current.on("setSlugs2", (data) => {
             setSlugs(data);
         })
+
         return () => {
+            // socketRef.current.disconnect();
             socketRef.current.off("crossedLines2");
             socketRef.current.off("storyLines2");
             socketRef.current.off("newPosition2");
             socketRef.current.off("setCurrentStoryNumber2");
             socketRef.current.off("allContent2");
             socketRef.current.off("setSlugs2");
-        }
-    }, [])
+
+            socketRef.current = null;
+        };
+    }, []);
 
     const scrollingTextStyle = {
         position: 'absolute',
@@ -77,14 +75,14 @@ const ScrollViewforcasparcg = ({  fontSize, scrollWidth,  newsReaderText, showCl
         padding: '0 40px',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-          // lineHeight: `${fontSize * 1.5}px` 
-          lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
+        // lineHeight: `${fontSize * 1.5}px` 
+        lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
     };
 
 
     return (<div>
 
-        <div style={{maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
+        <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
             <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
