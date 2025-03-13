@@ -1,13 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
-
-const socket = io();
-socket.on('connect', () => {
-  console.log('SOCKET CONNECTED! from caspar', socket.id);
-});
 
 export default function Home({ slugs, allContent,  startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle, storyLines, crossedLines, speed }) {
 
@@ -15,32 +10,53 @@ export default function Home({ slugs, allContent,  startPosition, fontSize, doub
   const [fliped, setFliped] = useState(false);
   const [socketcurrentstory, setSocketcurrentstory] = useState('not set');
 
+  const socketRef = useRef(null);
+
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('SOCKET CONNECTED! form casparcg connection', socket.id);
+      socketRef.current = io();
+
+      socketRef.current.on('connect', () => {
+          console.log('SOCKET CONNECTED! from caparcg page', socketRef.current.id);
+      });
+
+      return () => {
+          socketRef.current.disconnect();
+          socketRef.current = null;
+      };
+  }, []);
+
+
+  useEffect(() => {
+    if (!socketRef.current) return;
+
+    socketRef.current.on('connect', () => {
+      console.log('SOCKET CONNECTED! form casparcg connection', socketRef.current.id);
     });
-    socket.on('ServerConnectionStatus2', (msg) => {
+    socketRef.current.on('ServerConnectionStatus2', (msg) => {
       setConnected(msg);
     });
 
-    socket.on('currentStoryBroadcast', (data) => {
+    socketRef.current.on('currentStoryBroadcast', (data) => {
       // setSocketcurrentstory(JSON.parse(data).curstory)
       setSocketcurrentstory(data);
     });
 
-    socket.on('connect_error', (error) => {
+    socketRef.current.on('connect_error', (error) => {
       setConnected(false);
     });
 
-    socket.on('disconnect', () => {
+    socketRef.current.on('disconnect', () => {
       console.log('Disconnected from server');
       setConnected(false);
     });
 
 
     return () => {
-      socket.off('ServerConnectionStatus2');
-      // socket.disconnect();
+      socketRef.current?.off('connect');
+      socketRef.current?.off('ServerConnectionStatus2');
+      socketRef.current?.off('currentStoryBroadcast');
+      socketRef.current?.off('ServerConnectconnect_errorionStatus2');
+      socketRef.current?.off('disconnect');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -151,12 +167,12 @@ export default function Home({ slugs, allContent,  startPosition, fontSize, doub
                   command: `call 1-97 setFontSize(${fontSize})`,
                 });
 
-                socket.emit('newPosition', newPosition);
-                socket.emit('setCurrentStoryNumber', currentStoryNumber);
-                socket.emit('storyLines', storyLines);
-                socket.emit('crossedLines', crossedLines);
-                socket.emit('allContent', allContent);
-                socket.emit('setSlugs', JSON.stringify(slugs.map(item => item.SlugName)));
+                socketRef.current.emit('newPosition', newPosition);
+                socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
+                socketRef.current.emit('storyLines', storyLines);
+                socketRef.current.emit('crossedLines', crossedLines);
+                socketRef.current.emit('allContent', allContent);
+                socketRef.current.emit('setSlugs', JSON.stringify(slugs.map(item => item.SlugName)));
                 // socket.emit('speed', speed);
 
 
