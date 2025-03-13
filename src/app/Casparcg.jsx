@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ slugs, allContent,  startPosition, fontSize, doubleClickedPosition, newPosition, currentStoryNumber, selectedRunOrderTitle, storyLines, crossedLines, speed }) {
+export default function Home({ slugs, allContent,  startPosition, fontSize,  newPosition, currentStoryNumber,  storyLines, crossedLines }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
