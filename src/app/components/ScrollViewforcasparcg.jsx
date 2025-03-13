@@ -13,8 +13,8 @@ const scrollContainerStyle = {
     backgroundColor: '#000',
     color: '#fff'
 };
-
-const ScrollViewforcasparcg = ({ scrollWidth, newsReaderText, showClock }) => {
+const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
+const ScrollViewforcasparcg = () => {
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
     const [newPosition, setNewPosition] = useState(150);
@@ -22,6 +22,9 @@ const ScrollViewforcasparcg = ({ scrollWidth, newsReaderText, showClock }) => {
     const [allContent, setAllContent] = useState([]);
     const [fontSize, setFontSize] = useState(39);
     const [startPosition, setStartPosition] = useState(150);
+
+      const [newsReaderText, setNewsReaderText] = useState('Continue...');
+      const [showClock, setShowClock] = useState(true);
 
 
 
