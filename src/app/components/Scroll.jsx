@@ -9,10 +9,10 @@ import { changeStoryLines, changeCrossedLines } from '../store/store'; // Adjust
 
 import { useDispatch, useSelector } from 'react-redux';
 
-const socket = io();
-socket.on('connect', () => {
-    console.log('SOCKET CONNECTED! from Scroll page', socket.id);
-});
+// const socket = io();
+// socketRef.current.on('connect', () => {
+//     console.log('SOCKET CONNECTED! from Scroll page', socketRef.current.id);
+// });
 
 function moveZerosToFront(arr) {
     return arr.sort((a, b) => (a === 0 ? -1 : 1));
@@ -33,6 +33,21 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
     const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
 
+const socketRef = useRef(null);
+
+useEffect(() => {
+    socketRef.current = io();
+
+    socketRef.current.on('connect', () => {
+        console.log('SOCKET CONNECTED! from Scroll page', socketRef.current.id);
+    });
+
+    return () => {
+        socketRef.current.disconnect();
+    };
+}, []);
+
+
     const scrollingTextStyle = {
         position: 'absolute',
         top: parseFloat(newPosition),
@@ -51,30 +66,30 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     const contentRefs = useRef([]);
 
     useEffect(() => {
-        socket.emit('setCurrentStoryNumber', currentStoryNumber);
+        socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
         return () => {
-            socket.off('setCurrentStoryNumber');
+            socketRef.current.off('setCurrentStoryNumber');
         };
     }, [currentStoryNumber])
 
     useEffect(() => {
-        socket.emit('crossedLines', crossedLines);
+        socketRef.current.emit('crossedLines', crossedLines);
         return () => {
-            socket.off('crossedLines');
+            socketRef.current.off('crossedLines');
         };
     }, [crossedLines])
 
     useEffect(() => {
-        socket.emit('storyLines', storyLines);
+        socketRef.current.emit('storyLines', storyLines);
         return () => {
-            socket.off('storyLines');
+            socketRef.current.off('storyLines');
         };
     }, [storyLines])
 
     useEffect(() => {
-        socket.emit('newPosition', newPosition);
+        socketRef.current.emit('newPosition', newPosition);
         return () => {
-            socket.off('newPosition');
+            socketRef.current.off('newPosition');
         };
     }, [newPosition])
 
@@ -179,7 +194,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
         const result = moveZerosToFront(storiesLines);
         dispatch(changeStoryLines(result));
-        socket.emit('storyLines', result);
+        socketRef.current.emit('storyLines', result);
     }, [allContent, fontSize]);
     // Calculate width based on lines crossed
     const maxLines = storyLines[currentStoryNumber - 1];
