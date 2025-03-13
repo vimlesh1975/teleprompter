@@ -605,46 +605,29 @@ export default function Home() {
   }, [currentStoryNumber]);
 
   useEffect(() => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setStartPosition(${startPosition})`,
-    });
-  }, [startPosition]);
-
-  useEffect(() => {
     socket.emit('allContent', allContent);
-    return () => {
-      socket.off('allContent');
-    };
   }, [allContent])
 
   useEffect(() => {
     socket.emit('speed', speed);
-    return () => {
-      socket.off('speed');
-    };
   }, [speed]);
 
   useEffect(() => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setFontSize(${fontSize})`,
-    });
+    socket.emit('setFontSize', fontSize);
   }, [fontSize]);
 
   useEffect(() => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setShowClock(${showClock})`,
-    });
+    socket.emit('setStartPosition', startPosition);
+  }, [startPosition]);
+
+  useEffect(() => {
+    socket.emit('setShowClock', showClock);
   }, [showClock]);
 
   useEffect(() => {
-    endpoint({
-      action: "endpoint",
-      command: `call 1-97 setNewsReaderText('${newsReaderText}')`,
-    });
+    socket.emit('setNewsReaderText', newsReaderText);
   }, [newsReaderText]);
+
 
   useEffect(() => {
     socket.emit('setSlugs', JSON.stringify(slugs.map(item => item.SlugName)));
@@ -964,6 +947,8 @@ export default function Home() {
               storyLines={storyLines}
               crossedLines={crossedLines}
               speed={speed}
+              showClock={showClock}
+            newsReaderText={newsReaderText}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>

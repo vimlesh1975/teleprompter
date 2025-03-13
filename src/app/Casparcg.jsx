@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ slugs, allContent,  startPosition, fontSize,  newPosition, currentStoryNumber,  storyLines, crossedLines }) {
+export default function Home({ slugs, allContent,  startPosition, fontSize,  newPosition, currentStoryNumber,  storyLines, crossedLines, showClock, newsReaderText }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -158,14 +158,6 @@ export default function Home({ slugs, allContent,  startPosition, fontSize,  new
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
-                endpoint({
-                  action: 'endpoint',
-                  command: `call 1-97 setStartPosition(${startPosition})`,
-                });
-                endpoint({
-                  action: 'endpoint',
-                  command: `call 1-97 setFontSize(${fontSize})`,
-                });
 
                 socketRef.current.emit('newPosition', newPosition);
                 socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
@@ -173,7 +165,13 @@ export default function Home({ slugs, allContent,  startPosition, fontSize,  new
                 socketRef.current.emit('crossedLines', crossedLines);
                 socketRef.current.emit('allContent', allContent);
                 socketRef.current.emit('setSlugs', JSON.stringify(slugs.map(item => item.SlugName)));
-                // socket.emit('speed', speed);
+
+                socketRef.current.emit('setFontSize', fontSize);
+                socketRef.current.emit('setStartPosition', startPosition);
+
+                socketRef.current.emit('setShowClock', showClock);
+                socketRef.current.emit('setNewsReaderText', newsReaderText);
+
 
 
               }, 3000);

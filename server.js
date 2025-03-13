@@ -82,6 +82,24 @@ app.prepare().then(async () => {
         socket.on('setSlugs', (data) => {
             io.emit('setSlugs2', data);
         });
+
+        socket.on('setFontSize', (data) => {
+            io.emit('setFontSize2', data);
+        });
+
+        socket.on('setStartPosition', (data) => {
+            io.emit('setStartPosition2', data);
+        });
+
+        socket.on('setShowClock', (data) => {
+            io.emit('setShowClock2', data);
+        });
+
+        socket.on('setNewsReaderText', (data) => {
+            io.emit('setNewsReaderText2', data);
+        });
+
+
       
         socket.on('offer', (data) => {
             socket.broadcast.emit('offer', data);
@@ -111,6 +129,12 @@ app.prepare().then(async () => {
             socket.removeAllListeners("currentStory1");
             socket.removeAllListeners("allContent");
             socket.removeAllListeners("setSlugs");
+
+            socket.removeAllListeners("setFontSize");
+            socket.removeAllListeners("setStartPosition");
+            socket.removeAllListeners("setShowClock");
+            socket.removeAllListeners("setNewsReaderText");
+
         });
 
     });

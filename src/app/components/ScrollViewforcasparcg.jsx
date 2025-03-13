@@ -14,12 +14,17 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const ScrollViewforcasparcg = ({ fontSize, scrollWidth, newsReaderText, showClock, startPosition }) => {
+const ScrollViewforcasparcg = ({ scrollWidth, newsReaderText, showClock }) => {
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
-    const [newPosition, setNewPosition] = useState(startPosition);
+    const [newPosition, setNewPosition] = useState(150);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
     const [allContent, setAllContent] = useState([]);
+    const [fontSize, setFontSize] = useState(39);
+    const [startPosition, setStartPosition] = useState(150);
+
+
+
     const [slugs, setSlugs] = useState([]);
 
     const socketRef = useRef(null);
@@ -32,7 +37,6 @@ const ScrollViewforcasparcg = ({ fontSize, scrollWidth, newsReaderText, showCloc
         });
 
         socketRef.current.on("crossedLines2", (data) => {
-
             setCrossedLines(data);
         });
         socketRef.current.on("storyLines2", (data) => {
@@ -53,6 +57,22 @@ const ScrollViewforcasparcg = ({ fontSize, scrollWidth, newsReaderText, showCloc
             setSlugs(data);
         })
 
+        socketRef.current.on("setFontSize2", (data) => {
+            setFontSize(data);
+        });
+
+        socketRef.current.on("setStartPosition2", (data) => {
+            setStartPosition(data);
+        });
+
+        socketRef.current.on("setShowClock2", (data) => {
+            setShowClock(data);
+        });
+        socketRef.current.on("setNewsReaderText2", (data) => {
+            setNewsReaderText(data);
+        });
+
+
         return () => {
             // socketRef.current.disconnect();
             socketRef.current.off("crossedLines2");
@@ -61,6 +81,10 @@ const ScrollViewforcasparcg = ({ fontSize, scrollWidth, newsReaderText, showCloc
             socketRef.current.off("setCurrentStoryNumber2");
             socketRef.current.off("allContent2");
             socketRef.current.off("setSlugs2");
+
+            socketRef.current.off("setFontSize2");
+            socketRef.current.off("setStartPosition2");
+
 
             socketRef.current = null;
         };
