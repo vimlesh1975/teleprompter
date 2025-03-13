@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Count from './Count';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
-
-const socket = io();
-socket.on('connect', () => {
-    console.log('SOCKET CONNECTED! from Scrollviewforcasparcg page', socket.id);
-});
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
@@ -27,34 +22,49 @@ const ScrollViewforcasparcg = ({  fontSize, scrollWidth,  newsReaderText, showCl
     const [allContent, setAllContent] = useState([]);
     const [slugs, setSlugs] = useState([]);
 
+    const socketRef = useRef(null);
+
     useEffect(() => {
-        socket.on("crossedLines2", (data) => {
+        socketRef.current = io();
+
+        socketRef.current.on('connect', () => {
+            console.log('SOCKET CONNECTED! from Scrollviewforcasparcg page', socketRef.current.id);
+        });
+
+        return () => {
+            socketRef.current.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
+        socketRef.current.on("crossedLines2", (data) => {
+           
             setCrossedLines(data);
         });
-        socket.on("storyLines2", (data) => {
+        socketRef.current.on("storyLines2", (data) => {
             setStoryLines(data);
         });
-        socket.on("newPosition2", (data) => {
+        socketRef.current.on("newPosition2", (data) => {
             setNewPosition(data);
         });
-        socket.on("setCurrentStoryNumber2", (data) => {
+        socketRef.current.on("setCurrentStoryNumber2", (data) => {
             setCurrentStoryNumber(data);
         })
 
-        socket.on("allContent2", (data) => {
+        socketRef.current.on("allContent2", (data) => {
             setAllContent(data);
         })
 
-        socket.on("setSlugs2", (data) => {
+        socketRef.current.on("setSlugs2", (data) => {
             setSlugs(data);
         })
         return () => {
-            socket.off("crossedLines2");
-            socket.off("storyLines2");
-            socket.off("newPosition2");
-            socket.off("setCurrentStoryNumber2");
-            socket.off("allContent2");
-            socket.off("setSlugs2");
+            socketRef.current.off("crossedLines2");
+            socketRef.current.off("storyLines2");
+            socketRef.current.off("newPosition2");
+            socketRef.current.off("setCurrentStoryNumber2");
+            socketRef.current.off("allContent2");
+            socketRef.current.off("setSlugs2");
         }
     }, [])
 

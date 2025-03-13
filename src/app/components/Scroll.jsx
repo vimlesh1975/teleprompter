@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef} from 'react';
+import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
@@ -28,25 +28,13 @@ const scrollContainerStyle = {
     color: '#fff'
 };
 
-const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber,  slugs, newsReaderText,setSpeed }) => {
+const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, slugs, newsReaderText, setSpeed }) => {
     const dispatch = useDispatch();
     const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
     const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
 
-const socketRef = useRef(null);
-
-useEffect(() => {
-    socketRef.current = io();
-
-    socketRef.current.on('connect', () => {
-        console.log('SOCKET CONNECTED! from Scroll page', socketRef.current.id);
-    });
-
-    return () => {
-        socketRef.current.disconnect();
-    };
-}, []);
-
+    const containerRef = useRef(null);
+    const contentRefs = useRef([]);
 
     const scrollingTextStyle = {
         position: 'absolute',
@@ -62,8 +50,19 @@ useEffect(() => {
 
     };
 
-    const containerRef = useRef(null);
-    const contentRefs = useRef([]);
+    const socketRef = useRef(null);
+
+    useEffect(() => {
+        socketRef.current = io();
+
+        socketRef.current.on('connect', () => {
+            console.log('SOCKET CONNECTED! from Scroll page', socketRef.current.id);
+        });
+
+        return () => {
+            socketRef.current.disconnect();
+        };
+    }, []);
 
     useEffect(() => {
         socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
@@ -93,6 +92,32 @@ useEffect(() => {
         };
     }, [newPosition])
 
+    // useEffect(() => {
+    //     if (!socketRef.current) {
+    //         socketRef.current = io();
+    //     }
+    
+    //     socketRef.current.on('connect', () => {
+    //         console.log('SOCKET CONNECTED! from Scroll page', socketRef.current.id);
+    //     });
+    
+    //     // Emit events when dependencies change
+    //     socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
+    //     socketRef.current.emit('crossedLines', crossedLines);
+    //     socketRef.current.emit('storyLines', storyLines);
+    //     socketRef.current.emit('newPosition', newPosition);
+    
+    //     // Cleanup function to remove listeners
+    //     return () => {
+    //         socketRef.current.off('setCurrentStoryNumber');
+    //         socketRef.current.off('crossedLines');
+    //         socketRef.current.off('storyLines');
+    //         socketRef.current.off('newPosition');
+    //         socketRef.current.disconnect();
+    //     };
+    // }, [currentStoryNumber, crossedLines, storyLines, newPosition]);
+    
+
     useEffect(() => {
         let animationFrameId;
 
@@ -101,8 +126,8 @@ useEffect(() => {
                 // setNewPosition(prevTop => prevTop - (speed / 9.2));
                 const { top, height } = textRef.current.getBoundingClientRect();
                 if (top < -height) {
-                  setSpeed(0); // Stop the movement
-                  return;
+                    setSpeed(0); // Stop the movement
+                    return;
                 }
 
                 setNewPosition(prevTop => prevTop - (speed / 2.2));
