@@ -61,52 +61,64 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
         return () => {
             socketRef.current.disconnect();
+            socketRef.current = null;
         };
     }, []);
 
     useEffect(() => {
-        socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
-        return () => {
-            socketRef.current.off('setCurrentStoryNumber');
-        };
+        if (!socketRef.current) return;
+
+            socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
+            return () => {
+                socketRef.current?.off('setCurrentStoryNumber');
+            };
+        
     }, [currentStoryNumber])
 
     useEffect(() => {
-        socketRef.current.emit('crossedLines', crossedLines);
-        return () => {
-            socketRef.current.off('crossedLines');
-        };
+        if (socketRef.current) {
+            socketRef.current.emit('crossedLines', crossedLines);
+            return () => {
+                socketRef.current?.off('crossedLines');
+            };
+        }
     }, [crossedLines])
 
     useEffect(() => {
-        socketRef.current.emit('storyLines', storyLines);
-        return () => {
-            socketRef.current.off('storyLines');
-        };
+        if (!socketRef.current) return;
+            socketRef.current.emit('storyLines', storyLines);
+            return () => {
+                socketRef.current?.off('storyLines');
+            };
+        
     }, [storyLines])
 
     useEffect(() => {
+        if (!socketRef.current) return;
+    
         socketRef.current.emit('newPosition', newPosition);
+    
         return () => {
-            socketRef.current.off('newPosition');
+            socketRef.current?.off('newPosition');
         };
-    }, [newPosition])
+    }, [newPosition]);
+    
 
     // useEffect(() => {
     //     if (!socketRef.current) {
     //         socketRef.current = io();
     //     }
-    
+
     //     socketRef.current.on('connect', () => {
     //         console.log('SOCKET CONNECTED! from Scroll page', socketRef.current.id);
     //     });
-    
+
     //     // Emit events when dependencies change
     //     socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
     //     socketRef.current.emit('crossedLines', crossedLines);
     //     socketRef.current.emit('storyLines', storyLines);
     //     socketRef.current.emit('newPosition', newPosition);
-    
+
     //     // Cleanup function to remove listeners
     //     return () => {
     //         socketRef.current.off('setCurrentStoryNumber');
@@ -116,7 +128,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     //         socketRef.current.disconnect();
     //     };
     // }, [currentStoryNumber, crossedLines, storyLines, newPosition]);
-    
+
 
     useEffect(() => {
         let animationFrameId;
