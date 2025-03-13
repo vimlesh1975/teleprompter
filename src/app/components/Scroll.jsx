@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 function moveZerosToFront(arr) {
-    return arr.sort((a, b) => (a === 0 ? -1 : 1));
+    return [...arr.filter(n => n === 0), ...arr.filter(n => n !== 0)];
 }
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
