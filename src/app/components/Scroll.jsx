@@ -9,10 +9,6 @@ import { changeStoryLines, changeCrossedLines } from '../store/store'; // Adjust
 
 import { useDispatch, useSelector } from 'react-redux';
 
-// const socket = io();
-// socketRef.current.on('connect', () => {
-//     console.log('SOCKET CONNECTED! from Scroll page', socketRef.current.id);
-// });
 
 function moveZerosToFront(arr) {
     return arr.sort((a, b) => (a === 0 ? -1 : 1));

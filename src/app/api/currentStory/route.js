@@ -2,7 +2,6 @@ import mysql from 'mysql2/promise';
 import { config } from '../db.js';
 
 import io from 'socket.io-client';
-// const socket = io('http://localhost:3000');
 
 const socket = io('http://localhost:3000', {
     transports: ['polling'],
@@ -24,7 +23,6 @@ socket.on('connect_error', (err) => {
 export async function POST(req) {
     const payload = await req.json();
     const { curstory, curbulletin, ScriptID, usedStory } = payload;
-    // const data = { curstory, curbulletin, ScriptID, usedStory }; // Your payload
   
     var emittedData;
     if (usedStory.length===0){
@@ -43,7 +41,6 @@ export async function POST(req) {
         const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?, ScriptID = ?`;
         const values = [curstory, curbulletin, ScriptID];
 
-        // connection = await mysql.createConnection(config);
         connection = await mysql.createPool(config);
 
         try {
