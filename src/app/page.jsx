@@ -880,11 +880,13 @@ export default function Home() {
                 >
                   {val.SlugName}{" "}
                 </label>{" "}
+                <label style={{marginRight:0, fontSize:12}}>{isVideoNndCGPresent(val)}</label>
                 <br />
               </div>
             ))}
           </div>
           <button onClick={() => { setUsedStory([]) }}>Reset used story status</button>
+          
           <label>
             {" "}
             <input
