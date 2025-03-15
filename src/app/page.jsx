@@ -397,19 +397,28 @@ export default function Home() {
     }
   }, [selectedRunOrderTitle, selectedDate]);
 
-  const isVideoPresent = (slug) => {
+  const isVideoNndCGPresent = (slug) => {
     if (!slug) return "No visuals"; // Handle undefined slug
-  
+
     const mediaList = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
     const count = mediaList.filter(item => item?.trim()).length; // Count valid media entries
-  
+
     const totalCount = newdatabase ? count : (slug?.Media ? 1 : 0);
-  
-    if (totalCount === 0) return ", No Visuals";
-    if (totalCount === 1) return ", Visual - 1";
-    return `, Visuals - ${totalCount} `;
+    var aa;
+
+
+    if (totalCount === 0) {
+      aa = ", (No Visual)";
+    }
+    else if (totalCount === 1) {
+      aa= `, (1 Visual)`;
+    }
+    else{
+      aa= `, (${totalCount} Visuals)`;
+    }
+    return `${aa} (${(slug.graphicsid)?slug.graphicsid:'No CG'})`;
   };
-  
+
 
   const fetchAllContent = (slicedSlugs, startNumber) => {
     if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
@@ -421,7 +430,7 @@ export default function Home() {
       slicedSlugs.forEach((slug, i) => {
 
         if (!slug?.DropStory && (slug?.Approval || allowUnApproved)) {
-          data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoPresent(slug)
+          data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoNndCGPresent(slug)
             }`;
           // data1[i * 3 + 1] = `${slug.Script}`;
           data1[i * 3 + 1] = `${slug.Script?.split('$$$$')[0]}`;
@@ -955,7 +964,7 @@ export default function Home() {
               crossedLines={crossedLines}
               speed={speed}
               showClock={showClock}
-            newsReaderText={newsReaderText}
+              newsReaderText={newsReaderText}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
@@ -1047,7 +1056,7 @@ export default function Home() {
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
-                {isVideoPresent(slugs[currentSlug])}
+                {isVideoNndCGPresent(slugs[currentSlug])}
               </div>
             )}
 
