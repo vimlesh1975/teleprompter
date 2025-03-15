@@ -1,5 +1,6 @@
 import React, { useEffect, useState ,cloneElement } from 'react';
 import ReactDOM from 'react-dom';
+const IP = process.env.NEXT_PUBLIC_IP;
 
 function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight }) {
     // const newWindowRef = useRef(null);
@@ -70,7 +71,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', `width=${scrollWidth+20},height=${scrollHeight+40}`);
+            newWindowRef.current = window.open(`http://${IP}:3000/CasparcgOutput`, '', `width=${scrollWidth+20},height=${scrollHeight+40}`);
         }
 
         // Ensure the window is still available

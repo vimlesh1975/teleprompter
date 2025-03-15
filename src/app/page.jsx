@@ -15,6 +15,7 @@ import { changenewdatabase } from './store/store'; // Adjust the path as needed
 
 import 'react-tabs/style/react-tabs.css';
 
+import ScrollViewforcasparcg from './components/ScrollViewforcasparcg';
 
 
 // const scrollWidth = 600;
@@ -35,7 +36,7 @@ export default function Home() {
   const [startPosition, setStartPosition] = useState(150);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
-  const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("");
+  const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("0600 Hrs");
   const [slugs, setSlugs] = useState([]);
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
@@ -948,7 +949,7 @@ export default function Home() {
               crossedLines={crossedLines}
               speed={speed}
               showClock={showClock}
-            newsReaderText={newsReaderText}
+              newsReaderText={newsReaderText}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
@@ -1092,8 +1093,8 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-
-                <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                {/* <ScrollViewforcasparcg /> */}
+                {/* <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} /> */}
               </NewWindow>
 
             )}
