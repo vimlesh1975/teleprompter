@@ -7,6 +7,21 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
     const [scaleFactor, setScaleFactor] = useState(1);
     // State to keep track of flip status
 
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            if (newWindowRef.current) {
+                newWindowRef.current.close();
+            }
+        };
+    
+        window.addEventListener('beforeunload', handleBeforeUnload);
+    
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+    
+
     const handleTitleBarDoubleClick = (e) => {
         newWindowRef.current.resizeTo(newWindowRef.current.screen.width, newWindowRef.current.screen.height);
         newWindowRef.current.moveTo(0, 0);
