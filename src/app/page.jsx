@@ -1238,6 +1238,9 @@ export default function Home() {
               >
                 {showNewWindow2 ? "Close New Window2" : "Open New Window2"}
               </button>
+              <button onClick={()=>{
+                window.open('/CasparcgOutput2', '', `width=${scrollWidth+20},height=${scrollHeight+40}`);
+              }}>Test</button>
             </div>
 
             <button onClick={() => setShowSettings(val => !val)}>{showSettings ? 'Hide Setting' : 'Show Setting'}</button>
