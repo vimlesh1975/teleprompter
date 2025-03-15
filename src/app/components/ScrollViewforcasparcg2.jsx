@@ -11,7 +11,6 @@ const scrollContainerStyle = {
     height: '440px',
     overflow: 'hidden',
     backgroundColor: '#000',
-    color: '#fff'
 };
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const ScrollViewforcasparcg2 = () => {
@@ -126,7 +125,7 @@ const ScrollViewforcasparcg2 = () => {
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'white' }}>
+                    <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'red' }}>
                         {content}
                     </div>
                 ))}
