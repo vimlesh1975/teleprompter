@@ -1,25 +1,7 @@
 import mysql from 'mysql2/promise';
 import { config } from '../db.js';
 
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:3000', {
-    transports: ['polling'],
-});
-
-
-socket.on('connect', () => {
-    console.log('Socket currentStory connected:', socket.id);
-});
-
-socket.on('disconnect', () => {
-    console.log('Socket currentStory disconnected');
-});
-
-socket.on('connect_error', (err) => {
-    console.log('Socket currentStory connection error:', err);
-});
-
+import socket from '../socketClient.js';
 export async function POST(req) {
     const payload = await req.json();
     const { curstory, curbulletin, ScriptID, usedStory } = payload;
