@@ -128,6 +128,7 @@ export default function Home() {
     });
 
     socket.on('connect_error', (error) => {
+      console.log(error)
       setServerAlive(false);
       // connectbutton.current.style.backgroundColor = "red";
     });

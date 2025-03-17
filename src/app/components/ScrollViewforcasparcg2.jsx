@@ -35,7 +35,7 @@ const ScrollViewforcasparcg2 = () => {
         socketRef.current = io();
 
         socketRef.current.on('connect', () => {
-            console.log('SOCKET CONNECTED! from Scrollviewforcasparcg page', socketRef.current.id);
+            console.log('SOCKET CONNECTED! from Scrollviewforcasparcg2 page', socketRef.current.id);
         });
 
         socketRef.current.on("crossedLines2", (data) => {
