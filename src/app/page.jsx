@@ -79,14 +79,14 @@ export default function Home() {
 
   const [sendUsedStory, setSendUsedStory] = useState(false);
 
-  const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory) => {
+  const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate) => {
     if (!curbulletin) return;
     if (!ScriptID) return;
 
     fetch('/api/currentStory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [] }),
+      body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
     })
       .then(response => response.json())
       .then(data => {
@@ -98,8 +98,8 @@ export default function Home() {
   }, [sendUsedStory]);
 
   useEffect(() => {
-    updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory);
-  }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory]);
+    updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate);
+  }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate]);
 
 
   const handleDateChange = (event) => {
@@ -1248,13 +1248,13 @@ export default function Home() {
                   socket.emit('crossedLines', crossedLines);
                   socket.emit('allContent', allContent);
                   socket.emit('setSlugs', slugs.length);
-  
+
                   socket.emit('setFontSize', fontSize);
                   socket.emit('setStartPosition', startPosition);
-  
+
                   socket.emit('setShowClock', showClock);
                   socket.emit('setNewsReaderText', newsReaderText);
-  
+
                 }, 3000);
               }}>Test</button>
             </div>

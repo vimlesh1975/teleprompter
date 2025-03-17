@@ -4,24 +4,24 @@ import { config } from '../db.js';
 import socket from '../socketClient.js';
 export async function POST(req) {
     const payload = await req.json();
-    const { curstory, curbulletin, ScriptID, usedStory } = payload;
-  
+    const { curstory, curbulletin, ScriptID, usedStory, selectedDate } = payload;
+
     var emittedData;
-    if (usedStory.length===0){
-     emittedData= { curstory, curbulletin, ScriptID:123456789, usedStory }; // Your payload
-   }
-   else{
-        emittedData= { curstory, curbulletin, ScriptID, usedStory }; // Your payload
-   }
-   
+    if (usedStory.length === 0) {
+        emittedData = { curstory, curbulletin, ScriptID: 123456789, usedStory, bulletindate: selectedDate }; // Your payload
+    }
+    else {
+        emittedData = { curstory, curbulletin, ScriptID, usedStory, bulletindate: selectedDate }; // Your payload
+    }
+
     socket.emit('currentStory1', emittedData);
     // console.log(data)
 
     let connection;
 
     try {
-        const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?, ScriptID = ?, usedStory = ?`;
-        const values = [curstory, curbulletin, ScriptID, JSON.stringify(usedStory)];
+        const query = `UPDATE currentstory SET curstory = ?, curbulletin = ?, ScriptID = ?, usedStory = ?, bulletindate = ? `;
+        const values = [curstory, curbulletin, ScriptID, JSON.stringify(usedStory), selectedDate];
 
         connection = await mysql.createPool(config);
 
