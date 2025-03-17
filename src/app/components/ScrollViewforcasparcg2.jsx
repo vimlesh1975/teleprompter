@@ -125,7 +125,7 @@ const ScrollViewforcasparcg2 = () => {
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'red' }}>
+                    <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'white' }}>
                         {content}
                     </div>
                 ))}
