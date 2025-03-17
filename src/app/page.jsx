@@ -411,12 +411,12 @@ export default function Home() {
       aa = ", (No Visual)";
     }
     else if (totalCount === 1) {
-      aa= `, (1 Visual)`;
+      aa = `, (1 Visual)`;
     }
-    else{
-      aa= `, (${totalCount} Visuals)`;
+    else {
+      aa = `, (${totalCount} Visuals)`;
     }
-    return `${aa} (${(slug.graphicsid)?slug.graphicsid:'No CG'})`;
+    return `${aa} (${(slug.graphicsid) ? slug.graphicsid : 'No CG'})`;
   };
 
 
@@ -880,13 +880,13 @@ export default function Home() {
                 >
                   {val.SlugName}{" "}
                 </label>{" "}
-                <label style={{marginRight:0, fontSize:12}}>{isVideoNndCGPresent(val)}</label>
+                <label style={{ marginRight: 0, fontSize: 12 }}>{isVideoNndCGPresent(val)}</label>
                 <br />
               </div>
             ))}
           </div>
           <button onClick={() => { setUsedStory([]) }}>Reset used story status</button>
-          
+
           <label>
             {" "}
             <input
@@ -1238,8 +1238,23 @@ export default function Home() {
               >
                 {showNewWindow2 ? "Close New Window2" : "Open New Window2"}
               </button>
-              <button onClick={()=>{
-                window.open('/CasparcgOutput2', '', `width=${scrollWidth},height=${scrollHeight+40}`);
+              <button onClick={() => {
+                window.open('/CasparcgOutput2', '', `width=${scrollWidth},height=${scrollHeight + 40}`);
+                setTimeout(() => {
+                  socket.emit('newPosition', newPosition);
+                  socket.emit('setCurrentStoryNumber', currentStoryNumber);
+                  socket.emit('storyLines', storyLines);
+                  socket.emit('crossedLines', crossedLines);
+                  socket.emit('allContent', allContent);
+                  socket.emit('setSlugs', slugs.length);
+  
+                  socket.emit('setFontSize', fontSize);
+                  socket.emit('setStartPosition', startPosition);
+  
+                  socket.emit('setShowClock', showClock);
+                  socket.emit('setNewsReaderText', newsReaderText);
+  
+                }, 3000);
               }}>Test</button>
             </div>
 

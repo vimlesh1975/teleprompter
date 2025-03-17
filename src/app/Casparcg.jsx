@@ -158,7 +158,6 @@ export default function Home({ slugs, allContent,  startPosition, fontSize,  new
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
-
                 socketRef.current.emit('newPosition', newPosition);
                 socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
                 socketRef.current.emit('storyLines', storyLines);
@@ -171,8 +170,6 @@ export default function Home({ slugs, allContent,  startPosition, fontSize,  new
 
                 socketRef.current.emit('setShowClock', showClock);
                 socketRef.current.emit('setNewsReaderText', newsReaderText);
-
-
 
               }, 3000);
             }
