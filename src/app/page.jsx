@@ -646,7 +646,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    socket.emit('setSlugs', JSON.stringify(slugs.map(item => item.SlugName)));
+    socket.emit('setSlugs', slugs.length);
   }, [slugs]);
 
 

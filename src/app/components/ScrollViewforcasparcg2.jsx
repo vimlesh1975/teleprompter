@@ -27,8 +27,8 @@ const ScrollViewforcasparcg2 = () => {
 
 
 
-    const [slugs, setSlugs] = useState([]);
-
+       const [slugsLength, setSlugsLength] = useState(0);
+   
     const socketRef = useRef(null);
 
     useEffect(() => {
@@ -56,7 +56,7 @@ const ScrollViewforcasparcg2 = () => {
         })
 
         socketRef.current.on("setSlugs2", (data) => {
-            setSlugs(data);
+            setSlugsLength(data);
         })
 
         socketRef.current.on("setFontSize2", (data) => {
@@ -111,7 +111,7 @@ const ScrollViewforcasparcg2 = () => {
         <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
             <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
-                    <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
+                    <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugsLength})`}</div>
                     <div>{newsReaderText}</div>
                     <div><Count currentStoryNumber={currentStoryNumber} /></div>
                     <div>ScrollView</div>

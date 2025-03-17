@@ -164,7 +164,7 @@ export default function Home({ slugs, allContent,  startPosition, fontSize,  new
                 socketRef.current.emit('storyLines', storyLines);
                 socketRef.current.emit('crossedLines', crossedLines);
                 socketRef.current.emit('allContent', allContent);
-                socketRef.current.emit('setSlugs', JSON.stringify(slugs.map(item => item.SlugName)));
+                socketRef.current.emit('setSlugs', slugs.length);
 
                 socketRef.current.emit('setFontSize', fontSize);
                 socketRef.current.emit('setStartPosition', startPosition);
