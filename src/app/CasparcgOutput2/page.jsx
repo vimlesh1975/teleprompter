@@ -11,7 +11,7 @@ const Page = () => {
   const [scaleY, setScaleY] = useState(1);
   const [isMaximized, setIsMaximized] = useState(false);
 
-  const container=useRef(null);
+  const container = useRef(null);
 
   const handleRightClick = (event) => {
     event.preventDefault(); // Prevent the default context menu from appearing
@@ -20,30 +20,32 @@ const Page = () => {
     const screenWidth = screen.width;
 
     const knownOrigins = {
-        1920: 555,
-        1680: 530,
-        1600: 523,
-        1440: 505,
-        1366: 495,
-        1360: 495,
-        1280: 483,
-        1176: 466,
-        1152: 462,
-        1024: 440,
-        800: 392,
+      // 1920: 555,
+      1920: 600,
+      1680: 530,
+      1600: 523,
+      1440: 505,
+      1366: 495,
+      1360: 495,
+      1280: 483,
+      1176: 466,
+      1152: 462,
+      1024: 440,
+      800: 392,
     };
 
     // Calculate transform origin using the linear formula if not in known origins
-    const transformOriginX = knownOrigins[screenWidth] || (0.0893 * screenWidth );
+    const transformOriginX = knownOrigins[screenWidth] || (0.0893 * screenWidth + 284);
 
     // Toggle flip transformation
     if (container.current.style.transform.includes('rotateY(180deg)')) {
-        container.current.style.transform = container.current.style.transform.replace('rotateY(180deg)', 'rotateY(0deg)');
+      // container.current.style.transformOrigin = '5px 0';
+      container.current.style.transform = container.current.style.transform.replace('rotateY(180deg)', 'rotateY(0deg)');
     } else {
-        container.current.style.transformOrigin = `${950}px 0%`;
-        container.current.style.transform = container.current.style.transform + ' rotateY(180deg)';
+      // container.current.style.transformOrigin = `${transformOriginX}px 0%`;
+      container.current.style.transform = container.current.style.transform + ' rotateY(180deg)';
     }
-};
+  };
 
 
   const toggleScaleAndMaximize = () => {
@@ -57,7 +59,8 @@ const Page = () => {
         1080: 160,
         1050: 165,
         1024: 160,
-        960: 253,
+        // 960: 253,
+        960: 153,
         900: 155,
         864: 238,
         800: 150,
@@ -71,6 +74,7 @@ const Page = () => {
       // Use `document.documentElement.clientHeight` for better height detection
       setScaleX(window.innerWidth / scrollWidth);
       setScaleY(sf);
+
     } else {
       // Restore window to a smaller size
       window.resizeTo(scrollWidth, scrollHeight);
@@ -94,10 +98,10 @@ const Page = () => {
   }, [isMaximized]);
 
   return (
-    <div 
-    onDoubleClick={toggleScaleAndMaximize} style={{ overflow: "hidden", height: "100vh" }}
-    onContextMenu={handleRightClick}
-    ref={container}
+    <div
+      onDoubleClick={toggleScaleAndMaximize} 
+      onContextMenu={handleRightClick}
+      ref={container}
     >
       <div
         style={{

@@ -34,7 +34,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
             1080: 160,
             1050: 165,
             1024: 160,
-            960: 253,
+            960: 153,
             900: 155,
             864: 238,
             800: 150,
