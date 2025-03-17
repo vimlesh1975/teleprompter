@@ -66,7 +66,7 @@ const Page = () => {
         768: 150,
         720: 140,
         664: 145,
-        600: 130,
+        600: 135,
       };
       const sf = (screenHeight - (knownOrigins[screenHeight] || 150)) / scrollHeight;
 
