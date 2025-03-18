@@ -13,7 +13,7 @@ export async function POST(req) {
 
         try {
             await connection.query(query, values);
-            return new Response(JSON.stringify({ message: 'Content updated successfully' }), {
+            return new Response(JSON.stringify({ message: `Content updated successfully with ' ${dropstory} ${ ScriptID }` }), {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
             });

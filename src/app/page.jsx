@@ -315,8 +315,8 @@ export default function Home() {
         data.data.length !== slugs.length
       ) {
         if (
-          data.data[currentStoryNumber - 1]?.DropStory === 1 ||
-          data.data[currentStoryNumber - 1]?.Approval === 0
+          (data.data[currentStoryNumber - 1]?.DropStory === 1) ||  (data.data[currentStoryNumber - 1]?.DropStory === 3) ||
+          (data.data[currentStoryNumber - 1]?.Approval === 0)
         ) {
           // console.log("current story dropped or not disapproved");
           handleDoubleClick(currentStoryNumber);
@@ -430,14 +430,14 @@ export default function Home() {
     try {
       slicedSlugs.forEach((slug, i) => {
 
-        if (!slug?.DropStory && (slug?.Approval || allowUnApproved)) {
+        if ((slug.DropStory === 0 || slug.DropStory === 2) && (slug?.Approval || allowUnApproved)) {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoNndCGPresent(slug)
             }`;
           // data1[i * 3 + 1] = `${slug.Script}`;
           data1[i * 3 + 1] = `${slug.Script?.split('$$$$')[0]}`;
           data1[i * 3 + 2] = `--------------`;
         } else {
-          data1[i * 3] = `${startNumber + i + 1} ${slug?.DropStory ? "Story Dropped" : "Story UnApproved"}`;
+          data1[i * 3] = `${startNumber + i + 1} ${!(slug?.DropStory === 0 || slug?.DropStory === 2)? "Story Dropped" : "Story UnApproved"}`;
 
           data1[i * 3 + 1] = ` `;
           data1[i * 3 + 2] = ``;
@@ -650,7 +650,20 @@ export default function Home() {
     socket.emit('setSlugs', slugs.length);
   }, [slugs]);
 
-
+  const dropStoryValue = (slug) => {
+    if (slug.DropStory === 0) {
+      return 3;
+    }
+    if (slug.DropStory === 1) {
+      return 2;
+    }
+    if (slug.DropStory === 2) {
+      return 3;
+    }
+    if (slug.DropStory === 3) {
+      return 2;
+    }
+  }
   const readFile = (selectedFile) => {
     if (!selectedFile) return;
     const reader = new FileReader();
@@ -836,27 +849,28 @@ export default function Home() {
                   backgroundColor:
                     currentSlug === i
                       ? "green"
-                      : val.DropStory
+                      : (val.DropStory === 1 || val.DropStory === 3)
                         ? "#FF999C"
                         : !val.Approval
                           ? "red"
                           : "#E7DBD8",
                   margin: 10,
                 }}
-              >
+              > 
+              {/* {val.DropStory} */}
                 <input
-                  title={!val.DropStory ? 'Uncheck to Drop' : 'Check to Include'}
+                  title={(val.DropStory === 0 || val.DropStory === 2) ? 'Uncheck to Drop' : 'Check to Include'}
                   type="checkbox"
-                  checked={!val.DropStory}
+                  checked={val.DropStory === 0 || val.DropStory === 2}
                   onChange={(e) => {
                     // Correctly updating the array
                     const updatedSlugs = [...slugs]; // Create a copy of the array
-                    updatedSlugs[i] = { ...updatedSlugs[i], DropStory: !val.DropStory }; // Modify the object at index i
+                    updatedSlugs[i] = { ...updatedSlugs[i], DropStory:dropStoryValue(val) }; // Modify the object at index i
                     setSlugs(updatedSlugs); // Update state with the modified array
                     fetch('/api/setDropedStory', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ dropstory: !val.DropStory, ScriptID: val.ScriptID }),
+                      body: JSON.stringify({ dropstory:dropStoryValue(val), ScriptID: val.ScriptID }),
                     })
                       .then(response => response.json())
                       .then(data => {
@@ -871,7 +885,7 @@ export default function Home() {
                 <span title={'ScriptID:-' + val.ScriptID} style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
                 <label
                   title={
-                    val.DropStory
+                    (val.DropStory === 1 || val.DropStory === 3) 
                       ? "Story Dropped"
                       : !val.Approval
                         ? "Story UnApproved"
