@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,25 +11,31 @@
       font-family: Arial, sans-serif;
       margin: 20px;
     }
+
     #storyContainer {
       margin-top: 20px;
       padding: 10px;
       border: 1px solid #ccc;
       max-width: 600px;
     }
+
     #storyContainer h2 {
       font-size: 24px;
     }
+
     #storyContainer p {
       font-size: 18px;
     }
   </style>
 </head>
+
 <body>
   <h1>Socket.IO Client</h1>
   <div id="storyContainer">
     <h2>Current Story Update</h2>
     <p id="storyData">Waiting for updates...</p>
+    <h2>current Story Drop Allow</h2>
+    <p id="currentStoryDropAllow">Waiting for updates...</p>
   </div>
 
   <script>
@@ -37,7 +44,7 @@
 
     // Listen for the 'newStoryUpdate' event from the server
     socket.on('currentStoryBroadcast', (data) => {
-      console.log('Received new story update:', data);
+      // console.log('Received new story update:', data);
 
       // Update the content on the webpage with the new data
       document.getElementById('storyData').innerText = `
@@ -46,6 +53,15 @@
         Date: ${data.bulletindate}
         Script ID: ${data.ScriptID}
         Used Stories: ${data.usedStory}
+      `;
+    });
+
+    socket.on('currentStoryDropAllow', (data) => {
+      console.log('currentStoryDropAllow:', data);
+
+      // Update the content on the webpage with the new data
+      document.getElementById('currentStoryDropAllow').innerText = `
+         Story Stop/Allow by Teleprompter: ${JSON.stringify(data)}  
       `;
     });
 
@@ -59,4 +75,5 @@
     });
   </script>
 </body>
+
 </html>

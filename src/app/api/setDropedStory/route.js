@@ -1,10 +1,16 @@
 import mysql from 'mysql2/promise';
 import { config } from '../db.js';
+import socket from '../socketClient.js';
 
 
 export async function POST(req) {
     const payload = await req.json();
     const { dropstory, ScriptID } = payload;
+    var emittedData={[ScriptID]:dropstory}
+
+    socket.emit('currentStoryDropAllow1',emittedData);
+    console.log(emittedData);
+
     let connection;
     try {
         const query = `UPDATE script SET dropstory = ? WHERE ScriptID = ?`;

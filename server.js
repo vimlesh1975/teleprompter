@@ -58,6 +58,10 @@ app.prepare().then(async () => {
             io.emit('currentStoryBroadcast', data);  // Broadcast to all clients
         });
 
+        socket.on('currentStoryDropAllow1', (data) => {
+            io.emit('currentStoryDropAllow', data);  // Broadcast to all clients
+        });
+
         //from scroll page in caspar  start
         socket.on('setCurrentStoryNumber', (data) => {
             io.emit('setCurrentStoryNumber2', data);
