@@ -870,7 +870,7 @@ export default function Home() {
                     fetch('/api/setDropedStory', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ dropstory:dropStoryValue(val), ScriptID: val.ScriptID }),
+                      body: JSON.stringify({ dropstory:dropStoryValue(val), ScriptID: val.ScriptID, bulletindate:selectedDate, bulletinname:selectedRunOrderTitle }),
                     })
                       .then(response => response.json())
                       .then(data => {

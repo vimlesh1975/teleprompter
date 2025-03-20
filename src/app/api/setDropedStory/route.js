@@ -5,8 +5,8 @@ import socket from '../socketClient.js';
 
 export async function POST(req) {
     const payload = await req.json();
-    const { dropstory, ScriptID } = payload;
-    var emittedData={[ScriptID]:dropstory}
+    const { dropstory, ScriptID, bulletindate , bulletinname} = payload;
+    var emittedData={[ScriptID]:dropstory,  bulletindate, bulletinname};
 
     socket.emit('currentStoryDropAllow1',emittedData);
     console.log(emittedData);
