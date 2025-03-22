@@ -613,7 +613,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (slugs[currentStoryNumber - 1]?.DropStory) {
+    if (slugs[currentStoryNumber - 1]?.DropStory===1 || slugs[currentStoryNumber - 1]?.DropStory===3) {
       return;
     }
     const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
