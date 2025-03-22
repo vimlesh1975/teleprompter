@@ -7,12 +7,13 @@ export async function POST(req) {
     const { curstory, curbulletin, ScriptID, usedStory, selectedDate } = payload;
 
     var emittedData;
-    if (usedStory.length === 0) {
-        emittedData = { curstory, curbulletin, ScriptID: 123456789, usedStory, bulletindate: selectedDate }; // Your payload
-    }
-    else {
-        emittedData = { curstory, curbulletin, ScriptID, usedStory, bulletindate: selectedDate }; // Your payload
-    }
+    // if (usedStory.length === 0) {
+    //     emittedData = { curstory, curbulletin, ScriptID, usedStory:, bulletindate: selectedDate }; // Your payload
+    // }
+    // else {
+    //     emittedData = { curstory, curbulletin, ScriptID, usedStory, bulletindate: selectedDate }; // Your payload
+    // }
+    emittedData = { curstory, curbulletin, ScriptID, usedStory, bulletindate: selectedDate }; // Your payload
 
     socket.emit('currentStory1', emittedData);
     // console.log(data)
