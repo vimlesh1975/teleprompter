@@ -492,7 +492,7 @@ export default function Home() {
       if (newIndex < 0) {
         newIndex = slugs.length - 1;
       }
-      while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
+      while (((slugs[newIndex]?.DropStory===1) || (slugs[newIndex]?.DropStory)===3) || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
         newIndex--;
         if (newIndex < 0) {
           newIndex = slugs.length - 1;
@@ -510,7 +510,7 @@ export default function Home() {
       if (newIndex >= slugs.length) {
         newIndex = 0;
       }
-      while (slugs[newIndex]?.DropStory || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
+      while (((slugs[newIndex]?.DropStory===1) || (slugs[newIndex]?.DropStory)===3) || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
         newIndex++;
         if (newIndex >= slugs.length) {
           newIndex = 0;
@@ -778,7 +778,7 @@ export default function Home() {
   const exportScript = () => {
     let text = '';
     slugs.forEach((item) => {
-      text += `${item.SlugName}${item.DropStory ? '(Story Dropped)' : ''}${!item.approved ? '(Story UnApproved)' : ''}\nZXZX\n${item.Script}\nZCZC\n`;
+      text += `${item.SlugName}${(item.DropStory === 1 || item.DropStory === 3) ? '(Story Dropped)' : ''}${!item.approved ? '(Story UnApproved)' : ''}\nZXZX\n${item.Script}\nZCZC\n`;
     });
     // Remove the last occurrence of "ZCZC\n"
     text = text.replace(/ZCZC\n$/, '');
