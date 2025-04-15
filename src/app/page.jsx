@@ -87,7 +87,9 @@ export default function Home() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [ScriptID], selectedDate }),
-      body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
+      // body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
+      body: JSON.stringify({ curstory, curbulletin, ScriptID:sendUsedStory ?((usedStory.length===0)?123456478: ScriptID):123456789, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
+
     })
       .then(response => response.json())
       .then(data => {
