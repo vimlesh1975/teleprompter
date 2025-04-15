@@ -915,7 +915,7 @@ export default function Home() {
                 return !val
               })}
             />{" "}
-            <span>Send Used Story</span>
+          <b><span>Send Used Story</span></b>  
           </label>
 
           <div title={useDB ? 'Data from database' : `Text file should be like this
