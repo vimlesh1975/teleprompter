@@ -34,7 +34,8 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
     const scrollingTextStyle = useMemo(() => ({
         position: 'absolute',
-        top: parseFloat(newPosition),
+        // top: parseFloat(newPosition),
+        transform: `translateY(${newPosition}px)`,
         minWidth: 702,
         maxWidth: 702,
         textAlign: 'left',
@@ -98,7 +99,6 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
         };
     }, [newPosition]);
 
-    const newPositionRef = useRef(newPosition);
     useEffect(() => {
         let animationFrameId;
 
@@ -109,19 +109,8 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                     setSpeed(0); // Stop the movement
                     return;
                 }
+                setNewPosition(prevTop => prevTop - (speed / 2.2));
 
-                // setNewPosition(prevTop => prevTop - (speed / 2.2));
-
-                newPositionRef.current -= (speed / 2.2);
-                if (Math.abs(newPositionRef.current - newPosition) > 1) {
-                    setNewPosition(newPositionRef.current);
-                    if (newPosition === startPosition) {
-                        newPositionRef.current = startPosition;
-                    }
-                }
-
-
-                // Determine which div is at startPosition
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
                     if (ref) {
                         const rect = ref.getBoundingClientRect();
@@ -174,7 +163,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef, newPosition, setNewPosition]);
+    }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef,  setNewPosition]);
 
     // Function to calculate number of lines in a given element
     const calculateNumberOfLines = (element) => {
