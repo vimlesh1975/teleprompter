@@ -112,7 +112,9 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                     setSpeed(0); // Stop the movement
                     return;
                 }
-                setNewPosition(prevTop => prevTop - (speed / 2.2));
+                // setNewPosition(prevTop => prevTop - (speed / 2.2));
+                setNewPosition(prev => parseFloat((prev - speed / 2.2).toFixed(2)));
+
 
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
                     if (ref) {
