@@ -95,7 +95,9 @@ const ScrollViewforcasparcg2 = () => {
     const scrollingTextStyle = {
         position: 'absolute',
         // top: parseFloat(newPosition),
-        transform: `translateY(${newPosition}px)`,
+        // transform: `translateY(${newPosition}px)`,
+        transform: `translateY(${newPosition.toFixed(2)}px)`,
+        willChange: 'transform',
         minWidth: 702,
         maxWidth: 702,
         textAlign: 'left',
