@@ -15,7 +15,7 @@ export default function Home({content}) {
   const languagesLoading=false;
 
   const handleSpeak = async () => {
-    if (!content.trim()) {
+    if (!content?.trim()) {
       return;
     }
     setLoading(true);

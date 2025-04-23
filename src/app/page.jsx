@@ -101,6 +101,7 @@ export default function Home() {
   }, [sendUsedStory]);
 
   useEffect(() => {
+    if (!slugs) return;
     updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate);
   }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate]);
 
@@ -277,6 +278,7 @@ export default function Home() {
       const data = await res.json();
 
       const newSlugsTotal = data.data;
+      if (!newSlugsTotal) return
       const LastModifiedTimeTotal = newSlugsTotal.map(
         (slug) => slug.LastModifiedTime
       );
@@ -602,9 +604,8 @@ export default function Home() {
 
   useEffect(() => {
     setCurrentSlug(currentStoryNumber - 1);
-    if (slugs.length > 0) {
+    if (!slugs) return;
       setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
-    }
   }, [currentStoryNumber, slugs]);
 
   useEffect(() => {
@@ -650,6 +651,7 @@ export default function Home() {
 
 
   useEffect(() => {
+    if (!slugs) return;
     socket.emit('setSlugs', slugs.length);
   }, [slugs]);
 
@@ -778,6 +780,7 @@ export default function Home() {
   };
 
   const exportScript = () => {
+    if (!slugs) return;
     let text = '';
     slugs.forEach((item) => {
       text += `${item.SlugName}${(item.DropStory === 1 || item.DropStory === 3) ? '(Story Dropped)' : ''}${!item.approved ? '(Story UnApproved)' : ''}\nZXZX\n${item.Script}\nZCZC\n`;
