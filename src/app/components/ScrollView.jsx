@@ -19,8 +19,7 @@ const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, cro
     const scrollingTextStyle = {
         position: 'absolute',
         // top: parseFloat(newPosition),
-        // transform: `translateY(${newPosition}px)`,
-        transform: `translateY(${newPosition.toFixed(2)}px)`,
+        transform: `translateY(${newPosition}px)`,
         willChange: 'transform',
 
         minWidth: 702,
