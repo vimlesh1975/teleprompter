@@ -26,6 +26,12 @@ var socket;
 
 export default function Home() {
   const [useDB, setUseDB] = useState(true);
+  const [singleScript, setSingleScript] = useState(false);
+  const [file, setFile] = useState(null);
+
+
+  const [ZXZX, setZXZX] = useState(false);
+
 
   const dispatch = useDispatch();
   const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
@@ -88,7 +94,7 @@ export default function Home() {
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [ScriptID], selectedDate }),
       // body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
-      body: JSON.stringify({ curstory, curbulletin, ScriptID:sendUsedStory ?((usedStory.length===0)?123456478: ScriptID):123456789, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
+      body: JSON.stringify({ curstory, curbulletin, ScriptID: sendUsedStory ? ((usedStory.length === 0) ? 123456478 : ScriptID) : 123456789, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
 
     })
       .then(response => response.json())
@@ -115,6 +121,11 @@ export default function Home() {
   };
 
   useEffect(() => {
+    readFile(file);
+  }, [singleScript])
+
+
+  useEffect(() => {
     socket = io();
     socket.on("connect", () => {
       console.log("SOCKET CONNECTED! from main page", socket.id);
@@ -122,6 +133,7 @@ export default function Home() {
     socket.on("newdatabase", (data) => {
       dispatch(changenewdatabase(data));
     });
+
 
 
 
@@ -320,7 +332,7 @@ export default function Home() {
         data.data.length !== slugs.length
       ) {
         if (
-          (data.data[currentStoryNumber - 1]?.DropStory === 1) ||  (data.data[currentStoryNumber - 1]?.DropStory === 3) ||
+          (data.data[currentStoryNumber - 1]?.DropStory === 1) || (data.data[currentStoryNumber - 1]?.DropStory === 3) ||
           (data.data[currentStoryNumber - 1]?.Approval === 0)
         ) {
           // console.log("current story dropped or not disapproved");
@@ -404,6 +416,7 @@ export default function Home() {
   }, [selectedRunOrderTitle, selectedDate]);
 
   const isVideoNndCGPresent = (slug) => {
+    if (!useDB && file) return ""; // Handle single script case
     if (!slug) return "No visuals"; // Handle undefined slug
 
     const mediaList = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
@@ -442,7 +455,7 @@ export default function Home() {
           data1[i * 3 + 1] = `${slug.Script?.split('$$$$')[0]}`;
           data1[i * 3 + 2] = `--------------`;
         } else {
-          data1[i * 3] = `${startNumber + i + 1} ${!(slug?.DropStory === 0 || slug?.DropStory === 2)? "Story Dropped" : "Story UnApproved"}`;
+          data1[i * 3] = `${startNumber + i + 1} ${!(slug?.DropStory === 0 || slug?.DropStory === 2) ? "Story Dropped" : "Story UnApproved"}`;
 
           data1[i * 3 + 1] = ` `;
           data1[i * 3 + 2] = ``;
@@ -496,7 +509,7 @@ export default function Home() {
       if (newIndex < 0) {
         newIndex = slugs.length - 1;
       }
-      while (((slugs[newIndex]?.DropStory===1) || (slugs[newIndex]?.DropStory)===3) || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
+      while (((slugs[newIndex]?.DropStory === 1) || (slugs[newIndex]?.DropStory) === 3) || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
         newIndex--;
         if (newIndex < 0) {
           newIndex = slugs.length - 1;
@@ -514,7 +527,7 @@ export default function Home() {
       if (newIndex >= slugs.length) {
         newIndex = 0;
       }
-      while (((slugs[newIndex]?.DropStory===1) || (slugs[newIndex]?.DropStory)===3) || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
+      while (((slugs[newIndex]?.DropStory === 1) || (slugs[newIndex]?.DropStory) === 3) || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
         newIndex++;
         if (newIndex >= slugs.length) {
           newIndex = 0;
@@ -605,7 +618,7 @@ export default function Home() {
   useEffect(() => {
     setCurrentSlug(currentStoryNumber - 1);
     if (!slugs) return;
-      setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
+    setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
   }, [currentStoryNumber, slugs]);
 
   useEffect(() => {
@@ -617,7 +630,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (slugs[currentStoryNumber - 1]?.DropStory===1 || slugs[currentStoryNumber - 1]?.DropStory===3) {
+    if (slugs[currentStoryNumber - 1]?.DropStory === 1 || slugs[currentStoryNumber - 1]?.DropStory === 3) {
       return;
     }
     const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
@@ -678,6 +691,7 @@ export default function Home() {
 
       // Check if "ZXZX" (case-insensitive) exists in the content
       const hasZXZX = /ZXZX/i.test(content);
+      setZXZX(hasZXZX);
       const dummyScriptid = 200502071223160;
       const fixdata = {
         "ScriptID": "202502071223160",
@@ -756,15 +770,21 @@ export default function Home() {
         // If "ZXZX" does not exist, split by new lines and assign Slug1, Slug2, etc.
         const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line !== ""); // Remove empty lines
 
-        bb = lines.map((line, index) => {
-          const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
-          return {
-            ...fixdata,
-            ScriptID: dummyScriptid + index,
-            SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
-            Script: line
-          };
-        });
+        if (singleScript) {
+          bb = [{ ...fixdata, ScriptID: dummyScriptid, SlugName: selectedFile.name, Script: content }];
+        }
+        else {
+          bb = lines.map((line, index) => {
+            const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
+            return {
+              ...fixdata,
+              ScriptID: dummyScriptid + index,
+              SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
+              Script: line
+            };
+          });
+        }
+
 
       }
 
@@ -774,8 +794,11 @@ export default function Home() {
     reader.readAsText(selectedFile);
   };
 
+
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
+    setFile(selectedFile);  // Save the file to state
     readFile(selectedFile);
   };
 
@@ -862,8 +885,8 @@ export default function Home() {
                           : "#E7DBD8",
                   margin: 10,
                 }}
-              > 
-              {/* {val.DropStory} */}
+              >
+                {/* {val.DropStory} */}
                 <input
                   title={(val.DropStory === 0 || val.DropStory === 2) ? 'Uncheck to Drop' : 'Check to Include'}
                   type="checkbox"
@@ -871,12 +894,12 @@ export default function Home() {
                   onChange={(e) => {
                     // Correctly updating the array
                     const updatedSlugs = [...slugs]; // Create a copy of the array
-                    updatedSlugs[i] = { ...updatedSlugs[i], DropStory:dropStoryValue(val) }; // Modify the object at index i
+                    updatedSlugs[i] = { ...updatedSlugs[i], DropStory: dropStoryValue(val) }; // Modify the object at index i
                     setSlugs(updatedSlugs); // Update state with the modified array
                     fetch('/api/setDropedStory', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ dropstory:dropStoryValue(val), ScriptID: val.ScriptID, bulletindate:selectedDate, bulletinname:selectedRunOrderTitle }),
+                      body: JSON.stringify({ dropstory: dropStoryValue(val), ScriptID: val.ScriptID, bulletindate: selectedDate, bulletinname: selectedRunOrderTitle }),
                     })
                       .then(response => response.json())
                       .then(data => {
@@ -891,7 +914,7 @@ export default function Home() {
                 <span title={'ScriptID:-' + val.ScriptID} style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
                 <label
                   title={
-                    (val.DropStory === 1 || val.DropStory === 3) 
+                    (val.DropStory === 1 || val.DropStory === 3)
                       ? "Story Dropped"
                       : !val.Approval
                         ? "Story UnApproved"
@@ -918,7 +941,7 @@ export default function Home() {
                 return !val
               })}
             />{" "}
-          <b><span>Send Used Story</span></b>  
+            <b><span>Send Used Story</span></b>
           </label>
 
           <div title={useDB ? 'Data from database' : `Text file should be like this
@@ -936,11 +959,10 @@ export default function Home() {
             <label>
               {" "}
               <input
-
                 checked={useDB}
                 type="checkbox"
                 onChange={() => setUseDB((val) => {
-                  // setSlugs([]);
+                  setFile(null);
                   return !val
                 })}
               />{" "}
@@ -953,6 +975,20 @@ export default function Home() {
                 />
               }
             </label>
+            {!useDB && file && !ZXZX &&
+              <label>
+                <input
+                  checked={singleScript}
+                  type="checkbox"
+                  onChange={() => setSingleScript((val) => {
+                    return !val
+                  })}
+                />
+                <span>Single Script</span>
+              </label>
+            }
+
+
           </div>
           <div><button onClick={exportScript}>Export Script</button></div>
           {/* <div>
@@ -1169,8 +1205,8 @@ export default function Home() {
             }}
           >
             <div>
-       
-           
+
+
               <button onClick={() => setSpeed(1)}> 1</button>
               <button onClick={() => setSpeed(2)}> 2</button>
               <button onClick={() => setSpeed(3)}> 3</button>
