@@ -12,7 +12,7 @@ import Timer from "./components/Timer";
 import TTS from './components/TTS.jsx'
 import ScrollView from './components/ScrollView';
 import { changenewdatabase } from './store/store'; // Adjust the path as needed
-
+import mammoth from 'mammoth';
 import 'react-tabs/style/react-tabs.css';
 
 
@@ -20,6 +20,64 @@ import 'react-tabs/style/react-tabs.css';
 // const scrollWidth = 600;
 const scrollHeight = 440;
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
+
+const dummyScriptid = 200502071223160;
+const fixdata = {
+  "ScriptID": "202502071223160",
+  "id": 636,
+  "bulletinname": "simnews1",
+  "bulletinlock": 0,
+  "bulletindate": "2025-02-06T18:30:00.000Z",
+  "bulletintype": "",
+  "rowid": "202502071223160",
+  "slno": 1,
+  "SlugName": "No Slug Name",
+  "Script": "No Script",
+  "scriptmodifiedtime": "2025-02-07T06:55:51.000Z",
+  "createdtime": "2025-02-07T06:53:16.000Z",
+  "createdby": "binoy",
+  "currentuser": "rajeev",
+  "LastModifiedTime": "2025-02-07T11:46:46.000Z",
+  "lastmodifiedby": null,
+  "Lockscript": 0,
+  "lockedby": null,
+  "WordsCount": 1.31,
+  "EditCode": "0",
+  "autosavestatus": 0,
+  "OneLinerText": null,
+  "onelinermodifiedtime": null,
+  "importedscriptid": null,
+  "importedbulletinname": null,
+  "media1": null,
+  "media2": null,
+  "media3": null,
+  "media4": null,
+  "media5": null,
+  "media1duration": "00:00:00",
+  "media2duration": "00:00:00",
+  "media3duration": "00:00:00",
+  "media4duration": "00:00:00",
+  "media5duration": "00:00:00",
+  "mediamodifiedtime": null,
+  "mediamodifiedby": null,
+  "source": null,
+  "dropstory": 0,
+  "archivestatus": 0,
+  "graphicsid": null,
+  "reporter1": null,
+  "reporter2": null,
+  "location": null,
+  "repeated": 0,
+  "approved": 1,
+  "deleted": 0,
+  "voiceover": 0,
+  "RunOrder": 1,
+  "CreatedTime": "2025-02-07T06:53:16.000Z",
+  "ScriptLastModifiedTime": "2025-02-07T06:55:51.000Z",
+  "Approval": 1,
+  "MediaInsert": null,
+  "DropStory": 0
+};
 
 var socket;
 
@@ -684,117 +742,88 @@ export default function Home() {
   }
   const readFile = (selectedFile) => {
     if (!selectedFile) return;
+    console.log(selectedFile.type === 'text/plain');
     const reader = new FileReader();
+    let bb = [];
 
-    reader.onload = (e) => {
-      const content = e.target.result;
+    if (selectedFile.type !== 'text/plain') {
+      reader.onload = function (event) {
+        const arrayBuffer = event.target.result;
 
-      // Check if "ZXZX" (case-insensitive) exists in the content
-      const hasZXZX = /ZXZX/i.test(content);
-      setZXZX(hasZXZX);
-      const dummyScriptid = 200502071223160;
-      const fixdata = {
-        "ScriptID": "202502071223160",
-        "id": 636,
-        "bulletinname": "simnews1",
-        "bulletinlock": 0,
-        "bulletindate": "2025-02-06T18:30:00.000Z",
-        "bulletintype": "",
-        "rowid": "202502071223160",
-        "slno": 1,
-        "SlugName": "No Slug Name",
-        "Script": "No Script",
-        "scriptmodifiedtime": "2025-02-07T06:55:51.000Z",
-        "createdtime": "2025-02-07T06:53:16.000Z",
-        "createdby": "binoy",
-        "currentuser": "rajeev",
-        "LastModifiedTime": "2025-02-07T11:46:46.000Z",
-        "lastmodifiedby": null,
-        "Lockscript": 0,
-        "lockedby": null,
-        "WordsCount": 1.31,
-        "EditCode": "0",
-        "autosavestatus": 0,
-        "OneLinerText": null,
-        "onelinermodifiedtime": null,
-        "importedscriptid": null,
-        "importedbulletinname": null,
-        "media1": null,
-        "media2": null,
-        "media3": null,
-        "media4": null,
-        "media5": null,
-        "media1duration": "00:00:00",
-        "media2duration": "00:00:00",
-        "media3duration": "00:00:00",
-        "media4duration": "00:00:00",
-        "media5duration": "00:00:00",
-        "mediamodifiedtime": null,
-        "mediamodifiedby": null,
-        "source": null,
-        "dropstory": 0,
-        "archivestatus": 0,
-        "graphicsid": null,
-        "reporter1": null,
-        "reporter2": null,
-        "location": null,
-        "repeated": 0,
-        "approved": 1,
-        "deleted": 0,
-        "voiceover": 0,
-        "RunOrder": 1,
-        "CreatedTime": "2025-02-07T06:53:16.000Z",
-        "ScriptLastModifiedTime": "2025-02-07T06:55:51.000Z",
-        "Approval": 1,
-        "MediaInsert": null,
-        "DropStory": 0
+        mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+          .then(function (result) {
+            const content = result.value; // extracted text
+            const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line !== ""); // Remove empty lines
+            if (singleScript) {
+              bb = [{ ...fixdata, ScriptID: dummyScriptid, SlugName: selectedFile.name, Script: content }];
+              setSlugs(bb);
+
+            }
+            else {
+              bb = lines.map((line, index) => {
+                const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
+                return {
+                  ...fixdata,
+                  ScriptID: dummyScriptid + index,
+                  SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
+                  Script: line
+                };
+              });
+              setSlugs(bb);
+
+            }
+
+          })
+          .catch(function (err) {
+            console.error("Error reading docx:", err);
+          });
       };
 
-      let bb = [];
+      reader.readAsArrayBuffer(selectedFile);
 
-      if (hasZXZX) {
-        // If "ZXZX" exists, process normally
-        const aa = content.split(/ZCZC/i);
-        bb = aa.map((item, index) => {
-          const [SlugName, Script] = item.split(/ZXZX/i).map(str => str.trim().replace(/\r?\n/g, ''));
-          return {
-            ...fixdata,
-            ScriptID: dummyScriptid + index,
-            Approval: SlugName.includes('(Story UnApproved)') ? 0 : 1,
-            DropStory: SlugName.includes('(Story Dropped)') ? 1 : 0,
-            SlugName,
-            Script
-          };
-        });
-      } else {
-        // If "ZXZX" does not exist, split by new lines and assign Slug1, Slug2, etc.
-        const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line !== ""); // Remove empty lines
+    }
+    else {
+      reader.onload = (e) => {
+        const content = e.target.result;
+        const hasZXZX = /ZXZX/i.test(content);
+        setZXZX(hasZXZX);
 
-        if (singleScript) {
-          bb = [{ ...fixdata, ScriptID: dummyScriptid, SlugName: selectedFile.name, Script: content }];
-        }
-        else {
-          bb = lines.map((line, index) => {
-            const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
+        if (hasZXZX) {
+          const aa = content.split(/ZCZC/i);
+          bb = aa.map((item, index) => {
+            const [SlugName, Script] = item.split(/ZXZX/i).map(str => str.trim().replace(/\r?\n/g, ''));
             return {
               ...fixdata,
               ScriptID: dummyScriptid + index,
-              SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
-              Script: line
+              Approval: SlugName.includes('(Story UnApproved)') ? 0 : 1,
+              DropStory: SlugName.includes('(Story Dropped)') ? 1 : 0,
+              SlugName,
+              Script
             };
           });
+        } else {
+
+          const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line !== ""); // Remove empty lines
+          if (singleScript) {
+            bb = [{ ...fixdata, ScriptID: dummyScriptid, SlugName: selectedFile.name, Script: content }];
+          }
+          else {
+            bb = lines.map((line, index) => {
+              const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
+              return {
+                ...fixdata,
+                ScriptID: dummyScriptid + index,
+                SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
+                Script: line
+              };
+            });
+          }
         }
-
-
-      }
-
-      setSlugs(bb);
-    };
-
-    reader.readAsText(selectedFile);
+        setSlugs(bb);
+      };
+      reader.readAsText(selectedFile);
+    }
   };
-
-
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -970,7 +999,7 @@ export default function Home() {
               {!useDB &&
                 <input
                   type="file"
-                  accept=".txt"
+                  accept=".txt,.docx"
                   onChange={handleFileChange}
                 />
               }
