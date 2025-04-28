@@ -1,7 +1,7 @@
 "use client";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, use } from "react";
 import NewWindow from "./components/NewWindow";
 import Scroll from "./components/Scroll";
 import io from "socket.io-client";
@@ -166,8 +166,9 @@ export default function Home() {
 
   useEffect(() => {
     if (!slugs) return;
+    if (!useDB) return;
     updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate);
-  }, [currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate]);
+  }, [useDB, currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate]);
 
 
   const handleDateChange = (event) => {
@@ -510,7 +511,7 @@ export default function Home() {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoNndCGPresent(slug)
             }`;
           // data1[i * 3 + 1] = `${slug.Script}`;
-          data1[i * 3 + 1] = slug.Script ? `${slug.Script?.split('$$$$')[0]}` : 'No Script';
+          data1[i * 3 + 1] = slug.Script ? `${slug.Script?.split('$$$$')[0]}` : '';
           data1[i * 3 + 2] = `--------------`;
         } else {
           data1[i * 3] = `${startNumber + i + 1} ${!(slug?.DropStory === 0 || slug?.DropStory === 2) ? "Story Dropped" : "Story UnApproved"}`;
