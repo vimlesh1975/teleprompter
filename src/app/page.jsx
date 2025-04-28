@@ -846,6 +846,20 @@ export default function Home() {
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   }
+  const saveScript = () => {
+    const content = (slugs.map((slug) => slug.Script)).join('\n'); // Join array items into text
+    const blob = new Blob([content], { type: 'text/plain' }); // Create a Blob
+    const url = URL.createObjectURL(blob); // Create a download URL
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'scripts.txt'; // Download as 'scripts.txt'
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url); // Clean up the URL
+  }
 
   return (
     <div style={{ overflow: "hidden" }}>
@@ -1152,13 +1166,31 @@ export default function Home() {
               fontSize: `${fontSize}px`,
               lineHeight: `${fontSize * 1.5}px`,
               width: 702.22,
-            }}>
-              {slugs && slugs[currentSlug]?.Script}
+              overflow: "hidden",
+            }}>{(!useDB) ?
+              <textarea value={slugs ? slugs[currentSlug]?.Script : ''}
+                style={{
+                  fontSize: `${fontSize}px`,
+                  lineHeight: `${fontSize * 1.5}px`,
+                  width: 702.22,
+                  height: 510,
+                  border: 'none',
+                  resize: 'none',
+                }}
+                onChange={(e) => {
+                  const updatedSlugs = [...slugs]; // Create a copy of the array
+                  updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
+                  setSlugs(updatedSlugs); // Update state with the modified array
+                }}
+              /> : (slugs && slugs[currentSlug]?.Script)
+              }
             </div>
 
-
           </div>
+
           <div style={{ fontSize: 16, fontWeight: "normal", position: 'absolute', top: 770, }}>
+            {!useDB && <div><button onClick={saveScript}>Save Script</button></div>}
+
             <TTS content={slugs ? slugs[currentSlug]?.Script : ''} />
           </div>
         </div>

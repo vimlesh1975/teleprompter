@@ -11,7 +11,6 @@
   "dependencies": {
     "@google-cloud/text-to-speech": "^5.6.0",
     "@reduxjs/toolkit": "^2.6.1",
-    "@vercel/analytics": "^1.5.0",
     "beautiful-react-hooks": "^5.0.2",
     "casparcg-connection": "^5.1.0",
     "dotenv": "^16.4.5",
