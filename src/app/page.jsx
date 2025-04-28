@@ -510,7 +510,7 @@ export default function Home() {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoNndCGPresent(slug)
             }`;
           // data1[i * 3 + 1] = `${slug.Script}`;
-          data1[i * 3 + 1] = `${slug.Script?.split('$$$$')[0]}`;
+          data1[i * 3 + 1] = slug.Script ? `${slug.Script?.split('$$$$')[0]}` : 'No Script';
           data1[i * 3 + 2] = `--------------`;
         } else {
           data1[i * 3] = `${startNumber + i + 1} ${!(slug?.DropStory === 0 || slug?.DropStory === 2) ? "Story Dropped" : "Story UnApproved"}`;
