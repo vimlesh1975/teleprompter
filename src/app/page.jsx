@@ -1168,7 +1168,7 @@ export default function Home() {
               width: 702.22,
               overflow: "hidden",
             }}>{(!useDB) ?
-              <textarea value={slugs ? slugs[currentSlug]?.Script : ''}
+              <textarea value={slugs?.[currentSlug]?.Script ?? ''}
                 style={{
                   fontSize: `${fontSize}px`,
                   lineHeight: `${fontSize * 1.5}px`,
@@ -1182,7 +1182,8 @@ export default function Home() {
                   updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
                   setSlugs(updatedSlugs); // Update state with the modified array
                 }}
-              /> : (slugs && slugs[currentSlug]?.Script)
+              /> : slugs?.[currentSlug]?.Script ?? ''
+
               }
             </div>
 
