@@ -1168,7 +1168,7 @@ export default function Home() {
               lineHeight: `${fontSize * 1.5}px`,
               width: 702.22,
               overflow: "hidden",
-            }}>{(!useDB) ?
+            }}>{(!useDB && file) ?
               <textarea value={slugs?.[currentSlug]?.Script ?? ''}
                 style={{
                   fontSize: `${fontSize}px`,
