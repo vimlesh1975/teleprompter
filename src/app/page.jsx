@@ -1270,7 +1270,7 @@ export default function Home() {
             <div>
 
 
-              <button onClick={() => setSpeed(1)}> 1</button>
+              <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
               <button onClick={() => setSpeed(2)}> 2</button>
               <button onClick={() => setSpeed(3)}> 3</button>
               <button onClick={() => setSpeed(4)}> 4</button>
