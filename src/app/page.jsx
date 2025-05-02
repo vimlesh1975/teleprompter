@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useRef, useCallback, use } from "react";
 import NewWindow from "./components/NewWindow";
 import Scroll from "./components/Scroll";
-import io from "socket.io-client";
-import debounce from "lodash.debounce"; // Importing debounce from lodash
+// import io from "socket.io-client";
+
+import socket from "./components/socket"; // assumes shared instance
+
 
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
@@ -81,7 +83,7 @@ const fixdata = {
   "DropStory": 0
 };
 
-var socket;
+// var socket;
 
 
 export default function Home() {
@@ -189,7 +191,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    socket = io();
+    // socket = io();
     socket.on("connect", () => {
       console.log("SOCKET CONNECTED! from main page", socket.id);
     });
@@ -219,8 +221,8 @@ export default function Home() {
     });
 
     return () => {
-      socket.disconnect();
-      socket.close();
+      // socket.disconnect();
+      // socket.close();
     }
   }, [])
 
