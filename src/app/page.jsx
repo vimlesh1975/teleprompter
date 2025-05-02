@@ -18,6 +18,7 @@ import mammoth from 'mammoth';
 import 'react-tabs/style/react-tabs.css';
 
 import { UseSocketControls } from "./components/UseSocketControls";
+// import { UseSocketControls } from "./components/UseSocketControlsJaipur";
 
 
 
@@ -1433,7 +1434,7 @@ export default function Home() {
                     height: "100%",
                   }}
                 >
-                  <UseSocketControls setSpeed={setSpeed} fromStart={fromStart} handleDoubleClick={handleDoubleClick} slugs={slugs} currentStoryNumber={currentStoryNumber} onclickSlug={onclickSlug} previous={previous} next={next} />
+                  <UseSocketControls speed={speed} setSpeed={setSpeed} tempSpeed={tempSpeed} setTempSpeed={setTempSpeed} fromStart={fromStart} handleDoubleClick={handleDoubleClick} slugs={slugs} currentStoryNumber={currentStoryNumber} onclickSlug={onclickSlug} previous={previous} next={next} />
                 </div>
               </div>
             </div>
