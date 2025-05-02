@@ -15,6 +15,8 @@ import { changenewdatabase } from './store/store'; // Adjust the path as needed
 import mammoth from 'mammoth';
 import 'react-tabs/style/react-tabs.css';
 
+import { UseSocketControls } from "./components/UseSocketControls";
+
 
 
 // const scrollWidth = 600;
@@ -142,6 +144,8 @@ export default function Home() {
   const [usedStory, setUsedStory] = useState([]);
 
   const [sendUsedStory, setSendUsedStory] = useState(false);
+
+
 
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate) => {
     if (!curbulletin) return;
@@ -312,19 +316,6 @@ export default function Home() {
       );
     }, 1000);
   }, [fontSize, startPosition]);
-
-  const endpoint = async (str) => {
-
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Specify the content type as JSON
-      },
-      body: JSON.stringify(str), // Convert the data to JSON format
-    };
-    const aa = await fetch("/api/casparcg", requestOptions);
-
-  };
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
@@ -599,80 +590,73 @@ export default function Home() {
     });
   }, [slugs, handleDoubleClick]);
 
-  useEffect(() => {
-    const handleButtonDown = debounce((msg) => {
-      console.log(msg);
-      if (msg === 1) {
-        setSpeed(0);
-      } else if (msg === 2) {
-        setSpeed(-3);
-      } else if (msg === 3) {
-        setSpeed((val) => val - 1);
-      } else if (msg === 4) {
-        fromStart();
-      } else if (msg === 5) {
-        setSpeed(1);
-      } else if (msg === 6) {
-        setSpeed(2);
-      } else if (msg === 7) {
-        setSpeed(3);
-      } else if (msg === 8) {
-        setSpeed(4);
-      } else if (msg === 9) {
-        setSpeed((val) => val + 1);
-      } else if (msg === 10) {
-        onclickSlug(slugs[4], 4);
-        handleDoubleClick(4);
-      } else if (msg === 11) {
-        onclickSlug(slugs[9], 9);
-        handleDoubleClick(9);
-      } else if (msg === 12) {
-        onclickSlug(slugs[14], 14);
-        handleDoubleClick(14);
-      } else if (msg === 13) {
-        onclickSlug(slugs[currentStoryNumber + 4], currentStoryNumber + 4);
-        handleDoubleClick(currentStoryNumber + 4);
-      } else if (msg === 14) {
-        previous();
-      } else if (msg === 15) {
-        next();
-      }
-    }, 300); // Debounce with 300ms delay
+  // useEffect(() => {
+  //   const handleButtonDown = debounce((msg) => {
+  //     console.log(msg);
+  //     if (msg === 1) {
+  //       setSpeed(0);
+  //     } else if (msg === 2) {
+  //       setSpeed(-3);
+  //     } else if (msg === 3) {
+  //       setSpeed((val) => val - 1);
+  //     } else if (msg === 4) {
+  //       fromStart();
+  //     } else if (msg === 5) {
+  //       setSpeed(1);
+  //     } else if (msg === 6) {
+  //       setSpeed(2);
+  //     } else if (msg === 7) {
+  //       setSpeed(3);
+  //     } else if (msg === 8) {
+  //       setSpeed(4);
+  //     } else if (msg === 9) {
+  //       setSpeed((val) => val + 1);
+  //     } else if (msg === 10) {
+  //       onclickSlug(slugs[4], 4);
+  //       handleDoubleClick(4);
+  //     } else if (msg === 11) {
+  //       onclickSlug(slugs[9], 9);
+  //       handleDoubleClick(9);
+  //     } else if (msg === 12) {
+  //       onclickSlug(slugs[14], 14);
+  //       handleDoubleClick(14);
+  //     } else if (msg === 13) {
+  //       onclickSlug(slugs[currentStoryNumber + 4], currentStoryNumber + 4);
+  //       handleDoubleClick(currentStoryNumber + 4);
+  //     } else if (msg === 14) {
+  //       previous();
+  //     } else if (msg === 15) {
+  //       next();
+  //     }
+  //   }, 300); // Debounce with 300ms delay
 
-    const handleJogdir = debounce((msg) => {
-      console.log(msg);
-      if (msg === 1) {
-        setSpeed(1);
-      } else if (msg === -1) {
-        setSpeed(-1);
-      }
-    }, 300); // Debounce with 300ms delay
+  //   const handleJogdir = debounce((msg) => {
+  //     console.log(msg);
+  //     if (msg === 1) {
+  //       setSpeed(1);
+  //     } else if (msg === -1) {
+  //       setSpeed(-1);
+  //     }
+  //   }, 300); // Debounce with 300ms delay
 
-    const handleShuttle = debounce((msg) => {
-      console.log(msg);
-      setSpeed(msg);
-    }, 300); // Debounce with 300ms delay
+  //   const handleShuttle = debounce((msg) => {
+  //     console.log(msg);
+  //     setSpeed(msg);
+  //   }, 300); // Debounce with 300ms delay
 
-    socket.on("buttondown1", handleButtonDown);
-    socket.on("jog-dir1", handleJogdir);
-    socket.on("shuttle1", handleShuttle);
+  //   socket.on("buttondown1", handleButtonDown);
+  //   socket.on("jog-dir1", handleJogdir);
+  //   socket.on("shuttle1", handleShuttle);
 
-    return () => {
-      socket.off("buttondown1", handleButtonDown);
-      socket.off("jog-dir1", handleJogdir);
-      socket.off("shuttle1", handleShuttle);
-      // socket.disconnect();
-    };
-  }, [
-    next,
-    previous,
-    speed,
-    setSpeed,
-    fromStart,
-    handleDoubleClick,
-    slugs,
-    onclickSlug,
-  ]);
+  //   return () => {
+  //     socket.off("buttondown1", handleButtonDown);
+  //     socket.off("jog-dir1", handleJogdir);
+  //     socket.off("shuttle1", handleShuttle);
+  //     // socket.disconnect();
+  //   };
+  // }, [next, previous, speed, setSpeed, fromStart, handleDoubleClick, slugs, onclickSlug,]);
+
+
 
   useEffect(() => {
     setCurrentSlug(currentStoryNumber - 1);
@@ -861,6 +845,9 @@ export default function Home() {
 
     URL.revokeObjectURL(url); // Clean up the URL
   }
+
+
+
 
   return (
     <div style={{ overflow: "hidden" }}>
@@ -1444,6 +1431,7 @@ export default function Home() {
                     height: "100%",
                   }}
                 >
+                  <UseSocketControls setSpeed={setSpeed} fromStart={fromStart} handleDoubleClick={handleDoubleClick} slugs={slugs} currentStoryNumber={currentStoryNumber} onclickSlug={onclickSlug} previous={previous} next={next} />
                 </div>
               </div>
             </div>
