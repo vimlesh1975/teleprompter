@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ slugs, allContent,  startPosition, fontSize,  newPosition, currentStoryNumber,  storyLines, crossedLines, showClock, newsReaderText }) {
+export default function Home({ slugs, allContent, startPosition, fontSize, newPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -13,16 +13,16 @@ export default function Home({ slugs, allContent,  startPosition, fontSize,  new
   const socketRef = useRef(null);
 
   useEffect(() => {
-      socketRef.current = io();
+    socketRef.current = io();
 
-      socketRef.current.on('connect', () => {
-          console.log('SOCKET CONNECTED! from caparcg page', socketRef.current.id);
-      });
+    socketRef.current.on('connect', () => {
+      console.log('SOCKET CONNECTED! from caparcg page', socketRef.current.id);
+    });
 
-      return () => {
-          socketRef.current.disconnect();
-          socketRef.current = null;
-      };
+    return () => {
+      socketRef.current.disconnect();
+      socketRef.current = null;
+    };
   }, []);
 
 
@@ -110,41 +110,11 @@ export default function Home({ slugs, allContent,  startPosition, fontSize,  new
           >
             DisConnect
           </button>
-          <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID}</span>
+          {/* <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID}</span> */}
+          <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
         </div>
         <div>
           Method 1:
-          <button
-            onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: `play 1-97 [html] http://${IP}:3000/webrtc.html`,
-              });
-              endpoint({
-                action: 'endpoint',
-                command: fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
-              });
-              playOnSecondChannelinFlippedMode();
-            }
-            }
-          >
-            Screen Capture Method
-          </button>
-          <button
-            onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
-              });
-              setFliped(val => !val);
-            }}
-          >
-            Toggle Flip
-          </button>
-
-        </div>
-        <div>
-          Method 2:
           <button
             onClick={() => {
               endpoint({
@@ -192,6 +162,38 @@ export default function Home({ slugs, allContent,  startPosition, fontSize,  new
             Toggle Flip
           </button>
         </div>
+        <div>
+          Method 2:
+          <button
+            onClick={() => {
+              endpoint({
+                action: 'endpoint',
+                command: `play 1-97 [html] http://${IP}:3000/webrtc.html`,
+              });
+              endpoint({
+                action: 'endpoint',
+                command: fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
+              });
+              playOnSecondChannelinFlippedMode();
+            }
+            }
+          >
+            Screen Capture Method
+          </button>
+          <button
+            onClick={() => {
+              endpoint({
+                action: 'endpoint',
+                command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
+              });
+              setFliped(val => !val);
+            }}
+          >
+            Toggle Flip
+          </button>
+
+        </div>
+
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div>
             <button

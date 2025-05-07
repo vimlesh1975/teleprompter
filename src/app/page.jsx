@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useRef, useCallback, use } from "react";
 import NewWindow from "./components/NewWindow";
 import Scroll from "./components/Scroll";
-// import io from "socket.io-client";
+import io from "socket.io-client";
 
-import socket from "./components/socket"; // assumes shared instance
+// import socket from "./components/socket"; // assumes shared instance
 
 
 import Casparcg from "./Casparcg";
@@ -25,6 +25,7 @@ import { UseSocketControls } from "./components/UseSocketControls";
 // const scrollWidth = 600;
 const scrollHeight = 440;
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
+var socket;
 
 const dummyScriptid = 200502071223160;
 const fixdata = {
@@ -192,21 +193,14 @@ export default function Home() {
 
 
   useEffect(() => {
-    // socket = io();
+    socket = io();
     socket.on("connect", () => {
       console.log("SOCKET CONNECTED! from main page", socket.id);
+      setServerAlive(true);
+
     });
     socket.on("newdatabase", (data) => {
       dispatch(changenewdatabase(data));
-    });
-
-
-
-
-    socket.on('connect', () => {
-      console.log('Connected to server');
-      setServerAlive(true);
-
     });
 
     socket.on('connect_error', (error) => {
@@ -222,8 +216,9 @@ export default function Home() {
     });
 
     return () => {
-      // socket.disconnect();
-      // socket.close();
+      // socket.off("connect");
+      socket.disconnect();
+      socket.close();
     }
   }, [])
 
@@ -1062,6 +1057,7 @@ export default function Home() {
               speed={speed}
               showClock={showClock}
               newsReaderText={newsReaderText}
+              setSpeed={setSpeed}
             />
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
