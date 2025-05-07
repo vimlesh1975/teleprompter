@@ -284,7 +284,11 @@ export default function Home() {
       setCASPAR_HOST('not set');
     }
   }
-
+  const handleTextareaKeyDown = (event) => {
+    if (event.code === 'Space') {
+      event.stopPropagation(); // Prevent spacebar from bubbling to document
+    }
+  };
 
   useEffect(() => {
     getDB_NAME();
@@ -1159,7 +1163,9 @@ export default function Home() {
               width: 702.22,
               overflow: "hidden",
             }}>{(!useDB && file) ?
-              <textarea value={slugs?.[currentSlug]?.Script ?? ''}
+              <textarea
+                onKeyDown={handleTextareaKeyDown}
+                value={slugs?.[currentSlug]?.Script ?? ''}
                 style={{
                   fontSize: `${fontSize}px`,
                   lineHeight: `${fontSize * 1.5}px`,
