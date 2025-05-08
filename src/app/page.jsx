@@ -85,7 +85,7 @@ const fixdata = {
   "DropStory": 0
 };
 
-// var socket;
+var socket;
 
 
 export default function Home() {
@@ -148,19 +148,18 @@ export default function Home() {
   const [usedStory, setUsedStory] = useState([]);
 
   const [sendUsedStory, setSendUsedStory] = useState(false);
+  const [prompterId, setPrompterId] = useState(1);
 
 
-
-  const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate) => {
+  const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
     if (!curbulletin) return;
     if (!ScriptID) return;
+    console.log('Prompter ID being sent:', prompterId);
 
     fetch('/api/currentStory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [ScriptID], selectedDate }),
-      // body: JSON.stringify({ curstory, curbulletin, ScriptID, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
-      body: JSON.stringify({ curstory, curbulletin, ScriptID: sendUsedStory ? ((usedStory.length === 0) ? 123456478 : ScriptID) : 123456789, usedStory: sendUsedStory ? usedStory : [], selectedDate }),
+      body: JSON.stringify({ curstory, curbulletin, ScriptID: sendUsedStory ? ((usedStory.length === 0) ? 123456478 : ScriptID) : 123456789, usedStory: sendUsedStory ? usedStory : [], selectedDate, prompterId }),
 
     })
       .then(response => response.json())
@@ -170,13 +169,13 @@ export default function Home() {
       .catch(error => {
         console.error('Error:', error);
       });
-  }, [sendUsedStory]);
+  }, [sendUsedStory, prompterId]);
 
   useEffect(() => {
     if (!slugs) return;
     if (!useDB) return;
-    updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate);
-  }, [useDB, currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate]);
+    updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate, prompterId);
+  }, [useDB, currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate, prompterId]);
 
 
   const handleDateChange = (event) => {
@@ -855,7 +854,6 @@ export default function Home() {
     <div style={{ overflow: "hidden" }}>
       <div style={{ display: "flex" }}>
         <div>
-
           <div>
             {newdatabase &&
               <div>
@@ -932,7 +930,7 @@ export default function Home() {
                     fetch('/api/setDropedStory', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ dropstory: dropStoryValue(val), ScriptID: val.ScriptID, bulletindate: selectedDate, bulletinname: selectedRunOrderTitle }),
+                      body: JSON.stringify({ dropstory: dropStoryValue(val), ScriptID: val.ScriptID, bulletindate: selectedDate, bulletinname: selectedRunOrderTitle, prompterId }),
                     })
                       .then(response => response.json())
                       .then(data => {
@@ -1031,6 +1029,12 @@ export default function Home() {
             {JSON.stringify(textRef?.current?.getBoundingClientRect().height)}
           </div> */}
           {/* {JSON.stringify(usedStory)} */}
+          <div>
+            Prompter ID <input style={{ width: 40 }} min={1} type="number" value={prompterId} onChange={(e) => {
+              setUsedStory([]);
+              setPrompterId(e.target.value);
+            }} />
+          </div>
         </div>
 
         {/* second column */}
@@ -1192,7 +1196,6 @@ export default function Home() {
         {/* Third column */}
         <div>
           <div>
-
             <Scroll
               scrollWidth={scrollWidth}
               scrollHeight={scrollHeight}
@@ -1260,8 +1263,6 @@ export default function Home() {
             }}
           >
             <div>
-
-
               <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
               <button onClick={() => setSpeed(2)}> 2</button>
               <button onClick={() => setSpeed(3)}> 3</button>
@@ -1426,8 +1427,11 @@ export default function Home() {
                       }}
                     />
                     <button onClick={changeDB_NAME}>Set</button>
+
                   </div>
+
                 </div>
+
                 <div
                   style={{
                     display: "flex",
@@ -1436,12 +1440,18 @@ export default function Home() {
                     height: "100%",
                   }}
                 >
+
                   <UseSocketControls speed={speed} setSpeed={setSpeed} tempSpeed={tempSpeed} setTempSpeed={setTempSpeed} fromStart={fromStart} handleDoubleClick={handleDoubleClick} slugs={slugs} currentStoryNumber={currentStoryNumber} onclickSlug={onclickSlug} previous={previous} next={next} />
                 </div>
+
               </div>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
     </div>
   );
