@@ -30,48 +30,71 @@
 </head>
 
 <body>
-  <h1>Socket.IO Client</h1>
-  <div id="storyContainer">
-    <h2>Current Story Update</h2>
-    <p id="storyData">Waiting for updates...</p>
-    <h2>current Story Drop Allow</h2>
-    <p id="currentStoryDropAllow">Waiting for updates...</p>
+
+  <div style="display: flex1;">
+    <div style=" border: 1px solid red;">
+      <h1>Socket.IO Client 1</h1>
+      <h2>Current Story Update</h2>
+      <p id="storyData1">Waiting for updates...</p>
+      <h2>current Story Drop Allow</h2>
+      <p id="currentStoryDropAllow">Waiting for updates...</p>
+    </div>
+    <div style="border: 1px solid red;">
+      <h1>Socket.IO Client 2</h1>
+
+      <h2>Current Story Update</h2>
+      <p id="storyData2">Waiting for updates...</p>
+      <h2>current Story Drop Allow</h2>
+      <p id="currentStoryDropAllow2">Waiting for updates...</p>
+    </div>
   </div>
 
+
   <script>
-    // Connect to the Socket.IO server
-    const socket = io('http://localhost:3000');
+    const socket1 = io('http://localhost:3000');
+    socket1.on('currentStoryBroadcast', (data) => {
+      console.log(data);
+      if (data.prompterId === '1') {
+        document.getElementById('storyData1').innerText = `  ${JSON.stringify(data)} `;
+      }
 
-    // Listen for the 'newStoryUpdate' event from the server
-    socket.on('currentStoryBroadcast', (data) => {
-      // console.log('Received new story update:', data);
-
-      // Update the content on the webpage with the new data
-      document.getElementById('storyData').innerText = `
-      prompterId:${data.prompterId}
-        Story: ${data.curstory}
-        Bulletin: ${data.curbulletin}
-        Date: ${data.bulletindate}
-        Script ID: ${data.ScriptID}
-        Used Stories: ${data.usedStory}
-      `;
     });
 
-    socket.on('currentStoryDropAllow', (data) => {
-      console.log('currentStoryDropAllow:', data);
-
-      // Update the content on the webpage with the new data
-      document.getElementById('currentStoryDropAllow').innerText = `
-         Story Stop/Allow by Teleprompter: ${JSON.stringify(data)}  
+    socket1.on('currentStoryDropAllow', (data) => {
+      if (data.prompterId === '1') {
+        document.getElementById('currentStoryDropAllow').innerText = `
+          ${JSON.stringify(data)}  
       `;
-    });
+      }
 
-    // Optional: Handle connection and disconnection events
-    socket.on('connect', () => {
+    });
+    socket1.on('connect', () => {
       console.log('Connected to the server');
     });
+    socket1.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
 
-    socket.on('disconnect', () => {
+    const socket2 = io('http://192.168.15.114:3000');
+    socket2.on('currentStoryBroadcast', (data) => {
+      if (data.prompterId === '2') {
+        document.getElementById('storyData2').innerText = `  ${JSON.stringify(data)} `;
+      }
+    });
+
+    socket2.on('currentStoryDropAllow', (data) => {
+      if (data.prompterId === '2') {
+        document.getElementById('currentStoryDropAllow2').innerText = `
+        ${JSON.stringify(data)}  
+      `;
+      }
+
+
+    });
+    socket2.on('connect', () => {
+      console.log('Connected to the server');
+    });
+    socket2.on('disconnect', () => {
       console.log('Disconnected from the server');
     });
   </script>
