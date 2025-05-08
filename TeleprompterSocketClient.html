@@ -54,14 +54,14 @@
     const socket1 = io('http://localhost:3000');
     socket1.on('currentStoryBroadcast', (data) => {
       console.log(data);
-      if (data.prompterId === '1') {
+      if (data.prompterId.toString() === '1') {
         document.getElementById('storyData1').innerText = `  ${JSON.stringify(data)} `;
       }
 
     });
 
     socket1.on('currentStoryDropAllow', (data) => {
-      if (data.prompterId === '1') {
+      if (data.prompterId.toString() === '1') {
         document.getElementById('currentStoryDropAllow').innerText = `
           ${JSON.stringify(data)}  
       `;
@@ -77,13 +77,14 @@
 
     const socket2 = io('http://192.168.15.114:3000');
     socket2.on('currentStoryBroadcast', (data) => {
-      if (data.prompterId === '2') {
+      console.log(data);
+      if (data.prompterId.toString() === '2') {
         document.getElementById('storyData2').innerText = `  ${JSON.stringify(data)} `;
       }
     });
 
     socket2.on('currentStoryDropAllow', (data) => {
-      if (data.prompterId === '2') {
+      if (data.prompterId.toString() === '2') {
         document.getElementById('currentStoryDropAllow2').innerText = `
         ${JSON.stringify(data)}  
       `;
