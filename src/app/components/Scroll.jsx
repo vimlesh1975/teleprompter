@@ -16,15 +16,9 @@ function moveZerosToFront(arr) {
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
-const scrollContainerStyle = {
-    position: 'relative',
-    height: '440px',
-    overflow: 'hidden',
-    backgroundColor: '#000',
-    color: '#fff'
-};
 
-const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, slugs, newsReaderText, setSpeed }) => {
+
+const Scroll = ({ bgColor, fontColor, scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, slugs, newsReaderText, setSpeed }) => {
     const dispatch = useDispatch();
     const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
     const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
@@ -32,6 +26,15 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
     const containerRef = useRef(null);
     const contentRefs = useRef([]);
 
+    const scrollContainerStyle = {
+        position: 'relative',
+        height: '440px',
+        overflow: 'hidden',
+        // backgroundColor: '#000',
+        backgroundColor: bgColor,
+
+        color: '#fff'
+    };
     const scrollingTextStyle = useMemo(() => ({
         position: 'absolute',
         // top: parseFloat(newPosition),
@@ -164,7 +167,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
 
         animationFrameId = requestAnimationFrame(scrollText);
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef,  setNewPosition]);
+    }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, textRef, setNewPosition]);
 
     // Function to calculate number of lines in a given element
     const calculateNumberOfLines = (element) => {
@@ -222,7 +225,7 @@ const Scroll = ({ scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurre
                 <div ref={containerRef} style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>
                         {allContent.map((content, i) => (
-                            <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'white' }}>
+                            <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor }}>
                                 {content}
                             </div>
                         ))}

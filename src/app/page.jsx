@@ -88,6 +88,10 @@ const fixdata = {
 
 
 export default function Home() {
+  const [bgColor, setbgColor] = useState('black');
+  const [fontColor, setFontColor] = useState('#ffffff');
+
+
 
   const socketRef = useRef(null);
 
@@ -1226,6 +1230,8 @@ export default function Home() {
 
           <div>
             <Scroll
+              fontColor={fontColor}
+              bgColor={bgColor}
               scrollWidth={scrollWidth}
               scrollHeight={scrollHeight}
               fontSize={fontSize}
@@ -1255,7 +1261,7 @@ export default function Home() {
                 scrollHeight={scrollHeight}
               >
 
-                <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
 
             )}
@@ -1266,7 +1272,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
@@ -1478,7 +1484,10 @@ export default function Home() {
                 </div>
 
               </div>
-
+              <div>
+                Bg Color <input type="color" value={bgColor} onChange={e => setbgColor(e.target.value)} />
+                Font Color:<input type="color" value={fontColor} onChange={e => setFontColor(e.target.value)} />
+              </div>
             </div>
 
           </div>

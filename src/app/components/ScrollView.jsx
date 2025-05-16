@@ -5,16 +5,20 @@ import Triangles from './Triangles';
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
-const scrollContainerStyle = {
-    position: 'relative',
-    height: '440px',
-    overflow: 'hidden',
-    backgroundColor: '#000',
-    color: '#fff'
-};
+
 
 //ff
-const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
+const ScrollView = ({ bgColor, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
+
+
+    const scrollContainerStyle = {
+        position: 'relative',
+        height: '440px',
+        overflow: 'hidden',
+        // backgroundColor: '#ff0000',
+        backgroundColor: bgColor,
+        color: '#fff',
+    };
 
     const scrollingTextStyle = {
         position: 'absolute',
@@ -54,7 +58,7 @@ const ScrollView = ({ allContent, newPosition, fontSize, currentStoryNumber, cro
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'white' }}>
+                    <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor }}>
                         {content}
                     </div>
                 ))}
