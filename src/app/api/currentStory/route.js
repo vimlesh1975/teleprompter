@@ -32,7 +32,7 @@ export async function POST(req) {
             selectedDate
         ];
 
-        console.log(values);
+        // console.log(values);
 
         connection = await mysql.createPool(config);
 

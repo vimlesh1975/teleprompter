@@ -25,7 +25,6 @@ import { UseSocketControls } from "./components/UseSocketControls";
 // const scrollWidth = 600;
 const scrollHeight = 440;
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
-var socket;
 
 const dummyScriptid = 200502071223160;
 const fixdata = {
@@ -85,10 +84,13 @@ const fixdata = {
   "DropStory": 0
 };
 
-var socket;
+// var socket;
 
 
 export default function Home() {
+
+  const socketRef = useRef(null);
+
   const [useDB, setUseDB] = useState(true);
   const [singleScript, setSingleScript] = useState(false);
   const [file, setFile] = useState(null);
@@ -192,7 +194,8 @@ export default function Home() {
 
 
   useEffect(() => {
-    socket = io();
+    socketRef.current = io();
+    const socket = socketRef.current;
     socket.on("connect", () => {
       console.log("SOCKET CONNECTED! from main page", socket.id);
       setServerAlive(true);
@@ -220,9 +223,12 @@ export default function Home() {
     });
 
     return () => {
-      // socket.off("connect");
+      socket.off("connect");
+      socket.off("newdatabase");
+      socket.off("databaseConnection");
+      socket.off("connect_error");
+      socket.off("disconnect");
       socket.disconnect();
-      socket.close();
     }
   }, [])
 
@@ -688,31 +694,46 @@ export default function Home() {
   }, [currentStoryNumber]);
 
   useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
+
     socket.emit('allContent', allContent);
   }, [allContent])
 
   useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     socket.emit('speed', speed);
   }, [speed]);
 
   useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     socket.emit('setFontSize', fontSize);
   }, [fontSize]);
 
   useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     socket.emit('setStartPosition', startPosition);
   }, [startPosition]);
 
   useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     socket.emit('setShowClock', showClock);
   }, [showClock]);
 
   useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     socket.emit('setNewsReaderText', newsReaderText);
   }, [newsReaderText]);
 
 
   useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     if (!slugs) return;
     socket.emit('setSlugs', slugs.length);
   }, [slugs]);
@@ -856,9 +877,9 @@ export default function Home() {
 
 
   return (
-    <div style={{ overflow: "hidden" }}>
+    <div style={{ overflow: "hidden", backgroundColor: '#e0e0d2', }}>
       <div style={{ display: "flex" }}>
-        <div>
+        <div style={{ height: '100vh' }}>
           <div>
             {newdatabase &&
               <div>
@@ -893,7 +914,6 @@ export default function Home() {
               ))}
             </select>
             {slugs?.length} Slugs <button onClick={fetchNewsId}>Refresh RO</button>
-            {/* <span title="Database Status"> {(serverAlive && (databaseConnection === 'true')) ? '🟢' : '🔴'}</span> */}
 
           </div>
           <div
@@ -920,7 +940,7 @@ export default function Home() {
                         ? "#FF999C"
                         : !val.Approval
                           ? "red"
-                          : "#E7DBD8",
+                          : "#a1a178",
                   margin: 10,
                 }}
               >
@@ -1045,7 +1065,8 @@ export default function Home() {
         </div>
 
         {/* second column */}
-        <div>
+        <div style={{ height: '100vh' }}>
+
           <div
             style={{
               border: "1px solid red",
@@ -1201,7 +1222,8 @@ export default function Home() {
         </div>
 
         {/* Third column */}
-        <div>
+        <div style={{ height: '100vh' }}>
+
           <div>
             <Scroll
               scrollWidth={scrollWidth}
@@ -1363,6 +1385,10 @@ export default function Home() {
               <button onClick={() => {
                 window.open('/CasparcgOutput2', '', `width=${scrollWidth},height=${scrollHeight + 40}`);
                 setTimeout(() => {
+
+                  const socket = socketRef.current;
+                  if (!socket) return;
+
                   socket.emit('newPosition', newPosition);
                   socket.emit('setCurrentStoryNumber', currentStoryNumber);
                   socket.emit('storyLines', storyLines);
