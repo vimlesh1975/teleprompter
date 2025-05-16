@@ -154,7 +154,7 @@ export default function Home() {
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
     if (!curbulletin) return;
     if (!ScriptID) return;
-    console.log('Prompter ID being sent:', prompterId);
+    // console.log('Prompter ID being sent:', prompterId);
 
     fetch('/api/currentStory', {
       method: 'POST',
@@ -203,7 +203,7 @@ export default function Home() {
     });
 
     socket.on('databaseConnection', data => {
-      console.log('databaseConnection', data);
+      // console.log('databaseConnection', data);
       setDatabaseConnection(data);
     });
 

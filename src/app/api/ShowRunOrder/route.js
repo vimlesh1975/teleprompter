@@ -1,18 +1,19 @@
 import mysql from 'mysql2/promise';
-import {config, newdatabase} from '../db.js';
+import { config, newdatabase } from '../db.js';
+import socket from '../socketClient.js';
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const NewsId = searchParams.get('NewsId');
   const date = searchParams.get('date');
-  if (NewsId===''){
+  if (NewsId === '') {
     return new Response(JSON.stringify({ error: '' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }
   let connection;
-  
+
   try {
     connection = await mysql.createConnection(config);
     const query = newdatabase ? `SELECT *, 
@@ -29,6 +30,8 @@ export async function GET(req) {
 
     try {
       const [rows] = await connection.query(query, [NewsId, date]);
+      socket.emit("databaseConnection1", 'true');
+
       return new Response(JSON.stringify({ data: newdatabase ? rows : rows[0] }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -40,6 +43,8 @@ export async function GET(req) {
 
     }
   } catch (error) {
+    socket.emit("databaseConnection1", 'false');
+
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
