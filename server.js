@@ -7,8 +7,8 @@ const socketIO = require('socket.io');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-require('dotenv').config({path:'./.env.local'});
-var newdatabase = process.env.NEWDATABASE==="true";
+require('dotenv').config({ path: './.env.local' });
+var newdatabase = process.env.NEWDATABASE === "true";
 
 app.prepare().then(async () => {
     const server = express();
@@ -58,6 +58,11 @@ app.prepare().then(async () => {
             io.emit('currentStoryBroadcast', data);  // Broadcast to all clients
         });
 
+        socket.on('databaseConnection1', (data) => {
+            io.emit('databaseConnection', data);  // Broadcast to all clients
+        });
+
+
         socket.on('currentStoryDropAllow1', (data) => {
             io.emit('currentStoryDropAllow', data);  // Broadcast to all clients
         });
@@ -104,7 +109,7 @@ app.prepare().then(async () => {
         });
 
 
-      
+
         socket.on('offer', (data) => {
             socket.broadcast.emit('offer', data);
         });

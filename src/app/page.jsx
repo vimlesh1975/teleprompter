@@ -149,7 +149,7 @@ export default function Home() {
 
   const [sendUsedStory, setSendUsedStory] = useState(false);
   const [prompterId, setPrompterId] = useState(1);
-
+  const [databaseConnection, setDatabaseConnection] = useState('false');
 
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
     if (!curbulletin) return;
@@ -200,6 +200,11 @@ export default function Home() {
     });
     socket.on("newdatabase", (data) => {
       dispatch(changenewdatabase(data));
+    });
+
+    socket.on('databaseConnection', data => {
+      console.log('databaseConnection', data);
+      setDatabaseConnection(data);
     });
 
     socket.on('connect_error', (error) => {
@@ -865,6 +870,8 @@ export default function Home() {
                   onChange={handleDateChange}
                   disabled={!useDB}
                 />
+                <span title="Database Status"> {(serverAlive && (databaseConnection === 'true')) ? 'Database 🟢' : 'Database 🔴'}</span>
+
               </div>
             }
           </div>
@@ -886,7 +893,7 @@ export default function Home() {
               ))}
             </select>
             {slugs?.length} Slugs <button onClick={fetchNewsId}>Refresh RO</button>
-            <span title="Socket Server Status"> {serverAlive ? '🟢' : '🔴'}</span>
+            {/* <span title="Database Status"> {(serverAlive && (databaseConnection === 'true')) ? '🟢' : '🔴'}</span> */}
 
           </div>
           <div
