@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ isRTL, slugs, allContent, startPosition, fontSize, newPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
+export default function Home({ isRTL, bgColor, fontColor, slugs, allContent, startPosition, fontSize, newPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -140,7 +140,10 @@ export default function Home({ isRTL, slugs, allContent, startPosition, fontSize
 
                 socketRef.current.emit('setShowClock', showClock);
                 socketRef.current.emit('setNewsReaderText', newsReaderText);
+
                 socketRef.current.emit('rtl', isRTL);
+                socketRef.current.emit('bgColor', bgColor);
+                socketRef.current.emit('fontColor', fontColor);
 
               }, 3000);
             }

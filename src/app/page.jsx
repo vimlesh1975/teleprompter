@@ -89,10 +89,9 @@ const fixdata = {
 
 export default function Home() {
   const [isRTL, setIsRTL] = useState(false);
+
   const [bgColor, setbgColor] = useState('black');
   const [fontColor, setFontColor] = useState('#ffffff');
-
-
 
   const socketRef = useRef(null);
 
@@ -738,6 +737,18 @@ export default function Home() {
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
+    socket.emit('bgColor', bgColor);
+  }, [bgColor]);
+
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
+    socket.emit('fontColor', fontColor);
+  }, [fontColor]);
+
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     socket.emit('rtl', isRTL);
   }, [isRTL]);
 
@@ -1087,6 +1098,8 @@ export default function Home() {
           >
             <Casparcg
               isRTL={isRTL}
+              bgColor={bgColor}
+              fontColor={fontColor}
               slugs={slugs}
               allContent={allContent}
               startPosition={startPosition}
@@ -1202,8 +1215,10 @@ export default function Home() {
                 lineHeight: `${fontSize * 1.5}px`,
                 width: 702.22,
                 overflow: "hidden",
-
-              }}>{(!useDB && file) ?
+                backgroundColor: bgColor,
+                color: fontColor,
+              }}>
+              {(!useDB && file) ?
                 <textarea
                   dir={isRTL ? 'rtl' : 'ltr'}
                   onKeyDown={handleTextareaKeyDown}
@@ -1215,6 +1230,8 @@ export default function Home() {
                     height: 510,
                     border: 'none',
                     resize: 'none',
+                    backgroundColor: bgColor,
+                    color: fontColor,
                   }}
                   onChange={(e) => {
                     const updatedSlugs = [...slugs]; // Create a copy of the array
@@ -1430,6 +1447,8 @@ export default function Home() {
                   socket.emit('setShowClock', showClock);
                   socket.emit('setNewsReaderText', newsReaderText);
                   socket.emit('rtl', isRTL);
+                  socket.emit('bgColor', bgColor);
+                  socket.emit('fontColor', fontColor);
 
                 }, 3000);
               }}>Test</button>
@@ -1508,8 +1527,14 @@ export default function Home() {
 
               </div>
               <div>
-                Bg Color <input type="color" value={bgColor} onChange={e => setbgColor(e.target.value)} />
-                Font Color:<input type="color" value={fontColor} onChange={e => setFontColor(e.target.value)} />
+                Bg Color <input type="color" value={bgColor} onChange={e => {
+                  setbgColor(e.target.value);
+                  socketRef.current.emit('bgColor', e.target.value);
+                }} />
+                Font Color:<input type="color" value={fontColor} onChange={e => {
+                  setFontColor(e.target.value);
+                  socketRef.current.emit('fontColor', e.target.value);
+                }} />
               </div>
             </div>
 

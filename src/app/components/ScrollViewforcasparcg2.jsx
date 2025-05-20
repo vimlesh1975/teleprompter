@@ -6,15 +6,12 @@ import io from 'socket.io-client';
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
-const scrollContainerStyle = {
-    position: 'relative',
-    height: '440px',
-    overflow: 'hidden',
-    backgroundColor: '#000',
-};
+
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const ScrollViewforcasparcg2 = () => {
     const [isRTL, setIsRTL] = useState(false);
+    const [bgColor, setbgColor] = useState('black');
+    const [fontColor, setFontColor] = useState('#ffffff');
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
     const [newPosition, setNewPosition] = useState(150);
@@ -31,6 +28,15 @@ const ScrollViewforcasparcg2 = () => {
     const [slugsLength, setSlugsLength] = useState(0);
 
     const socketRef = useRef(null);
+
+    const scrollContainerStyle = {
+        position: 'relative',
+        height: '440px',
+        overflow: 'hidden',
+        // backgroundColor: '#000',
+        backgroundColor: bgColor,
+
+    };
 
     useEffect(() => {
         socketRef.current = io();
@@ -79,6 +85,13 @@ const ScrollViewforcasparcg2 = () => {
             setIsRTL(data);
         });
 
+        socketRef.current.on("bgColor2", (data) => {
+            setbgColor(data);
+        });
+
+        socketRef.current.on("fontColor2", (data) => {
+            setFontColor(data);
+        });
 
 
         return () => {
@@ -93,7 +106,8 @@ const ScrollViewforcasparcg2 = () => {
             socketRef.current.off("setFontSize2");
             socketRef.current.off("setStartPosition2");
             socketRef.current.off("rtl2");
-
+            socketRef.current.off("rbgColor2tl2");
+            socketRef.current.off("fontColor2");
             socketRef.current = null;
         };
     }, []);
@@ -133,7 +147,7 @@ const ScrollViewforcasparcg2 = () => {
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'white' }}>
+                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor }}>
                         {content}
                     </div>
                 ))}
