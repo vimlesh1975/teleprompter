@@ -18,7 +18,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 
 
-const Scroll = ({ bgColor, fontColor, scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, slugs, newsReaderText, setSpeed }) => {
+const Scroll = ({ isRTL, bgColor, fontColor, scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, slugs, newsReaderText, setSpeed }) => {
     const dispatch = useDispatch();
     const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
     const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
@@ -43,7 +43,7 @@ const Scroll = ({ bgColor, fontColor, scaleFactor = 1, scrollWidth, scrollHeight
 
         minWidth: 702,
         maxWidth: 702,
-        textAlign: 'left',
+        // textAlign: 'left',
         padding: '0 40px',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
@@ -225,7 +225,7 @@ const Scroll = ({ bgColor, fontColor, scaleFactor = 1, scrollWidth, scrollHeight
                 <div ref={containerRef} style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>
                         {allContent.map((content, i) => (
-                            <div key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor }}>
+                            <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor }}>
                                 {content}
                             </div>
                         ))}
@@ -236,7 +236,7 @@ const Scroll = ({ bgColor, fontColor, scaleFactor = 1, scrollWidth, scrollHeight
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 };
 

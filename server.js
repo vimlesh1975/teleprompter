@@ -107,7 +107,9 @@ app.prepare().then(async () => {
         socket.on('setNewsReaderText', (data) => {
             io.emit('setNewsReaderText2', data);
         });
-
+        socket.on('rtl', (data) => {
+            io.emit('rtl2', data);
+        });
 
 
         socket.on('offer', (data) => {
@@ -143,6 +145,8 @@ app.prepare().then(async () => {
             socket.removeAllListeners("setStartPosition");
             socket.removeAllListeners("setShowClock");
             socket.removeAllListeners("setNewsReaderText");
+            socket.removeAllListeners("rtl");
+
 
         });
 

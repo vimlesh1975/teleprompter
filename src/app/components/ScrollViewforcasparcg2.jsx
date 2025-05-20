@@ -14,6 +14,7 @@ const scrollContainerStyle = {
 };
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const ScrollViewforcasparcg2 = () => {
+    const [isRTL, setIsRTL] = useState(false);
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
     const [newPosition, setNewPosition] = useState(150);
@@ -22,13 +23,13 @@ const ScrollViewforcasparcg2 = () => {
     const [fontSize, setFontSize] = useState(39);
     const [startPosition, setStartPosition] = useState(150);
 
-      const [newsReaderText, setNewsReaderText] = useState('Continue...');
-      const [showClock, setShowClock] = useState(true);
+    const [newsReaderText, setNewsReaderText] = useState('Continue...');
+    const [showClock, setShowClock] = useState(true);
 
 
 
-       const [slugsLength, setSlugsLength] = useState(0);
-   
+    const [slugsLength, setSlugsLength] = useState(0);
+
     const socketRef = useRef(null);
 
     useEffect(() => {
@@ -74,6 +75,11 @@ const ScrollViewforcasparcg2 = () => {
             setNewsReaderText(data);
         });
 
+        socketRef.current.on("rtl2", (data) => {
+            setIsRTL(data);
+        });
+
+
 
         return () => {
             // socketRef.current.disconnect();
@@ -86,7 +92,7 @@ const ScrollViewforcasparcg2 = () => {
 
             socketRef.current.off("setFontSize2");
             socketRef.current.off("setStartPosition2");
-
+            socketRef.current.off("rtl2");
 
             socketRef.current = null;
         };
@@ -99,7 +105,7 @@ const ScrollViewforcasparcg2 = () => {
         willChange: 'transform',
         minWidth: 702,
         maxWidth: 702,
-        textAlign: 'left',
+        // textAlign: 'left',
         padding: '0 40px',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
@@ -127,7 +133,7 @@ const ScrollViewforcasparcg2 = () => {
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'white' }}>
+                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : 'white' }}>
                         {content}
                     </div>
                 ))}

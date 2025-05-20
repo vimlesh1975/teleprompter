@@ -88,6 +88,7 @@ const fixdata = {
 
 
 export default function Home() {
+  const [isRTL, setIsRTL] = useState(false);
   const [bgColor, setbgColor] = useState('black');
   const [fontColor, setFontColor] = useState('#ffffff');
 
@@ -734,6 +735,11 @@ export default function Home() {
     socket.emit('setNewsReaderText', newsReaderText);
   }, [newsReaderText]);
 
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
+    socket.emit('rtl', isRTL);
+  }, [isRTL]);
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -1080,6 +1086,7 @@ export default function Home() {
             }}
           >
             <Casparcg
+              isRTL={isRTL}
               slugs={slugs}
               allContent={allContent}
               startPosition={startPosition}
@@ -1189,29 +1196,32 @@ export default function Home() {
               </div>
             )}
 
-            <div style={{
-              fontSize: `${fontSize}px`,
-              lineHeight: `${fontSize * 1.5}px`,
-              width: 702.22,
-              overflow: "hidden",
-            }}>{(!useDB && file) ?
-              <textarea
-                onKeyDown={handleTextareaKeyDown}
-                value={slugs?.[currentSlug]?.Script ?? ''}
-                style={{
-                  fontSize: `${fontSize}px`,
-                  lineHeight: `${fontSize * 1.5}px`,
-                  width: 702.22,
-                  height: 510,
-                  border: 'none',
-                  resize: 'none',
-                }}
-                onChange={(e) => {
-                  const updatedSlugs = [...slugs]; // Create a copy of the array
-                  updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
-                  setSlugs(updatedSlugs); // Update state with the modified array
-                }}
-              /> : (slugs?.[currentSlug]?.Script)?.trim() ?? ''
+            <div dir={isRTL ? 'rtl' : 'ltr'}
+              style={{
+                fontSize: `${fontSize}px`,
+                lineHeight: `${fontSize * 1.5}px`,
+                width: 702.22,
+                overflow: "hidden",
+
+              }}>{(!useDB && file) ?
+                <textarea
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                  onKeyDown={handleTextareaKeyDown}
+                  value={slugs?.[currentSlug]?.Script ?? ''}
+                  style={{
+                    fontSize: `${fontSize}px`,
+                    lineHeight: `${fontSize * 1.5}px`,
+                    width: 702.22,
+                    height: 510,
+                    border: 'none',
+                    resize: 'none',
+                  }}
+                  onChange={(e) => {
+                    const updatedSlugs = [...slugs]; // Create a copy of the array
+                    updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
+                    setSlugs(updatedSlugs); // Update state with the modified array
+                  }}
+                /> : (slugs?.[currentSlug]?.Script)?.trim() ?? ''
 
               }
             </div>
@@ -1230,6 +1240,7 @@ export default function Home() {
 
           <div>
             <Scroll
+              isRTL={isRTL}
               fontColor={fontColor}
               bgColor={bgColor}
               scrollWidth={scrollWidth}
@@ -1261,7 +1272,7 @@ export default function Home() {
                 scrollHeight={scrollHeight}
               >
 
-                <ScrollView fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
 
             )}
@@ -1272,7 +1283,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
@@ -1342,8 +1353,19 @@ export default function Home() {
                 style={{ width: "60%" }}
               />
             </div>
-            <div style={{ textAlign: "left" }}>
+            <div style={{ textAlign: "center" }}>
               Right Click to Stop and Play
+            </div>
+            <div style={{ textAlign: "left" }}>
+              <label>
+                {" "}
+                <input
+                  type="checkbox"
+                  checked={isRTL}
+                  onChange={(e) => setIsRTL(e.target.checked)}
+                />
+                <b><span>Right to left for urdu</span></b>
+              </label>
             </div>
             <Timer
               callback={timerFunction}
@@ -1407,6 +1429,7 @@ export default function Home() {
 
                   socket.emit('setShowClock', showClock);
                   socket.emit('setNewsReaderText', newsReaderText);
+                  socket.emit('rtl', isRTL);
 
                 }, 3000);
               }}>Test</button>
