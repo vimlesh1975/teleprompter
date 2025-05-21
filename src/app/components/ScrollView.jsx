@@ -8,7 +8,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 
 //ff
-const ScrollView = ({ isRTL, bgColor, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
+const ScrollView = ({ fontBold, isRTL, bgColor, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
 
 
     const scrollContainerStyle = {
@@ -58,7 +58,7 @@ const ScrollView = ({ isRTL, bgColor, fontColor, allContent, newPosition, fontSi
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor }}>
+                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
                         {content}
                     </div>
                 ))}
