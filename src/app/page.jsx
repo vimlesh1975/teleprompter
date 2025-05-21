@@ -20,69 +20,14 @@ import 'react-tabs/style/react-tabs.css';
 import { UseSocketControls } from "./components/UseSocketControls";
 // import { UseSocketControls } from "./components/UseSocketControlsJaipur";
 
-
+import fixdata from './fixdata.js';
 
 // const scrollWidth = 600;
 const scrollHeight = 440;
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 
 const dummyScriptid = 200502071223160;
-const fixdata = {
-  "ScriptID": "202502071223160",
-  "id": 636,
-  "bulletinname": "simnews1",
-  "bulletinlock": 0,
-  "bulletindate": "2025-02-06T18:30:00.000Z",
-  "bulletintype": "",
-  "rowid": "202502071223160",
-  "slno": 1,
-  "SlugName": "No Slug Name",
-  "Script": "No Script",
-  "scriptmodifiedtime": "2025-02-07T06:55:51.000Z",
-  "createdtime": "2025-02-07T06:53:16.000Z",
-  "createdby": "binoy",
-  "currentuser": "rajeev",
-  "LastModifiedTime": "2025-02-07T11:46:46.000Z",
-  "lastmodifiedby": null,
-  "Lockscript": 0,
-  "lockedby": null,
-  "WordsCount": 1.31,
-  "EditCode": "0",
-  "autosavestatus": 0,
-  "OneLinerText": null,
-  "onelinermodifiedtime": null,
-  "importedscriptid": null,
-  "importedbulletinname": null,
-  "media1": null,
-  "media2": null,
-  "media3": null,
-  "media4": null,
-  "media5": null,
-  "media1duration": "00:00:00",
-  "media2duration": "00:00:00",
-  "media3duration": "00:00:00",
-  "media4duration": "00:00:00",
-  "media5duration": "00:00:00",
-  "mediamodifiedtime": null,
-  "mediamodifiedby": null,
-  "source": null,
-  "dropstory": 0,
-  "archivestatus": 0,
-  "graphicsid": null,
-  "reporter1": null,
-  "reporter2": null,
-  "location": null,
-  "repeated": 0,
-  "approved": 1,
-  "deleted": 0,
-  "voiceover": 0,
-  "RunOrder": 1,
-  "CreatedTime": "2025-02-07T06:53:16.000Z",
-  "ScriptLastModifiedTime": "2025-02-07T06:55:51.000Z",
-  "Approval": 1,
-  "MediaInsert": null,
-  "DropStory": 0
-};
+
 
 // var socket;
 
@@ -1215,8 +1160,6 @@ export default function Home() {
                 lineHeight: `${fontSize * 1.5}px`,
                 width: 702.22,
                 overflow: "hidden",
-                backgroundColor: bgColor,
-                color: fontColor,
               }}>
               {(!useDB && file) ?
                 <textarea
@@ -1230,8 +1173,6 @@ export default function Home() {
                     height: 510,
                     border: 'none',
                     resize: 'none',
-                    backgroundColor: bgColor,
-                    color: fontColor,
                   }}
                   onChange={(e) => {
                     const updatedSlugs = [...slugs]; // Create a copy of the array
