@@ -37,6 +37,7 @@ export default function Home() {
 
   const [bgColor, setbgColor] = useState('black');
   const [fontColor, setFontColor] = useState('#ffffff');
+  const [fontBold, setFontBold] = useState(false);
 
   const socketRef = useRef(null);
 
@@ -1167,7 +1168,8 @@ export default function Home() {
                     height: 510,
                     border: 'none',
                     resize: 'none',
-                    fontFamily: 'inherit'
+                    fontFamily: 'inherit',
+                    fontWeight: fontBold ? 'bold' : 'normal',
                   }}
                   onChange={(e) => {
                     const updatedSlugs = [...slugs]; // Create a copy of the array
@@ -1182,6 +1184,8 @@ export default function Home() {
                   lineHeight: `${fontSize * 1.5}px`,
                   width: 702.22,
                   overflow: "hidden",
+                  fontWeight: fontBold ? 'bold' : 'normal',
+
                 }}>
                 {(slugs?.[currentSlug]?.Script)?.trim() ?? ''}
               </div>
@@ -1199,6 +1203,7 @@ export default function Home() {
 
           <div>
             <Scroll
+              fontBold={fontBold}
               isRTL={isRTL}
               fontColor={fontColor}
               bgColor={bgColor}
@@ -1326,6 +1331,19 @@ export default function Home() {
                 <b><span>Right to left for urdu</span></b>
               </label>
             </div>
+
+            <div style={{ textAlign: "left" }}>
+              <label>
+                {" "}
+                <input
+                  type="checkbox"
+                  checked={fontBold}
+                  onChange={(e) => setFontBold(e.target.checked)}
+                />
+                <b><span>fontBold</span></b>
+              </label>
+            </div>
+
             <Timer
               callback={timerFunction}
               interval={5000}

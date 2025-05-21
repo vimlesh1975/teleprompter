@@ -18,7 +18,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 
 
-const Scroll = ({ isRTL, bgColor, fontColor, scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, slugs, newsReaderText, setSpeed }) => {
+const Scroll = ({ fontBold, isRTL, bgColor, fontColor, scaleFactor = 1, scrollWidth, scrollHeight, fontSize, setCurrentSlug, newPosition, setNewPosition, doubleClickedPosition, textRef, startPosition, allContent, showClock, speed, loggedPositions, setLoggedPositions, currentStoryNumber, setCurrentStoryNumber, slugs, newsReaderText, setSpeed }) => {
     const dispatch = useDispatch();
     const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
     const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
@@ -225,7 +225,8 @@ const Scroll = ({ isRTL, bgColor, fontColor, scaleFactor = 1, scrollWidth, scrol
                 <div ref={containerRef} style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>
                         {allContent.map((content, i) => (
-                            <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor }}>
+
+                            <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} ref={(el) => (contentRefs.current[i] = el)} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
                                 {content}
                             </div>
                         ))}
