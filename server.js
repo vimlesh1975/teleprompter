@@ -114,8 +114,13 @@ app.prepare().then(async () => {
         socket.on('bgColor', (data) => {
             io.emit('bgColor2', data);
         });
+
         socket.on('fontColor', (data) => {
             io.emit('fontColor2', data);
+        });
+
+        socket.on('fontBold', (data) => {
+            io.emit('fontBold2', data);
         });
 
 

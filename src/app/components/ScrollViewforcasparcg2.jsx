@@ -12,6 +12,8 @@ const ScrollViewforcasparcg2 = () => {
     const [isRTL, setIsRTL] = useState(false);
     const [bgColor, setbgColor] = useState('black');
     const [fontColor, setFontColor] = useState('#ffffff');
+    const [fontBold, setFontBold] = useState(false);
+
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
     const [newPosition, setNewPosition] = useState(150);
@@ -92,6 +94,9 @@ const ScrollViewforcasparcg2 = () => {
         socketRef.current.on("fontColor2", (data) => {
             setFontColor(data);
         });
+        socketRef.current.on("fontBold2", (data) => {
+            setFontBold(data);
+        });
 
 
         return () => {
@@ -108,6 +113,7 @@ const ScrollViewforcasparcg2 = () => {
             socketRef.current.off("rtl2");
             socketRef.current.off("rbgColor2tl2");
             socketRef.current.off("fontColor2");
+            socketRef.current.off("fontBold2");
             socketRef.current = null;
         };
     }, []);
@@ -147,7 +153,7 @@ const ScrollViewforcasparcg2 = () => {
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor }}>
+                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
                         {content}
                     </div>
                 ))}

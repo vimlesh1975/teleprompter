@@ -701,6 +701,12 @@ export default function Home() {
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
+    socket.emit('fontBold', fontBold);
+  }, [fontBold]);
+
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     if (!slugs) return;
     socket.emit('setSlugs', slugs.length);
   }, [slugs]);
@@ -1043,6 +1049,7 @@ export default function Home() {
             }}
           >
             <Casparcg
+              fontBold={fontBold}
               isRTL={isRTL}
               bgColor={bgColor}
               fontColor={fontColor}
@@ -1410,6 +1417,7 @@ export default function Home() {
                   socket.emit('rtl', isRTL);
                   socket.emit('bgColor', bgColor);
                   socket.emit('fontColor', fontColor);
+                  socket.emit('fontBold', fontBold);
 
                 }, 3000);
               }}>Test</button>
