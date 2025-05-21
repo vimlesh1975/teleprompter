@@ -259,10 +259,22 @@ export default function Home() {
       if (dataObject.startPosition !== undefined) {
         setStartPosition(dataObject.startPosition);
       }
+      if (dataObject.isRTL !== undefined) {
+        setIsRTL(dataObject.isRTL);
+      }
+      if (dataObject.bgColor !== undefined) {
+        setbgColor(dataObject.bgColor);
+      }
+      if (dataObject.fontColor !== undefined) {
+        setFontColor(dataObject.fontColor);
+      }
+      if (dataObject.fontBold !== undefined) {
+        setFontBold(dataObject.fontBold);
+      }
     } else {
       localStorage.setItem(
         "WebTelePrompter",
-        JSON.stringify({ fontSize, startPosition })
+        JSON.stringify({ fontSize, startPosition, isRTL, bgColor, fontColor, fontBold })
       );
     }
   }, []);
@@ -274,10 +286,10 @@ export default function Home() {
 
       localStorage.setItem(
         "WebTelePrompter",
-        JSON.stringify({ ...dataObject, fontSize, startPosition })
+        JSON.stringify({ ...dataObject, fontSize, startPosition, isRTL, bgColor, fontColor, fontBold })
       );
     }, 1000);
-  }, [fontSize, startPosition]);
+  }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold]);
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
