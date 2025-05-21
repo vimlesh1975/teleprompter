@@ -20,7 +20,7 @@ import 'react-tabs/style/react-tabs.css';
 import { UseSocketControls } from "./components/UseSocketControls";
 // import { UseSocketControls } from "./components/UseSocketControlsJaipur";
 
-import fixdata from './fixdata.js';
+import { fixdata } from './fixdata.js';
 
 // const scrollWidth = 600;
 const scrollHeight = 440;
@@ -1154,14 +1154,8 @@ export default function Home() {
               </div>
             )}
 
-            <div dir={isRTL ? 'rtl' : 'ltr'}
-              style={{
-                fontSize: `${fontSize}px`,
-                lineHeight: `${fontSize * 1.5}px`,
-                width: 702.22,
-                overflow: "hidden",
-              }}>
-              {(!useDB && file) ?
+            {(!useDB && file) ?
+              <div>
                 <textarea
                   dir={isRTL ? 'rtl' : 'ltr'}
                   onKeyDown={handleTextareaKeyDown}
@@ -1173,19 +1167,26 @@ export default function Home() {
                     height: 510,
                     border: 'none',
                     resize: 'none',
+                    fontFamily: 'inherit'
                   }}
                   onChange={(e) => {
                     const updatedSlugs = [...slugs]; // Create a copy of the array
                     updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
                     setSlugs(updatedSlugs); // Update state with the modified array
                   }}
-                /> : (slugs?.[currentSlug]?.Script)?.trim() ?? ''
-
-              }
-            </div>
-
+                />
+              </div> :
+              <div dir={isRTL ? 'rtl' : 'ltr'}
+                style={{
+                  fontSize: `${fontSize}px`,
+                  lineHeight: `${fontSize * 1.5}px`,
+                  width: 702.22,
+                  overflow: "hidden",
+                }}>
+                {(slugs?.[currentSlug]?.Script)?.trim() ?? ''}
+              </div>
+            }
           </div>
-
           <div style={{ fontSize: 16, fontWeight: "normal", position: 'absolute', top: 770, }}>
             {!useDB && <div><button onClick={saveScript}>Save Script</button></div>}
 
