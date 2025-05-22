@@ -7,7 +7,7 @@ export async function OPTIONS() {
   return new Response(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:3000', // Change to your frontend origin
+      'Access-Control-Allow-Origin': '*', // Change to your frontend origin
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },
@@ -56,7 +56,7 @@ export async function POST(request) {
     return new Response(JSON.stringify({ error: 'No text provided.' }), {
       status: 400,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
     });
@@ -79,7 +79,7 @@ export async function POST(request) {
     const combinedAudio = Buffer.concat(audioChunks.map((chunk) => Buffer.from(chunk, 'base64')));
 
     return new Response(combinedAudio, {
-      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Origin': '*',
       headers: { 'Content-Type': 'audio/mpeg' },
     });
   } catch (error) {
@@ -87,7 +87,7 @@ export async function POST(request) {
     return new Response(JSON.stringify({ error: 'Error synthesizing speech.' }), {
       status: 500,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
     });
