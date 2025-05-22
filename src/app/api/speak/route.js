@@ -1,5 +1,4 @@
 // app/api/speak/route.js
-import { NextResponse } from 'next/server';
 import { TextToSpeechClient } from '@google-cloud/text-to-speech';
 
 // Handle preflight OPTIONS requests
