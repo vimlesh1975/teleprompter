@@ -1,4 +1,5 @@
 "use client";
+import { fontLists } from "./common.js";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useState, useEffect, useRef, useCallback, use } from "react";
@@ -30,12 +31,10 @@ const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const dummyScriptid = 200502071223160;
 
 
-// var socket;
-
-
 export default function Home() {
+  const [fontList, setFontList] = useState(fontLists);
+  const [currentFont, setCurrentFont] = useState("Arial");
   const [isRTL, setIsRTL] = useState(false);
-
   const [bgColor, setbgColor] = useState('black');
   const [fontColor, setFontColor] = useState('#ffffff');
   const [fontBold, setFontBold] = useState(false);
@@ -107,13 +106,19 @@ export default function Home() {
   const iframeRef = useRef(null);
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
-  // const [address, setAddress] = useState('');
 
   useEffect(() => {
-    // Safe to use window here (client-side only)
-    const addr = `${window.location.origin}/SpeechToText`;
-    // setAddress(addr);
+    if (window.location.origin !== "https://teleprompter-chi.vercel.app") {
 
+    }
+    fetch('/api/fonts')
+      .then((res) => res.json())
+      .then((data) => setFontList(data.fonts))
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    const addr = `${window.location.origin}/SpeechToText`;
     if (iframeRef.current) {
       iframeRef.current.src = addr;
     }
@@ -125,7 +130,7 @@ export default function Home() {
     };
 
     const inputs = [textarea1Ref.current];
-    console.log(inputs)
+    // console.log(inputs)
     inputs.forEach((input) => {
       if (input) {
         input.addEventListener('focus', handleFocus);
@@ -1442,6 +1447,18 @@ export default function Home() {
                 />
                 <b><span>fontBold</span></b>
               </label>
+            </div>
+            <div style={{ textAlign: "left" }}>
+              <b> Font: </b>{" "}
+              <select onChange={(e) => setCurrentFont(e.target.value)} value={currentFont}>
+                {fontList.map((val, i) => {
+                  return (
+                    <option key={i} value={val}>
+                      {val}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
 
             <Timer

@@ -16,6 +16,7 @@
     "casparcg-connection": "^5.1.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "font-list": "^1.5.1",
     "i": "^0.3.7",
     "lodash.debounce": "^4.0.8",
     "mammoth": "^1.9.0",
