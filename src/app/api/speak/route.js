@@ -1,6 +1,19 @@
 // app/api/speak/route.js
-
+import { NextResponse } from 'next/server';
 import { TextToSpeechClient } from '@google-cloud/text-to-speech';
+
+// Handle preflight OPTIONS requests
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:3000', // Change to your frontend origin
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  });
+}
+
 
 const client = new TextToSpeechClient({
   credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON),
@@ -40,7 +53,13 @@ export async function POST(request) {
   const { text, languageCode, name } = await request.json();
 
   if (!text) {
-    return new Response(JSON.stringify({ error: 'No text provided.' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'No text provided.' }), {
+      status: 400,
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   try {
@@ -60,10 +79,17 @@ export async function POST(request) {
     const combinedAudio = Buffer.concat(audioChunks.map((chunk) => Buffer.from(chunk, 'base64')));
 
     return new Response(combinedAudio, {
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
       headers: { 'Content-Type': 'audio/mpeg' },
     });
   } catch (error) {
     console.error('Error synthesizing speech:', error);
-    return new Response(JSON.stringify({ error: 'Error synthesizing speech.' }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'Error synthesizing speech.' }), {
+      status: 500,
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json',
+      },
+    });
   }
 }

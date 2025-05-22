@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import {list_voices} from './list-voices'
+import { list_voices } from './list-voices'
 
-export default function Home({content}) {
+export default function Home({ content }) {
   const [language, setLanguage] = useState('mr-IN');
   const [name, setName] = useState('mr-IN-Standard-A');
   const [audioUrl, setAudioUrl] = useState('');
@@ -11,8 +11,8 @@ export default function Home({content}) {
   const [autoPlay, setAutoPlay] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const audioRef = useRef(null);
-  const languages=list_voices;
-  const languagesLoading=false;
+  const languages = list_voices;
+  const languagesLoading = false;
 
   const handleSpeak = async () => {
     if (!content?.trim()) {
@@ -21,10 +21,11 @@ export default function Home({content}) {
     setLoading(true);
     setAudioUrl('');
     try {
-      const response = await fetch('/api/speak', {
+      // const response = await fetch('/api/speak', {
+      const response = await fetch('https://teleprompter-chi.vercel.app/api/speak', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text:content, languageCode: language, name }),
+        body: JSON.stringify({ text: content, languageCode: language, name }),
       });
 
       if (response.ok) {
@@ -51,7 +52,7 @@ export default function Home({content}) {
 
   return (
     <div style={{ padding: '20px' }}>
-     
+
       <div style={{ marginBottom: '10px' }}>
         <label htmlFor="language-select">Language:</label>
         <select
