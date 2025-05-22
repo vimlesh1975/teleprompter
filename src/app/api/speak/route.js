@@ -79,8 +79,10 @@ export async function POST(request) {
     const combinedAudio = Buffer.concat(audioChunks.map((chunk) => Buffer.from(chunk, 'base64')));
 
     return new Response(combinedAudio, {
-      'Access-Control-Allow-Origin': '*',
-      headers: { 'Content-Type': 'audio/mpeg' },
+      headers: {
+        'Access-Control-Allow-Origin': '*',  // ✅ Correct placement
+        'Content-Type': 'audio/mpeg',
+      },
     });
   } catch (error) {
     console.error('Error synthesizing speech:', error);
