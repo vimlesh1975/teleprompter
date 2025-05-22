@@ -707,7 +707,7 @@ export default function Home() {
     setCurrentSlug(currentStoryNumber - 1);
     if (!slugs) return;
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
-  }, [currentStoryNumber, slugs]);
+  }, [currentStoryNumber, slugs, useDB]);
 
   useEffect(() => {
     if (stopAfterStoryChange) {
