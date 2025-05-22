@@ -12,6 +12,7 @@ import io from "socket.io-client";
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
 import TTS from './components/TTS.jsx'
+// import SpeechToText from './SpeechToText/SpeechToText';
 import ScrollView from './components/ScrollView';
 import { changenewdatabase } from './store/store'; // Adjust the path as needed
 import mammoth from 'mammoth';
@@ -102,6 +103,74 @@ export default function Home() {
   const [sendUsedStory, setSendUsedStory] = useState(false);
   const [prompterId, setPrompterId] = useState(1);
   const [databaseConnection, setDatabaseConnection] = useState('false');
+
+  const iframeRef = useRef(null);
+  const textarea1Ref = useRef(null);
+  const [focusedInput, setFocusedInput] = useState(null);
+  // const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    // Safe to use window here (client-side only)
+    const addr = `${window.location.protocol}//${window.location.hostname}:3000/SpeechToText`;
+    // setAddress(addr);
+
+    if (iframeRef.current) {
+      iframeRef.current.src = addr;
+    }
+
+    const handleFocus = (event) => {
+      if (textarea1Ref.current) textarea1Ref.current.style.borderColor = 'red';
+      event.target.style.borderColor = 'red';
+      setFocusedInput(event.target);
+    };
+
+    const inputs = [textarea1Ref.current];
+    console.log(inputs)
+    inputs.forEach((input) => {
+      if (input) {
+        input.addEventListener('focus', handleFocus);
+      }
+    });
+
+    const messageHandler = (event) => {
+      console.log(focusedInput)
+
+      // if (event.origin !== addr) return;
+      if (
+        event.data &&
+        typeof event.data === 'object' &&
+        'replace' in event.data &&
+        'value' in event.data
+      ) {
+        if (focusedInput) {
+          const aa = currentSlug;
+
+          if (event.data.replace) {
+            const updatedSlugs = [...slugs];
+            updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: event.data.value }; // Modify the object at index i
+            setSlugs(updatedSlugs);
+          } else {
+            const updatedSlugs = [...slugs];
+            updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: focusedInput.value + event.data.value }; // Modify the object at index i
+            setSlugs(updatedSlugs);
+          }
+        }
+      }
+
+      if (event.data === 'request_textarea_content' && focusedInput) {
+        event.source.postMessage({ textareaValue: focusedInput.value }, event.origin);
+      }
+    };
+
+    window.addEventListener('message', messageHandler);
+
+    return () => {
+      window.removeEventListener('message', messageHandler);
+    };
+  }, [focusedInput, useDB, file]);
+
+
+
 
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
     if (!curbulletin) return;
@@ -633,6 +702,8 @@ export default function Home() {
 
 
   useEffect(() => {
+    if (!useDB) { return }
+    console.log('slugs chaned')
     setCurrentSlug(currentStoryNumber - 1);
     if (!slugs) return;
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
@@ -739,7 +810,6 @@ export default function Home() {
   }
   const readFile = (selectedFile) => {
     if (!selectedFile) return;
-    console.log(selectedFile.type === 'text/plain');
     const reader = new FileReader();
     let bb = [];
 
@@ -1177,6 +1247,7 @@ export default function Home() {
             {(!useDB && file) ?
               <div>
                 <textarea
+                  ref={textarea1Ref}
                   dir={isRTL ? 'rtl' : 'ltr'}
                   onKeyDown={handleTextareaKeyDown}
                   value={slugs?.[currentSlug]?.Script ?? ''}
@@ -1185,15 +1256,16 @@ export default function Home() {
                     lineHeight: `${fontSize * 1.5}px`,
                     width: 702.22,
                     height: 510,
-                    border: 'none',
+                    // border: 'none',
                     resize: 'none',
                     fontFamily: 'inherit',
                     fontWeight: fontBold ? 'bold' : 'normal',
                   }}
                   onChange={(e) => {
+                    const aa = currentSlug;
                     const updatedSlugs = [...slugs]; // Create a copy of the array
                     updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
-                    setSlugs(updatedSlugs); // Update state with the modified array
+                    setSlugs(updatedSlugs);
                   }}
                 />
               </div> :
@@ -1214,6 +1286,15 @@ export default function Home() {
             {!useDB && <div><button onClick={saveScript}>Save Script</button></div>}
 
             <TTS content={slugs ? slugs[currentSlug]?.Script : ''} />
+            {/* <SpeechToText /> */}
+            {file && <iframe
+              ref={iframeRef}
+              width="750"
+              height="40"
+              // style={{ border: '1px solid black' }}
+              allow="microphone"
+              title="External Content"
+            ></iframe>}
           </div>
         </div>
 
@@ -1517,6 +1598,7 @@ export default function Home() {
                   socketRef.current.emit('fontColor', e.target.value);
                 }} />
               </div>
+
             </div>
 
           </div>
@@ -1524,6 +1606,8 @@ export default function Home() {
         </div>
 
       </div>
+
+
     </div>
   );
 }
