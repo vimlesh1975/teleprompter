@@ -123,6 +123,9 @@ app.prepare().then(async () => {
             io.emit('fontBold2', data);
         });
 
+        socket.on('currentFont', (data) => {
+            io.emit('currentFont2', data);
+        });
 
 
         socket.on('offer', (data) => {

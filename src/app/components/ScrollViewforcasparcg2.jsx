@@ -9,6 +9,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const ScrollViewforcasparcg2 = () => {
+    const [currentFont, setCurrentFont] = useState("Times New Roman");
     const [isRTL, setIsRTL] = useState(false);
     const [bgColor, setbgColor] = useState('black');
     const [fontColor, setFontColor] = useState('#ffffff');
@@ -98,6 +99,9 @@ const ScrollViewforcasparcg2 = () => {
             setFontBold(data);
         });
 
+        socketRef.current.on("currentFont2", (data) => {
+            setCurrentFont(data);
+        });
 
         return () => {
             // socketRef.current.disconnect();
@@ -114,6 +118,8 @@ const ScrollViewforcasparcg2 = () => {
             socketRef.current.off("rbgColor2tl2");
             socketRef.current.off("fontColor2");
             socketRef.current.off("fontBold2");
+            socketRef.current.off("currentFont2");
+
             socketRef.current = null;
         };
     }, []);
@@ -153,7 +159,7 @@ const ScrollViewforcasparcg2 = () => {
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
+                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ fontFamily: (i % 3 === 1) ? currentFont : '', backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
                         {content}
                     </div>
                 ))}

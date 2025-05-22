@@ -33,7 +33,7 @@ const dummyScriptid = 200502071223160;
 
 export default function Home() {
   const [fontList, setFontList] = useState(fontLists);
-  const [currentFont, setCurrentFont] = useState("Arial");
+  const [currentFont, setCurrentFont] = useState("Times New Roman");
   const [isRTL, setIsRTL] = useState(false);
   const [bgColor, setbgColor] = useState('black');
   const [fontColor, setFontColor] = useState('#ffffff');
@@ -345,10 +345,13 @@ export default function Home() {
       if (dataObject.fontBold !== undefined) {
         setFontBold(dataObject.fontBold);
       }
+      if (dataObject.currentFont !== undefined) {
+        setCurrentFont(dataObject.currentFont);
+      }
     } else {
       localStorage.setItem(
         "WebTelePrompter",
-        JSON.stringify({ fontSize, startPosition, isRTL, bgColor, fontColor, fontBold })
+        JSON.stringify({ fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont })
       );
     }
   }, []);
@@ -360,10 +363,10 @@ export default function Home() {
 
       localStorage.setItem(
         "WebTelePrompter",
-        JSON.stringify({ ...dataObject, fontSize, startPosition, isRTL, bgColor, fontColor, fontBold })
+        JSON.stringify({ ...dataObject, fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont })
       );
     }, 1000);
-  }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold]);
+  }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont]);
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
@@ -794,6 +797,12 @@ export default function Home() {
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
+    socket.emit('currentFont', currentFont);
+  }, [currentFont]);
+
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     if (!slugs) return;
     socket.emit('setSlugs', slugs.length);
   }, [slugs]);
@@ -1135,6 +1144,7 @@ export default function Home() {
             }}
           >
             <Casparcg
+              currentFont={currentFont}
               fontBold={fontBold}
               isRTL={isRTL}
               bgColor={bgColor}
@@ -1262,7 +1272,8 @@ export default function Home() {
                     height: 510,
                     // border: 'none',
                     resize: 'none',
-                    fontFamily: 'inherit',
+                    // fontFamily: 'inherit',
+                    fontFamily: currentFont,
                     fontWeight: fontBold ? 'bold' : 'normal',
                   }}
                   onChange={(e) => {
@@ -1280,7 +1291,7 @@ export default function Home() {
                   width: 702.22,
                   overflow: "hidden",
                   fontWeight: fontBold ? 'bold' : 'normal',
-
+                  fontFamily: currentFont,
                 }}>
                 {(slugs?.[currentSlug]?.Script)?.trim() ?? ''}
               </div>
@@ -1307,6 +1318,7 @@ export default function Home() {
 
           <div>
             <Scroll
+              currentFont={currentFont}
               fontBold={fontBold}
               isRTL={isRTL}
               fontColor={fontColor}
@@ -1341,7 +1353,7 @@ export default function Home() {
               >
 
 
-                <ScrollView fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
 
             )}
@@ -1352,7 +1364,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
@@ -1467,7 +1479,7 @@ export default function Home() {
               stopOnNext={stopOnNext}
               setStopOnNext={setStopOnNext}
             />
-            <h3>
+            <p style={{ fontWeight: 'bold' }}>
               Last Update:{" "}
               {latestDate?.toLocaleString(undefined, {
                 year: "numeric",
@@ -1477,7 +1489,7 @@ export default function Home() {
                 minute: "numeric",
                 second: "numeric",
               })}
-            </h3>
+            </p>
 
 
             <div>
@@ -1527,6 +1539,7 @@ export default function Home() {
                   socket.emit('bgColor', bgColor);
                   socket.emit('fontColor', fontColor);
                   socket.emit('fontBold', fontBold);
+                  socket.emit('currentFont', currentFont);
 
                 }, 3000);
               }}>Test</button>
