@@ -111,7 +111,7 @@ export default function Home() {
 
   useEffect(() => {
     // Safe to use window here (client-side only)
-    const addr = `${window.location.protocol}//${window.location.hostname}:3000/SpeechToText`;
+    const addr = `${window.location.origin}/SpeechToText`;
     // setAddress(addr);
 
     if (iframeRef.current) {
