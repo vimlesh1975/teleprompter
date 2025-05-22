@@ -51,10 +51,10 @@ export default function Home({ content }) {
   }, [playbackSpeed]);
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '10px' }}>
 
       <div style={{ marginBottom: '10px' }}>
-        <label htmlFor="language-select">Language:</label>
+        <label htmlFor="language-select">Lang:</label>
         <select
           id="language-select"
           value={name}
@@ -64,7 +64,7 @@ export default function Home({ content }) {
             setName(selectedVoice.name);
             setAudioUrl('');
           }}
-          style={{ marginLeft: '10px' }}
+          style={{ marginLeft: 5 }}
         >
           {languagesLoading ? (
             <option>Loading languages...</option>
@@ -78,37 +78,37 @@ export default function Home({ content }) {
         </select>
 
 
-      </div>
 
-      {/* Auto Play Option */}
-      <label htmlFor="autoPlay">
+
+        {/* Auto Play Option */}
+        <label htmlFor="autoPlay">
+          <input
+            type="checkbox"
+            id="autoPlay"
+            checked={autoPlay}
+            onChange={() => setAutoPlay((val) => !val)}
+          />
+          Auto Play
+        </label>
+
+        {/* Speak Button */}
+        <button onClick={handleSpeak} style={{ padding: '10px 20px' }} disabled={loading}>
+          {loading ? 'Loading...' : 'Speak'}
+        </button>
+        Speed: {playbackSpeed.toFixed(1)}x
         <input
-          type="checkbox"
-          id="autoPlay"
-          checked={autoPlay}
-          onChange={() => setAutoPlay((val) => !val)}
+          type="range"
+          min="0.5"
+          max="2.0"
+          step="0.1"
+          value={playbackSpeed}
+          onChange={(e) => setPlaybackSpeed(parseFloat(e.target.value))}
+          style={{ width: 100 }}
         />
-        Auto Play
-      </label>
-
-      {/* Speak Button */}
-      <button onClick={handleSpeak} style={{ padding: '10px 20px' }} disabled={loading}>
-        {loading ? 'Loading...' : 'Speak'}
-      </button>
-      Speed: {playbackSpeed.toFixed(1)}x
-      <input
-        type="range"
-        min="0.5"
-        max="2.0"
-        step="0.1"
-        value={playbackSpeed}
-        onChange={(e) => setPlaybackSpeed(parseFloat(e.target.value))}
-        style={{ width: 100 }}
-      />
-
+      </div>
       {/* Audio Player and Controls */}
       {audioUrl && (
-        <div style={{ marginTop: 20 }}>
+        <div style={{ marginTop: 5 }}>
           <audio style={{ width: 300, height: 30 }}
             controls
             src={audioUrl}
