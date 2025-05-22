@@ -703,18 +703,17 @@ export default function Home() {
 
   useEffect(() => {
     if (!useDB) { return }
-    console.log('slugs chaned')
     setCurrentSlug(currentStoryNumber - 1);
     if (!slugs) return;
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
   }, [currentStoryNumber, slugs, useDB]);
 
+
   useEffect(() => {
     if (stopAfterStoryChange) {
       setSpeed(0);
     }
-
-  }, [currentStoryNumber]);
+  }, [currentStoryNumber, stopAfterStoryChange]);
 
 
   useEffect(() => {
