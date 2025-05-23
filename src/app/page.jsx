@@ -1265,6 +1265,7 @@ export default function Home() {
                   onKeyDown={handleTextareaKeyDown}
                   value={slugs?.[currentSlug]?.Script ?? ''}
                   style={{
+                    backgroundColor: '#e0e0d2',
                     fontSize: `${fontSize}px`,
                     lineHeight: `${fontSize * 1.5}px`,
                     width: 702.22,
@@ -1297,7 +1298,7 @@ export default function Home() {
             }
           </div>
           <div style={{ fontSize: 16, fontWeight: "normal", position: 'absolute', top: 770, }}>
-            {!useDB && <div><button onClick={saveScript}>Save Script</button></div>}
+            {!useDB && file && <div><button onClick={saveScript}>Save Script</button></div>}
 
             <TTS content={slugs ? slugs[currentSlug]?.Script : ''} />
             {/* <SpeechToText /> */}
