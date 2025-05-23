@@ -1497,7 +1497,7 @@ export default function Home() {
                   if (showNewWindow) {
                     newWindowRef.current.close();
                   }
-                  { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
+                  // { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
                   setShowNewWindow(!showNewWindow);
                 }}
               >
@@ -1509,7 +1509,7 @@ export default function Home() {
                   if (showNewWindow2) {
                     newWindowRef2.current.close();
                   }
-                  { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
+                  // { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
                   setShowNewWindow2(!showNewWindow2);
                 }}
               >
