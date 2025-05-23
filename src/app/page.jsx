@@ -1462,7 +1462,15 @@ export default function Home() {
             </div>
             <div style={{ textAlign: "left" }}>
               <b> Font: </b>{" "}
-              <select onChange={(e) => setCurrentFont(e.target.value)} value={currentFont}>
+              <select onChange={(e) => {
+                setCurrentFont(e.target.value);
+              }}
+                onKeyDown={(e) => {
+                  if (e.code === 'ArrowUp' || e.code === 'ArrowDown') {
+                    e.stopPropagation();
+                  }
+                }}
+                value={currentFont}>
                 {fontList.map((val, i) => {
                   return (
                     <option key={i} value={val}>
