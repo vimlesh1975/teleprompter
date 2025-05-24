@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react'
 import useInterval from 'beautiful-react-hooks/useInterval';
 
 
-const Count = ({currentStoryNumber}) => {
+const Count = ({ currentStoryNumber }) => {
   const [count, setCount] = useState(0)
 
   useInterval(() => {
     setCount(val => val + 1)
   }, 1000);
 
-  useEffect(()=>{
+  useEffect(() => {
     setCount(0);
-  },[currentStoryNumber])
+  }, [currentStoryNumber])
 
   return (
-    <div style={{fontSize:20, color:'black', backgroundColor:'white', minWidth:50, textAlign:'center'}}> 
+    <div style={{ color: 'black', backgroundColor: 'white', minWidth: 50, textAlign: 'center' }}>
       {count}
     </div>
   )

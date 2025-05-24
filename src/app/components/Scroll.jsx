@@ -41,7 +41,7 @@ const Scroll = ({
 
     const scrollContainerStyle = {
         position: 'relative',
-        height: '100%',
+        height: 1800,
         overflow: 'hidden',
         backgroundColor: bgColor,
         color: '#fff',
@@ -51,8 +51,8 @@ const Scroll = ({
         position: 'absolute',
         transform: `translateY(${newPosition}px)`,
         willChange: 'transform',
-        width: 1800,
-        padding: '0 40px',
+        width: 1720,
+        padding: '0 100px',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
         lineHeight: `${Math.floor(fontSize * 1.5)}px`,
@@ -95,7 +95,7 @@ const Scroll = ({
                     return;
                 }
 
-                setNewPosition(prev => parseFloat((prev - speed / 2.2).toFixed(2)));
+                setNewPosition(prev => parseFloat((prev - speed * 1.2).toFixed(2)));
 
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
                     if (ref) {
@@ -180,7 +180,7 @@ const Scroll = ({
                 transform: `scale(${scale})`,
                 transformOrigin: 'top left'
             }}>
-                <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
+                <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder' }}>
                     <div style={{ backgroundColor: 'lightgreen', width: `${widthPercentage}%` }}>
                         <div style={{ display: 'flex', justifyContent: 'space-around', width: baseWidth }}>
                             <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>

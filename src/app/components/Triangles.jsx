@@ -6,7 +6,8 @@ const triangleStyle = {
   borderLeft: '20px solid transparent',
   borderRight: '20px solid transparent',
   borderBottom: '40px solid rgb(255, 0, 34)',
-  transform: 'rotate(90deg)', 
+  transform: 'rotate(90deg)',
+  scale: 4,
 };
 
 const Triangles = () => {

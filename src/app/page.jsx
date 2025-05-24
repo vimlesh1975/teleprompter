@@ -25,7 +25,8 @@ import { UseSocketControls } from "./components/UseSocketControls";
 import { fixdata } from './fixdata.js';
 
 // const scrollWidth = 600;
-const scrollHeight = 440;
+// const scrollHeight = 440;
+const scrollHeight = 460;
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 
 const dummyScriptid = 200502071223160;
@@ -54,7 +55,7 @@ export default function Home() {
   const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
   const newdatabase = useSelector((state) => state.newdatabaseReducer.newdatabase);
 
-  const [startPosition, setStartPosition] = useState(150);
+  const [startPosition, setStartPosition] = useState(355);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("0600 Hrs");
@@ -1237,7 +1238,7 @@ export default function Home() {
               minHeight: 600,
               maxHeight: 600,
               position: "absolute",
-              top: startPosition + 28,
+              top: 150 + 28,
               overflow: "scroll",
               padding: '0 25px',
               boxSizing: 'border-box',
