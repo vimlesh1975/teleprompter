@@ -100,7 +100,7 @@ const Scroll = ({
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
                     if (ref) {
                         const rect = ref.getBoundingClientRect();
-                        return rect.top <= startPosition && rect.bottom > startPosition;
+                        return (rect.top / scale <= startPosition && rect.bottom / scale > startPosition);
                     }
                     return false;
                 });
