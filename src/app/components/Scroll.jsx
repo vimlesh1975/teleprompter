@@ -131,7 +131,7 @@ const Scroll = ({
                         }
                     }
                 }
-                console.log(linesCrossed)
+                // console.log(linesCrossed)
                 if (linesCrossed !== crossedLines) {
                     dispatch(changeCrossedLines(linesCrossed));
                 }
