@@ -25,8 +25,10 @@ import { UseSocketControls } from "./components/UseSocketControls";
 import { fixdata } from './fixdata.js';
 
 // const scrollWidth = 600;
-const scrollHeight = 440;
-const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
+// const scrollHeight = 440;
+const scrollHeight = 1080;
+// const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
+const scrollWidth = 900;//scrollHeight * 16 / 9=782.22;
 
 const dummyScriptid = 200502071223160;
 
@@ -106,72 +108,6 @@ export default function Home() {
   const iframeRef = useRef(null);
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
-
-  useEffect(() => {
-    if (window.location.origin !== "https://teleprompter-chi.vercel.app") {
-      fetch('/api/fonts')
-        .then((res) => res.json())
-        .then((data) => setFontList(data.fonts))
-        .catch((err) => console.error(err));
-    }
-  }, []);
-
-  useEffect(() => {
-    const addr = `${window.location.origin}/SpeechToText`;
-    if (iframeRef.current) {
-      iframeRef.current.src = addr;
-    }
-
-    const handleFocus = (event) => {
-      if (textarea1Ref.current) textarea1Ref.current.style.borderColor = 'red';
-      event.target.style.borderColor = 'red';
-      setFocusedInput(event.target);
-    };
-
-    const inputs = [textarea1Ref.current];
-    // console.log(inputs)
-    inputs.forEach((input) => {
-      if (input) {
-        input.addEventListener('focus', handleFocus);
-      }
-    });
-
-    const messageHandler = (event) => {
-      console.log(focusedInput)
-
-      // if (event.origin !== addr) return;
-      if (
-        event.data &&
-        typeof event.data === 'object' &&
-        'replace' in event.data &&
-        'value' in event.data
-      ) {
-        if (focusedInput) {
-          const aa = currentSlug;
-
-          if (event.data.replace) {
-            const updatedSlugs = [...slugs];
-            updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: event.data.value }; // Modify the object at index i
-            setSlugs(updatedSlugs);
-          } else {
-            const updatedSlugs = [...slugs];
-            updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: focusedInput.value + event.data.value }; // Modify the object at index i
-            setSlugs(updatedSlugs);
-          }
-        }
-      }
-
-      if (event.data === 'request_textarea_content' && focusedInput) {
-        event.source.postMessage({ textareaValue: focusedInput.value }, event.origin);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
-
-    return () => {
-      window.removeEventListener('message', messageHandler);
-    };
-  }, [focusedInput, useDB, file]);
 
 
 
@@ -941,6 +877,72 @@ export default function Home() {
   }
 
 
+  useEffect(() => {
+    if (window.location.origin !== "https://teleprompter-chi.vercel.app") {
+      fetch('/api/fonts')
+        .then((res) => res.json())
+        .then((data) => setFontList(data.fonts))
+        .catch((err) => console.error(err));
+    }
+  }, []);
+
+  useEffect(() => {
+    const addr = `${window.location.origin}/SpeechToText`;
+    if (iframeRef.current) {
+      iframeRef.current.src = addr;
+    }
+
+    const handleFocus = (event) => {
+      if (textarea1Ref.current) textarea1Ref.current.style.borderColor = 'red';
+      event.target.style.borderColor = 'red';
+      setFocusedInput(event.target);
+    };
+
+    const inputs = [textarea1Ref.current];
+    // console.log(inputs)
+    inputs.forEach((input) => {
+      if (input) {
+        input.addEventListener('focus', handleFocus);
+      }
+    });
+
+    const messageHandler = (event) => {
+      console.log(focusedInput)
+
+      // if (event.origin !== addr) return;
+      if (
+        event.data &&
+        typeof event.data === 'object' &&
+        'replace' in event.data &&
+        'value' in event.data
+      ) {
+        if (focusedInput) {
+          const aa = currentSlug;
+
+          if (event.data.replace) {
+            const updatedSlugs = [...slugs];
+            updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: event.data.value }; // Modify the object at index i
+            setSlugs(updatedSlugs);
+          } else {
+            const updatedSlugs = [...slugs];
+            updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: focusedInput.value + event.data.value }; // Modify the object at index i
+            setSlugs(updatedSlugs);
+          }
+        }
+      }
+
+      if (event.data === 'request_textarea_content' && focusedInput) {
+        event.source.postMessage({ textareaValue: focusedInput.value }, event.origin);
+      }
+    };
+
+    window.addEventListener('message', messageHandler);
+
+    return () => {
+      window.removeEventListener('message', messageHandler);
+    };
+  }, [focusedInput, useDB, file]);
+
 
 
   return (
@@ -1316,7 +1318,7 @@ export default function Home() {
         {/* Third column */}
         <div style={{ height: '100vh' }}>
 
-          <div>
+          <div style={{ scale: 0.607, transform: 'translate(-400px, -500px)' }}>
             <Scroll
               currentFont={currentFont}
               fontBold={fontBold}
@@ -1344,6 +1346,9 @@ export default function Home() {
               newsReaderText={newsReaderText}
               setSpeed={setSpeed}
             />
+
+          </div>
+          <div>
             {showNewWindow && (
               <NewWindow
                 onClose={handleCloseNewWindow}
