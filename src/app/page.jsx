@@ -1325,7 +1325,7 @@ export default function Home() {
               bgColor={bgColor}
               scrollWidth={scrollWidth}
               scrollHeight={scrollHeight}
-              fontSize={fontSize}
+              fontSize={fontSize * 2.5}
               setCurrentSlug={setCurrentSlug}
               newPosition={newPosition}
               setNewPosition={setNewPosition}
