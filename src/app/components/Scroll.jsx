@@ -119,16 +119,19 @@ const Scroll = ({
                 if (ref) {
                     const rect = ref.getBoundingClientRect();
                     const style = getComputedStyle(ref);
-                    const lineHeight = parseFloat(style.lineHeight) * scaleFactor;
+                    const lineHeight = parseFloat(style.lineHeight);
 
-                    if (rect.top < startPosition) {
-                        linesCrossed = 1 + Math.floor((startPosition - rect.top) / lineHeight);
+                    const scaledTop = rect.top / scale;
+                    // const scaledStartPos = startPosition / scale;
+
+                    if (scaledTop < startPosition) {
+                        linesCrossed = 1 + Math.floor((startPosition - scaledTop) / lineHeight);
                         if (linesCrossed > storyLines[currentStoryNumber - 1]) {
                             linesCrossed = storyLines[currentStoryNumber - 1];
                         }
                     }
                 }
-
+                console.log(linesCrossed)
                 if (linesCrossed !== crossedLines) {
                     dispatch(changeCrossedLines(linesCrossed));
                 }
@@ -165,6 +168,7 @@ const Scroll = ({
         }
 
         const result = moveZerosToFront(storiesLines);
+        console.log(result)
         dispatch(changeStoryLines(result));
         socketRef.current.emit('storyLines', result);
     }, [allContent, fontSize]);

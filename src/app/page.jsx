@@ -1365,7 +1365,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
