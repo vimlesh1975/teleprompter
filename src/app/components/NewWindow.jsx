@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,cloneElement } from 'react';
+import React, { useEffect, useState, cloneElement } from 'react';
 import ReactDOM from 'react-dom';
 
 function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight }) {
@@ -13,14 +13,14 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
                 newWindowRef.current.close();
             }
         };
-    
+
         window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
-    
+
 
     const handleTitleBarDoubleClick = (e) => {
         newWindowRef.current.resizeTo(newWindowRef.current.screen.width, newWindowRef.current.screen.height);
@@ -43,7 +43,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
             664: 145,
             600: 135,
         };
-        const sf= (screenHeight-(knownOrigins[screenHeight] || 150)) / scrollHeight;
+        const sf = (screenHeight - (knownOrigins[screenHeight] || 150)) / scrollHeight;
         container.style.transform = `scale(${newWindowRef.current.screen.width / scrollWidth}, ${sf} )`;
         setScaleFactor(sf);
     };
@@ -85,7 +85,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', `width=${scrollWidth+20},height=${scrollHeight+40}`);
+            newWindowRef.current = window.open('', '', `width=${scrollWidth + 20},height=${scrollHeight + 40}`);
         }
 
         // Ensure the window is still available

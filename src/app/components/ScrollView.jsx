@@ -13,7 +13,8 @@ const ScrollView = ({ currentFont, fontBold, isRTL, bgColor, fontColor, allConte
 
     const scrollContainerStyle = {
         position: 'relative',
-        height: '440px',
+        height: 1080,
+        width: 1920,
         overflow: 'hidden',
         // backgroundColor: '#ff0000',
         backgroundColor: bgColor,
@@ -26,11 +27,8 @@ const ScrollView = ({ currentFont, fontBold, isRTL, bgColor, fontColor, allConte
         transform: `translateY(${newPosition}px)`,
         willChange: 'transform',
 
-        minWidth: 702,
-        maxWidth: 702,
-        // textAlign: 'left',
-        // fontWeight: 'bolder',
-        padding: '0 40px',
+        // width: 1920,
+        padding: '0 100px',
         // boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
@@ -41,9 +39,9 @@ const ScrollView = ({ currentFont, fontBold, isRTL, bgColor, fontColor, allConte
 
     return (<div>
 
-        <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
+        <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder', width: 1920 }}>
             <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
-                <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
+                <div style={{ display: 'flex', justifyContent: 'space-around', width: 1920 }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                     <div>{newsReaderText}</div>
                     <div><Count currentStoryNumber={currentStoryNumber} /></div>
