@@ -3,7 +3,9 @@ import ScrollViewforcasparcg from '../components/ScrollViewforcasparcg';
 
 const Page = () => {
   return (
-    <div >
+    <div style={{
+      scale: (4)
+    }} >
       <ScrollViewforcasparcg />
     </div>
   );

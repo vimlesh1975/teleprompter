@@ -17,11 +17,11 @@ const ScrollViewforcasparcg2 = () => {
 
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
-    const [newPosition, setNewPosition] = useState(150);
+    const [newPosition, setNewPosition] = useState(355);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
     const [allContent, setAllContent] = useState([]);
-    const [fontSize, setFontSize] = useState(39);
-    const [startPosition, setStartPosition] = useState(150);
+    const [fontSize, setFontSize] = useState(39 * 2.5);
+    const [startPosition, setStartPosition] = useState(355);
 
     const [newsReaderText, setNewsReaderText] = useState('Continue...');
     const [showClock, setShowClock] = useState(true);
@@ -34,9 +34,9 @@ const ScrollViewforcasparcg2 = () => {
 
     const scrollContainerStyle = {
         position: 'relative',
-        height: '440px',
+        height: 1080,
+        width: 1920,
         overflow: 'hidden',
-        // backgroundColor: '#000',
         backgroundColor: bgColor,
 
     };
@@ -126,25 +126,20 @@ const ScrollViewforcasparcg2 = () => {
 
     const scrollingTextStyle = {
         position: 'absolute',
-        // top: parseFloat(newPosition),
         transform: `translateY(${newPosition}px)`,
         willChange: 'transform',
-        minWidth: 702,
-        maxWidth: 702,
-        // textAlign: 'left',
-        padding: '0 40px',
+        padding: '0 100px',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-        // lineHeight: `${fontSize * 1.5}px` 
-        lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
+        lineHeight: `${Math.floor(fontSize * 1.5)}px`
     };
 
 
     return (<div>
 
-        <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
+        <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder', width: 1920 }}>
             <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
-                <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
+                <div style={{ display: 'flex', justifyContent: 'space-around', width: 1920 }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugsLength})`}</div>
                     <div>{newsReaderText}</div>
                     <div><Count currentStoryNumber={currentStoryNumber} /></div>

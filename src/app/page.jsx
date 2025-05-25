@@ -749,7 +749,7 @@ export default function Home() {
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('setFontSize', fontSize);
+    socket.emit('setFontSize', fontSize * 2.5);
   }, [fontSize]);
 
   useEffect(() => {
@@ -1152,7 +1152,7 @@ export default function Home() {
               slugs={slugs}
               allContent={allContent}
               startPosition={startPosition}
-              fontSize={fontSize}
+              fontSize={fontSize * 2.5}
               doubleClickedPosition={doubleClickedPosition}
               newPosition={newPosition}
               currentStoryNumber={currentStoryNumber}
@@ -1539,7 +1539,7 @@ export default function Home() {
                   socket.emit('allContent', allContent);
                   socket.emit('setSlugs', slugs.length);
 
-                  socket.emit('setFontSize', fontSize);
+                  socket.emit('setFontSize', fontSize * 2.5);
                   socket.emit('setStartPosition', startPosition);
 
                   socket.emit('setShowClock', showClock);

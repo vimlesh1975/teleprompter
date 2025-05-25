@@ -7,8 +7,8 @@ const scrollHeight = 440;
 
 
 const Page = () => {
-  const [scaleX, setScaleX] = useState(1);
-  const [scaleY, setScaleY] = useState(1);
+  const [scaleX, setScaleX] = useState(0.41);
+  const [scaleY, setScaleY] = useState(0.43);
   const [isMaximized, setIsMaximized] = useState(false);
 
   const container = useRef(null);
@@ -77,8 +77,8 @@ const Page = () => {
     } else {
       // Restore window to a smaller size
       window.resizeTo(scrollWidth, scrollHeight);
-      setScaleX(1);
-      setScaleY(1);
+      setScaleX(0.41);
+      setScaleY(0.43);
     }
 
     setIsMaximized(!isMaximized);
@@ -86,10 +86,10 @@ const Page = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (isMaximized) {
-        setScaleX(window.innerWidth / scrollWidth);
-        setScaleY(document.documentElement.clientHeight / scrollHeight);
-      }
+      // if (isMaximized) {
+      setScaleX(window.innerWidth / 1920);
+      setScaleY(document.documentElement.clientHeight / 1080);
+      // }
     };
 
     window.addEventListener("resize", handleResize);
@@ -98,7 +98,7 @@ const Page = () => {
 
   return (
     <div
-      onDoubleClick={toggleScaleAndMaximize} 
+      onDoubleClick={toggleScaleAndMaximize}
       onContextMenu={handleRightClick}
       ref={container}
     >
