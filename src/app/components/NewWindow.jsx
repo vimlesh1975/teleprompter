@@ -102,6 +102,8 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
             newWindowRef.current.document.body.appendChild(containerDiv);
 
             newWindowRef.current.document.body.style.overflow = 'hidden';
+            newWindowRef.current.document.body.style.transform = `scale(0.410,0.43)`;
+            newWindowRef.current.document.body.style.transformOrigin = 'top left';
 
 
         }
