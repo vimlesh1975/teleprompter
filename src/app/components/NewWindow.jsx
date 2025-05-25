@@ -54,19 +54,34 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
 
         const screenWidth = newWindowRef.current.screen.width;
 
+        // const knownOrigins = {
+        //     1920: 1350,
+        //     1680: 530,
+        //     1600: 523,
+        //     1440: 505,
+        //     1366: 495,
+        //     1360: 495,
+        //     1280: 483,
+        //     1176: 466,
+        //     1152: 462,
+        //     1024: 440,
+        //     800: 392,
+        // };
+
         const knownOrigins = {
-            1920: 555,
-            1680: 530,
-            1600: 523,
-            1440: 505,
-            1366: 495,
-            1360: 495,
-            1280: 483,
-            1176: 466,
-            1152: 462,
-            1024: 440,
-            800: 392,
+            1920: 1350,
+            1680: 1305,
+            1600: 1260,
+            1440: 1220,
+            1366: 1200,
+            1360: 1200,
+            1280: 1170,
+            1176: 1145,
+            1152: 1120,
+            1024: 1070,
+            800: 950,
         };
+
 
         // Calculate transform origin using the linear formula if not in known origins
         const transformOriginX = knownOrigins[screenWidth] || (0.0893 * screenWidth + 284);
