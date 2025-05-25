@@ -135,9 +135,12 @@ const ScrollViewforcasparcg2 = () => {
     };
 
 
-    return (<div>
+    return (<div style={{
+        marginTop: -8,
+        marginLeft: -8,
+    }} >
 
-        <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder', width: 1920 }}>
+        <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder', width: 1920 }}>
             <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', width: 1920 }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugsLength})`}</div>
