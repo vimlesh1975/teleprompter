@@ -162,7 +162,7 @@ const ScrollViewforcasparcg2 = () => {
                     </div>
                 ))}
             </div>
-            <div style={{ position: 'absolute', top: parseInt(startPosition) - 20 }}>
+            <div style={{ position: 'absolute', top: parseInt(startPosition) - 50 }}>
                 <Triangles />
             </div>
         </div>

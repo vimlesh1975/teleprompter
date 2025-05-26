@@ -20,18 +20,17 @@ const Page = () => {
     const screenWidth = screen.width;
 
     const knownOrigins = {
-      // 1920: 555,
-      1920: 600,
-      1680: 530,
-      1600: 523,
-      1440: 505,
-      1366: 495,
-      1360: 495,
-      1280: 483,
-      1176: 466,
-      1152: 462,
-      1024: 440,
-      800: 392,
+      1920: 1350,
+      1680: 1305,
+      1600: 1260,
+      1440: 1220,
+      1366: 1200,
+      1360: 1200,
+      1280: 1170,
+      1176: 1145,
+      1152: 1120,
+      1024: 1070,
+      800: 950,
     };
 
     // Calculate transform origin using the linear formula if not in known origins
@@ -49,6 +48,7 @@ const Page = () => {
 
 
   const toggleScaleAndMaximize = () => {
+    console.log('double clicked')
     if (!isMaximized) {
       // Maximize window (only works for popups)
       window.moveTo(0, 0);
@@ -68,15 +68,15 @@ const Page = () => {
         664: 145,
         600: 135,
       };
-      const sf = (screenHeight - (knownOrigins[screenHeight] || 150)) / scrollHeight;
+      const sf = (screenHeight - (knownOrigins[screenHeight] || 150)) / 1080;
 
       // Use `document.documentElement.clientHeight` for better height detection
-      setScaleX(window.innerWidth / scrollWidth);
+      setScaleX(window.innerWidth / 1920);
       setScaleY(sf);
 
     } else {
       // Restore window to a smaller size
-      window.resizeTo(scrollWidth, scrollHeight);
+      window.resizeTo(scrollWidth, scrollHeight + 130);
       setScaleX(0.41);
       setScaleY(0.43);
     }
@@ -110,8 +110,6 @@ const Page = () => {
           height: scrollHeight, // Ensures proper scaling
         }}
       >
-        {/* <p>ScaleX: {scaleX.toFixed(2)}</p>
-        <p>ScaleY: {scaleY.toFixed(2)}</p> */}
         <ScrollViewforcasparcg2 />
       </div>
     </div>
