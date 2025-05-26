@@ -123,7 +123,7 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
               });
               endpoint({
                 action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill 0 0 1 1.0' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.35',
+                command: !fliped ? 'mixer 1-97 fill 0 0 1 1' : 'mixer 1-97 fill 1 0 -1 1',
               });
 
               playOnSecondChannelinFlippedMode();
@@ -159,7 +159,7 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill -0.01 -0.02 2.45 2.35' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.35',
+                command: !fliped ? 'mixer 1-97 fill 0 0 1 1' : 'mixer 1-97 fill 1 0 -1 1',
 
               });
               setFliped(val => !val);
