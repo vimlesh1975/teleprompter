@@ -5,9 +5,6 @@ import Triangles from './Triangles';
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
-
-
-//ff
 const ScrollView = ({ scrollContainerStyle, scrollingTextStyle, currentFont, fontBold, isRTL, fontColor, allContent, currentStoryNumber, crossedLines, storyLines, slugs, newsReaderText, showClock, startPosition }) => {
 
     return (<div>

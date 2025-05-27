@@ -101,8 +101,6 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
                     const lineHeight = parseFloat(style.lineHeight);
 
                     const scaledTop = rect.top / scale;
-                    // const scaledStartPos = startPosition / scale;
-
                     if (scaledTop < startPosition) {
                         linesCrossed = 1 + Math.floor((startPosition - scaledTop) / lineHeight);
                         if (linesCrossed > storyLines[currentStoryNumber - 1]) {
@@ -110,7 +108,6 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
                         }
                     }
                 }
-                // console.log(linesCrossed)
                 if (linesCrossed !== crossedLines) {
                     dispatch(changeCrossedLines(linesCrossed));
                 }
@@ -123,7 +120,6 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
         return () => cancelAnimationFrame(animationFrameId);
     }, [scaleFactor, speed, doubleClickedPosition, startPosition, loggedPositions, currentStoryNumber, storyLines]);
 
-    // Count story lines
     const calculateNumberOfLines = (element) => {
         if (element) {
             const style = getComputedStyle(element);
