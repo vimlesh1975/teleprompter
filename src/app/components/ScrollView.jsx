@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { } from 'react'
 import Count from './Count';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
@@ -8,7 +8,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 
 //ff
-const ScrollView = ({ scrollContainerStyle, scrollingTextStyle, currentFont, fontBold, isRTL, bgColor, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
+const ScrollView = ({ scrollContainerStyle, scrollingTextStyle, currentFont, fontBold, isRTL, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
 
     return (<div>
 

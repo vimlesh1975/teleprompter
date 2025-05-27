@@ -795,8 +795,16 @@ export default function Home() {
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('bgColor', bgColor);
-  }, [bgColor]);
+    // socket.emit('bgColor', bgColor);
+    socket.emit('scrollContainerStyle', scrollContainerStyle);
+
+  }, [scrollContainerStyle]);
+
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
+    socket.emit('scrollingTextStyle', scrollingTextStyle);
+  }, [scrollingTextStyle]);
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -1166,6 +1174,8 @@ export default function Home() {
             }}
           >
             <Casparcg
+              scrollingTextStyle={scrollingTextStyle}
+              scrollContainerStyle={scrollContainerStyle}
               currentFont={currentFont}
               fontBold={fontBold}
               isRTL={isRTL}
@@ -1346,7 +1356,6 @@ export default function Home() {
               fontBold={fontBold}
               isRTL={isRTL}
               fontColor={fontColor}
-              bgColor={bgColor}
               scrollWidth={scrollWidth}
               scrollHeight={scrollHeight}
               fontSize={fontSize * 2.5}
@@ -1378,7 +1387,7 @@ export default function Home() {
 
 
 
-                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
 
             )}
@@ -1389,7 +1398,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
@@ -1569,10 +1578,13 @@ export default function Home() {
                   socket.emit('setShowClock', showClock);
                   socket.emit('setNewsReaderText', newsReaderText);
                   socket.emit('rtl', isRTL);
-                  socket.emit('bgColor', bgColor);
+                  // socket.emit('bgColor', bgColor);
                   socket.emit('fontColor', fontColor);
                   socket.emit('fontBold', fontBold);
                   socket.emit('currentFont', currentFont);
+                  socket.emit('scrollContainerStyle', scrollContainerStyle);
+                  socket.emit('scrollingTextStyle', scrollingTextStyle);
+
 
                 }, 3000);
               }}>Test</button>

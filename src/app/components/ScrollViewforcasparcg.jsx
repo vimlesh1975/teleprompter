@@ -25,20 +25,10 @@ const ScrollViewforcasparcg = () => {
 
     const [newsReaderText, setNewsReaderText] = useState('Continue...');
     const [showClock, setShowClock] = useState(true);
-
-
-
+    const [scrollContainerStyle, setScrollContainerStyle] = useState({});
+    const [scrollingTextStyle, setScrollingTextStyle] = useState({});
     const [slugsLength, setSlugsLength] = useState(0);
-
     const socketRef = useRef(null);
-
-    const scrollContainerStyle = {
-        position: 'relative',
-        height: 1080,
-        width: 1920,
-        overflow: 'hidden',
-        backgroundColor: bgColor,
-    };
 
     useEffect(() => {
         socketRef.current = io();
@@ -100,7 +90,13 @@ const ScrollViewforcasparcg = () => {
         socketRef.current.on("currentFont2", (data) => {
             setCurrentFont(data);
         });
+        socketRef.current.on("scrollContainerStyle2", (data) => {
+            setScrollContainerStyle(data);
+        });
 
+        socketRef.current.on("scrollingTextStyle2", (data) => {
+            setScrollingTextStyle(data);
+        });
 
         return () => {
             // socketRef.current.disconnect();
@@ -118,21 +114,23 @@ const ScrollViewforcasparcg = () => {
             socketRef.current.off("fontColor2");
             socketRef.current.off("fontBold2");
             socketRef.current.off("currentFont2");
+            socketRef.current.off("scrollContainerStyle2");
+            socketRef.current.off("scrollingTextStyle2");
 
             socketRef.current = null;
         };
     }, []);
 
-    const scrollingTextStyle = useMemo(() => ({
-        position: 'absolute',
-        transform: `translateY(${newPosition}px)`,
-        willChange: 'transform',
-        width: 1720,
-        padding: '0 100px',
-        whiteSpace: 'pre-wrap',
-        fontSize: parseInt(fontSize),
-        lineHeight: `${Math.floor(fontSize * 1.5)}px`,
-    }), [newPosition, fontSize]);
+    // const scrollingTextStyle = useMemo(() => ({
+    //     position: 'absolute',
+    //     transform: `translateY(${newPosition}px)`,
+    //     willChange: 'transform',
+    //     width: 1720,
+    //     padding: '0 100px',
+    //     whiteSpace: 'pre-wrap',
+    //     fontSize: parseInt(fontSize),
+    //     lineHeight: `${Math.floor(fontSize * 1.5)}px`,
+    // }), [newPosition, fontSize]);
 
     return (<div style={{
         marginTop: -8,

@@ -111,9 +111,9 @@ app.prepare().then(async () => {
         socket.on('rtl', (data) => {
             io.emit('rtl2', data);
         });
-        socket.on('bgColor', (data) => {
-            io.emit('bgColor2', data);
-        });
+        // socket.on('bgColor', (data) => {
+        //     io.emit('bgColor2', data);
+        // });
 
         socket.on('fontColor', (data) => {
             io.emit('fontColor2', data);
@@ -125,6 +125,12 @@ app.prepare().then(async () => {
 
         socket.on('currentFont', (data) => {
             io.emit('currentFont2', data);
+        });
+        socket.on('scrollContainerStyle', (data) => {
+            io.emit('scrollContainerStyle2', data);
+        });
+        socket.on('scrollingTextStyle', (data) => {
+            io.emit('scrollingTextStyle2', data);
         });
 
 
@@ -162,9 +168,11 @@ app.prepare().then(async () => {
             socket.removeAllListeners("setShowClock");
             socket.removeAllListeners("setNewsReaderText");
 
-            socket.removeAllListeners("bgColor");
+            // socket.removeAllListeners("bgColor");
             socket.removeAllListeners("fontColor");
             socket.removeAllListeners("rtl");
+            socket.removeAllListeners("scrollContainerStyle");
+            socket.removeAllListeners("scrollingTextStyle");
 
 
         });

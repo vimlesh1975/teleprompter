@@ -16,7 +16,7 @@ function moveZerosToFront(arr) {
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
-    currentFont, fontBold, isRTL, bgColor, fontColor,
+    currentFont, fontBold, isRTL, fontColor,
     scaleFactor = 1, scrollWidth, scrollHeight, fontSize,
     setCurrentSlug, newPosition, setNewPosition,
     doubleClickedPosition, textRef, startPosition,
@@ -39,27 +39,6 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
     const scaleY = scrollHeight / baseHeight;
     const scale = Math.min(scaleX, scaleY); // keep aspect ratio
 
-    // const scrollContainerStyle = {
-    //     position: 'relative',
-    //     height: 1800,
-    //     overflow: 'hidden',
-    //     backgroundColor: bgColor,
-    //     color: '#fff',
-    // };
-
-    // const scrollingTextStyle = useMemo(() => ({
-    //     position: 'absolute',
-    //     transform: `translateY(${newPosition}px)`,
-    //     willChange: 'transform',
-    //     width: 1720,
-    //     padding: '0 100px',
-    //     whiteSpace: 'pre-wrap',
-    //     fontSize: parseInt(fontSize),
-    //     lineHeight: `${Math.floor(fontSize * 1.5)}px`,
-    // }), [newPosition, fontSize]);
-
-
-    // Socket connections
     useEffect(() => {
         socketRef.current = io();
         return () => {
