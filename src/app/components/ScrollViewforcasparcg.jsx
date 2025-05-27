@@ -11,16 +11,16 @@ const ScrollViewforcasparcg = () => {
     const [currentFont, setCurrentFont] = useState("Times New Roman");
 
     const [isRTL, setIsRTL] = useState(false);
-    const [bgColor, setbgColor] = useState('black');
+    // const [bgColor, setbgColor] = useState('black');
     const [fontColor, setFontColor] = useState('#ffffff');
     const [fontBold, setFontBold] = useState(false);
 
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
-    const [newPosition, setNewPosition] = useState(355);
+    // const [newPosition, setNewPosition] = useState(355);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
     const [allContent, setAllContent] = useState([]);
-    const [fontSize, setFontSize] = useState(39 * 2.5);
+    // const [fontSize, setFontSize] = useState(39 * 2.5);
     const [startPosition, setStartPosition] = useState(355);
 
     const [newsReaderText, setNewsReaderText] = useState('Continue...');
@@ -43,9 +43,9 @@ const ScrollViewforcasparcg = () => {
         socketRef.current.on("storyLines2", (data) => {
             setStoryLines(data);
         });
-        socketRef.current.on("newPosition2", (data) => {
-            setNewPosition(data);
-        });
+        // socketRef.current.on("newPosition2", (data) => {
+        //     setNewPosition(data);
+        // });
         socketRef.current.on("setCurrentStoryNumber2", (data) => {
             setCurrentStoryNumber(data);
         })
@@ -58,9 +58,9 @@ const ScrollViewforcasparcg = () => {
             setSlugsLength(data);
         })
 
-        socketRef.current.on("setFontSize2", (data) => {
-            setFontSize(data);
-        });
+        // socketRef.current.on("setFontSize2", (data) => {
+        //     setFontSize(data);
+        // });
 
         socketRef.current.on("setStartPosition2", (data) => {
             setStartPosition(data);
@@ -77,9 +77,9 @@ const ScrollViewforcasparcg = () => {
             setIsRTL(data);
         });
 
-        socketRef.current.on("bgColor2", (data) => {
-            setbgColor(data);
-        });
+        // socketRef.current.on("bgColor2", (data) => {
+        //     setbgColor(data);
+        // });
 
         socketRef.current.on("fontColor2", (data) => {
             setFontColor(data);
@@ -102,12 +102,12 @@ const ScrollViewforcasparcg = () => {
             // socketRef.current.disconnect();
             socketRef.current.off("crossedLines2");
             socketRef.current.off("storyLines2");
-            socketRef.current.off("newPosition2");
+            // socketRef.current.off("newPosition2");
             socketRef.current.off("setCurrentStoryNumber2");
             socketRef.current.off("allContent2");
             socketRef.current.off("setSlugs2");
 
-            socketRef.current.off("setFontSize2");
+            // socketRef.current.off("setFontSize2");
             socketRef.current.off("setStartPosition2");
             socketRef.current.off("rtl2");
             socketRef.current.off("rbgColor2tl2");

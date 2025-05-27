@@ -1565,14 +1565,14 @@ export default function Home() {
                   const socket = socketRef.current;
                   if (!socket) return;
 
-                  socket.emit('newPosition', newPosition);
+                  // socket.emit('newPosition', newPosition);
                   socket.emit('setCurrentStoryNumber', currentStoryNumber);
                   socket.emit('storyLines', storyLines);
                   socket.emit('crossedLines', crossedLines);
                   socket.emit('allContent', allContent);
                   socket.emit('setSlugs', slugs.length);
 
-                  socket.emit('setFontSize', fontSize * 2.5);
+                  // socket.emit('setFontSize', fontSize * 2.5);
                   socket.emit('setStartPosition', startPosition);
 
                   socket.emit('setShowClock', showClock);
