@@ -1330,6 +1330,7 @@ export default function Home() {
 
           <div>
             <Scroll
+              scrollingTextStyle={scrollingTextStyle}
               currentFont={currentFont}
               fontBold={fontBold}
               isRTL={isRTL}

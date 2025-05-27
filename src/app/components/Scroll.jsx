@@ -15,7 +15,7 @@ function moveZerosToFront(arr) {
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
-const Scroll = ({
+const Scroll = ({ scrollingTextStyle,
     currentFont, fontBold, isRTL, bgColor, fontColor,
     scaleFactor = 1, scrollWidth, scrollHeight, fontSize,
     setCurrentSlug, newPosition, setNewPosition,
@@ -47,16 +47,16 @@ const Scroll = ({
         color: '#fff',
     };
 
-    const scrollingTextStyle = useMemo(() => ({
-        position: 'absolute',
-        transform: `translateY(${newPosition}px)`,
-        willChange: 'transform',
-        width: 1720,
-        padding: '0 100px',
-        whiteSpace: 'pre-wrap',
-        fontSize: parseInt(fontSize),
-        lineHeight: `${Math.floor(fontSize * 1.5)}px`,
-    }), [newPosition, fontSize]);
+    // const scrollingTextStyle = useMemo(() => ({
+    //     position: 'absolute',
+    //     transform: `translateY(${newPosition}px)`,
+    //     willChange: 'transform',
+    //     width: 1720,
+    //     padding: '0 100px',
+    //     whiteSpace: 'pre-wrap',
+    //     fontSize: parseInt(fontSize),
+    //     lineHeight: `${Math.floor(fontSize * 1.5)}px`,
+    // }), [newPosition, fontSize]);
 
 
     // Socket connections
