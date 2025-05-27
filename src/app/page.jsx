@@ -354,6 +354,7 @@ export default function Home() {
       }
       if (dataObject.startPosition !== undefined) {
         setStartPosition(dataObject.startPosition);
+        setNewPosition(dataObject.startPosition);
       }
       if (dataObject.isRTL !== undefined) {
         setIsRTL(dataObject.isRTL);
