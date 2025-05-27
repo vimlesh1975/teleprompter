@@ -768,11 +768,11 @@ export default function Home() {
     socket.emit('speed', speed);
   }, [speed]);
 
-  useEffect(() => {
-    const socket = socketRef.current;
-    if (!socket) return;
-    socket.emit('setFontSize', fontSize * 2.5);
-  }, [fontSize]);
+  // useEffect(() => {
+  //   const socket = socketRef.current;
+  //   if (!socket) return;
+  //   socket.emit('setFontSize', fontSize * 2.5);
+  // }, [fontSize]);
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -1387,7 +1387,7 @@ export default function Home() {
 
 
 
-                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
 
             )}
@@ -1398,7 +1398,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
@@ -1540,7 +1540,6 @@ export default function Home() {
                   if (showNewWindow) {
                     newWindowRef.current.close();
                   }
-                  // { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
                   setShowNewWindow(!showNewWindow);
                 }}
               >
@@ -1552,7 +1551,6 @@ export default function Home() {
                   if (showNewWindow2) {
                     newWindowRef2.current.close();
                   }
-                  // { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
                   setShowNewWindow2(!showNewWindow2);
                 }}
               >
