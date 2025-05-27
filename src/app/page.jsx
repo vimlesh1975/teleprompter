@@ -108,6 +108,16 @@ export default function Home() {
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
 
+  const scrollContainerStyle = useMemo(() => ({
+    position: 'relative',
+    height: 1080,
+    width: 1920,
+    overflow: 'hidden',
+    backgroundColor: bgColor,
+    color: '#fff',
+  }), [bgColor]);
+
+
   const scrollingTextStyle = useMemo(() => ({
     position: 'absolute',
     transform: `translateY(${newPosition}px)`,
@@ -1330,6 +1340,7 @@ export default function Home() {
 
           <div>
             <Scroll
+              scrollContainerStyle={scrollContainerStyle}
               scrollingTextStyle={scrollingTextStyle}
               currentFont={currentFont}
               fontBold={fontBold}
@@ -1366,7 +1377,8 @@ export default function Home() {
               >
 
 
-                <ScrollView scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+
+                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
 
             )}
@@ -1377,7 +1389,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>

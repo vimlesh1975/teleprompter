@@ -8,29 +8,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 
 //ff
-const ScrollView = ({ scrollingTextStyle, currentFont, fontBold, isRTL, bgColor, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
-
-
-    const scrollContainerStyle = {
-        position: 'relative',
-        height: 1080,
-        width: 1920,
-        overflow: 'hidden',
-        backgroundColor: bgColor,
-        color: '#fff',
-    };
-
-    // const scrollingTextStyle = useMemo(() => ({
-    //     position: 'absolute',
-    //     transform: `translateY(${newPosition}px)`,
-    //     willChange: 'transform',
-    //     width: 1720,
-    //     padding: '0 100px',
-    //     whiteSpace: 'pre-wrap',
-    //     fontSize: parseInt(fontSize),
-    //     lineHeight: `${Math.floor(fontSize * 1.5)}px`,
-    // }), [newPosition, fontSize]);
-
+const ScrollView = ({ scrollContainerStyle, scrollingTextStyle, currentFont, fontBold, isRTL, bgColor, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
 
     return (<div>
 

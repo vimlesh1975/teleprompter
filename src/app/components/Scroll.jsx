@@ -15,7 +15,7 @@ function moveZerosToFront(arr) {
 
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
-const Scroll = ({ scrollingTextStyle,
+const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
     currentFont, fontBold, isRTL, bgColor, fontColor,
     scaleFactor = 1, scrollWidth, scrollHeight, fontSize,
     setCurrentSlug, newPosition, setNewPosition,
@@ -39,13 +39,13 @@ const Scroll = ({ scrollingTextStyle,
     const scaleY = scrollHeight / baseHeight;
     const scale = Math.min(scaleX, scaleY); // keep aspect ratio
 
-    const scrollContainerStyle = {
-        position: 'relative',
-        height: 1800,
-        overflow: 'hidden',
-        backgroundColor: bgColor,
-        color: '#fff',
-    };
+    // const scrollContainerStyle = {
+    //     position: 'relative',
+    //     height: 1800,
+    //     overflow: 'hidden',
+    //     backgroundColor: bgColor,
+    //     color: '#fff',
+    // };
 
     // const scrollingTextStyle = useMemo(() => ({
     //     position: 'absolute',
