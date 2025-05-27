@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import ScrollViewforcasparcg2 from '../components/ScrollViewforcasparcg2';
+import ScrollViewforcasparcg from '../components/ScrollViewforcasparcg';
 const scrollWidth = 782;
 const scrollHeight = 440;
 
@@ -110,7 +110,7 @@ const Page = () => {
           height: scrollHeight, // Ensures proper scaling
         }}
       >
-        <ScrollViewforcasparcg2 />
+        <ScrollViewforcasparcg />
       </div>
     </div>
   );

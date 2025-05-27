@@ -7,7 +7,6 @@ import io from 'socket.io-client';
 const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 
-const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const ScrollViewforcasparcg = () => {
     const [currentFont, setCurrentFont] = useState("Times New Roman");
 
@@ -38,10 +37,7 @@ const ScrollViewforcasparcg = () => {
         height: 1080,
         width: 1920,
         overflow: 'hidden',
-        // backgroundColor: '#000',
         backgroundColor: bgColor,
-
-        color: '#fff'
     };
 
     useEffect(() => {
@@ -145,7 +141,7 @@ const ScrollViewforcasparcg = () => {
 
         <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder', width: 1920 }}>
             <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
-                <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth, width: 1920 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-around', width: 1920 }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugsLength})`}</div>
                     <div>{newsReaderText}</div>
                     <div><Count currentStoryNumber={currentStoryNumber} /></div>
