@@ -107,6 +107,7 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
             DisConnect
           </button>
           <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
+          {socketcurrentstory.ScriptID}
         </div>
         <div>
           Method 1:

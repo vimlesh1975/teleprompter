@@ -143,7 +143,6 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
         }
 
         const result = moveZerosToFront(storiesLines);
-        console.log(result)
         dispatch(changeStoryLines(result));
         socketRef.current.emit('storyLines', result);
     }, [allContent, fontSize]);
