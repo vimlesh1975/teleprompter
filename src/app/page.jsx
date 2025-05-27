@@ -835,7 +835,7 @@ export default function Home() {
     const socket = socketRef.current;
     if (!socket) return;
     if (!slugs) return;
-    socket.emit('setSlugs', slugs.length);
+    socket.emit('setSlugs', slugs);
   }, [slugs]);
 
   const dropStoryValue = (slug) => {
@@ -1569,7 +1569,7 @@ export default function Home() {
                   socket.emit('storyLines', storyLines);
                   socket.emit('crossedLines', crossedLines);
                   socket.emit('allContent', allContent);
-                  socket.emit('setSlugs', slugs.length);
+                  socket.emit('setSlugs', slugs);
 
                   // socket.emit('setFontSize', fontSize * 2.5);
                   socket.emit('setStartPosition', startPosition);

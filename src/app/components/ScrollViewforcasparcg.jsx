@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
-import Count from './Count';
-import dynamic from 'next/dynamic';
-import Triangles from './Triangles';
+import React, { useEffect, useState, useRef } from 'react'
+// import Count from './Count';
+// import dynamic from 'next/dynamic';
+// import Triangles from './Triangles';
 import io from 'socket.io-client';
+import ScrollView from './ScrollView';
 
-const Clock = dynamic(() => import('./Clock'), { ssr: false });
+// const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 const ScrollViewforcasparcg = () => {
     const [currentFont, setCurrentFont] = useState("Times New Roman");
@@ -20,7 +21,7 @@ const ScrollViewforcasparcg = () => {
     const [showClock, setShowClock] = useState(true);
     const [scrollContainerStyle, setScrollContainerStyle] = useState({});
     const [scrollingTextStyle, setScrollingTextStyle] = useState({});
-    const [slugsLength, setSlugsLength] = useState(0);
+    const [slugs, setSlugs] = useState(0);
     const socketRef = useRef(null);
 
     useEffect(() => {
@@ -46,7 +47,7 @@ const ScrollViewforcasparcg = () => {
         })
 
         socketRef.current.on("setSlugs2", (data) => {
-            setSlugsLength(data);
+            setSlugs(data);
         })
 
         socketRef.current.on("setStartPosition2", (data) => {
@@ -105,7 +106,7 @@ const ScrollViewforcasparcg = () => {
         marginLeft: -8,
     }} >
 
-        <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder', width: 1920 }}>
+        {/* <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder', width: 1920 }}>
             <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-around', width: 1920 }}>
                     <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugsLength})`}</div>
@@ -130,7 +131,11 @@ const ScrollViewforcasparcg = () => {
             <div style={{ position: 'absolute', top: parseInt(startPosition) - 50 }}>
                 <Triangles />
             </div>
-        </div>
+        </div> */}
+
+        <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+
+
     </div>
 
     )

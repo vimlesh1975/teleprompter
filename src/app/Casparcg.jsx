@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, bgColor, fontColor, slugs, allContent, startPosition, fontSize, newPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
+export default function Home({ scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, fontSize, newPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -128,21 +128,15 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
-                // socketRef.current.emit('newPosition', newPosition);
                 socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
                 socketRef.current.emit('storyLines', storyLines);
                 socketRef.current.emit('crossedLines', crossedLines);
                 socketRef.current.emit('allContent', allContent);
-                socketRef.current.emit('setSlugs', slugs.length);
-
-                // socketRef.current.emit('setFontSize', fontSize);
+                socketRef.current.emit('setSlugs', slugs);
                 socketRef.current.emit('setStartPosition', startPosition);
-
                 socketRef.current.emit('setShowClock', showClock);
                 socketRef.current.emit('setNewsReaderText', newsReaderText);
-
                 socketRef.current.emit('rtl', isRTL);
-                // socketRef.current.emit('bgColor', bgColor);
                 socketRef.current.emit('fontColor', fontColor);
                 socketRef.current.emit('fontBold', fontBold);
                 socketRef.current.emit('currentFont', currentFont);
