@@ -56,7 +56,7 @@ const ScrollView = ({ currentFont, fontBold, isRTL, bgColor, fontColor, allConte
         <div style={scrollContainerStyle}>
             <div style={scrollingTextStyle}>
                 {allContent.map((content, i) => (
-                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ fontFamily: (i % 3 === 1) ? currentFont : '', backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
+                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ fontFamily: (i % 3 === 1) ? currentFont : 'Times New Roman', backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
                         {content}
                     </div>
                 ))}

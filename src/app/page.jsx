@@ -1233,7 +1233,6 @@ export default function Home() {
             style={{
               fontSize: `${fontSize}px`,
               lineHeight: `${fontSize * 1.5}px`,
-              // fontWeight: "bolder",
               width: scrollWidth,
               minHeight: 600,
               maxHeight: 600,
@@ -1251,6 +1250,8 @@ export default function Home() {
                   backgroundColor: "blue",
                   color: "yellow",
                   width: 702,
+                  fontFamily: 'Times New Roman',
+
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
@@ -1271,9 +1272,7 @@ export default function Home() {
                     lineHeight: `${fontSize * 1.5}px`,
                     width: 702.22,
                     height: 510,
-                    // border: 'none',
                     resize: 'none',
-                    // fontFamily: 'inherit',
                     fontFamily: currentFont,
                     fontWeight: fontBold ? 'bold' : 'normal',
                   }}
