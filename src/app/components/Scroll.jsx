@@ -147,9 +147,6 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
         socketRef.current.emit('storyLines', result);
     }, [allContent, fontSize]);
 
-    const maxLines = storyLines[currentStoryNumber - 1] || 1;
-    const widthPercentage = Math.min((crossedLines / maxLines) * 100, 100);
-
     return (
         <div style={{ width: scrollWidth, height: scrollHeight, overflow: 'hidden', border: '1px solid black' }}>
             <div style={{
@@ -159,7 +156,7 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
                 transformOrigin: 'top left'
             }}>
                 <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder' }}>
-                    <div style={{ backgroundColor: 'lightgreen', width: `${widthPercentage}%` }}>
+                    <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
                         <div style={{ display: 'flex', justifyContent: 'space-around', width: baseWidth }}>
                             <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                             <div>{newsReaderText}</div>
