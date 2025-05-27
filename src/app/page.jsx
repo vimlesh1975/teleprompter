@@ -2,7 +2,7 @@
 import { fontLists } from "./common.js";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useState, useEffect, useRef, useCallback, use } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import NewWindow from "./components/NewWindow";
 import Scroll from "./components/Scroll";
 import io from "socket.io-client";
@@ -107,6 +107,18 @@ export default function Home() {
   const iframeRef = useRef(null);
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
+
+  const scrollingTextStyle = useMemo(() => ({
+    position: 'absolute',
+    transform: `translateY(${newPosition}px)`,
+    willChange: 'transform',
+    width: 1720,
+    padding: '0 100px',
+    whiteSpace: 'pre-wrap',
+    fontSize: parseInt(fontSize * 2.5),
+    lineHeight: `${Math.floor(fontSize * 1.5 * 2.5)}px`,
+  }), [newPosition, fontSize]);
+
 
   useEffect(() => {
     if (window.location.origin !== "https://teleprompter-chi.vercel.app") {
@@ -1353,7 +1365,7 @@ export default function Home() {
               >
 
 
-                <ScrollView currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
 
             )}
@@ -1364,7 +1376,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize * 2.5} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
