@@ -16,24 +16,18 @@ const ScrollView = ({ currentFont, fontBold, isRTL, bgColor, fontColor, allConte
         height: 1080,
         width: 1920,
         overflow: 'hidden',
-        // backgroundColor: '#ff0000',
         backgroundColor: bgColor,
         color: '#fff',
     };
 
     const scrollingTextStyle = {
         position: 'absolute',
-        // top: parseFloat(newPosition),
         transform: `translateY(${newPosition}px)`,
         willChange: 'transform',
-
-        // width: 1920,
         padding: '0 100px',
-        // boxSizing: 'border-box',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-        // lineHeight: `${fontSize * 1.5}px` 
-        lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
+        lineHeight: `${Math.floor(fontSize * 1.5)}px`
     };
 
 
