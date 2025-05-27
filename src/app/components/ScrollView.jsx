@@ -8,7 +8,7 @@ const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 
 //ff
-const ScrollView = ({ scrollContainerStyle, scrollingTextStyle, currentFont, fontBold, isRTL, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, scrollWidth, slugs, newsReaderText, showClock, startPosition }) => {
+const ScrollView = ({ scrollContainerStyle, scrollingTextStyle, currentFont, fontBold, isRTL, fontColor, allContent, newPosition, fontSize, currentStoryNumber, crossedLines, storyLines, slugs, newsReaderText, showClock, startPosition }) => {
 
     return (<div>
 
