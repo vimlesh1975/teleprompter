@@ -19,6 +19,11 @@ const ScrollViewforcasparcg = () => {
     const [slugs, setSlugs] = useState(0);
     const socketRef = useRef(null);
 
+    const [contentRefs, setContentRefs] = useState(null);
+    const [textRef, setTextRef] = useState([]);
+    // const textRef = useRef(null);
+    // const contentRefs = useRef([]);
+
     useEffect(() => {
         socketRef.current = io();
 
@@ -77,6 +82,18 @@ const ScrollViewforcasparcg = () => {
             setScrollingTextStyle(data);
         });
 
+        socketRef.current.on("contentRefs2", (data) => {
+            console.log('contentRefs2');
+            setContentRefs(data);
+            // contentRefs = data;
+        });
+
+        socketRef.current.on("textRef2", (data) => {
+            console.log('textRef2');
+            setTextRef(data);
+            // textRef = data;
+        });
+
         return () => {
             socketRef.current.off("crossedLines2");
             socketRef.current.off("storyLines2");
@@ -92,6 +109,9 @@ const ScrollViewforcasparcg = () => {
             socketRef.current.off("scrollContainerStyle2");
             socketRef.current.off("scrollingTextStyle2");
 
+            socketRef.current.off("contentRefs2");
+            socketRef.current.off("textRef2");
+
             socketRef.current = null;
         };
     }, []);
@@ -100,7 +120,7 @@ const ScrollViewforcasparcg = () => {
         marginTop: -8,
         marginLeft: -8,
     }} >
-        <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+        <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} contentRefs={contentRefs} textRef={textRef} />
     </div>
     )
 }

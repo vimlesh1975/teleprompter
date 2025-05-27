@@ -121,6 +121,14 @@ app.prepare().then(async () => {
             io.emit('scrollingTextStyle2', data);
         });
 
+        socket.on('contentRefs', (data) => {
+            io.emit('contentRefs2', data);
+        });
+
+        socket.on('textRef', (data) => {
+            io.emit('textRef2', data);
+        });
+
 
         socket.on('offer', (data) => {
             socket.broadcast.emit('offer', data);
@@ -156,6 +164,8 @@ app.prepare().then(async () => {
             socket.removeAllListeners("rtl");
             socket.removeAllListeners("scrollContainerStyle");
             socket.removeAllListeners("scrollingTextStyle");
+            socket.removeAllListeners("contentRefs");
+            socket.removeAllListeners("textRef");
         });
 
     });

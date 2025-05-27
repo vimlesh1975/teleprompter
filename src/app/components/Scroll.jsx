@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 import io from 'socket.io-client';
 import Count from './Count';
+import ScrollView from './ScrollView';
 import { changeStoryLines, changeCrossedLines } from '../store/store';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,7 +23,7 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
     doubleClickedPosition, textRef, startPosition,
     allContent, showClock, speed, loggedPositions,
     setLoggedPositions, currentStoryNumber, setCurrentStoryNumber,
-    slugs, newsReaderText, setSpeed
+    slugs, newsReaderText, setSpeed, contentRefs
 }) => {
 
     const dispatch = useDispatch();
@@ -30,7 +31,6 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
     const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
 
     const containerRef = useRef(null);
-    const contentRefs = useRef([]);
     const socketRef = useRef(null);
 
     const baseWidth = 1920;
@@ -155,41 +155,24 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
                 transform: `scale(${scale})`,
                 transformOrigin: 'top left'
             }}>
-                <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder' }}>
-                    <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-around', width: baseWidth }}>
-                            <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
-                            <div>{newsReaderText}</div>
-                            <div><Count currentStoryNumber={currentStoryNumber} /></div>
-                            <div>{showClock ? '' : '.'}</div>
-                            <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
-                            <div >{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div ref={containerRef} style={scrollContainerStyle}>
-                    <div ref={textRef} style={scrollingTextStyle}>
-                        {allContent.map((content, i) => (
-                            <div
-                                dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'}
-                                key={i}
-                                ref={(el) => (contentRefs.current[i] = el)}
-                                style={{
-                                    fontFamily: (i % 3 === 1) ? currentFont : 'Times New Roman',
-                                    backgroundColor: i % 3 === 0 ? 'blue' : 'transparent',
-                                    color: i % 3 === 0 ? 'yellow' : fontColor,
-                                    fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal'
-                                }}
-                            >
-                                {content}
-                            </div>
-                        ))}
-                    </div>
-                    <div style={{ position: 'absolute', top: parseInt(startPosition) - 50 }}>
-                        <Triangles />
-                    </div>
-                </div>
+                <ScrollView
+                    scrollContainerStyle={scrollContainerStyle}
+                    scrollingTextStyle={scrollingTextStyle}
+                    currentFont={currentFont}
+                    fontBold={fontBold}
+                    isRTL={isRTL}
+                    fontColor={fontColor}
+                    allContent={allContent}
+                    currentStoryNumber={currentStoryNumber}
+                    crossedLines={crossedLines}
+                    storyLines={storyLines}
+                    slugs={slugs}
+                    newsReaderText={newsReaderText}
+                    showClock={showClock}
+                    startPosition={startPosition}
+                    contentRefs={contentRefs}
+                    textRef={textRef}
+                />
             </div>
         </div>
     );
