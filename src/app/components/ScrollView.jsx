@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Count from './Count';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
@@ -20,15 +20,16 @@ const ScrollView = ({ currentFont, fontBold, isRTL, bgColor, fontColor, allConte
         color: '#fff',
     };
 
-    const scrollingTextStyle = {
+    const scrollingTextStyle = useMemo(() => ({
         position: 'absolute',
         transform: `translateY(${newPosition}px)`,
         willChange: 'transform',
+        width: 1720,
         padding: '0 100px',
         whiteSpace: 'pre-wrap',
         fontSize: parseInt(fontSize),
-        lineHeight: `${Math.floor(fontSize * 1.5)}px`
-    };
+        lineHeight: `${Math.floor(fontSize * 1.5)}px`,
+    }), [newPosition, fontSize]);
 
 
     return (<div>
