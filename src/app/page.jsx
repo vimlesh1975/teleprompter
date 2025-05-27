@@ -1,36 +1,24 @@
 "use client";
 import { fontLists } from "./common.js";
 import { useDispatch, useSelector } from 'react-redux';
-
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import NewWindow from "./components/NewWindow";
 import Scroll from "./components/Scroll";
 import io from "socket.io-client";
-
-// import socket from "./components/socket"; // assumes shared instance
-
-
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
 import TTS from './components/TTS.jsx'
-// import SpeechToText from './SpeechToText/SpeechToText';
 import ScrollView from './components/ScrollView';
 import { changenewdatabase } from './store/store'; // Adjust the path as needed
 import mammoth from 'mammoth';
 import 'react-tabs/style/react-tabs.css';
-
 import { UseSocketControls } from "./components/UseSocketControls";
-// import { UseSocketControls } from "./components/UseSocketControlsJaipur";
-
 import { fixdata } from './fixdata.js';
 
-// const scrollWidth = 600;
-// const scrollHeight = 440;
 const scrollHeight = 460;
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 
 const dummyScriptid = 200502071223160;
-
 
 export default function Home() {
   const [fontList, setFontList] = useState(fontLists);
@@ -39,22 +27,15 @@ export default function Home() {
   const [bgColor, setbgColor] = useState('black');
   const [fontColor, setFontColor] = useState('#ffffff');
   const [fontBold, setFontBold] = useState(false);
-
   const socketRef = useRef(null);
-
   const [useDB, setUseDB] = useState(true);
   const [singleScript, setSingleScript] = useState(false);
   const [file, setFile] = useState(null);
-
-
   const [ZXZX, setZXZX] = useState(false);
-
-
   const dispatch = useDispatch();
   const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
   const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
   const newdatabase = useSelector((state) => state.newdatabaseReducer.newdatabase);
-
   const [startPosition, setStartPosition] = useState(355);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
@@ -81,15 +62,11 @@ export default function Home() {
   const [DB_HOST, setDB_HOST] = useState('localhost');
   const [CASPAR_HOST, setCASPAR_HOST] = useState('127.0.0.1');
   const [showSettings, setShowSettings] = useState(false);
-
   const [keyPressed, setKeyPressed] = useState('');
-
   const newWindowRef = useRef(null);
   const newWindowRef2 = useRef(null);
   const textRef = useRef(null);
-
   const [serverAlive, setServerAlive] = useState(false);
-
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -97,17 +74,13 @@ export default function Home() {
     const dd = String(today.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   });
-
   const [usedStory, setUsedStory] = useState([]);
-
   const [sendUsedStory, setSendUsedStory] = useState(false);
   const [prompterId, setPrompterId] = useState(1);
   const [databaseConnection, setDatabaseConnection] = useState('false');
-
   const iframeRef = useRef(null);
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
-
   const scrollContainerStyle = useMemo(() => ({
     position: 'relative',
     height: 1080,
@@ -116,7 +89,6 @@ export default function Home() {
     backgroundColor: bgColor,
     color: '#fff',
   }), [bgColor]);
-
 
   const scrollingTextStyle = useMemo(() => ({
     position: 'absolute',
@@ -152,7 +124,6 @@ export default function Home() {
     };
 
     const inputs = [textarea1Ref.current];
-    // console.log(inputs)
     inputs.forEach((input) => {
       if (input) {
         input.addEventListener('focus', handleFocus);
@@ -160,9 +131,6 @@ export default function Home() {
     });
 
     const messageHandler = (event) => {
-      console.log(focusedInput)
-
-      // if (event.origin !== addr) return;
       if (
         event.data &&
         typeof event.data === 'object' &&
@@ -202,8 +170,6 @@ export default function Home() {
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
     if (!curbulletin) return;
     if (!ScriptID) return;
-    // console.log('Prompter ID being sent:', prompterId);
-
     fetch('/api/currentStory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -212,7 +178,6 @@ export default function Home() {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log('Success:', data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -252,20 +217,17 @@ export default function Home() {
     });
 
     socket.on('databaseConnection', data => {
-      // console.log('databaseConnection', data);
       setDatabaseConnection(data);
     });
 
     socket.on('connect_error', (error) => {
       console.log(error)
       setServerAlive(false);
-      // connectbutton.current.style.backgroundColor = "red";
     });
 
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
       setServerAlive(false);
-      // connectbutton.current.style.backgroundColor = "red";
     });
 
     return () => {
@@ -437,7 +399,6 @@ export default function Home() {
         setLatestDate(newLatestDateTotal);
         setSlugs(data.data);
       } else {
-        // console.log(`'No Update at all'`);
       }
 
       const newSlugs = data.data.slice(doubleClickedPosition);
@@ -459,13 +420,11 @@ export default function Home() {
           (data.data[currentStoryNumber - 1]?.DropStory === 1) || (data.data[currentStoryNumber - 1]?.DropStory === 3) ||
           (data.data[currentStoryNumber - 1]?.Approval === 0)
         ) {
-          // console.log("current story dropped or not disapproved");
           handleDoubleClick(currentStoryNumber);
         } else {
           fetchAllContent(newSlugs, doubleClickedPosition);
         }
       } else {
-        // console.log("No update below current story");
       }
     } catch (error) {
       console.error(error);
@@ -575,7 +534,6 @@ export default function Home() {
         if ((slug.DropStory === 0 || slug.DropStory === 2) && (slug?.Approval || allowUnApproved)) {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoNndCGPresent(slug)
             }`;
-          // data1[i * 3 + 1] = `${slug.Script}`;
           data1[i * 3 + 1] = slug.Script ? `${slug.Script?.trim().split('$$$$')[0]}` : '';
           data1[i * 3 + 2] = `--------------`;
         } else {
@@ -664,74 +622,6 @@ export default function Home() {
     });
   }, [slugs, handleDoubleClick]);
 
-  // useEffect(() => {
-  //   const handleButtonDown = debounce((msg) => {
-  //     console.log(msg);
-  //     if (msg === 1) {
-  //       setSpeed(0);
-  //     } else if (msg === 2) {
-  //       setSpeed(-3);
-  //     } else if (msg === 3) {
-  //       setSpeed((val) => val - 1);
-  //     } else if (msg === 4) {
-  //       fromStart();
-  //     } else if (msg === 5) {
-  //       setSpeed(1);
-  //     } else if (msg === 6) {
-  //       setSpeed(2);
-  //     } else if (msg === 7) {
-  //       setSpeed(3);
-  //     } else if (msg === 8) {
-  //       setSpeed(4);
-  //     } else if (msg === 9) {
-  //       setSpeed((val) => val + 1);
-  //     } else if (msg === 10) {
-  //       onclickSlug(slugs[4], 4);
-  //       handleDoubleClick(4);
-  //     } else if (msg === 11) {
-  //       onclickSlug(slugs[9], 9);
-  //       handleDoubleClick(9);
-  //     } else if (msg === 12) {
-  //       onclickSlug(slugs[14], 14);
-  //       handleDoubleClick(14);
-  //     } else if (msg === 13) {
-  //       onclickSlug(slugs[currentStoryNumber + 4], currentStoryNumber + 4);
-  //       handleDoubleClick(currentStoryNumber + 4);
-  //     } else if (msg === 14) {
-  //       previous();
-  //     } else if (msg === 15) {
-  //       next();
-  //     }
-  //   }, 300); // Debounce with 300ms delay
-
-  //   const handleJogdir = debounce((msg) => {
-  //     console.log(msg);
-  //     if (msg === 1) {
-  //       setSpeed(1);
-  //     } else if (msg === -1) {
-  //       setSpeed(-1);
-  //     }
-  //   }, 300); // Debounce with 300ms delay
-
-  //   const handleShuttle = debounce((msg) => {
-  //     console.log(msg);
-  //     setSpeed(msg);
-  //   }, 300); // Debounce with 300ms delay
-
-  //   socket.on("buttondown1", handleButtonDown);
-  //   socket.on("jog-dir1", handleJogdir);
-  //   socket.on("shuttle1", handleShuttle);
-
-  //   return () => {
-  //     socket.off("buttondown1", handleButtonDown);
-  //     socket.off("jog-dir1", handleJogdir);
-  //     socket.off("shuttle1", handleShuttle);
-  //     // socket.disconnect();
-  //   };
-  // }, [next, previous, speed, setSpeed, fromStart, handleDoubleClick, slugs, onclickSlug,]);
-
-
-
   useEffect(() => {
     if (!useDB) { return }
     setCurrentSlug(currentStoryNumber - 1);
@@ -768,12 +658,6 @@ export default function Home() {
     if (!socket) return;
     socket.emit('speed', speed);
   }, [speed]);
-
-  // useEffect(() => {
-  //   const socket = socketRef.current;
-  //   if (!socket) return;
-  //   socket.emit('setFontSize', fontSize * 2.5);
-  // }, [fontSize]);
 
   useEffect(() => {
     const socket = socketRef.current;

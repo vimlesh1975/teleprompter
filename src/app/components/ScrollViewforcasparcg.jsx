@@ -1,11 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-// import Count from './Count';
-// import dynamic from 'next/dynamic';
-// import Triangles from './Triangles';
 import io from 'socket.io-client';
 import ScrollView from './ScrollView';
-
-// const Clock = dynamic(() => import('./Clock'), { ssr: false });
 
 const ScrollViewforcasparcg = () => {
     const [currentFont, setCurrentFont] = useState("Times New Roman");
@@ -105,40 +100,8 @@ const ScrollViewforcasparcg = () => {
         marginTop: -8,
         marginLeft: -8,
     }} >
-
-        {/* <div style={{ backgroundColor: 'lightgray', color: 'blue', fontSize: 18 * 2.5, fontWeight: 'bolder', width: 1920 }}>
-            <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
-                <div style={{ display: 'flex', justifyContent: 'space-around', width: 1920 }}>
-                    <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugsLength})`}</div>
-                    <div>{newsReaderText}</div>
-                    <div><Count currentStoryNumber={currentStoryNumber} /></div>
-                    <div>ScrollView</div>
-                    <div>{showClock ? '' : '.'}</div>
-                    <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
-                    <div >{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
-                </div>
-            </div>
-        </div>
-
-        <div style={scrollContainerStyle}>
-            <div style={scrollingTextStyle}>
-                {allContent.map((content, i) => (
-                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ fontFamily: (i % 3 === 1) ? currentFont : 'Times New Roman', backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
-                        {content}
-                    </div>
-                ))}
-            </div>
-            <div style={{ position: 'absolute', top: parseInt(startPosition) - 50 }}>
-                <Triangles />
-            </div>
-        </div> */}
-
         <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
-
-
     </div>
-
     )
 }
-
 export default ScrollViewforcasparcg

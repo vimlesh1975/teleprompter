@@ -25,7 +25,6 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
     };
   }, []);
 
-
   useEffect(() => {
     if (!socketRef.current) return;
 
@@ -37,7 +36,6 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
     });
 
     socketRef.current.on('currentStoryBroadcast', (data) => {
-      // setSocketcurrentstory(JSON.parse(data).curstory)
       setSocketcurrentstory(data);
     });
 
@@ -49,7 +47,6 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
       console.log('Disconnected from server');
       setConnected(false);
     });
-
 
     return () => {
       socketRef.current?.off('connect');
@@ -65,10 +62,9 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
     const requestOptions = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json', // Specify the content type as JSON
-        // You may include other headers as needed
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(str), // Convert the data to JSON format
+      body: JSON.stringify(str),
     };
     const aa = await fetch('/api/casparcg', requestOptions);
     if (str.action === 'connect' || str.action === 'disconnect') {
@@ -110,7 +106,6 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
           >
             DisConnect
           </button>
-          {/* <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID}</span> */}
           <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
         </div>
         <div>
@@ -145,7 +140,6 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
 
               }, 3000);
             }
-
             }
           >
             Normal Method
@@ -156,7 +150,6 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
               endpoint({
                 action: 'endpoint',
                 command: !fliped ? 'mixer 1-97 fill 0 0 1 1' : 'mixer 1-97 fill 1 0 -1 1',
-
               });
               setFliped(val => !val);
             }}
@@ -239,10 +232,8 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
               });
             }}>Stop 2nd Channel</button>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 }
