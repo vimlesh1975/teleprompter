@@ -37,7 +37,7 @@ const ScrollView = ({
                     </div>
                 </div>
             </div>
-            {contentRefs && contentRefs.current &&
+            {
                 <div style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>
                         {allContent.map((content, i) => (
