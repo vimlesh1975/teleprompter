@@ -134,7 +134,25 @@ app.prepare().then(async () => {
         });
         //webrtc code ends
 
+        //for mobile
+        socket.on('speed', (data) => {
+            io.emit('speed2', data);
+        });
 
+        socket.on('next', () => {
+            io.emit('next2', '');
+        });
+
+        socket.on('previous', () => {
+            io.emit('previous2', '');
+        });
+
+        socket.on('fromStart', () => {
+            io.emit('fromStart2', '');
+        });
+
+
+        //end for mbile
 
         // Handle disconnection
         socket.on('disconnect', () => {
@@ -155,6 +173,12 @@ app.prepare().then(async () => {
             socket.removeAllListeners("rtl");
             socket.removeAllListeners("scrollContainerStyle");
             socket.removeAllListeners("scrollingTextStyle");
+
+            socket.removeAllListeners("speed");
+            socket.removeAllListeners("next");
+            socket.removeAllListeners("previous");
+            socket.removeAllListeners("fromStart");
+
 
         });
 

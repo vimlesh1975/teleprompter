@@ -1,4 +1,6 @@
 "use client";
+import './page1.css'
+
 import { fontLists, fixdata } from "./common.js";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
@@ -208,41 +210,7 @@ export default function Home() {
   }, [singleScript])
 
 
-  useEffect(() => {
-    socketRef.current = io();
-    const socket = socketRef.current;
-    socket.on("connect", () => {
-      console.log("SOCKET CONNECTED! from main page", socket.id);
-      setServerAlive(true);
 
-    });
-    socket.on("newdatabase", (data) => {
-      dispatch(changenewdatabase(data));
-    });
-
-    socket.on('databaseConnection', data => {
-      setDatabaseConnection(data);
-    });
-
-    socket.on('connect_error', (error) => {
-      console.log(error)
-      setServerAlive(false);
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Disconnected from server');
-      setServerAlive(false);
-    });
-
-    return () => {
-      socket.off("connect");
-      socket.off("newdatabase");
-      socket.off("databaseConnection");
-      socket.off("connect_error");
-      socket.off("disconnect");
-      socket.disconnect();
-    }
-  }, [])
 
 
   useEffect(() => {
@@ -860,8 +828,70 @@ export default function Home() {
     URL.revokeObjectURL(url); // Clean up the URL
   }
 
+  const nextRef = useRef();
+  nextRef.current = next;
+
+  const previousRef = useRef();
+  previousRef.current = previous;
+
+  const fromStartRef = useRef();
+  fromStartRef.current = fromStart;
 
 
+  useEffect(() => {
+    socketRef.current = io();
+    const socket = socketRef.current;
+    socket.on("connect", () => {
+      console.log("SOCKET CONNECTED! from main page", socket.id);
+      setServerAlive(true);
+
+    });
+    socket.on("newdatabase", (data) => {
+      dispatch(changenewdatabase(data));
+    });
+
+    socket.on('databaseConnection', data => {
+      setDatabaseConnection(data);
+    });
+
+    socket.on('connect_error', (error) => {
+      console.log(error)
+      setServerAlive(false);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+      setServerAlive(false);
+    });
+
+    socket.on('speed2', data => {
+      setSpeed(data);
+    });
+
+    socket.on('next2', () => {
+      nextRef.current?.();
+    });
+    socket.on('previous2', () => {
+      previousRef.current?.();
+    });
+
+    socket.on('fromStart2', () => {
+      fromStartRef.current?.();
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("newdatabase");
+      socket.off("databaseConnection");
+      socket.off("connect_error");
+      socket.off("disconnect");
+      socket.off("speed2");
+      socket.off("next2");
+      socket.off("fromStart2");
+
+      socket.disconnect();
+    }
+  }, [])
 
   return (
     <div style={{ overflow: "hidden", backgroundColor: '#e0e0d2', }}>

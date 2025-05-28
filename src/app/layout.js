@@ -1,4 +1,4 @@
-import './globals.css'
+// import './globals.css'
 import ProviderWrapper from './store/ProviderWrapper';
 export const metadata = {
   title: "Teleprompter_280525_1",
