@@ -22,6 +22,7 @@ const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const dummyScriptid = 200502071223160;
 
 export default function Home() {
+  const [ip, setIp] = useState(null)
   const [fontList, setFontList] = useState(fontLists);
   const [currentFont, setCurrentFont] = useState("Times New Roman");
   const [isRTL, setIsRTL] = useState(false);
@@ -893,6 +894,12 @@ export default function Home() {
     }
   }, [])
 
+  useEffect(() => {
+    fetch('/api/getlocalip')
+      .then(res => res.json())
+      .then(data => setIp(data.ip))
+  }, [])
+
   return (
     <div style={{ overflow: "hidden", backgroundColor: '#e0e0d2', }}>
       <div style={{ display: "flex" }}>
@@ -1262,6 +1269,7 @@ export default function Home() {
               title="External Content"
             ></iframe>}
           </div>
+
         </div>
 
         {/* Third column */}
@@ -1391,6 +1399,7 @@ export default function Home() {
             </div>
             <div style={{ textAlign: "center" }}>
               Right Click to Stop and Play
+
             </div>
             <div style={{ textAlign: "left" }}>
               <label>
@@ -1589,6 +1598,7 @@ export default function Home() {
                   setFontColor(e.target.value);
                   socketRef.current.emit('fontColor', e.target.value);
                 }} />
+                <button onClick={() => window.open(`http://${ip}:3000/m`)}>Mobile controllerr</button>
               </div>
 
             </div>
