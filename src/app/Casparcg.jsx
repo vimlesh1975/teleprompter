@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, fontSize, newPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
+export default function Home({ scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -117,10 +117,6 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
                 action: 'endpoint',
                 command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
-              endpoint({
-                action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill 0 0 1 1' : 'mixer 1-97 fill 1 0 -1 1',
-              });
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
@@ -146,17 +142,7 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
             Normal Method
           </button>
 
-          <button
-            onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill 0 0 1 1' : 'mixer 1-97 fill 1 0 -1 1',
-              });
-              setFliped(val => !val);
-            }}
-          >
-            Toggle Flip
-          </button>
+
         </div>
         <div>
           Method 2:
@@ -166,27 +152,13 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
                 action: 'endpoint',
                 command: `play 1-97 [html] http://${IP}:3000/webrtc.html`,
               });
-              endpoint({
-                action: 'endpoint',
-                command: fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
-              });
               playOnSecondChannelinFlippedMode();
             }
             }
           >
             Screen Capture Method
           </button>
-          <button
-            onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
-              });
-              setFliped(val => !val);
-            }}
-          >
-            Toggle Flip
-          </button>
+
 
         </div>
 
@@ -206,6 +178,17 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
               }
             >
               Stop Caspar Output
+            </button>
+            <button
+              onClick={() => {
+                endpoint({
+                  action: 'endpoint',
+                  command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
+                });
+                setFliped(val => !val);
+              }}
+            >
+              Toggle Flip
             </button>
           </div>
           <div >
