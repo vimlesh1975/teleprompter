@@ -1511,7 +1511,7 @@ export default function Home() {
                   setShowNewWindow3(!showNewWindow3);
                 }}
               >
-                {showNewWindow3 ? "Close New Window3" : "Open New Window3"}
+                {showNewWindow3 ? "Close Full Screen" : "Open Full Screen"}
               </button>
               <button onClick={() => {
                 window.open('/CasparcgOutput2', '', `width=${scrollWidth},height=${scrollHeight + 40}`);

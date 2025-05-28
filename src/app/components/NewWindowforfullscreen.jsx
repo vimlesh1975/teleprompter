@@ -24,7 +24,9 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', `width=${screen.width - 200},height=${screen.height - 200},resizable=no`);
+            newWindowRef.current = window.open('', '', `width=${scrollWidth + 20},height=${scrollHeight + 40}`);
+
+            // newWindowRef.current = window.open('', '', `width=${screen.width * 0.99},height=${screen.height * 0.99}`);
         }
 
         // Ensure the window is still available
@@ -42,14 +44,47 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
 
             newWindowRef.current.document.body.style.overflow = 'hidden';
             newWindowRef.current.document.body.style.transform = `scale(0.410,0.43)`;
+
             newWindowRef.current.document.body.style.transformOrigin = 'top left';
         }
         setContainer(containerDiv);
         newWindowRef.current.addEventListener('beforeunload', onClose);
+
+
+        newWindowRef.current.resizeTo(newWindowRef.current.screen.width, newWindowRef.current.screen.height);
+        newWindowRef.current.moveTo(0, 0);
+
+        console.log('Title bar double-clicked');
+        containerDiv.style.transformOrigin = '5px 0';
+        const screenHeight = newWindowRef.current.screen.height;
+
+        const knownOrigins = {
+            1080: 160,
+            1050: 165,
+            1024: 160,
+            960: 153,
+            900: 155,
+            864: 155,
+            800: 150,
+            768: 150,
+            720: 140,
+            664: 145,
+            600: 135,
+        };
+        const sf = (screenHeight - (knownOrigins[screenHeight] || 150)) / scrollHeight;
+        containerDiv.style.transform = `scale(${newWindowRef.current.screen.width / scrollWidth}, ${sf} )`;
+        setScaleFactor(sf);
+
+
         return () => {
             newWindowRef.current.removeEventListener('beforeunload', onClose);
         };
     }, [container, onClose]);
+
+
+    useEffect(() => {
+
+    })
 
     const childrenWithProps = React.Children.map(children, (child) =>
         cloneElement(child, { scaleFactor })
