@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { list_voices } from './list-voices'
+import { list_voices } from '../common'
 
 export default function Home({ content }) {
   const [language, setLanguage] = useState('mr-IN');
