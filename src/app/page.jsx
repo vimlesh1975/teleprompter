@@ -108,7 +108,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (window.location.origin !== "https://teleprompter-chi.vercel.app") {
+    if (window.location.origin.contains('vercel')) {
       fetch('/api/fonts')
         .then((res) => res.json())
         .then((data) => setFontList(data.fonts))
