@@ -5,6 +5,7 @@ import { fontLists, fixdata } from "./common.js";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import NewWindow from "./components/NewWindow";
+import NewWindowforfullscreen from "./components/NewWindowforfullscreen";
 import Scroll from "./components/Scroll";
 import io from "socket.io-client";
 import Casparcg from "./Casparcg";
@@ -54,6 +55,7 @@ export default function Home() {
   const [currentStoryNumber, setCurrentStoryNumber] = useState(-1);
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [showNewWindow2, setShowNewWindow2] = useState(false);
+  const [showNewWindow3, setShowNewWindow3] = useState(false);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
   const [fontSize, setFontSize] = useState(39);
   const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
@@ -67,6 +69,7 @@ export default function Home() {
   const [keyPressed, setKeyPressed] = useState('');
   const newWindowRef = useRef(null);
   const newWindowRef2 = useRef(null);
+  const newWindowRef3 = useRef(null);
   const textRef = useRef(null);
   const contentRefs = useRef([]);
 
@@ -333,7 +336,9 @@ export default function Home() {
   const handleCloseNewWindow2 = () => {
     setShowNewWindow2(false);
   };
-
+  const handleCloseNewWindow3 = () => {
+    setShowNewWindow3(false);
+  };
   const timerFunction = async () => {
     if (selectedRunOrderTitle === '') {
       return;
@@ -1330,6 +1335,17 @@ export default function Home() {
                 <ScrollView contentRefs={contentRefs} scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
+
+            {showNewWindow3 && (
+              <NewWindowforfullscreen
+                onClose={handleCloseNewWindow3}
+                newWindowRef={newWindowRef3}
+                scrollWidth={scrollWidth}
+                scrollHeight={scrollHeight}
+              >
+                <ScrollView contentRefs={contentRefs} scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+              </NewWindowforfullscreen>
+            )}
           </div>
 
           <div
@@ -1485,6 +1501,17 @@ export default function Home() {
                 }}
               >
                 {showNewWindow2 ? "Close New Window2" : "Open New Window2"}
+              </button>
+
+              <button
+                onClick={() => {
+                  if (showNewWindow3) {
+                    newWindowRef3.current.close();
+                  }
+                  setShowNewWindow3(!showNewWindow3);
+                }}
+              >
+                {showNewWindow3 ? "Close New Window3" : "Open New Window3"}
               </button>
               <button onClick={() => {
                 window.open('/CasparcgOutput2', '', `width=${scrollWidth},height=${scrollHeight + 40}`);
