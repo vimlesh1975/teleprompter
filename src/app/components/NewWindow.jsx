@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,cloneElement } from 'react';
+import React, { useEffect, useState, cloneElement } from 'react';
 import ReactDOM from 'react-dom';
 
 function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight }) {
@@ -13,14 +13,14 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
                 newWindowRef.current.close();
             }
         };
-    
+
         window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
-    
+
 
     const handleTitleBarDoubleClick = (e) => {
         newWindowRef.current.resizeTo(newWindowRef.current.screen.width, newWindowRef.current.screen.height);
@@ -43,7 +43,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
             664: 145,
             600: 135,
         };
-        const sf= (screenHeight-(knownOrigins[screenHeight] || 150)) / scrollHeight;
+        const sf = (screenHeight - (knownOrigins[screenHeight] || 150)) / scrollHeight;
         container.style.transform = `scale(${newWindowRef.current.screen.width / scrollWidth}, ${sf} )`;
         setScaleFactor(sf);
     };
@@ -54,19 +54,34 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
 
         const screenWidth = newWindowRef.current.screen.width;
 
+        // const knownOrigins = {
+        //     1920: 1350,
+        //     1680: 530,
+        //     1600: 523,
+        //     1440: 505,
+        //     1366: 495,
+        //     1360: 495,
+        //     1280: 483,
+        //     1176: 466,
+        //     1152: 462,
+        //     1024: 440,
+        //     800: 392,
+        // };
+
         const knownOrigins = {
-            1920: 555,
-            1680: 530,
-            1600: 523,
-            1440: 505,
-            1366: 495,
-            1360: 495,
-            1280: 483,
-            1176: 466,
-            1152: 462,
-            1024: 440,
-            800: 392,
+            1920: 1350,
+            1680: 1305,
+            1600: 1260,
+            1440: 1220,
+            1366: 1200,
+            1360: 1200,
+            1280: 1170,
+            1176: 1145,
+            1152: 1120,
+            1024: 1070,
+            800: 950,
         };
+
 
         // Calculate transform origin using the linear formula if not in known origins
         const transformOriginX = knownOrigins[screenWidth] || (0.0893 * screenWidth + 284);
@@ -85,7 +100,7 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
     useEffect(() => {
         // Check if the new window exists, if not, create it
         if (!newWindowRef.current || newWindowRef.current.closed) {
-            newWindowRef.current = window.open('', '', `width=${scrollWidth+20},height=${scrollHeight+40}`);
+            newWindowRef.current = window.open('', '', `width=${scrollWidth + 20},height=${scrollHeight + 40}`);
         }
 
         // Ensure the window is still available
@@ -102,6 +117,8 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
             newWindowRef.current.document.body.appendChild(containerDiv);
 
             newWindowRef.current.document.body.style.overflow = 'hidden';
+            newWindowRef.current.document.body.style.transform = `scale(0.410,0.43)`;
+            newWindowRef.current.document.body.style.transformOrigin = 'top left';
 
 
         }

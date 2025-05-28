@@ -1,35 +1,23 @@
 "use client";
-import { fontLists } from "./common.js";
+import { fontLists, fixdata } from "./common.js";
 import { useDispatch, useSelector } from 'react-redux';
-
-import { useState, useEffect, useRef, useCallback, use } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import NewWindow from "./components/NewWindow";
 import Scroll from "./components/Scroll";
 import io from "socket.io-client";
-
-// import socket from "./components/socket"; // assumes shared instance
-
-
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
 import TTS from './components/TTS.jsx'
-// import SpeechToText from './SpeechToText/SpeechToText';
 import ScrollView from './components/ScrollView';
 import { changenewdatabase } from './store/store'; // Adjust the path as needed
 import mammoth from 'mammoth';
 import 'react-tabs/style/react-tabs.css';
-
 import { UseSocketControls } from "./components/UseSocketControls";
-// import { UseSocketControls } from "./components/UseSocketControlsJaipur";
 
-import { fixdata } from './fixdata.js';
-
-// const scrollWidth = 600;
-const scrollHeight = 440;
+const scrollHeight = 460;
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 
 const dummyScriptid = 200502071223160;
-
 
 export default function Home() {
   const [fontList, setFontList] = useState(fontLists);
@@ -38,23 +26,16 @@ export default function Home() {
   const [bgColor, setbgColor] = useState('black');
   const [fontColor, setFontColor] = useState('#ffffff');
   const [fontBold, setFontBold] = useState(false);
-
   const socketRef = useRef(null);
-
   const [useDB, setUseDB] = useState(true);
   const [singleScript, setSingleScript] = useState(false);
   const [file, setFile] = useState(null);
-
-
   const [ZXZX, setZXZX] = useState(false);
-
-
   const dispatch = useDispatch();
   const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
   const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
   const newdatabase = useSelector((state) => state.newdatabaseReducer.newdatabase);
-
-  const [startPosition, setStartPosition] = useState(150);
+  const [startPosition, setStartPosition] = useState(355);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("0600 Hrs");
@@ -80,15 +61,16 @@ export default function Home() {
   const [DB_HOST, setDB_HOST] = useState('localhost');
   const [CASPAR_HOST, setCASPAR_HOST] = useState('127.0.0.1');
   const [showSettings, setShowSettings] = useState(false);
-
   const [keyPressed, setKeyPressed] = useState('');
-
   const newWindowRef = useRef(null);
   const newWindowRef2 = useRef(null);
   const textRef = useRef(null);
+  const contentRefs = useRef([]);
+
+  const textRef2 = useRef(null);
+  const contentRefs2 = useRef([]);
 
   const [serverAlive, setServerAlive] = useState(false);
-
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -96,19 +78,36 @@ export default function Home() {
     const dd = String(today.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   });
-
   const [usedStory, setUsedStory] = useState([]);
-
   const [sendUsedStory, setSendUsedStory] = useState(false);
   const [prompterId, setPrompterId] = useState(1);
   const [databaseConnection, setDatabaseConnection] = useState('false');
-
   const iframeRef = useRef(null);
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
+  const scrollContainerStyle = useMemo(() => ({
+    position: 'relative',
+    height: 1080,
+    width: 1920,
+    overflow: 'hidden',
+    backgroundColor: bgColor,
+    color: '#fff',
+  }), [bgColor]);
+
+  const scrollingTextStyle = useMemo(() => ({
+    position: 'absolute',
+    transform: `translateY(${newPosition}px)`,
+    willChange: 'transform',
+    width: 1720,
+    padding: '0 100px',
+    whiteSpace: 'pre-wrap',
+    fontSize: parseInt(fontSize * 2.5),
+    lineHeight: `${Math.floor(fontSize * 1.5 * 2.5)}px`,
+  }), [newPosition, fontSize]);
+
 
   useEffect(() => {
-    if (window.location.origin !== "https://teleprompter-chi.vercel.app") {
+    if (!window.location.origin.includes('vercel')) {
       fetch('/api/fonts')
         .then((res) => res.json())
         .then((data) => setFontList(data.fonts))
@@ -129,7 +128,6 @@ export default function Home() {
     };
 
     const inputs = [textarea1Ref.current];
-    // console.log(inputs)
     inputs.forEach((input) => {
       if (input) {
         input.addEventListener('focus', handleFocus);
@@ -137,9 +135,6 @@ export default function Home() {
     });
 
     const messageHandler = (event) => {
-      console.log(focusedInput)
-
-      // if (event.origin !== addr) return;
       if (
         event.data &&
         typeof event.data === 'object' &&
@@ -179,8 +174,6 @@ export default function Home() {
   const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
     if (!curbulletin) return;
     if (!ScriptID) return;
-    // console.log('Prompter ID being sent:', prompterId);
-
     fetch('/api/currentStory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -189,7 +182,6 @@ export default function Home() {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log('Success:', data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -229,20 +221,17 @@ export default function Home() {
     });
 
     socket.on('databaseConnection', data => {
-      // console.log('databaseConnection', data);
       setDatabaseConnection(data);
     });
 
     socket.on('connect_error', (error) => {
       console.log(error)
       setServerAlive(false);
-      // connectbutton.current.style.backgroundColor = "red";
     });
 
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
       setServerAlive(false);
-      // connectbutton.current.style.backgroundColor = "red";
     });
 
     return () => {
@@ -331,6 +320,7 @@ export default function Home() {
       }
       if (dataObject.startPosition !== undefined) {
         setStartPosition(dataObject.startPosition);
+        setNewPosition(dataObject.startPosition);
       }
       if (dataObject.isRTL !== undefined) {
         setIsRTL(dataObject.isRTL);
@@ -413,7 +403,6 @@ export default function Home() {
         setLatestDate(newLatestDateTotal);
         setSlugs(data.data);
       } else {
-        // console.log(`'No Update at all'`);
       }
 
       const newSlugs = data.data.slice(doubleClickedPosition);
@@ -435,13 +424,11 @@ export default function Home() {
           (data.data[currentStoryNumber - 1]?.DropStory === 1) || (data.data[currentStoryNumber - 1]?.DropStory === 3) ||
           (data.data[currentStoryNumber - 1]?.Approval === 0)
         ) {
-          // console.log("current story dropped or not disapproved");
           handleDoubleClick(currentStoryNumber);
         } else {
           fetchAllContent(newSlugs, doubleClickedPosition);
         }
       } else {
-        // console.log("No update below current story");
       }
     } catch (error) {
       console.error(error);
@@ -551,7 +538,6 @@ export default function Home() {
         if ((slug.DropStory === 0 || slug.DropStory === 2) && (slug?.Approval || allowUnApproved)) {
           data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoNndCGPresent(slug)
             }`;
-          // data1[i * 3 + 1] = `${slug.Script}`;
           data1[i * 3 + 1] = slug.Script ? `${slug.Script?.trim().split('$$$$')[0]}` : '';
           data1[i * 3 + 2] = `--------------`;
         } else {
@@ -640,74 +626,6 @@ export default function Home() {
     });
   }, [slugs, handleDoubleClick]);
 
-  // useEffect(() => {
-  //   const handleButtonDown = debounce((msg) => {
-  //     console.log(msg);
-  //     if (msg === 1) {
-  //       setSpeed(0);
-  //     } else if (msg === 2) {
-  //       setSpeed(-3);
-  //     } else if (msg === 3) {
-  //       setSpeed((val) => val - 1);
-  //     } else if (msg === 4) {
-  //       fromStart();
-  //     } else if (msg === 5) {
-  //       setSpeed(1);
-  //     } else if (msg === 6) {
-  //       setSpeed(2);
-  //     } else if (msg === 7) {
-  //       setSpeed(3);
-  //     } else if (msg === 8) {
-  //       setSpeed(4);
-  //     } else if (msg === 9) {
-  //       setSpeed((val) => val + 1);
-  //     } else if (msg === 10) {
-  //       onclickSlug(slugs[4], 4);
-  //       handleDoubleClick(4);
-  //     } else if (msg === 11) {
-  //       onclickSlug(slugs[9], 9);
-  //       handleDoubleClick(9);
-  //     } else if (msg === 12) {
-  //       onclickSlug(slugs[14], 14);
-  //       handleDoubleClick(14);
-  //     } else if (msg === 13) {
-  //       onclickSlug(slugs[currentStoryNumber + 4], currentStoryNumber + 4);
-  //       handleDoubleClick(currentStoryNumber + 4);
-  //     } else if (msg === 14) {
-  //       previous();
-  //     } else if (msg === 15) {
-  //       next();
-  //     }
-  //   }, 300); // Debounce with 300ms delay
-
-  //   const handleJogdir = debounce((msg) => {
-  //     console.log(msg);
-  //     if (msg === 1) {
-  //       setSpeed(1);
-  //     } else if (msg === -1) {
-  //       setSpeed(-1);
-  //     }
-  //   }, 300); // Debounce with 300ms delay
-
-  //   const handleShuttle = debounce((msg) => {
-  //     console.log(msg);
-  //     setSpeed(msg);
-  //   }, 300); // Debounce with 300ms delay
-
-  //   socket.on("buttondown1", handleButtonDown);
-  //   socket.on("jog-dir1", handleJogdir);
-  //   socket.on("shuttle1", handleShuttle);
-
-  //   return () => {
-  //     socket.off("buttondown1", handleButtonDown);
-  //     socket.off("jog-dir1", handleJogdir);
-  //     socket.off("shuttle1", handleShuttle);
-  //     // socket.disconnect();
-  //   };
-  // }, [next, previous, speed, setSpeed, fromStart, handleDoubleClick, slugs, onclickSlug,]);
-
-
-
   useEffect(() => {
     if (!useDB) { return }
     setCurrentSlug(currentStoryNumber - 1);
@@ -748,12 +666,6 @@ export default function Home() {
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('setFontSize', fontSize);
-  }, [fontSize]);
-
-  useEffect(() => {
-    const socket = socketRef.current;
-    if (!socket) return;
     socket.emit('setStartPosition', startPosition);
   }, [startPosition]);
 
@@ -772,8 +684,16 @@ export default function Home() {
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('bgColor', bgColor);
-  }, [bgColor]);
+    // socket.emit('bgColor', bgColor);
+    socket.emit('scrollContainerStyle', scrollContainerStyle);
+
+  }, [scrollContainerStyle]);
+
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
+    socket.emit('scrollingTextStyle', scrollingTextStyle);
+  }, [scrollingTextStyle]);
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -803,7 +723,7 @@ export default function Home() {
     const socket = socketRef.current;
     if (!socket) return;
     if (!slugs) return;
-    socket.emit('setSlugs', slugs.length);
+    socket.emit('setSlugs', slugs);
   }, [slugs]);
 
   const dropStoryValue = (slug) => {
@@ -1143,6 +1063,8 @@ export default function Home() {
             }}
           >
             <Casparcg
+              scrollingTextStyle={scrollingTextStyle}
+              scrollContainerStyle={scrollContainerStyle}
               currentFont={currentFont}
               fontBold={fontBold}
               isRTL={isRTL}
@@ -1151,7 +1073,7 @@ export default function Home() {
               slugs={slugs}
               allContent={allContent}
               startPosition={startPosition}
-              fontSize={fontSize}
+              fontSize={fontSize * 2.5}
               doubleClickedPosition={doubleClickedPosition}
               newPosition={newPosition}
               currentStoryNumber={currentStoryNumber}
@@ -1232,12 +1154,11 @@ export default function Home() {
             style={{
               fontSize: `${fontSize}px`,
               lineHeight: `${fontSize * 1.5}px`,
-              // fontWeight: "bolder",
               width: scrollWidth,
               minHeight: 600,
               maxHeight: 600,
               position: "absolute",
-              top: startPosition + 28,
+              top: 150 + 28,
               overflow: "scroll",
               padding: '0 25px',
               boxSizing: 'border-box',
@@ -1250,6 +1171,8 @@ export default function Home() {
                   backgroundColor: "blue",
                   color: "yellow",
                   width: 702,
+                  fontFamily: 'Times New Roman',
+
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
@@ -1270,9 +1193,7 @@ export default function Home() {
                     lineHeight: `${fontSize * 1.5}px`,
                     width: 702.22,
                     height: 510,
-                    // border: 'none',
                     resize: 'none',
-                    // fontFamily: 'inherit',
                     fontFamily: currentFont,
                     fontWeight: fontBold ? 'bold' : 'normal',
                   }}
@@ -1318,19 +1239,21 @@ export default function Home() {
 
           <div>
             <Scroll
+              scrollContainerStyle={scrollContainerStyle}
+              scrollingTextStyle={scrollingTextStyle}
               currentFont={currentFont}
               fontBold={fontBold}
               isRTL={isRTL}
               fontColor={fontColor}
-              bgColor={bgColor}
               scrollWidth={scrollWidth}
               scrollHeight={scrollHeight}
-              fontSize={fontSize}
+              fontSize={fontSize * 2.5}
               setCurrentSlug={setCurrentSlug}
               newPosition={newPosition}
               setNewPosition={setNewPosition}
               doubleClickedPosition={doubleClickedPosition}
               textRef={textRef}
+              contentRefs={contentRefs}
               startPosition={startPosition}
               allContent={allContent}
               showClock={showClock}
@@ -1353,7 +1276,9 @@ export default function Home() {
               >
 
 
-                <ScrollView currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+
+
+                <ScrollView contentRefs={contentRefs2} textRef={textRef2} scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
 
             )}
@@ -1364,7 +1289,7 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} bgColor={bgColor} allContent={allContent} newPosition={newPosition} fontSize={fontSize} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} scrollWidth={scrollWidth} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView contentRefs={contentRefs} scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
               </NewWindow>
             )}
           </div>
@@ -1506,7 +1431,6 @@ export default function Home() {
                   if (showNewWindow) {
                     newWindowRef.current.close();
                   }
-                  // { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
                   setShowNewWindow(!showNewWindow);
                 }}
               >
@@ -1518,7 +1442,6 @@ export default function Home() {
                   if (showNewWindow2) {
                     newWindowRef2.current.close();
                   }
-                  // { textRef && textRef.current && setNewPosition(textRef.current.offsetTop); }
                   setShowNewWindow2(!showNewWindow2);
                 }}
               >
@@ -1531,23 +1454,25 @@ export default function Home() {
                   const socket = socketRef.current;
                   if (!socket) return;
 
-                  socket.emit('newPosition', newPosition);
+                  // socket.emit('newPosition', newPosition);
                   socket.emit('setCurrentStoryNumber', currentStoryNumber);
                   socket.emit('storyLines', storyLines);
                   socket.emit('crossedLines', crossedLines);
                   socket.emit('allContent', allContent);
-                  socket.emit('setSlugs', slugs.length);
+                  socket.emit('setSlugs', slugs);
 
-                  socket.emit('setFontSize', fontSize);
+                  // socket.emit('setFontSize', fontSize * 2.5);
                   socket.emit('setStartPosition', startPosition);
 
                   socket.emit('setShowClock', showClock);
                   socket.emit('setNewsReaderText', newsReaderText);
                   socket.emit('rtl', isRTL);
-                  socket.emit('bgColor', bgColor);
+                  // socket.emit('bgColor', bgColor);
                   socket.emit('fontColor', fontColor);
                   socket.emit('fontBold', fontBold);
                   socket.emit('currentFont', currentFont);
+                  socket.emit('scrollContainerStyle', scrollContainerStyle);
+                  socket.emit('scrollingTextStyle', scrollingTextStyle);
 
                 }, 3000);
               }}>Test</button>

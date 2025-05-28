@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor, slugs, allContent, startPosition, fontSize, newPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
+export default function Home({ scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -25,7 +25,6 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
     };
   }, []);
 
-
   useEffect(() => {
     if (!socketRef.current) return;
 
@@ -37,7 +36,6 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
     });
 
     socketRef.current.on('currentStoryBroadcast', (data) => {
-      // setSocketcurrentstory(JSON.parse(data).curstory)
       setSocketcurrentstory(data);
     });
 
@@ -49,7 +47,6 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
       console.log('Disconnected from server');
       setConnected(false);
     });
-
 
     return () => {
       socketRef.current?.off('connect');
@@ -65,10 +62,9 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
     const requestOptions = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json', // Specify the content type as JSON
-        // You may include other headers as needed
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(str), // Convert the data to JSON format
+      body: JSON.stringify(str),
     };
     const aa = await fetch('/api/casparcg', requestOptions);
     if (str.action === 'connect' || str.action === 'disconnect') {
@@ -110,8 +106,8 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
           >
             DisConnect
           </button>
-          {/* <span>{socketcurrentstory.curstory} {socketcurrentstory.curbulletin} {socketcurrentstory.ScriptID}</span> */}
           <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
+          {socketcurrentstory.ScriptID}
         </div>
         <div>
           Method 1:
@@ -121,52 +117,32 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
                 action: 'endpoint',
                 command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
-              endpoint({
-                action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill -0.01 -0.02 2.45 2.35' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.35',
-              });
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
-                socketRef.current.emit('newPosition', newPosition);
                 socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
                 socketRef.current.emit('storyLines', storyLines);
                 socketRef.current.emit('crossedLines', crossedLines);
                 socketRef.current.emit('allContent', allContent);
-                socketRef.current.emit('setSlugs', slugs.length);
-
-                socketRef.current.emit('setFontSize', fontSize);
+                socketRef.current.emit('setSlugs', slugs);
                 socketRef.current.emit('setStartPosition', startPosition);
-
                 socketRef.current.emit('setShowClock', showClock);
                 socketRef.current.emit('setNewsReaderText', newsReaderText);
-
                 socketRef.current.emit('rtl', isRTL);
-                socketRef.current.emit('bgColor', bgColor);
                 socketRef.current.emit('fontColor', fontColor);
                 socketRef.current.emit('fontBold', fontBold);
                 socketRef.current.emit('currentFont', currentFont);
+                socketRef.current.emit('scrollContainerStyle', scrollContainerStyle);
+                socketRef.current.emit('scrollingTextStyle', scrollingTextStyle);
 
               }, 3000);
             }
-
             }
           >
             Normal Method
           </button>
 
-          <button
-            onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill -0.01 -0.02 2.45 2.35' : 'mixer 1-97 fill 1.02 -0.02 -2.48 2.35',
 
-              });
-              setFliped(val => !val);
-            }}
-          >
-            Toggle Flip
-          </button>
         </div>
         <div>
           Method 2:
@@ -176,27 +152,13 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
                 action: 'endpoint',
                 command: `play 1-97 [html] http://${IP}:3000/webrtc.html`,
               });
-              endpoint({
-                action: 'endpoint',
-                command: fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
-              });
               playOnSecondChannelinFlippedMode();
             }
             }
           >
             Screen Capture Method
           </button>
-          <button
-            onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
-              });
-              setFliped(val => !val);
-            }}
-          >
-            Toggle Flip
-          </button>
+
 
         </div>
 
@@ -216,6 +178,17 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
               }
             >
               Stop Caspar Output
+            </button>
+            <button
+              onClick={() => {
+                endpoint({
+                  action: 'endpoint',
+                  command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
+                });
+                setFliped(val => !val);
+              }}
+            >
+              Toggle Flip
             </button>
           </div>
           <div >
@@ -243,10 +216,8 @@ export default function Home({ currentFont, fontBold, isRTL, bgColor, fontColor,
               });
             }}>Stop 2nd Channel</button>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 }

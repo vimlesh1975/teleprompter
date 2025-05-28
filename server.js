@@ -80,20 +80,12 @@ app.prepare().then(async () => {
             io.emit('storyLines2', data);
         });
 
-        socket.on('newPosition', (data) => {
-            io.emit('newPosition2', data);
-        });
-
         socket.on('allContent', (data) => {
             io.emit('allContent2', data);
         });
 
         socket.on('setSlugs', (data) => {
             io.emit('setSlugs2', data);
-        });
-
-        socket.on('setFontSize', (data) => {
-            io.emit('setFontSize2', data);
         });
 
         socket.on('setStartPosition', (data) => {
@@ -111,10 +103,6 @@ app.prepare().then(async () => {
         socket.on('rtl', (data) => {
             io.emit('rtl2', data);
         });
-        socket.on('bgColor', (data) => {
-            io.emit('bgColor2', data);
-        });
-
         socket.on('fontColor', (data) => {
             io.emit('fontColor2', data);
         });
@@ -126,7 +114,12 @@ app.prepare().then(async () => {
         socket.on('currentFont', (data) => {
             io.emit('currentFont2', data);
         });
-
+        socket.on('scrollContainerStyle', (data) => {
+            io.emit('scrollContainerStyle2', data);
+        });
+        socket.on('scrollingTextStyle', (data) => {
+            io.emit('scrollingTextStyle2', data);
+        });
 
         socket.on('offer', (data) => {
             socket.broadcast.emit('offer', data);
@@ -152,20 +145,16 @@ app.prepare().then(async () => {
             socket.removeAllListeners("setCurrentStoryNumber");
             socket.removeAllListeners("crossedLines");
             socket.removeAllListeners("storyLines");
-            socket.removeAllListeners("newPosition");
             socket.removeAllListeners("currentStory1");
             socket.removeAllListeners("allContent");
             socket.removeAllListeners("setSlugs");
-
-            socket.removeAllListeners("setFontSize");
             socket.removeAllListeners("setStartPosition");
             socket.removeAllListeners("setShowClock");
             socket.removeAllListeners("setNewsReaderText");
-
-            socket.removeAllListeners("bgColor");
             socket.removeAllListeners("fontColor");
             socket.removeAllListeners("rtl");
-
+            socket.removeAllListeners("scrollContainerStyle");
+            socket.removeAllListeners("scrollingTextStyle");
 
         });
 

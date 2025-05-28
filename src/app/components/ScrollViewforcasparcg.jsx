@@ -1,47 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react'
-import Count from './Count';
-import dynamic from 'next/dynamic';
-import Triangles from './Triangles';
 import io from 'socket.io-client';
+import ScrollView from './ScrollView';
 
-const Clock = dynamic(() => import('./Clock'), { ssr: false });
-
-
-const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const ScrollViewforcasparcg = () => {
     const [currentFont, setCurrentFont] = useState("Times New Roman");
-
     const [isRTL, setIsRTL] = useState(false);
-    const [bgColor, setbgColor] = useState('black');
     const [fontColor, setFontColor] = useState('#ffffff');
     const [fontBold, setFontBold] = useState(false);
-
     const [crossedLines, setCrossedLines] = useState(0);
     const [storyLines, setStoryLines] = useState([]);
-    const [newPosition, setNewPosition] = useState(150);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
     const [allContent, setAllContent] = useState([]);
-    const [fontSize, setFontSize] = useState(39);
-    const [startPosition, setStartPosition] = useState(150);
-
+    const [startPosition, setStartPosition] = useState(355);
     const [newsReaderText, setNewsReaderText] = useState('Continue...');
     const [showClock, setShowClock] = useState(true);
-
-
-
-    const [slugsLength, setSlugsLength] = useState(0);
-
+    const [scrollContainerStyle, setScrollContainerStyle] = useState({});
+    const [scrollingTextStyle, setScrollingTextStyle] = useState({});
+    const [slugs, setSlugs] = useState(0);
     const socketRef = useRef(null);
 
-    const scrollContainerStyle = {
-        position: 'relative',
-        height: '440px',
-        overflow: 'hidden',
-        // backgroundColor: '#000',
-        backgroundColor: bgColor,
-
-        color: '#fff'
-    };
+    const textRef = useRef(null);
+    const contentRefs = useRef([]);
 
     useEffect(() => {
         socketRef.current = io();
@@ -56,9 +35,7 @@ const ScrollViewforcasparcg = () => {
         socketRef.current.on("storyLines2", (data) => {
             setStoryLines(data);
         });
-        socketRef.current.on("newPosition2", (data) => {
-            setNewPosition(data);
-        });
+
         socketRef.current.on("setCurrentStoryNumber2", (data) => {
             setCurrentStoryNumber(data);
         })
@@ -68,12 +45,8 @@ const ScrollViewforcasparcg = () => {
         })
 
         socketRef.current.on("setSlugs2", (data) => {
-            setSlugsLength(data);
+            setSlugs(data);
         })
-
-        socketRef.current.on("setFontSize2", (data) => {
-            setFontSize(data);
-        });
 
         socketRef.current.on("setStartPosition2", (data) => {
             setStartPosition(data);
@@ -90,10 +63,6 @@ const ScrollViewforcasparcg = () => {
             setIsRTL(data);
         });
 
-        socketRef.current.on("bgColor2", (data) => {
-            setbgColor(data);
-        });
-
         socketRef.current.on("fontColor2", (data) => {
             setFontColor(data);
         });
@@ -103,76 +72,41 @@ const ScrollViewforcasparcg = () => {
         socketRef.current.on("currentFont2", (data) => {
             setCurrentFont(data);
         });
+        socketRef.current.on("scrollContainerStyle2", (data) => {
+            setScrollContainerStyle(data);
+        });
 
+        socketRef.current.on("scrollingTextStyle2", (data) => {
+            setScrollingTextStyle(data);
+        });
 
         return () => {
-            // socketRef.current.disconnect();
             socketRef.current.off("crossedLines2");
             socketRef.current.off("storyLines2");
-            socketRef.current.off("newPosition2");
             socketRef.current.off("setCurrentStoryNumber2");
             socketRef.current.off("allContent2");
             socketRef.current.off("setSlugs2");
-
-            socketRef.current.off("setFontSize2");
             socketRef.current.off("setStartPosition2");
             socketRef.current.off("rtl2");
             socketRef.current.off("rbgColor2tl2");
             socketRef.current.off("fontColor2");
             socketRef.current.off("fontBold2");
             socketRef.current.off("currentFont2");
+            socketRef.current.off("scrollContainerStyle2");
+            socketRef.current.off("scrollingTextStyle2");
 
             socketRef.current = null;
         };
     }, []);
 
-    const scrollingTextStyle = {
-        position: 'absolute',
-        // top: parseFloat(newPosition),
-        transform: `translateY(${newPosition}px)`,
-        willChange: 'transform',
-        minWidth: 702,
-        maxWidth: 702,
-        // textAlign: 'left',
-        padding: '0 40px',
-        whiteSpace: 'pre-wrap',
-        fontSize: parseInt(fontSize),
-        // lineHeight: `${fontSize * 1.5}px` 
-        lineHeight: `${Math.floor(fontSize * 1.5)}px` // Removes decimal part
-    };
-
-
-    return (<div>
-
-        <div style={{ maxWidth: scrollWidth, minWidth: scrollWidth, backgroundColor: 'lightgray', color: 'blue', fontSize: 18, fontWeight: 'bolder' }}>
-            <div style={{ backgroundColor: 'lightgreen', width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%` }}>
-                <div style={{ display: 'flex', justifyContent: 'space-around', width: scrollWidth }}>
-                    <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugsLength})`}</div>
-                    <div>{newsReaderText}</div>
-                    <div><Count currentStoryNumber={currentStoryNumber} /></div>
-                    <div>ScrollView</div>
-                    <div>{showClock ? '' : '.'}</div>
-                    <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
-                    <div >{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
-                </div>
-            </div>
-        </div>
-
-        <div style={scrollContainerStyle}>
-            <div style={scrollingTextStyle}>
-                {allContent.map((content, i) => (
-                    <div dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'} key={i} style={{ fontFamily: (i % 3 === 1) ? currentFont : '', backgroundColor: i % 3 === 0 ? 'blue' : 'transparent', color: i % 3 === 0 ? 'yellow' : fontColor, fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal' }}>
-                        {content}
-                    </div>
-                ))}
-            </div>
-            <div style={{ position: 'absolute', top: parseInt(startPosition) - 20 }}>
-                <Triangles />
-            </div>
-        </div>
+    return (<div style={{
+        marginTop: -8,
+        marginLeft: -8,
+    }} >
+        {/* {textRef}
+        ddd */}
+        <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} contentRefs={contentRefs} textRef={textRef} />
     </div>
-
     )
 }
-
 export default ScrollViewforcasparcg
