@@ -1,5 +1,5 @@
 "use client";
-import { fontLists } from "./common.js";
+import { fontLists, fixdata } from "./common.js";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import NewWindow from "./components/NewWindow";
@@ -13,7 +13,6 @@ import { changenewdatabase } from './store/store'; // Adjust the path as needed
 import mammoth from 'mammoth';
 import 'react-tabs/style/react-tabs.css';
 import { UseSocketControls } from "./components/UseSocketControls";
-import { fixdata } from './fixdata.js';
 
 const scrollHeight = 460;
 const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
