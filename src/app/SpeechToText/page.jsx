@@ -3,7 +3,7 @@ import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognitio
 import { useState, useEffect, useCallback, useRef } from "react";
 
 import { languagelist } from '../components/languagelist.js';
-import { languages } from '../components/languages.js';
+import { languages } from '../common.js';
 
 
 
