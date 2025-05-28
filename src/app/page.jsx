@@ -107,7 +107,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (window.location.origin.contains('vercel')) {
+    if (!window.location.origin.includes('vercel')) {
       fetch('/api/fonts')
         .then((res) => res.json())
         .then((data) => setFontList(data.fonts))
