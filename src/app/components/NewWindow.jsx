@@ -53,21 +53,6 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
         console.log('Right-click detected, flipping content');
 
         const screenWidth = newWindowRef.current.screen.width;
-
-        // const knownOrigins = {
-        //     1920: 1350,
-        //     1680: 530,
-        //     1600: 523,
-        //     1440: 505,
-        //     1366: 495,
-        //     1360: 495,
-        //     1280: 483,
-        //     1176: 466,
-        //     1152: 462,
-        //     1024: 440,
-        //     800: 392,
-        // };
-
         const knownOrigins = {
             1920: 1350,
             1680: 1305,
