@@ -198,7 +198,6 @@ export default function Home() {
     updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate, prompterId);
   }, [useDB, currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate, prompterId]);
 
-
   const handleDateChange = (event) => {
     const date = event.target.value;
     setSelectedDate(date)
@@ -206,37 +205,6 @@ export default function Home() {
     setSpeed(0);
     setDoubleClickedPosition(0);
   };
-
-  useEffect(() => {
-    readFile(file);
-  }, [singleScript, file, readFile])
-
-
-
-
-
-  useEffect(() => {
-    // Event listener function
-    const handleKeyPress = (event) => {
-      if (event.key === 'Enter') {
-        handleDoubleClick(parseInt(keyPressed) - 1);
-        setKeyPressed('');
-      }
-      else {
-        if (!isNaN(event.key)) {
-          setKeyPressed(val => val + event.key);
-        }
-      }
-    };
-
-    // Add event listener on mount
-    window.addEventListener('keydown', handleKeyPress);
-
-    // Cleanup event listener on unmount
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [keyPressed, handleDoubleClick]); // Empty dependency array ensures it runs only once when component mounts
 
   const changeDB_NAME = async () => {
     try {
@@ -461,25 +429,7 @@ export default function Home() {
     fetchNewsId()
   }, []);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch(
-          `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
-        );
-        const data = await res.json();
-        setSlugs(data.data);
-        setUsedStory([data.data[0]?.ScriptID]);
-        fetchAllContent(data.data, 0);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    if (selectedRunOrderTitle) {
-      fetchData();
-      setCurrentStoryNumber(1);
-    }
-  }, [selectedRunOrderTitle, selectedDate, fetchAllContent]);
+
 
   const isVideoNndCGPresent = useCallback((slug) => {
     if (!useDB && file) return ""; // Handle single script case
@@ -623,13 +573,15 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (slugs[currentStoryNumber - 1]?.DropStory === 1 || slugs[currentStoryNumber - 1]?.DropStory === 3) {
-      return;
-    }
-    const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
-    const uniqueStories = [...new Set(updatedStories.filter((item) => item !== null))];
-    setUsedStory(uniqueStories);
+    const slug = slugs[currentStoryNumber - 1];
+    if (!slug || slug.DropStory === 1 || slug.DropStory === 3) return;
+
+    const newScriptID = slug.ScriptID;
+    if (!newScriptID || usedStory.includes(newScriptID)) return;
+
+    setUsedStory(prev => [...prev, newScriptID]);
   }, [currentStoryNumber, slugs, usedStory]);
+
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -911,6 +863,53 @@ export default function Home() {
       .then(res => res.json())
       .then(data => setIp(data.ip))
   }, [])
+
+  useEffect(() => {
+    readFile(file);
+  }, [singleScript, file, readFile])
+
+  useEffect(() => {
+    // Event listener function
+    const handleKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        handleDoubleClick(parseInt(keyPressed) - 1);
+        setKeyPressed('');
+      }
+      else {
+        if (!isNaN(event.key)) {
+          setKeyPressed(val => val + event.key);
+        }
+      }
+    };
+
+    // Add event listener on mount
+    window.addEventListener('keydown', handleKeyPress);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [keyPressed, handleDoubleClick]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch(
+          `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
+        );
+        const data = await res.json();
+        setSlugs(data.data);
+        setUsedStory([data.data[0]?.ScriptID]);
+        fetchAllContent(data.data, 0);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    if (selectedRunOrderTitle) {
+      fetchData();
+      setCurrentStoryNumber(1);
+    }
+  }, [selectedRunOrderTitle, selectedDate, fetchAllContent]);
 
   return (
     <div style={{ overflow: "hidden", backgroundColor: '#e0e0d2', }}>
