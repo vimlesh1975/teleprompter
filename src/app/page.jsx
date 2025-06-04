@@ -1515,7 +1515,7 @@ export default function Home() {
                 {showNewWindow3 ? "Close Full Screen" : "Open Full Screen"}
               </button>
               <button onClick={() => {
-                window.open('/CasparcgOutput2', '', `width=${scrollWidth},height=${scrollHeight + 40}`);
+                window.open('/WebSocketOutput', '', `width=${scrollWidth},height=${scrollHeight + 40}`);
                 setTimeout(() => {
 
                   const socket = socketRef.current;
@@ -1542,7 +1542,7 @@ export default function Home() {
                   socket.emit('scrollingTextStyle', scrollingTextStyle);
 
                 }, 3000);
-              }}>Test</button>
+              }}>WebSocketOutput</button>
             </div>
 
             <button onClick={() => setShowSettings(val => !val)}>{showSettings ? 'Hide Setting' : 'Show Setting'}</button>
