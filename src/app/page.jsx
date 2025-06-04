@@ -148,8 +148,6 @@ export default function Home() {
         'value' in event.data
       ) {
         if (focusedInput) {
-          const aa = currentSlug;
-
           if (event.data.replace) {
             const updatedSlugs = [...slugs];
             updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: event.data.value }; // Modify the object at index i
@@ -172,7 +170,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('message', messageHandler);
     };
-  }, [focusedInput, useDB, file]);
+  }, [focusedInput, useDB, file, currentSlug, slugs]);
 
 
 
@@ -187,12 +185,12 @@ export default function Home() {
 
     })
       .then(response => response.json())
-      .then(data => {
+      .then(() => {
       })
       .catch(error => {
         console.error('Error:', error);
       });
-  }, [sendUsedStory, prompterId]);
+  }, [sendUsedStory]);
 
   useEffect(() => {
     if (!slugs) return;
@@ -211,7 +209,7 @@ export default function Home() {
 
   useEffect(() => {
     readFile(file);
-  }, [singleScript])
+  }, [singleScript, file, readFile])
 
 
 
@@ -238,7 +236,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [keyPressed]); // Empty dependency array ensures it runs only once when component mounts
+  }, [keyPressed, handleDoubleClick]); // Empty dependency array ensures it runs only once when component mounts
 
   const changeDB_NAME = async () => {
     try {
@@ -283,6 +281,7 @@ export default function Home() {
     getDB_NAME();
   }, [])
 
+  // Read from localStorage ONLY ONCE when component mounts
   useEffect(() => {
     const savedData = localStorage.getItem("WebTelePrompter");
     if (savedData) {
@@ -309,24 +308,30 @@ export default function Home() {
       if (dataObject.currentFont !== undefined) {
         setCurrentFont(dataObject.currentFont);
       }
-    } else {
-      localStorage.setItem(
-        "WebTelePrompter",
-        JSON.stringify({ fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont })
-      );
     }
-  }, []);
+  }, []); // ⬅️ Run only once on mount
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       const savedData = localStorage.getItem("WebTelePrompter");
       const dataObject = savedData ? JSON.parse(savedData) : {};
 
       localStorage.setItem(
         "WebTelePrompter",
-        JSON.stringify({ ...dataObject, fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont })
+        JSON.stringify({
+          ...dataObject,
+          fontSize,
+          startPosition,
+          isRTL,
+          bgColor,
+          fontColor,
+          fontBold,
+          currentFont,
+        })
       );
-    }, 1000);
+    }, 500); // shorter debounce is usually enough
+
+    return () => clearTimeout(timeoutId); // cleanup previous timeout if values change rapidly
   }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont]);
 
   const handleCloseNewWindow = () => {
@@ -474,9 +479,9 @@ export default function Home() {
       fetchData();
       setCurrentStoryNumber(1);
     }
-  }, [selectedRunOrderTitle, selectedDate]);
+  }, [selectedRunOrderTitle, selectedDate, fetchAllContent]);
 
-  const isVideoNndCGPresent = (slug) => {
+  const isVideoNndCGPresent = useCallback((slug) => {
     if (!useDB && file) return ""; // Handle single script case
     if (!slug) return "No visuals"; // Handle undefined slug
 
@@ -497,10 +502,10 @@ export default function Home() {
       aa = `, (${totalCount} Visuals)`;
     }
     return `${aa} (${(slug.graphicsid) ? slug.graphicsid : 'No CG'})`;
-  };
+  }, [useDB, newdatabase, file]);
 
 
-  const fetchAllContent = (slicedSlugs, startNumber) => {
+  const fetchAllContent = useCallback((slicedSlugs, startNumber) => {
     if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
       return;
     }
@@ -526,7 +531,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching content:", error);
     }
-  };
+  }, [allowUnApproved, isVideoNndCGPresent]);
 
   const handleSelectionChange = (e) => {
     setSpeed(0);
@@ -539,7 +544,7 @@ export default function Home() {
     }
   };
 
-  const handleDoubleClick = (i) => {
+  const handleDoubleClick = useCallback((i) => {
     if (i === 0) {
       setUsedStory(val => [...val, slugs[0]?.ScriptID]);
     }
@@ -554,7 +559,9 @@ export default function Home() {
       setDoubleClickedPosition(i);
       setNewPosition(startPosition);
     }
-  };
+  }, [slugs, startPosition, fetchAllContent]);
+
+
   const fromStart = () => {
     setCurrentSlug(0);
     handleDoubleClick(0);
@@ -598,7 +605,7 @@ export default function Home() {
       handleDoubleClick(newIndex);
       return newIndex;
     });
-  }, [slugs, handleDoubleClick]);
+  }, [slugs, handleDoubleClick, allowUnApproved,]);
 
   useEffect(() => {
     if (!useDB) { return }
@@ -622,7 +629,7 @@ export default function Home() {
     const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
     const uniqueStories = [...new Set(updatedStories.filter((item) => item !== null))];
     setUsedStory(uniqueStories);
-  }, [currentStoryNumber]);
+  }, [currentStoryNumber, slugs, usedStory]);
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -714,7 +721,7 @@ export default function Home() {
       return 2;
     }
   }
-  const readFile = (selectedFile) => {
+  const readFile = useCallback((selectedFile) => {
     if (!selectedFile) return;
     const reader = new FileReader();
     let bb = [];
@@ -796,7 +803,7 @@ export default function Home() {
       };
       reader.readAsText(selectedFile);
     }
-  };
+  }, [singleScript]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -897,7 +904,7 @@ export default function Home() {
 
       socket.disconnect();
     }
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     fetch('/api/getlocalip')
@@ -978,7 +985,7 @@ export default function Home() {
                   title={(val.DropStory === 0 || val.DropStory === 2) ? 'Uncheck to Drop' : 'Check to Include'}
                   type="checkbox"
                   checked={val.DropStory === 0 || val.DropStory === 2}
-                  onChange={(e) => {
+                  onChange={() => {
                     // Correctly updating the array
                     const updatedSlugs = [...slugs]; // Create a copy of the array
                     updatedSlugs[i] = { ...updatedSlugs[i], DropStory: dropStoryValue(val) }; // Modify the object at index i
@@ -1240,7 +1247,6 @@ export default function Home() {
                     fontWeight: fontBold ? 'bold' : 'normal',
                   }}
                   onChange={(e) => {
-                    const aa = currentSlug;
                     const updatedSlugs = [...slugs]; // Create a copy of the array
                     updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
                     setSlugs(updatedSlugs);

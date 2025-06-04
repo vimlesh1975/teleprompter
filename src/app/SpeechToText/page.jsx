@@ -126,7 +126,7 @@ function SpeechToText() {
 
             </div>
             <div>
-                <span> Put to Script: </span> <input type="checkbox" checked={directtoScript} onChange={e => {
+                <span> Put to Script: </span> <input type="checkbox" checked={directtoScript} onChange={() => {
                     setDirecttoScript(val => !val);
                     resetTranscript();
                 }} />
