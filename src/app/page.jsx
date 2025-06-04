@@ -896,6 +896,7 @@ export default function Home() {
   }, [keyPressed, handleDoubleClick]);
 
   useEffect(() => {
+    if (!useDB) return;
     async function fetchData() {
       try {
         const res = await fetch(
@@ -913,7 +914,7 @@ export default function Home() {
       fetchData();
       setCurrentStoryNumber(1);
     }
-  }, [selectedRunOrderTitle, selectedDate, fetchAllContent]);
+  }, [useDB, selectedRunOrderTitle, selectedDate, fetchAllContent]);
 
   return (
     <div style={{ overflow: "hidden", backgroundColor: '#e0e0d2', }}>
