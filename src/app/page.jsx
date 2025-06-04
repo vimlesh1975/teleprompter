@@ -27,7 +27,7 @@ export default function Home() {
   const [fontList, setFontList] = useState(fontLists);
   const [currentFont, setCurrentFont] = useState("Times New Roman");
   const [isRTL, setIsRTL] = useState(false);
-  const [bgColor, setbgColor] = useState('black');
+  const [bgColor, setbgColor] = useState('#000000');
   const [fontColor, setFontColor] = useState('#ffffff');
   const [fontBold, setFontBold] = useState(false);
   const socketRef = useRef(null);
@@ -122,11 +122,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const addr = `${window.location.origin}/SpeechToText`;
-    if (iframeRef.current) {
-      iframeRef.current.src = addr;
+    if (file) {
+      const addr = `${window.location.origin}/SpeechToText`;
+      if (iframeRef.current) {
+        iframeRef.current.src = addr;
+      }
     }
+  }, [file])
 
+  useEffect(() => {
     const handleFocus = (event) => {
       if (textarea1Ref.current) textarea1Ref.current.style.borderColor = 'red';
       event.target.style.borderColor = 'red';
@@ -1269,12 +1273,10 @@ export default function Home() {
             {!useDB && file && <div><button onClick={saveScript}>Save Script</button></div>}
 
             <TTS content={slugs ? slugs[currentSlug]?.Script : ''} />
-            {/* <SpeechToText /> */}
             {file && <iframe
               ref={iframeRef}
               width="750"
               height="40"
-              // style={{ border: '1px solid black' }}
               allow="microphone"
               title="External Content"
             ></iframe>}
