@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
-import {config, newdatabase} from '../db.js';
+import { config, newdatabase } from '../db.js';
 
-export async function GET(req) {
+export async function GET() {
   let connection;
   try {
     connection = await mysql.createConnection(config);

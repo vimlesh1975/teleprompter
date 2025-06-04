@@ -19,10 +19,10 @@ function NewWindow({ children, onClose, newWindowRef, scrollWidth, scrollHeight 
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, []);
+    }, [newWindowRef]);
 
 
-    const handleTitleBarDoubleClick = (e) => {
+    const handleTitleBarDoubleClick = () => {
         newWindowRef.current.resizeTo(newWindowRef.current.screen.width, newWindowRef.current.screen.height);
         newWindowRef.current.moveTo(0, 0);
 
