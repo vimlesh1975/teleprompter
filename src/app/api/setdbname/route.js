@@ -4,12 +4,12 @@ import path from 'path';
 // Load environment variables from .env.local
 dotenv.config({ path: '.env.local' });
 
-export async function GET(req) {
+export async function GET() {
     try {
         const DB_NAME = process.env.DB_NAME;
         const DB_HOST = process.env.DB_HOST;
         const CASPAR_HOST = process.env.CASPAR_HOST;
-        return new Response(JSON.stringify({ DB_NAME , DB_HOST, CASPAR_HOST}), {
+        return new Response(JSON.stringify({ DB_NAME, DB_HOST, CASPAR_HOST }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
@@ -24,7 +24,7 @@ export async function GET(req) {
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { DB_NAME, DB_HOST , CASPAR_HOST} = body;
+        const { DB_NAME, DB_HOST, CASPAR_HOST } = body;
         console.log(body)
 
         const envFilePath = path.resolve(process.cwd(), '.env.local');

@@ -148,8 +148,6 @@ export default function Home() {
         'value' in event.data
       ) {
         if (focusedInput) {
-          const aa = currentSlug;
-
           if (event.data.replace) {
             const updatedSlugs = [...slugs];
             updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: event.data.value }; // Modify the object at index i
@@ -172,7 +170,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('message', messageHandler);
     };
-  }, [focusedInput, useDB, file]);
+  }, [focusedInput, useDB, file, currentSlug, slugs]);
 
 
 
@@ -187,19 +185,18 @@ export default function Home() {
 
     })
       .then(response => response.json())
-      .then(data => {
+      .then(() => {
       })
       .catch(error => {
         console.error('Error:', error);
       });
-  }, [sendUsedStory, prompterId]);
+  }, [sendUsedStory]);
 
   useEffect(() => {
     if (!slugs) return;
     if (!useDB) return;
     updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate, prompterId);
   }, [useDB, currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate, prompterId]);
-
 
   const handleDateChange = (event) => {
     const date = event.target.value;
@@ -208,37 +205,6 @@ export default function Home() {
     setSpeed(0);
     setDoubleClickedPosition(0);
   };
-
-  useEffect(() => {
-    readFile(file);
-  }, [singleScript])
-
-
-
-
-
-  useEffect(() => {
-    // Event listener function
-    const handleKeyPress = (event) => {
-      if (event.key === 'Enter') {
-        handleDoubleClick(parseInt(keyPressed) - 1);
-        setKeyPressed('');
-      }
-      else {
-        if (!isNaN(event.key)) {
-          setKeyPressed(val => val + event.key);
-        }
-      }
-    };
-
-    // Add event listener on mount
-    window.addEventListener('keydown', handleKeyPress);
-
-    // Cleanup event listener on unmount
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [keyPressed]); // Empty dependency array ensures it runs only once when component mounts
 
   const changeDB_NAME = async () => {
     try {
@@ -283,6 +249,7 @@ export default function Home() {
     getDB_NAME();
   }, [])
 
+  // Read from localStorage ONLY ONCE when component mounts
   useEffect(() => {
     const savedData = localStorage.getItem("WebTelePrompter");
     if (savedData) {
@@ -309,24 +276,30 @@ export default function Home() {
       if (dataObject.currentFont !== undefined) {
         setCurrentFont(dataObject.currentFont);
       }
-    } else {
-      localStorage.setItem(
-        "WebTelePrompter",
-        JSON.stringify({ fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont })
-      );
     }
-  }, []);
+  }, []); // ⬅️ Run only once on mount
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       const savedData = localStorage.getItem("WebTelePrompter");
       const dataObject = savedData ? JSON.parse(savedData) : {};
 
       localStorage.setItem(
         "WebTelePrompter",
-        JSON.stringify({ ...dataObject, fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont })
+        JSON.stringify({
+          ...dataObject,
+          fontSize,
+          startPosition,
+          isRTL,
+          bgColor,
+          fontColor,
+          fontBold,
+          currentFont,
+        })
       );
-    }, 1000);
+    }, 500); // shorter debounce is usually enough
+
+    return () => clearTimeout(timeoutId); // cleanup previous timeout if values change rapidly
   }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont]);
 
   const handleCloseNewWindow = () => {
@@ -456,27 +429,9 @@ export default function Home() {
     fetchNewsId()
   }, []);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch(
-          `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
-        );
-        const data = await res.json();
-        setSlugs(data.data);
-        setUsedStory([data.data[0]?.ScriptID]);
-        fetchAllContent(data.data, 0);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    if (selectedRunOrderTitle) {
-      fetchData();
-      setCurrentStoryNumber(1);
-    }
-  }, [selectedRunOrderTitle, selectedDate]);
 
-  const isVideoNndCGPresent = (slug) => {
+
+  const isVideoNndCGPresent = useCallback((slug) => {
     if (!useDB && file) return ""; // Handle single script case
     if (!slug) return "No visuals"; // Handle undefined slug
 
@@ -497,10 +452,10 @@ export default function Home() {
       aa = `, (${totalCount} Visuals)`;
     }
     return `${aa} (${(slug.graphicsid) ? slug.graphicsid : 'No CG'})`;
-  };
+  }, [useDB, newdatabase, file]);
 
 
-  const fetchAllContent = (slicedSlugs, startNumber) => {
+  const fetchAllContent = useCallback((slicedSlugs, startNumber) => {
     if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
       return;
     }
@@ -526,7 +481,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching content:", error);
     }
-  };
+  }, [allowUnApproved, isVideoNndCGPresent]);
 
   const handleSelectionChange = (e) => {
     setSpeed(0);
@@ -539,7 +494,7 @@ export default function Home() {
     }
   };
 
-  const handleDoubleClick = (i) => {
+  const handleDoubleClick = useCallback((i) => {
     if (i === 0) {
       setUsedStory(val => [...val, slugs[0]?.ScriptID]);
     }
@@ -554,7 +509,9 @@ export default function Home() {
       setDoubleClickedPosition(i);
       setNewPosition(startPosition);
     }
-  };
+  }, [slugs, startPosition, fetchAllContent]);
+
+
   const fromStart = () => {
     setCurrentSlug(0);
     handleDoubleClick(0);
@@ -598,7 +555,7 @@ export default function Home() {
       handleDoubleClick(newIndex);
       return newIndex;
     });
-  }, [slugs, handleDoubleClick]);
+  }, [slugs, handleDoubleClick, allowUnApproved,]);
 
   useEffect(() => {
     if (!useDB) { return }
@@ -616,13 +573,15 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (slugs[currentStoryNumber - 1]?.DropStory === 1 || slugs[currentStoryNumber - 1]?.DropStory === 3) {
-      return;
-    }
-    const updatedStories = [...usedStory, slugs[currentStoryNumber - 1]?.ScriptID];
-    const uniqueStories = [...new Set(updatedStories.filter((item) => item !== null))];
-    setUsedStory(uniqueStories);
-  }, [currentStoryNumber]);
+    const slug = slugs[currentStoryNumber - 1];
+    if (!slug || slug.DropStory === 1 || slug.DropStory === 3) return;
+
+    const newScriptID = slug.ScriptID;
+    if (!newScriptID || usedStory.includes(newScriptID)) return;
+
+    setUsedStory(prev => [...prev, newScriptID]);
+  }, [currentStoryNumber, slugs, usedStory]);
+
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -714,7 +673,7 @@ export default function Home() {
       return 2;
     }
   }
-  const readFile = (selectedFile) => {
+  const readFile = useCallback((selectedFile) => {
     if (!selectedFile) return;
     const reader = new FileReader();
     let bb = [];
@@ -796,7 +755,7 @@ export default function Home() {
       };
       reader.readAsText(selectedFile);
     }
-  };
+  }, [singleScript]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -897,13 +856,60 @@ export default function Home() {
 
       socket.disconnect();
     }
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     fetch('/api/getlocalip')
       .then(res => res.json())
       .then(data => setIp(data.ip))
   }, [])
+
+  useEffect(() => {
+    readFile(file);
+  }, [singleScript, file, readFile])
+
+  useEffect(() => {
+    // Event listener function
+    const handleKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        handleDoubleClick(parseInt(keyPressed) - 1);
+        setKeyPressed('');
+      }
+      else {
+        if (!isNaN(event.key)) {
+          setKeyPressed(val => val + event.key);
+        }
+      }
+    };
+
+    // Add event listener on mount
+    window.addEventListener('keydown', handleKeyPress);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [keyPressed, handleDoubleClick]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch(
+          `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
+        );
+        const data = await res.json();
+        setSlugs(data.data);
+        setUsedStory([data.data[0]?.ScriptID]);
+        fetchAllContent(data.data, 0);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    if (selectedRunOrderTitle) {
+      fetchData();
+      setCurrentStoryNumber(1);
+    }
+  }, [selectedRunOrderTitle, selectedDate, fetchAllContent]);
 
   return (
     <div style={{ overflow: "hidden", backgroundColor: '#e0e0d2', }}>
@@ -978,7 +984,7 @@ export default function Home() {
                   title={(val.DropStory === 0 || val.DropStory === 2) ? 'Uncheck to Drop' : 'Check to Include'}
                   type="checkbox"
                   checked={val.DropStory === 0 || val.DropStory === 2}
-                  onChange={(e) => {
+                  onChange={() => {
                     // Correctly updating the array
                     const updatedSlugs = [...slugs]; // Create a copy of the array
                     updatedSlugs[i] = { ...updatedSlugs[i], DropStory: dropStoryValue(val) }; // Modify the object at index i
@@ -1240,7 +1246,6 @@ export default function Home() {
                     fontWeight: fontBold ? 'bold' : 'normal',
                   }}
                   onChange={(e) => {
-                    const aa = currentSlug;
                     const updatedSlugs = [...slugs]; // Create a copy of the array
                     updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
                     setSlugs(updatedSlugs);
@@ -1510,7 +1515,7 @@ export default function Home() {
                 {showNewWindow3 ? "Close Full Screen" : "Open Full Screen"}
               </button>
               <button onClick={() => {
-                window.open('/CasparcgOutput2', '', `width=${scrollWidth},height=${scrollHeight + 40}`);
+                window.open('/WebSocketOutput', '', `width=${scrollWidth},height=${scrollHeight + 40}`);
                 setTimeout(() => {
 
                   const socket = socketRef.current;
@@ -1537,7 +1542,7 @@ export default function Home() {
                   socket.emit('scrollingTextStyle', scrollingTextStyle);
 
                 }, 3000);
-              }}>Test</button>
+              }}>WebSocketOutput</button>
             </div>
 
             <button onClick={() => setShowSettings(val => !val)}>{showSettings ? 'Hide Setting' : 'Show Setting'}</button>
