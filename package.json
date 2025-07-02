@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx next lint && nodemon server.js",
+    "dev": "npx next lint && nodemon --watch .env.local server.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
