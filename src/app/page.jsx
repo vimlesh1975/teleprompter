@@ -23,6 +23,7 @@ const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
 const dummyScriptid = 200502071223160;
 
 export default function Home() {
+  const [showDropControl, setShowDropControl] = useState(true)
   const [ip, setIp] = useState(null)
   const [fontList, setFontList] = useState(fontLists);
   const [currentFont, setCurrentFont] = useState("Times New Roman");
@@ -280,6 +281,9 @@ export default function Home() {
       if (dataObject.currentFont !== undefined) {
         setCurrentFont(dataObject.currentFont);
       }
+      if (dataObject.showDropControl !== undefined) {
+        setShowDropControl(dataObject.showDropControl);
+      }
     }
   }, []); // ⬅️ Run only once on mount
 
@@ -299,12 +303,13 @@ export default function Home() {
           fontColor,
           fontBold,
           currentFont,
+          showDropControl
         })
       );
     }, 500); // shorter debounce is usually enough
 
     return () => clearTimeout(timeoutId); // cleanup previous timeout if values change rapidly
-  }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont]);
+  }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont, showDropControl]);
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
@@ -985,30 +990,32 @@ export default function Home() {
                 }}
               >
                 {/* {val.DropStory} */}
-                <input
-                  title={(val.DropStory === 0 || val.DropStory === 2) ? 'Uncheck to Drop' : 'Check to Include'}
-                  type="checkbox"
-                  checked={val.DropStory === 0 || val.DropStory === 2}
-                  onChange={() => {
-                    // Correctly updating the array
-                    const updatedSlugs = [...slugs]; // Create a copy of the array
-                    updatedSlugs[i] = { ...updatedSlugs[i], DropStory: dropStoryValue(val) }; // Modify the object at index i
-                    setSlugs(updatedSlugs); // Update state with the modified array
-                    fetch('/api/setDropedStory', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ dropstory: dropStoryValue(val), ScriptID: val.ScriptID, bulletindate: selectedDate, bulletinname: selectedRunOrderTitle, prompterId }),
-                    })
-                      .then(response => response.json())
-                      .then(data => {
-                        console.log('Success:', data);
+                {showDropControl &&
+                  <input
+                    title={(val.DropStory === 0 || val.DropStory === 2) ? 'Uncheck to Drop' : 'Check to Include'}
+                    type="checkbox"
+                    checked={val.DropStory === 0 || val.DropStory === 2}
+                    onChange={() => {
+                      // Correctly updating the array
+                      const updatedSlugs = [...slugs]; // Create a copy of the array
+                      updatedSlugs[i] = { ...updatedSlugs[i], DropStory: dropStoryValue(val) }; // Modify the object at index i
+                      setSlugs(updatedSlugs); // Update state with the modified array
+                      fetch('/api/setDropedStory', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ dropstory: dropStoryValue(val), ScriptID: val.ScriptID, bulletindate: selectedDate, bulletinname: selectedRunOrderTitle, prompterId }),
                       })
-                      .catch(error => {
-                        console.error('Error:', error);
-                      });
+                        .then(response => response.json())
+                        .then(data => {
+                          console.log('Success:', data);
+                        })
+                        .catch(error => {
+                          console.error('Error:', error);
+                        });
 
-                  }}
-                />
+                    }}
+                  />
+                }
                 <span title={'ScriptID:-' + val.ScriptID} style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
                 <label
                   title={
@@ -1621,6 +1628,18 @@ export default function Home() {
 
               </div>
               <div>
+
+                <label>
+                  {" "}
+                  <input
+                    type="checkbox"
+                    checked={showDropControl}
+                    onChange={(e) => setShowDropControl(e.target.checked)}
+                  />
+                  <span>show Drop Control</span>
+                </label>
+                {" "}
+
                 Bg Color <input type="color" value={bgColor} onChange={e => {
                   setbgColor(e.target.value);
                   socketRef.current.emit('bgColor', e.target.value);
