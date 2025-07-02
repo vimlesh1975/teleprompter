@@ -292,6 +292,7 @@ export default function Home() {
       const savedData = localStorage.getItem("WebTelePrompter");
       const dataObject = savedData ? JSON.parse(savedData) : {};
 
+
       localStorage.setItem(
         "WebTelePrompter",
         JSON.stringify({
