@@ -839,7 +839,7 @@ export default function Home() {
       setServerAlive(false);
     });
 
-    socket.on('speed2', data => {
+    socket.on('speedFromMobile2', data => {
       setSpeed(data);
     });
 
@@ -860,7 +860,7 @@ export default function Home() {
       socket.off("databaseConnection");
       socket.off("connect_error");
       socket.off("disconnect");
-      socket.off("speed2");
+      socket.off("speedFromMobile2");
       socket.off("next2");
       socket.off("fromStart2");
 
@@ -1392,6 +1392,7 @@ export default function Home() {
                 ++1
               </button>
               <button
+                style={{ width: 60 }}
                 onClick={() => {
                   if (speed === 0) {
                     setSpeed(tempSpeed);
@@ -1420,8 +1421,12 @@ export default function Home() {
                 type="range"
                 min={-20}
                 max={20}
+                step={1}
                 value={speed}
-                onChange={(e) => setSpeed(e.target.value)}
+                onChange={(e) => {
+                  console.log("CHANGE", e.target.value);
+                  setSpeed(Number(e.target.value));
+                }}
                 style={{ width: "60%" }}
               />
             </div>

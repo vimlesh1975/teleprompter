@@ -5,7 +5,7 @@ import './controller.css' // import the css
 
 const Page = () => {
     const scrollwithSpeed = (data) => {
-        socket.emit('speed', data)
+        socket.emit('speedFromMobile', data)
     }
     const next = () => {
         socket.emit('next', '')

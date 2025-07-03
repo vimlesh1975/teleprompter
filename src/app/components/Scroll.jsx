@@ -125,6 +125,7 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
     };
 
     useEffect(() => {
+        if (!slugs) return;
         const storiesLines = [];
         for (let i = 0; i < slugs.length * 3; i += 3) {
             const totalLines =

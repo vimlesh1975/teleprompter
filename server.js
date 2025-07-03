@@ -135,8 +135,8 @@ app.prepare().then(async () => {
         //webrtc code ends
 
         //for mobile
-        socket.on('speed', (data) => {
-            io.emit('speed2', data);
+        socket.on('speedFromMobile', (data) => {
+            io.emit('speedFromMobile2', data);
         });
 
         socket.on('next', () => {
