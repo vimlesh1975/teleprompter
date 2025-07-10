@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
+export default function Home({ setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
   const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -15,48 +15,35 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
   useEffect(() => {
     socketRef.current = io();
 
-    socketRef.current.on('connect', () => {
-      console.log('SOCKET CONNECTED! from caparcg page', socketRef.current.id);
+    const socket = socketRef.current;
+
+    socket.on('connect', () => {
+      console.log('SOCKET CONNECTED! from casparcg page', socket.id);
     });
 
-    return () => {
-      socketRef.current.disconnect();
-      socketRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!socketRef.current) return;
-
-    socketRef.current.on('connect', () => {
-      console.log('SOCKET CONNECTED! form casparcg connection', socketRef.current.id);
-    });
-    socketRef.current.on('ServerConnectionStatus2', (msg) => {
+    socket.on('ServerConnectionStatus2', (msg) => {
       setConnected(msg);
     });
 
-    socketRef.current.on('currentStoryBroadcast', (data) => {
+    socket.on('currentStoryBroadcast', (data) => {
       setSocketcurrentstory(data);
     });
 
-    socketRef.current.on('connect_error', () => {
+    socket.on('connect_error', () => {
       setConnected(false);
     });
 
-    socketRef.current.on('disconnect', () => {
+    socket.on('disconnect', () => {
       console.log('Disconnected from server');
       setConnected(false);
     });
 
     return () => {
-      socketRef.current?.off('connect');
-      socketRef.current?.off('ServerConnectionStatus2');
-      socketRef.current?.off('currentStoryBroadcast');
-      socketRef.current?.off('ServerConnectconnect_errorionStatus2');
-      socketRef.current?.off('disconnect');
+      socket.disconnect();
+      socketRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const endpoint = async (str) => {
     const requestOptions = {
@@ -139,10 +126,8 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
             }
             }
           >
-            Normal Method
+            Start Teleprompting in Caspar with Normal Method
           </button>
-
-
         </div>
         <div>
           Method 2:
@@ -156,7 +141,7 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
             }
             }
           >
-            Screen Capture Method
+            Start Teleprompting in Caspar with Screen Capture Method
           </button>
 
 
@@ -174,6 +159,7 @@ export default function Home({ scrollingTextStyle, scrollContainerStyle, current
                   action: 'endpoint',
                   command: `mixer 1-97 clear`,
                 });
+                setAllContent([]);
               }
               }
             >

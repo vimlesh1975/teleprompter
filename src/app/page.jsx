@@ -1124,6 +1124,7 @@ export default function Home() {
             }}
           >
             <Casparcg
+              setAllContent={setAllContent}
               scrollingTextStyle={scrollingTextStyle}
               scrollContainerStyle={scrollContainerStyle}
               currentFont={currentFont}
