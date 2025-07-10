@@ -74,7 +74,7 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
     <div>
       <div>
         <div>
-          For Casparcg Output <button
+          {/* For Casparcg Output <button
             style={{ backgroundColor: connected ? 'green' : 'red' }}
             onClick={() =>
               endpoint({
@@ -83,8 +83,8 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
             }
           >
             Connect
-          </button>
-          <button
+          </button> */}
+          {/* <button
             onClick={() =>
               endpoint({
                 action: 'disconnect',
@@ -92,12 +92,12 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
             }
           >
             DisConnect
-          </button>
+          </button> */}
           <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
           {socketcurrentstory.ScriptID}
         </div>
         <div>
-          Method 1:
+          {/* Method 1: */}
           <button
             onClick={() => {
               endpoint({
@@ -130,7 +130,7 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
           </button>
         </div>
         <div>
-          Method 2:
+          {/* Method 2: */}
           <button
             onClick={() => {
               endpoint({
@@ -163,7 +163,7 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
               }
               }
             >
-              Stop Caspar Output
+              Stop  Output
             </button>
             <button
               onClick={() => {
