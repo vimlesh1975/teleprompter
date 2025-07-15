@@ -1131,6 +1131,7 @@ export default function Home() {
             }}
           >
             <Casparcg
+              handleDoubleClick={handleDoubleClick}
               setAllContent={setAllContent}
               scrollingTextStyle={scrollingTextStyle}
               scrollContainerStyle={scrollContainerStyle}

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
-export default function Home({ setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
+export default function Home({ handleDoubleClick, setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
   // const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
@@ -104,6 +104,7 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
                 action: 'endpoint',
                 command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
+              handleDoubleClick(0);
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
@@ -137,6 +138,8 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
                 action: 'endpoint',
                 command: `play 1-97 [html] http://${IP}:3000/webrtc.html`,
               });
+              handleDoubleClick(0);
+
               playOnSecondChannelinFlippedMode();
             }
             }
