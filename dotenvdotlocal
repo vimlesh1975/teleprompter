@@ -5,12 +5,12 @@ credentialsfromenv=1
 DB_HOST=103.196.4.141
 DB_USER=itmaint
 DB_PASSWORD=itddkchn
-# DB_NAME=nrcsnew
-DB_NAME=c1news
+DB_NAME=nrcsnew
+# DB_NAME=c1news
 CASPAR_HOST=127.0.0.1
 NEXT_PUBLIC_IP=localhost
-# NEWDATABASE=true
-NEWDATABASE=false
+NEWDATABASE=true
+# NEWDATABASE=false
 
 
 GOOGLE_APPLICATION_CREDENTIALS_JSON=`{
