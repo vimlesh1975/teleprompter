@@ -6,7 +6,6 @@ const IP = process.env.NEXT_PUBLIC_IP;
 
 export default function Home({ handleDoubleClick, setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
-  // const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
   const [socketcurrentstory, setSocketcurrentstory] = useState('not set');
 
@@ -21,21 +20,12 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
       console.log('SOCKET CONNECTED! from casparcg page', socket.id);
     });
 
-    // socket.on('ServerConnectionStatus2', (msg) => {
-    //   // setConnected(msg);
-    // });
-
     socket.on('currentStoryBroadcast', (data) => {
       setSocketcurrentstory(data);
     });
 
-    socket.on('connect_error', () => {
-      setConnected(false);
-    });
-
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
-      setConnected(false);
     });
 
     return () => {
@@ -55,7 +45,6 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
     };
     const aa = await fetch('/api/casparcg', requestOptions);
     if (str.action === 'connect' || str.action === 'disconnect') {
-      setConnected(await aa.json());
     }
   };
 
