@@ -941,10 +941,12 @@ export default function Home() {
                   onChange={handleDateChange}
                   disabled={!useDB}
                 />
-                <span title="Database Status"> {(serverAlive && (databaseConnection === 'true')) ? 'Database 🟢' : 'Database 🔴'}</span>
-
+                {/* <span title="Database Status"> {(serverAlive && (databaseConnection === 'true')) ? 'Database 🟢' : 'Database 🔴'}</span> */}
               </div>
+
             }
+            <span title="Database Status"> {(serverAlive && (databaseConnection === 'true')) ? 'Database 🟢' : 'Database 🔴'}</span>
+
           </div>
 
           <div>
