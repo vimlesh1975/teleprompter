@@ -284,6 +284,9 @@ export default function Home() {
       if (dataObject.showDropControl !== undefined) {
         setShowDropControl(dataObject.showDropControl);
       }
+      if (dataObject.allowUnApproved !== undefined) {
+        setAllowUnApproved(dataObject.allowUnApproved);
+      }
     }
   }, []); // ⬅️ Run only once on mount
 
@@ -304,13 +307,14 @@ export default function Home() {
           fontColor,
           fontBold,
           currentFont,
-          showDropControl
+          showDropControl,
+          allowUnApproved
         })
       );
     }, 500); // shorter debounce is usually enough
 
     return () => clearTimeout(timeoutId); // cleanup previous timeout if values change rapidly
-  }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont, showDropControl]);
+  }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont, showDropControl, allowUnApproved]);
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);

@@ -21,9 +21,9 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
       console.log('SOCKET CONNECTED! from casparcg page', socket.id);
     });
 
-    socket.on('ServerConnectionStatus2', (msg) => {
-      // setConnected(msg);
-    });
+    // socket.on('ServerConnectionStatus2', (msg) => {
+    //   // setConnected(msg);
+    // });
 
     socket.on('currentStoryBroadcast', (data) => {
       setSocketcurrentstory(data);
