@@ -100,11 +100,12 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
           {/* Method 1: */}
           <button
             onClick={() => {
+
               endpoint({
                 action: 'endpoint',
                 command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
-              handleDoubleClick(0);
+
 
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
@@ -124,8 +125,13 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
                 socketRef.current.emit('scrollingTextStyle', scrollingTextStyle);
 
               }, 3000);
+              setTimeout(() => {
+                handleDoubleClick(0);
+              }, 4000);
             }
+
             }
+
           >
             Start Teleprompting in Caspar with Normal Method
           </button>
