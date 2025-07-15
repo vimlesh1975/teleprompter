@@ -6,7 +6,7 @@ const IP = process.env.NEXT_PUBLIC_IP;
 
 export default function Home({ setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
 
-  const [connected, setConnected] = useState(false);
+  // const [connected, setConnected] = useState(false);
   const [fliped, setFliped] = useState(false);
   const [socketcurrentstory, setSocketcurrentstory] = useState('not set');
 
@@ -22,7 +22,7 @@ export default function Home({ setAllContent, scrollingTextStyle, scrollContaine
     });
 
     socket.on('ServerConnectionStatus2', (msg) => {
-      setConnected(msg);
+      // setConnected(msg);
     });
 
     socket.on('currentStoryBroadcast', (data) => {

@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise';
-import { config } from '../db.js';
+import { config, newdatabase } from '../db.js';
 import socket from '../socketClient.js';
 
 export async function POST(req) {
@@ -11,7 +11,7 @@ export async function POST(req) {
 
     let connection;
     try {
-        const query = `
+        const query = newdatabase ? `
             INSERT INTO currentstory (
                 prompterId, curstory, curbulletin, ScriptID, usedStory, bulletindate
             ) VALUES (?, ?, ?, ?, ?, ?)
@@ -21,16 +21,45 @@ export async function POST(req) {
                 ScriptID = VALUES(ScriptID),
                 usedStory = VALUES(usedStory),
                 bulletindate = VALUES(bulletindate)
+        `: `
+            INSERT INTO currentstory (
+                 curstory, curbulletin, ScriptID, curstorymanualro, curtime , curlinetext, curwidth
+            ) VALUES ( ?, ?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE 
+                curstory = VALUES(curstory),
+                curbulletin = VALUES(curbulletin),
+                ScriptID = VALUES(ScriptID),
+                curstorymanualro=VALUES(curstory),
+                curtime = VALUES(curtime),
+                curlinetext = VALUES(curlinetext),
+                curwidth = VALUES(curwidth)
         `;
 
-        const values = [
-            prompterId,
-            curstory,
-            curbulletin,
-            ScriptID,
-            JSON.stringify(usedStory),
-            selectedDate
-        ];
+        let values;
+        const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+        if (newdatabase) {
+            values = [
+                prompterId,
+                curstory,
+                curbulletin,
+                ScriptID,
+                JSON.stringify(usedStory),
+                selectedDate
+
+            ];
+        } else {
+            values = [
+                curstory,
+                curbulletin,
+                ScriptID,
+                curstory,
+                now,
+                '--0-',
+                1920
+
+            ];
+        }
 
         // console.log(values);
 
