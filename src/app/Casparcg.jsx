@@ -43,7 +43,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
       },
       body: JSON.stringify(str),
     };
-    const aa = await fetch('/api/casparcg', requestOptions);
+    await fetch('/api/casparcg', requestOptions);
     if (str.action === 'connect' || str.action === 'disconnect') {
     }
   };
