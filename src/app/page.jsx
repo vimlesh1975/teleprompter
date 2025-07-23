@@ -409,6 +409,76 @@ export default function Home() {
   //     console.error(error);
   //   }
   // };
+  // const timerFunction = async () => {
+  //   if (!selectedRunOrderTitle || !useDB) return;
+
+  //   try {
+  //     const res = await fetch(
+  //       `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
+  //     );
+  //     const { data } = await res.json();
+  //     if (!data) return;
+
+  //     const dataLengthChanged = data.length !== slugs.length;
+
+  //     // Extract and sanitize all timestamps
+  //     const allDates = data.flatMap(slug => [
+  //       slug.LastModifiedTime,
+  //       slug.ScriptLastModifiedTime
+  //     ]).filter(date => date && !isNaN(new Date(date)));
+
+  //     if (allDates.length === 0) {
+  //       console.warn("No valid timestamps found.");
+  //       return;
+  //     }
+
+  //     const newLatestDateTotal = new Date(
+  //       Math.max(...allDates.map(date => new Date(date).getTime()))
+  //     );
+
+  //     if (
+  //       latestDate === null ||
+  //       newLatestDateTotal > latestDate ||
+  //       dataLengthChanged
+  //     ) {
+  //       setLatestDate(newLatestDateTotal);
+  //       setSlugs(data);
+  //     }
+
+  //     // Process sliced data for current story logic
+  //     const slicedSlugs = data.slice(doubleClickedPosition);
+  //     const slicedDates = slicedSlugs.flatMap(slug => [
+  //       slug.LastModifiedTime,
+  //       slug.ScriptLastModifiedTime
+  //     ]).filter(date => date && !isNaN(new Date(date)));
+
+  //     if (slicedDates.length === 0) return;
+
+  //     const newLatestDate = new Date(
+  //       Math.max(...slicedDates.map(date => new Date(date).getTime()))
+  //     );
+
+  //     if (
+  //       latestDate === null ||
+  //       newLatestDate > latestDate ||
+  //       dataLengthChanged
+  //     ) {
+  //       const currentStory = data[currentStoryNumber - 1];
+  //       if (
+  //         currentStory?.DropStory === 1 ||
+  //         currentStory?.DropStory === 3 ||
+  //         currentStory?.Approval === 0
+  //       ) {
+  //         handleDoubleClick(currentStoryNumber);
+  //       } else {
+  //         fetchAllContent(slicedSlugs, doubleClickedPosition);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error in timerFunction:", error);
+  //   }
+  // };
+
   const timerFunction = async () => {
     if (!selectedRunOrderTitle || !useDB) return;
 
@@ -421,11 +491,14 @@ export default function Home() {
 
       const dataLengthChanged = data.length !== slugs.length;
 
-      // Extract and sanitize all timestamps
+      // ✅ Extract and sanitize all timestamps as proper Date objects
       const allDates = data.flatMap(slug => [
         slug.LastModifiedTime,
         slug.ScriptLastModifiedTime
-      ]).filter(date => date && !isNaN(new Date(date)));
+      ])
+        .filter(date => date)
+        .map(date => new Date(date))
+        .filter(date => !isNaN(date));
 
       if (allDates.length === 0) {
         console.warn("No valid timestamps found.");
@@ -433,7 +506,7 @@ export default function Home() {
       }
 
       const newLatestDateTotal = new Date(
-        Math.max(...allDates.map(date => new Date(date).getTime()))
+        Math.max(...allDates.map(date => date.getTime()))
       );
 
       if (
@@ -445,17 +518,21 @@ export default function Home() {
         setSlugs(data);
       }
 
-      // Process sliced data for current story logic
+      // ✅ Handle sliced data logic
       const slicedSlugs = data.slice(doubleClickedPosition);
+
       const slicedDates = slicedSlugs.flatMap(slug => [
         slug.LastModifiedTime,
         slug.ScriptLastModifiedTime
-      ]).filter(date => date && !isNaN(new Date(date)));
+      ])
+        .filter(date => date)
+        .map(date => new Date(date))
+        .filter(date => !isNaN(date));
 
       if (slicedDates.length === 0) return;
 
       const newLatestDate = new Date(
-        Math.max(...slicedDates.map(date => new Date(date).getTime()))
+        Math.max(...slicedDates.map(date => date.getTime()))
       );
 
       if (
@@ -478,7 +555,6 @@ export default function Home() {
       console.error("Error in timerFunction:", error);
     }
   };
-
 
   const onclickSlug = (val, i) => {
     if (i < slugs.length) {
