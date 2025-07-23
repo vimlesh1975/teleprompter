@@ -62,6 +62,7 @@ export default function Home() {
   const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
   const [stopOnNext, setStopOnNext] = useState(false);
   const [latestDate, setLatestDate] = useState(null);
+  const [hasMounted, setHasMounted] = useState(false);
   const [allowUnApproved, setAllowUnApproved] = useState(false);
   const [DB_NAME, setDB_NAME] = useState('nrcsnew');
   const [DB_HOST, setDB_HOST] = useState('localhost');
@@ -92,6 +93,13 @@ export default function Home() {
   const iframeRef = useRef(null);
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
+
+  useEffect(() => {
+    setHasMounted(true);
+    // Example: use the latest value from database
+    setLatestDate(new Date());
+  }, []);
+
   const scrollContainerStyle = useMemo(() => ({
     position: 'relative',
     height: 1080,
@@ -1565,7 +1573,7 @@ export default function Home() {
             />
             <p style={{ fontWeight: 'bold' }}>
               Last Update:{" "}
-              {latestDate instanceof Date && !isNaN(latestDate)
+              {hasMounted && latestDate instanceof Date && !isNaN(latestDate)
                 ? latestDate.toLocaleString(undefined, {
                   year: "numeric",
                   month: "long",
