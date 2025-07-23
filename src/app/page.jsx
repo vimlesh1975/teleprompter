@@ -43,7 +43,7 @@ export default function Home() {
   const [startPosition, setStartPosition] = useState(355);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
-  const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("0600 Hrs");
+  const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState('');
   const [slugs, setSlugs] = useState([]);
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
@@ -99,6 +99,12 @@ export default function Home() {
     // Example: use the latest value from database
     setLatestDate(new Date());
   }, []);
+
+  useEffect(() => {
+    if (runOrderTitles.length > 0) {
+      setSelectedRunOrderTitle(runOrderTitles[0].title);
+    }
+  }, [runOrderTitles]);
 
   const scrollContainerStyle = useMemo(() => ({
     position: 'relative',
