@@ -11,7 +11,7 @@ const ScrollView = ({
     scrollContainerStyle, scrollingTextStyle, currentFont, fontBold,
     isRTL, fontColor, allContent, currentStoryNumber, crossedLines,
     storyLines, slugs, newsReaderText, showClock, startPosition,
-    contentRefs, textRef
+    contentRefs, textRef, scrollContainerRef
 }) => {
     return (
         <div>
@@ -38,7 +38,7 @@ const ScrollView = ({
                 </div>
             </div>
             {
-                <div style={scrollContainerStyle}>
+                <div ref={scrollContainerRef} style={scrollContainerStyle}>
                     <div ref={textRef} style={scrollingTextStyle}>
                         {allContent.map((content, i) => (
                             <div

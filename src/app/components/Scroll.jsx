@@ -33,6 +33,9 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
     const scaleY = scrollHeight / baseHeight;
     const scale = Math.min(scaleX, scaleY); // keep aspect ratio
 
+    const scrollContainerRef = useRef(null); // 👈 Add this
+
+
     useEffect(() => {
         socketRef.current = io();
         return () => {
@@ -125,7 +128,24 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
     };
 
     useEffect(() => {
-        if (!slugs) return;
+
+
+        if (!slugs || !contentRefs.current || !scrollContainerRef.current) return;
+
+        const index = (currentStoryNumber - 1) * 3;
+        const refBefore = contentRefs.current[index];
+        const topBefore = refBefore?.getBoundingClientRect().top;
+
+        requestAnimationFrame(() => {
+            const refAfter = contentRefs.current[index];
+            const topAfter = refAfter?.getBoundingClientRect().top;
+
+            if (topBefore !== undefined && topAfter !== undefined) {
+                const diff = topAfter - topBefore;
+                scrollContainerRef.current.scrollTop += diff; // Adjust only scroll inside container
+            }
+        });
+
         const storiesLines = [];
         for (let i = 0; i < slugs.length * 3; i += 3) {
             const totalLines =
@@ -167,6 +187,7 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
                     startPosition={startPosition}
                     contentRefs={contentRefs}
                     textRef={textRef}
+                    scrollContainerRef={scrollContainerRef} // 👈 new prop
                 />
             </div>
         </div>
