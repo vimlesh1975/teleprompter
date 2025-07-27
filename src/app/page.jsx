@@ -75,6 +75,9 @@ export default function Home() {
   const textRef = useRef(null);
   const contentRefs = useRef([]);
 
+  const [oldSlugs, setOldSlugs] = useState([]);
+
+
   const textRef2 = useRef(null);
   const contentRefs2 = useRef([]);
 
@@ -508,9 +511,8 @@ export default function Home() {
       const newLatestDateTotal = new Date(
         Math.max(...allDates.map(date => date.getTime()))
       );
-      const oldslugs = [...slugs];
       const newwslugs = [...data];
-      const mixed = [...oldslugs.slice(doubleClickedPosition, currentStoryNumber), ...newwslugs.slice(currentStoryNumber)];
+      const mixed = [...oldSlugs.slice(0, (currentStoryNumber - doubleClickedPosition)), ...newwslugs.slice(currentStoryNumber)];
 
 
       if (
@@ -675,12 +677,14 @@ export default function Home() {
   };
 
   const handleDoubleClick = useCallback((i) => {
+
     if (i === 0) {
       setUsedStory(val => [...val, slugs[0]?.ScriptID]);
     }
     setStopOnNext(true); // Signal to skip the callback
     if (i < slugs.length) {
       const newSlugs = slugs.slice(i);
+      setOldSlugs(newSlugs);
       fetchAllContent(newSlugs, i);
       setSpeed(0);
       setCurrentStoryNumber(i + 1);
