@@ -53,7 +53,7 @@ export default function Home() {
   const [newPosition, setNewPosition] = useState(startPosition);
   const [tempSpeed, setTempSpeed] = useState(0);
   const [loggedPositions, setLoggedPositions] = useState(new Set());
-  const [currentStoryNumber, setCurrentStoryNumber] = useState(-1);
+  const [currentStoryNumber, setCurrentStoryNumber] = useState(0);
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [showNewWindow2, setShowNewWindow2] = useState(false);
   const [showNewWindow3, setShowNewWindow3] = useState(false);
@@ -219,6 +219,8 @@ export default function Home() {
     if (!useDB) return;
     updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate, prompterId);
   }, [useDB, currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate, prompterId]);
+
+
 
   const handleDateChange = (event) => {
     const date = event.target.value;
@@ -1095,6 +1097,10 @@ export default function Home() {
       setCurrentStoryNumber(1);
     }
   }, [useDB, selectedRunOrderTitle, selectedDate, fetchAllContent]);
+
+  useEffect(() => {
+    handleDoubleClick(0);
+  }, [])
 
   return (
     <div style={{ overflow: "hidden", backgroundColor: '#e0e0d2', }}>
