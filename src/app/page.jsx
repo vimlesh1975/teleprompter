@@ -508,6 +508,10 @@ export default function Home() {
       const newLatestDateTotal = new Date(
         Math.max(...allDates.map(date => date.getTime()))
       );
+      const oldslugs = [...slugs];
+      const newwslugs = [...data];
+      const mixed = [...oldslugs.slice(doubleClickedPosition, currentStoryNumber), ...newwslugs.slice(currentStoryNumber)];
+
 
       if (
         latestDate === null ||
@@ -548,7 +552,9 @@ export default function Home() {
         ) {
           handleDoubleClick(currentStoryNumber);
         } else {
-          fetchAllContent(slicedSlugs, doubleClickedPosition);
+          // fetchAllContent(slicedSlugs, doubleClickedPosition);
+          fetchAllContent(mixed, doubleClickedPosition);
+
         }
       }
     } catch (error) {
