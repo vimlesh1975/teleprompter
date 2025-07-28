@@ -1,8 +1,8 @@
 "use client";
-import './page1.css'
+import "./page1.css";
 
 import { fontLists, fixdata } from "./common.js";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import NewWindow from "./components/NewWindow";
 import NewWindowforfullscreen from "./components/NewWindowforfullscreen";
@@ -10,26 +10,26 @@ import Scroll from "./components/Scroll";
 import io from "socket.io-client";
 import Casparcg from "./Casparcg";
 import Timer from "./components/Timer";
-import TTS from './components/TTS.jsx'
-import ScrollView from './components/ScrollView';
-import { changenewdatabase } from './store/store'; // Adjust the path as needed
-import mammoth from 'mammoth';
-import 'react-tabs/style/react-tabs.css';
+import TTS from "./components/TTS.jsx";
+import ScrollView from "./components/ScrollView";
+import { changenewdatabase } from "./store/store"; // Adjust the path as needed
+import mammoth from "mammoth";
+import "react-tabs/style/react-tabs.css";
 import { UseSocketControls } from "./components/UseSocketControls";
 
 const scrollHeight = 460;
-const scrollWidth = 782;//scrollHeight * 16 / 9=782.22;
+const scrollWidth = 782; //scrollHeight * 16 / 9=782.22;
 
 const dummyScriptid = 200502071223160;
 
 export default function Home() {
-  const [showDropControl, setShowDropControl] = useState(true)
-  const [ip, setIp] = useState(null)
+  const [showDropControl, setShowDropControl] = useState(true);
+  const [ip, setIp] = useState(null);
   const [fontList, setFontList] = useState(fontLists);
   const [currentFont, setCurrentFont] = useState("Times New Roman");
   const [isRTL, setIsRTL] = useState(false);
-  const [bgColor, setbgColor] = useState('#000000');
-  const [fontColor, setFontColor] = useState('#ffffff');
+  const [bgColor, setbgColor] = useState("#000000");
+  const [fontColor, setFontColor] = useState("#ffffff");
   const [fontBold, setFontBold] = useState(false);
   const socketRef = useRef(null);
   const [useDB, setUseDB] = useState(true);
@@ -38,12 +38,16 @@ export default function Home() {
   const [ZXZX, setZXZX] = useState(false);
   const dispatch = useDispatch();
   const storyLines = useSelector((state) => state.storyLinesReducer.storyLines);
-  const crossedLines = useSelector((state) => state.crossedLinesReducer.crossedLines);
-  const newdatabase = useSelector((state) => state.newdatabaseReducer.newdatabase);
+  const crossedLines = useSelector(
+    (state) => state.crossedLinesReducer.crossedLines
+  );
+  const newdatabase = useSelector(
+    (state) => state.newdatabaseReducer.newdatabase
+  );
   const [startPosition, setStartPosition] = useState(355);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
-  const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState('');
+  const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("");
   const [slugs, setSlugs] = useState([]);
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
@@ -64,16 +68,18 @@ export default function Home() {
   const [latestDate, setLatestDate] = useState(null);
   const [hasMounted, setHasMounted] = useState(false);
   const [allowUnApproved, setAllowUnApproved] = useState(false);
-  const [DB_NAME, setDB_NAME] = useState('nrcsnew');
-  const [DB_HOST, setDB_HOST] = useState('localhost');
-  const [CASPAR_HOST, setCASPAR_HOST] = useState('127.0.0.1');
+  const [DB_NAME, setDB_NAME] = useState("nrcsnew");
+  const [DB_HOST, setDB_HOST] = useState("localhost");
+  const [CASPAR_HOST, setCASPAR_HOST] = useState("127.0.0.1");
   const [showSettings, setShowSettings] = useState(false);
-  const [keyPressed, setKeyPressed] = useState('');
+  const [keyPressed, setKeyPressed] = useState("");
   const newWindowRef = useRef(null);
   const newWindowRef2 = useRef(null);
   const newWindowRef3 = useRef(null);
   const textRef = useRef(null);
   const contentRefs = useRef([]);
+
+  const [oldSlugs, setOldSlugs] = useState([]);
 
   const textRef2 = useRef(null);
   const contentRefs2 = useRef([]);
@@ -82,14 +88,14 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
     const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const dd = String(today.getDate()).padStart(2, "0");
     return `${yyyy}-${mm}-${dd}`;
   });
   const [usedStory, setUsedStory] = useState([]);
   const [sendUsedStory, setSendUsedStory] = useState(false);
   const [prompterId, setPrompterId] = useState(1);
-  const [databaseConnection, setDatabaseConnection] = useState('false');
+  const [databaseConnection, setDatabaseConnection] = useState("false");
   const iframeRef = useRef(null);
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
@@ -101,35 +107,40 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (runOrderTitles.length > 0) {
+    if (runOrderTitles?.length > 0) {
       setSelectedRunOrderTitle(runOrderTitles[0].title);
     }
   }, [runOrderTitles]);
 
-  const scrollContainerStyle = useMemo(() => ({
-    position: 'relative',
-    height: 1080,
-    width: 1920,
-    overflow: 'hidden',
-    backgroundColor: bgColor,
-    color: '#fff',
-  }), [bgColor]);
+  const scrollContainerStyle = useMemo(
+    () => ({
+      position: "relative",
+      height: 1080,
+      width: 1920,
+      overflow: "hidden",
+      backgroundColor: bgColor,
+      color: "#fff",
+    }),
+    [bgColor]
+  );
 
-  const scrollingTextStyle = useMemo(() => ({
-    position: 'absolute',
-    transform: `translateY(${newPosition}px)`,
-    willChange: 'transform',
-    width: 1720,
-    padding: '0 100px',
-    whiteSpace: 'pre-wrap',
-    fontSize: parseInt(fontSize * 2.5),
-    lineHeight: `${Math.floor(fontSize * 1.5 * 2.5)}px`,
-  }), [newPosition, fontSize]);
-
+  const scrollingTextStyle = useMemo(
+    () => ({
+      position: "absolute",
+      transform: `translateY(${newPosition}px)`,
+      willChange: "transform",
+      width: 1720,
+      padding: "0 100px",
+      whiteSpace: "pre-wrap",
+      fontSize: parseInt(fontSize * 2.5),
+      lineHeight: `${Math.floor(fontSize * 1.5 * 2.5)}px`,
+    }),
+    [newPosition, fontSize]
+  );
 
   useEffect(() => {
-    if (!window.location.origin.includes('vercel')) {
-      fetch('/api/fonts')
+    if (!window.location.origin.includes("vercel")) {
+      fetch("/api/fonts")
         .then((res) => res.json())
         .then((data) => setFontList(data.fonts))
         .catch((err) => console.error(err));
@@ -143,83 +154,117 @@ export default function Home() {
         iframeRef.current.src = addr;
       }
     }
-  }, [file])
+  }, [file]);
 
   useEffect(() => {
     const handleFocus = (event) => {
-      if (textarea1Ref.current) textarea1Ref.current.style.borderColor = 'red';
-      event.target.style.borderColor = 'red';
+      if (textarea1Ref.current) textarea1Ref.current.style.borderColor = "red";
+      event.target.style.borderColor = "red";
       setFocusedInput(event.target);
     };
 
     const inputs = [textarea1Ref.current];
     inputs.forEach((input) => {
       if (input) {
-        input.addEventListener('focus', handleFocus);
+        input.addEventListener("focus", handleFocus);
       }
     });
 
     const messageHandler = (event) => {
       if (
         event.data &&
-        typeof event.data === 'object' &&
-        'replace' in event.data &&
-        'value' in event.data
+        typeof event.data === "object" &&
+        "replace" in event.data &&
+        "value" in event.data
       ) {
         if (focusedInput) {
           if (event.data.replace) {
             const updatedSlugs = [...slugs];
-            updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: event.data.value }; // Modify the object at index i
+            updatedSlugs[currentSlug] = {
+              ...updatedSlugs[currentSlug],
+              Script: event.data.value,
+            }; // Modify the object at index i
             setSlugs(updatedSlugs);
           } else {
             const updatedSlugs = [...slugs];
-            updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: focusedInput.value + event.data.value }; // Modify the object at index i
+            updatedSlugs[currentSlug] = {
+              ...updatedSlugs[currentSlug],
+              Script: focusedInput.value + event.data.value,
+            }; // Modify the object at index i
             setSlugs(updatedSlugs);
           }
         }
       }
 
-      if (event.data === 'request_textarea_content' && focusedInput) {
-        event.source.postMessage({ textareaValue: focusedInput.value }, event.origin);
+      if (event.data === "request_textarea_content" && focusedInput) {
+        event.source.postMessage(
+          { textareaValue: focusedInput.value },
+          event.origin
+        );
       }
     };
 
-    window.addEventListener('message', messageHandler);
+    window.addEventListener("message", messageHandler);
 
     return () => {
-      window.removeEventListener('message', messageHandler);
+      window.removeEventListener("message", messageHandler);
     };
   }, [focusedInput, useDB, file, currentSlug, slugs]);
 
-
-
-
-  const updateCurrentStory = useCallback((curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
-    if (!curbulletin) return;
-    if (!ScriptID) return;
-    fetch('/api/currentStory', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ curstory, curbulletin, ScriptID: sendUsedStory ? ((usedStory.length === 0) ? 123456478 : ScriptID) : 123456789, usedStory: sendUsedStory ? usedStory : [], selectedDate, prompterId }),
-
-    })
-      .then(response => response.json())
-      .then(() => {
+  const updateCurrentStory = useCallback(
+    (curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
+      if (!curbulletin) return;
+      if (!ScriptID) return;
+      fetch("/api/currentStory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          curstory,
+          curbulletin,
+          ScriptID: sendUsedStory
+            ? usedStory.length === 0
+              ? 123456478
+              : ScriptID
+            : 123456789,
+          usedStory: sendUsedStory ? usedStory : [],
+          selectedDate,
+          prompterId,
+        }),
       })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  }, [sendUsedStory]);
+        .then((response) => response.json())
+        .then(() => { })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+    [sendUsedStory]
+  );
 
   useEffect(() => {
     if (!slugs) return;
     if (!useDB) return;
-    updateCurrentStory(currentStoryNumber, selectedRunOrderTitle, slugs[currentStoryNumber - 1]?.ScriptID, usedStory, selectedDate, prompterId);
-  }, [useDB, currentStoryNumber, selectedRunOrderTitle, updateCurrentStory, slugs, usedStory, selectedDate, prompterId]);
+    updateCurrentStory(
+      currentStoryNumber,
+      selectedRunOrderTitle,
+      slugs[currentStoryNumber - 1]?.ScriptID,
+      usedStory,
+      selectedDate,
+      prompterId
+    );
+  }, [
+    useDB,
+    currentStoryNumber,
+    selectedRunOrderTitle,
+    updateCurrentStory,
+    slugs,
+    usedStory,
+    selectedDate,
+    prompterId,
+  ]);
 
   const handleDateChange = (event) => {
     const date = event.target.value;
-    setSelectedDate(date)
+    setSelectedDate(date);
 
     setSpeed(0);
     setDoubleClickedPosition(0);
@@ -227,7 +272,7 @@ export default function Home() {
 
   const changeDB_NAME = async () => {
     try {
-      const str = { DB_NAME, DB_HOST, CASPAR_HOST }
+      const str = { DB_NAME, DB_HOST, CASPAR_HOST };
       const requestOptions = {
         method: "POST",
         headers: {
@@ -237,36 +282,36 @@ export default function Home() {
       };
       await fetch("/api/setdbname", requestOptions);
       setTimeout(() => {
-        fetchNewsId()
+        fetchNewsId();
       }, 2000);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const getDB_NAME = async () => {
     try {
-      const res = await fetch('/api/setdbname')
+      const res = await fetch("/api/setdbname");
       const data = await res.json();
       setDB_NAME(data.DB_NAME);
       setDB_HOST(data.DB_HOST);
       setCASPAR_HOST(data.CASPAR_HOST);
     } catch (error) {
       console.error(error);
-      setDB_NAME('not set');
-      setDB_HOST('not set');
-      setCASPAR_HOST('not set');
+      setDB_NAME("not set");
+      setDB_HOST("not set");
+      setCASPAR_HOST("not set");
     }
-  }
+  };
   const handleTextareaKeyDown = (event) => {
-    if (event.code === 'Space') {
+    if (event.code === "Space") {
       event.stopPropagation(); // Prevent spacebar from bubbling to document
     }
   };
 
   useEffect(() => {
     getDB_NAME();
-  }, [])
+  }, []);
 
   // Read from localStorage ONLY ONCE when component mounts
   useEffect(() => {
@@ -309,7 +354,6 @@ export default function Home() {
       const savedData = localStorage.getItem("WebTelePrompter");
       const dataObject = savedData ? JSON.parse(savedData) : {};
 
-
       localStorage.setItem(
         "WebTelePrompter",
         JSON.stringify({
@@ -322,13 +366,23 @@ export default function Home() {
           fontBold,
           currentFont,
           showDropControl,
-          allowUnApproved
+          allowUnApproved,
         })
       );
     }, 500); // shorter debounce is usually enough
 
     return () => clearTimeout(timeoutId); // cleanup previous timeout if values change rapidly
-  }, [fontSize, startPosition, isRTL, bgColor, fontColor, fontBold, currentFont, showDropControl, allowUnApproved]);
+  }, [
+    fontSize,
+    startPosition,
+    isRTL,
+    bgColor,
+    fontColor,
+    fontBold,
+    currentFont,
+    showDropControl,
+    allowUnApproved,
+  ]);
 
   const handleCloseNewWindow = () => {
     setShowNewWindow(false);
@@ -340,144 +394,6 @@ export default function Home() {
   const handleCloseNewWindow3 = () => {
     setShowNewWindow3(false);
   };
-  // const timerFunction = async () => {
-  //   if (selectedRunOrderTitle === '') {
-  //     return;
-  //   }
-  //   if (!useDB) {
-  //     return
-  //   }
-
-  //   try {
-  //     const res = await fetch(
-  //       `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
-  //     );
-  //     const data = await res.json();
-
-  //     const newSlugsTotal = data.data;
-  //     if (!newSlugsTotal) return
-  //     const LastModifiedTimeTotal = newSlugsTotal.map(
-  //       (slug) => slug.LastModifiedTime
-  //     );
-  //     const ScriptLastModifiedTimeTotal = newSlugsTotal.map(
-  //       (slug) => slug.ScriptLastModifiedTime
-  //     );
-  //     const dateArrayTotal = [
-  //       ...LastModifiedTimeTotal,
-  //       ...ScriptLastModifiedTimeTotal,
-  //     ];
-  //     const newLatestDateTotal = new Date(
-  //       Math.max(...dateArrayTotal.map((date) => new Date(date)))
-  //     );
-
-  //     if (
-  //       latestDate === null ||
-  //       newLatestDateTotal > latestDate ||
-  //       data.data.length !== slugs.length
-  //     ) {
-  //       setLatestDate(newLatestDateTotal);
-  //       setSlugs(data.data);
-  //     } else {
-  //     }
-
-  //     const newSlugs = data.data.slice(doubleClickedPosition);
-  //     const LastModifiedTime = newSlugs.map((slug) => slug.LastModifiedTime);
-  //     const ScriptLastModifiedTime = newSlugs.map(
-  //       (slug) => slug.ScriptLastModifiedTime
-  //     );
-  //     const dateArray = [...LastModifiedTime, ...ScriptLastModifiedTime];
-  //     const newLatestDate = new Date(
-  //       Math.max(...dateArray.map((date) => new Date(date)))
-  //     );
-
-  //     if (
-  //       latestDate === null ||
-  //       newLatestDate > latestDate ||
-  //       data.data.length !== slugs.length
-  //     ) {
-  //       if (
-  //         (data.data[currentStoryNumber - 1]?.DropStory === 1) || (data.data[currentStoryNumber - 1]?.DropStory === 3) ||
-  //         (data.data[currentStoryNumber - 1]?.Approval === 0)
-  //       ) {
-  //         handleDoubleClick(currentStoryNumber);
-  //       } else {
-  //         fetchAllContent(newSlugs, doubleClickedPosition);
-  //       }
-  //     } else {
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  // const timerFunction = async () => {
-  //   if (!selectedRunOrderTitle || !useDB) return;
-
-  //   try {
-  //     const res = await fetch(
-  //       `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
-  //     );
-  //     const { data } = await res.json();
-  //     if (!data) return;
-
-  //     const dataLengthChanged = data.length !== slugs.length;
-
-  //     // Extract and sanitize all timestamps
-  //     const allDates = data.flatMap(slug => [
-  //       slug.LastModifiedTime,
-  //       slug.ScriptLastModifiedTime
-  //     ]).filter(date => date && !isNaN(new Date(date)));
-
-  //     if (allDates.length === 0) {
-  //       console.warn("No valid timestamps found.");
-  //       return;
-  //     }
-
-  //     const newLatestDateTotal = new Date(
-  //       Math.max(...allDates.map(date => new Date(date).getTime()))
-  //     );
-
-  //     if (
-  //       latestDate === null ||
-  //       newLatestDateTotal > latestDate ||
-  //       dataLengthChanged
-  //     ) {
-  //       setLatestDate(newLatestDateTotal);
-  //       setSlugs(data);
-  //     }
-
-  //     // Process sliced data for current story logic
-  //     const slicedSlugs = data.slice(doubleClickedPosition);
-  //     const slicedDates = slicedSlugs.flatMap(slug => [
-  //       slug.LastModifiedTime,
-  //       slug.ScriptLastModifiedTime
-  //     ]).filter(date => date && !isNaN(new Date(date)));
-
-  //     if (slicedDates.length === 0) return;
-
-  //     const newLatestDate = new Date(
-  //       Math.max(...slicedDates.map(date => new Date(date).getTime()))
-  //     );
-
-  //     if (
-  //       latestDate === null ||
-  //       newLatestDate > latestDate ||
-  //       dataLengthChanged
-  //     ) {
-  //       const currentStory = data[currentStoryNumber - 1];
-  //       if (
-  //         currentStory?.DropStory === 1 ||
-  //         currentStory?.DropStory === 3 ||
-  //         currentStory?.Approval === 0
-  //       ) {
-  //         handleDoubleClick(currentStoryNumber);
-  //       } else {
-  //         fetchAllContent(slicedSlugs, doubleClickedPosition);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error in timerFunction:", error);
-  //   }
-  // };
 
   const timerFunction = async () => {
     if (!selectedRunOrderTitle || !useDB) return;
@@ -492,13 +408,11 @@ export default function Home() {
       const dataLengthChanged = data.length !== slugs.length;
 
       // ✅ Extract and sanitize all timestamps as proper Date objects
-      const allDates = data.flatMap(slug => [
-        slug.LastModifiedTime,
-        slug.ScriptLastModifiedTime
-      ])
-        .filter(date => date)
-        .map(date => new Date(date))
-        .filter(date => !isNaN(date));
+      const allDates = data
+        .flatMap((slug) => [slug.LastModifiedTime, slug.ScriptLastModifiedTime])
+        .filter((date) => date)
+        .map((date) => new Date(date))
+        .filter((date) => !isNaN(date));
 
       if (allDates.length === 0) {
         console.warn("No valid timestamps found.");
@@ -506,8 +420,14 @@ export default function Home() {
       }
 
       const newLatestDateTotal = new Date(
-        Math.max(...allDates.map(date => date.getTime()))
+        Math.max(...allDates.map((date) => date.getTime()))
       );
+      const newwslugs = [...data];
+      const mixed = [
+        ...oldSlugs.slice(0, currentStoryNumber - 1 - doubleClickedPosition),
+        ...newwslugs.slice(currentStoryNumber - 1),
+      ];
+      // console.log(mixed.length, slugs.length);
 
       if (
         latestDate === null ||
@@ -521,18 +441,16 @@ export default function Home() {
       // ✅ Handle sliced data logic
       const slicedSlugs = data.slice(doubleClickedPosition);
 
-      const slicedDates = slicedSlugs.flatMap(slug => [
-        slug.LastModifiedTime,
-        slug.ScriptLastModifiedTime
-      ])
-        .filter(date => date)
-        .map(date => new Date(date))
-        .filter(date => !isNaN(date));
+      const slicedDates = slicedSlugs
+        .flatMap((slug) => [slug.LastModifiedTime, slug.ScriptLastModifiedTime])
+        .filter((date) => date)
+        .map((date) => new Date(date))
+        .filter((date) => !isNaN(date));
 
       if (slicedDates.length === 0) return;
 
       const newLatestDate = new Date(
-        Math.max(...slicedDates.map(date => date.getTime()))
+        Math.max(...slicedDates.map((date) => date.getTime()))
       );
 
       if (
@@ -548,7 +466,9 @@ export default function Home() {
         ) {
           handleDoubleClick(currentStoryNumber);
         } else {
-          fetchAllContent(slicedSlugs, doubleClickedPosition);
+          // fetchAllContent(slicedSlugs, doubleClickedPosition);
+          setOldSlugs(mixed);
+          fetchAllContent(mixed, doubleClickedPosition);
         }
       }
     } catch (error) {
@@ -598,64 +518,77 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
   useEffect(() => {
-    fetchNewsId()
+    fetchNewsId();
   }, []);
 
+  const isVideoNndCGPresent = useCallback(
+    (slug) => {
+      if (!useDB && file) return ""; // Handle single script case
+      if (!slug) return "No visuals"; // Handle undefined slug
 
+      const mediaList = [
+        slug.media1,
+        slug.media2,
+        slug.media3,
+        slug.media4,
+        slug.media5,
+      ];
+      const count = mediaList.filter((item) => item?.trim()).length; // Count valid media entries
 
-  const isVideoNndCGPresent = useCallback((slug) => {
-    if (!useDB && file) return ""; // Handle single script case
-    if (!slug) return "No visuals"; // Handle undefined slug
+      const totalCount = newdatabase ? count : slug?.Media ? 1 : 0;
+      var aa;
 
-    const mediaList = [slug.media1, slug.media2, slug.media3, slug.media4, slug.media5];
-    const count = mediaList.filter(item => item?.trim()).length; // Count valid media entries
+      if (totalCount === 0) {
+        aa = ", (No Visual)";
+      } else if (totalCount === 1) {
+        aa = `, (1 Visual)`;
+      } else {
+        aa = `, (${totalCount} Visuals)`;
+      }
+      return `${aa} (${slug.graphicsid ? slug.graphicsid : "No CG"})`;
+    },
+    [useDB, newdatabase, file]
+  );
 
-    const totalCount = newdatabase ? count : (slug?.Media ? 1 : 0);
-    var aa;
+  const fetchAllContent = useCallback(
+    (slicedSlugs, startNumber) => {
+      if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
+        return;
+      }
 
+      const data1 = new Array(slicedSlugs.length * 3);
+      try {
+        slicedSlugs.forEach((slug, i) => {
+          if (
+            (slug.DropStory === 0 || slug.DropStory === 2) &&
+            (slug?.Approval || allowUnApproved)
+          ) {
+            data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName
+              }${isVideoNndCGPresent(slug)}`;
+            data1[i * 3 + 1] = slug.Script
+              ? `${slug.Script?.trim().split("$$$$")[0]}`
+              : "";
+            data1[i * 3 + 2] = `--------------`;
+          } else {
+            data1[i * 3] = `${startNumber + i + 1} ${!(slug?.DropStory === 0 || slug?.DropStory === 2)
+              ? "Story Dropped"
+              : "Story UnApproved"
+              }`;
 
-    if (totalCount === 0) {
-      aa = ", (No Visual)";
-    }
-    else if (totalCount === 1) {
-      aa = `, (1 Visual)`;
-    }
-    else {
-      aa = `, (${totalCount} Visuals)`;
-    }
-    return `${aa} (${(slug.graphicsid) ? slug.graphicsid : 'No CG'})`;
-  }, [useDB, newdatabase, file]);
+            data1[i * 3 + 1] = ` `;
+            data1[i * 3 + 2] = ``;
+          }
+        });
 
-
-  const fetchAllContent = useCallback((slicedSlugs, startNumber) => {
-    if (!Array.isArray(slicedSlugs) || slicedSlugs.length === 0) {
-      return;
-    }
-
-    const data1 = new Array(slicedSlugs.length * 3);
-    try {
-      slicedSlugs.forEach((slug, i) => {
-
-        if ((slug.DropStory === 0 || slug.DropStory === 2) && (slug?.Approval || allowUnApproved)) {
-          data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName}${isVideoNndCGPresent(slug)
-            }`;
-          data1[i * 3 + 1] = slug.Script ? `${slug.Script?.trim().split('$$$$')[0]}` : '';
-          data1[i * 3 + 2] = `--------------`;
-        } else {
-          data1[i * 3] = `${startNumber + i + 1} ${!(slug?.DropStory === 0 || slug?.DropStory === 2) ? "Story Dropped" : "Story UnApproved"}`;
-
-          data1[i * 3 + 1] = ` `;
-          data1[i * 3 + 2] = ``;
-        }
-      });
-
-      setAllContent(data1.filter((item) => item !== undefined));
-    } catch (error) {
-      console.error("Error fetching content:", error);
-    }
-  }, [allowUnApproved, isVideoNndCGPresent]);
+        setAllContent(data1.filter((item) => item !== undefined));
+      } catch (error) {
+        console.error("Error fetching content:", error);
+      }
+    },
+    [allowUnApproved, isVideoNndCGPresent]
+  );
 
   const handleSelectionChange = (e) => {
     setSpeed(0);
@@ -668,23 +601,26 @@ export default function Home() {
     }
   };
 
-  const handleDoubleClick = useCallback((i) => {
-    if (i === 0) {
-      setUsedStory(val => [...val, slugs[0]?.ScriptID]);
-    }
-    setStopOnNext(true); // Signal to skip the callback
-    if (i < slugs.length) {
-      const newSlugs = slugs.slice(i);
-      fetchAllContent(newSlugs, i);
-      setSpeed(0);
-      setCurrentStoryNumber(i + 1);
-      const newLoggedPositions = new Set();
-      setLoggedPositions(newLoggedPositions);
-      setDoubleClickedPosition(i);
-      setNewPosition(startPosition);
-    }
-  }, [slugs, startPosition, fetchAllContent]);
-
+  const handleDoubleClick = useCallback(
+    (i) => {
+      if (i === 0) {
+        setUsedStory((val) => [...val, slugs[0]?.ScriptID]);
+      }
+      setStopOnNext(true); // Signal to skip the callback
+      if (i < slugs.length) {
+        const newSlugs = slugs.slice(i);
+        setOldSlugs(newSlugs);
+        fetchAllContent(newSlugs, i);
+        setSpeed(0);
+        setCurrentStoryNumber(i + 1);
+        const newLoggedPositions = new Set();
+        setLoggedPositions(newLoggedPositions);
+        setDoubleClickedPosition(i);
+        setNewPosition(startPosition);
+      }
+    },
+    [slugs, startPosition, fetchAllContent]
+  );
 
   const fromStart = () => {
     setCurrentSlug(0);
@@ -700,12 +636,16 @@ export default function Home() {
       if (newIndex < 0) {
         newIndex = slugs.length - 1;
       }
-      while (((slugs[newIndex]?.DropStory === 1) || (slugs[newIndex]?.DropStory) === 3) || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
+      while (
+        slugs[newIndex]?.DropStory === 1 ||
+        slugs[newIndex]?.DropStory === 3 ||
+        (!slugs[newIndex]?.Approval && !allowUnApproved)
+      ) {
         newIndex--;
         if (newIndex < 0) {
           newIndex = slugs.length - 1;
         }
-      };
+      }
       handleDoubleClick(newIndex);
       setCurrentSlugName(slugs[newIndex].SlugName);
       return newIndex;
@@ -718,33 +658,37 @@ export default function Home() {
       if (newIndex >= slugs.length) {
         newIndex = 0;
       }
-      while (((slugs[newIndex]?.DropStory === 1) || (slugs[newIndex]?.DropStory) === 3) || (!slugs[newIndex]?.Approval && !allowUnApproved)) {
+      while (
+        slugs[newIndex]?.DropStory === 1 ||
+        slugs[newIndex]?.DropStory === 3 ||
+        (!slugs[newIndex]?.Approval && !allowUnApproved)
+      ) {
         newIndex++;
         if (newIndex >= slugs.length) {
           newIndex = 0;
         }
-      };
+      }
 
       setCurrentSlugName(slugs[newIndex].SlugName);
       handleDoubleClick(newIndex);
       return newIndex;
     });
-  }, [slugs, handleDoubleClick, allowUnApproved,]);
+  }, [slugs, handleDoubleClick, allowUnApproved]);
 
   useEffect(() => {
-    if (!useDB) { return }
+    if (!useDB) {
+      return;
+    }
     setCurrentSlug(currentStoryNumber - 1);
     if (!slugs) return;
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
   }, [currentStoryNumber, slugs, useDB]);
-
 
   useEffect(() => {
     if (stopAfterStoryChange) {
       setSpeed(0);
     }
   }, [currentStoryNumber, stopAfterStoryChange]);
-
 
   useEffect(() => {
     const slug = slugs[currentStoryNumber - 1];
@@ -753,84 +697,82 @@ export default function Home() {
     const newScriptID = slug.ScriptID;
     if (!newScriptID || usedStory.includes(newScriptID)) return;
 
-    setUsedStory(prev => [...prev, newScriptID]);
+    setUsedStory((prev) => [...prev, newScriptID]);
   }, [currentStoryNumber, slugs, usedStory]);
 
-
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
 
-    socket.emit('allContent', allContent);
-  }, [allContent])
+    socket.emit("allContent", allContent);
+  }, [allContent]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('speed', speed);
+    socket.emit("speed", speed);
   }, [speed]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('setStartPosition', startPosition);
+    socket.emit("setStartPosition", startPosition);
   }, [startPosition]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('setShowClock', showClock);
+    socket.emit("setShowClock", showClock);
   }, [showClock]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('setNewsReaderText', newsReaderText);
+    socket.emit("setNewsReaderText", newsReaderText);
   }, [newsReaderText]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
     // socket.emit('bgColor', bgColor);
-    socket.emit('scrollContainerStyle', scrollContainerStyle);
-
+    socket.emit("scrollContainerStyle", scrollContainerStyle);
   }, [scrollContainerStyle]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('scrollingTextStyle', scrollingTextStyle);
+    socket.emit("scrollingTextStyle", scrollingTextStyle);
   }, [scrollingTextStyle]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('fontColor', fontColor);
+    socket.emit("fontColor", fontColor);
   }, [fontColor]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('rtl', isRTL);
+    socket.emit("rtl", isRTL);
   }, [isRTL]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('fontBold', fontBold);
+    socket.emit("fontBold", fontBold);
   }, [fontBold]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
-    socket.emit('currentFont', currentFont);
+    socket.emit("currentFont", currentFont);
   }, [currentFont]);
 
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
     if (!slugs) return;
-    socket.emit('setSlugs', slugs);
+    socket.emit("setSlugs", slugs);
   }, [slugs]);
 
   const dropStoryValue = (slug) => {
@@ -846,126 +788,147 @@ export default function Home() {
     if (slug.DropStory === 3) {
       return 2;
     }
-  }
-  const readFile = useCallback((selectedFile) => {
-    if (!selectedFile) return;
-    const reader = new FileReader();
-    let bb = [];
+  };
+  const readFile = useCallback(
+    (selectedFile) => {
+      if (!selectedFile) return;
+      const reader = new FileReader();
+      let bb = [];
 
-    if (selectedFile.type !== 'text/plain') {
-      reader.onload = function (event) {
-        const arrayBuffer = event.target.result;
+      if (selectedFile.type !== "text/plain") {
+        reader.onload = function (event) {
+          const arrayBuffer = event.target.result;
 
-        mammoth.extractRawText({ arrayBuffer: arrayBuffer })
-          .then(function (result) {
-            const content = result.value; // extracted text
-            const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line !== ""); // Remove empty lines
+          mammoth
+            .extractRawText({ arrayBuffer: arrayBuffer })
+            .then(function (result) {
+              const content = result.value; // extracted text
+              const lines = content
+                .split(/\r?\n/)
+                .map((line) => line.trim())
+                .filter((line) => line !== ""); // Remove empty lines
+              if (singleScript) {
+                bb = [
+                  {
+                    ...fixdata,
+                    ScriptID: dummyScriptid,
+                    SlugName: selectedFile.name,
+                    Script: content,
+                  },
+                ];
+                setSlugs(bb);
+              } else {
+                bb = lines.map((line, index) => {
+                  const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
+                  return {
+                    ...fixdata,
+                    ScriptID: dummyScriptid + index,
+                    SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
+                    Script: line,
+                  };
+                });
+                setSlugs(bb);
+              }
+            })
+            .catch(function (err) {
+              console.error("Error reading docx:", err);
+            });
+        };
+
+        reader.readAsArrayBuffer(selectedFile);
+      } else {
+        reader.onload = (e) => {
+          const content = e.target.result;
+          const hasZXZX = /ZXZX/i.test(content);
+          setZXZX(hasZXZX);
+
+          if (hasZXZX) {
+            const aa = content.split(/ZCZC/i);
+            bb = aa.map((item, index) => {
+              const [SlugName, Script] = item
+                .split(/ZXZX/i)
+                .map((str) => str.trim().replace(/\r?\n/g, ""));
+              return {
+                ...fixdata,
+                ScriptID: dummyScriptid + index,
+                Approval: SlugName.includes("(Story UnApproved)") ? 0 : 1,
+                DropStory: SlugName.includes("(Story Dropped)") ? 1 : 0,
+                SlugName,
+                Script,
+              };
+            });
+          } else {
+            const lines = content
+              .split(/\r?\n/)
+              .map((line) => line.trim())
+              .filter((line) => line !== ""); // Remove empty lines
             if (singleScript) {
-              bb = [{ ...fixdata, ScriptID: dummyScriptid, SlugName: selectedFile.name, Script: content }];
-              setSlugs(bb);
-
-            }
-            else {
+              bb = [
+                {
+                  ...fixdata,
+                  ScriptID: dummyScriptid,
+                  SlugName: selectedFile.name,
+                  Script: content,
+                },
+              ];
+            } else {
               bb = lines.map((line, index) => {
                 const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
                 return {
                   ...fixdata,
                   ScriptID: dummyScriptid + index,
                   SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
-                  Script: line
+                  Script: line,
                 };
               });
-              setSlugs(bb);
-
             }
-
-          })
-          .catch(function (err) {
-            console.error("Error reading docx:", err);
-          });
-      };
-
-      reader.readAsArrayBuffer(selectedFile);
-
-    }
-    else {
-      reader.onload = (e) => {
-        const content = e.target.result;
-        const hasZXZX = /ZXZX/i.test(content);
-        setZXZX(hasZXZX);
-
-        if (hasZXZX) {
-          const aa = content.split(/ZCZC/i);
-          bb = aa.map((item, index) => {
-            const [SlugName, Script] = item.split(/ZXZX/i).map(str => str.trim().replace(/\r?\n/g, ''));
-            return {
-              ...fixdata,
-              ScriptID: dummyScriptid + index,
-              Approval: SlugName.includes('(Story UnApproved)') ? 0 : 1,
-              DropStory: SlugName.includes('(Story Dropped)') ? 1 : 0,
-              SlugName,
-              Script
-            };
-          });
-        } else {
-
-          const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line !== ""); // Remove empty lines
-          if (singleScript) {
-            bb = [{ ...fixdata, ScriptID: dummyScriptid, SlugName: selectedFile.name, Script: content }];
           }
-          else {
-            bb = lines.map((line, index) => {
-              const words = line.split(/\s+/).slice(0, 3).join(" "); // Extract first three words
-              return {
-                ...fixdata,
-                ScriptID: dummyScriptid + index,
-                SlugName: words || `Slug${index + 1}`, // Fallback if line is empty
-                Script: line
-              };
-            });
-          }
-        }
-        setSlugs(bb);
-      };
-      reader.readAsText(selectedFile);
-    }
-  }, [singleScript]);
+          setSlugs(bb);
+        };
+        reader.readAsText(selectedFile);
+      }
+    },
+    [singleScript]
+  );
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
-    setFile(selectedFile);  // Save the file to state
+    setFile(selectedFile); // Save the file to state
     readFile(selectedFile);
   };
 
   const exportScript = () => {
     if (!slugs) return;
-    let text = '';
+    let text = "";
     slugs.forEach((item) => {
-      text += `${item.SlugName}${(item.DropStory === 1 || item.DropStory === 3) ? '(Story Dropped)' : ''}${!item.approved ? '(Story UnApproved)' : ''}\nZXZX\n${item.Script}\nZCZC\n`;
+      text += `${item.SlugName}${item.DropStory === 1 || item.DropStory === 3 ? "(Story Dropped)" : ""
+        }${!item.approved ? "(Story UnApproved)" : ""}\nZXZX\n${item.Script
+        }\nZCZC\n`;
     });
     // Remove the last occurrence of "ZCZC\n"
-    text = text.replace(/ZCZC\n$/, '');
+    text = text.replace(/ZCZC\n$/, "");
     const element = document.createElement("a");
-    const file = new Blob([text], { type: 'text/plain' });
+    const file = new Blob([text], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    element.download = selectedDate + '_' + selectedRunOrderTitle + "_script.txt";
+    element.download =
+      selectedDate + "_" + selectedRunOrderTitle + "_script.txt";
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
-  }
+  };
   const saveScript = () => {
-    const content = (slugs.map((slug) => slug.Script)).join('\n'); // Join array items into text
-    const blob = new Blob([content], { type: 'text/plain' }); // Create a Blob
+    const content = slugs.map((slug) => slug.Script).join("\n"); // Join array items into text
+    const blob = new Blob([content], { type: "text/plain" }); // Create a Blob
     const url = URL.createObjectURL(blob); // Create a download URL
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'scripts.txt'; // Download as 'scripts.txt'
+    link.download = "scripts.txt"; // Download as 'scripts.txt'
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
     URL.revokeObjectURL(url); // Clean up the URL
-  }
+  };
 
   const nextRef = useRef();
   nextRef.current = next;
@@ -976,45 +939,43 @@ export default function Home() {
   const fromStartRef = useRef();
   fromStartRef.current = fromStart;
 
-
   useEffect(() => {
     socketRef.current = io();
     const socket = socketRef.current;
     socket.on("connect", () => {
       console.log("SOCKET CONNECTED! from main page", socket.id);
       setServerAlive(true);
-
     });
     socket.on("newdatabase", (data) => {
       dispatch(changenewdatabase(data));
     });
 
-    socket.on('databaseConnection', data => {
+    socket.on("databaseConnection", (data) => {
       setDatabaseConnection(data);
     });
 
-    socket.on('connect_error', (error) => {
-      console.log(error)
+    socket.on("connect_error", (error) => {
+      console.log(error);
       setServerAlive(false);
     });
 
-    socket.on('disconnect', () => {
-      console.log('Disconnected from server');
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
       setServerAlive(false);
     });
 
-    socket.on('speedFromMobile2', data => {
+    socket.on("speedFromMobile2", (data) => {
       setSpeed(data);
     });
 
-    socket.on('next2', () => {
+    socket.on("next2", () => {
       nextRef.current?.();
     });
-    socket.on('previous2', () => {
+    socket.on("previous2", () => {
       previousRef.current?.();
     });
 
-    socket.on('fromStart2', () => {
+    socket.on("fromStart2", () => {
       fromStartRef.current?.();
     });
 
@@ -1029,39 +990,38 @@ export default function Home() {
       socket.off("fromStart2");
 
       socket.disconnect();
-    }
-  }, [dispatch])
+    };
+  }, [dispatch]);
 
   useEffect(() => {
-    fetch('/api/getlocalip')
-      .then(res => res.json())
-      .then(data => setIp(data.ip))
-  }, [])
+    fetch("/api/getlocalip")
+      .then((res) => res.json())
+      .then((data) => setIp(data.ip));
+  }, []);
 
   useEffect(() => {
     readFile(file);
-  }, [singleScript, file, readFile])
+  }, [singleScript, file, readFile]);
 
   useEffect(() => {
     // Event listener function
     const handleKeyPress = (event) => {
-      if (event.key === 'Enter') {
+      if (event.key === "Enter") {
         handleDoubleClick(parseInt(keyPressed) - 1);
-        setKeyPressed('');
-      }
-      else {
+        setKeyPressed("");
+      } else {
         if (!isNaN(event.key)) {
-          setKeyPressed(val => val + event.key);
+          setKeyPressed((val) => val + event.key);
         }
       }
     };
 
     // Add event listener on mount
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
 
     // Cleanup event listener on unmount
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
   }, [keyPressed, handleDoubleClick]);
 
@@ -1086,12 +1046,16 @@ export default function Home() {
     }
   }, [useDB, selectedRunOrderTitle, selectedDate, fetchAllContent]);
 
+  useEffect(() => {
+    handleDoubleClick(0);
+  }, []);
+
   return (
-    <div style={{ overflow: "hidden", backgroundColor: '#e0e0d2', }}>
+    <div style={{ overflow: "hidden", backgroundColor: "#e0e0d2" }}>
       <div style={{ display: "flex" }}>
-        <div style={{ height: '100vh' }}>
+        <div style={{ height: "100vh" }}>
           <div>
-            {newdatabase &&
+            {newdatabase && (
               <div>
                 <label htmlFor="date-selector">Select a date: </label>
                 <input
@@ -1101,13 +1065,22 @@ export default function Home() {
                   onChange={handleDateChange}
                   disabled={!useDB}
                 />
-                <span title="Database Status"> {(serverAlive && (databaseConnection === 'true')) ? 'Database 🟢' : 'Database 🔴'}</span>
+                <span title="Database Status">
+                  {" "}
+                  {serverAlive && databaseConnection === "true"
+                    ? "Database 🟢"
+                    : "Database 🔴"}
+                </span>
               </div>
-
-            }
-            {!newdatabase && <span title="Database Status"> {(serverAlive && (databaseConnection === 'true')) ? 'Database 🟢' : 'Database 🔴'}</span>}
-
-
+            )}
+            {!newdatabase && (
+              <span title="Database Status">
+                {" "}
+                {serverAlive && databaseConnection === "true"
+                  ? "Database 🟢"
+                  : "Database 🔴"}
+              </span>
+            )}
           </div>
 
           <div>
@@ -1126,8 +1099,8 @@ export default function Home() {
                 </option>
               ))}
             </select>
-            {slugs?.length} Slugs <button onClick={fetchNewsId}>Refresh RO</button>
-
+            {slugs?.length} Slugs{" "}
+            <button onClick={fetchNewsId}>Refresh RO</button>
           </div>
           <div
             style={{
@@ -1149,7 +1122,7 @@ export default function Home() {
                   backgroundColor:
                     currentSlug === i
                       ? "green"
-                      : (val.DropStory === 1 || val.DropStory === 3)
+                      : val.DropStory === 1 || val.DropStory === 3
                         ? "#FF999C"
                         : !val.Approval
                           ? "red"
@@ -1158,36 +1131,54 @@ export default function Home() {
                 }}
               >
                 {/* {val.DropStory} */}
-                {showDropControl &&
+                {showDropControl && (
                   <input
-                    title={(val.DropStory === 0 || val.DropStory === 2) ? 'Uncheck to Drop' : 'Check to Include'}
+                    title={
+                      val.DropStory === 0 || val.DropStory === 2
+                        ? "Uncheck to Drop"
+                        : "Check to Include"
+                    }
                     type="checkbox"
                     checked={val.DropStory === 0 || val.DropStory === 2}
                     onChange={() => {
                       // Correctly updating the array
                       const updatedSlugs = [...slugs]; // Create a copy of the array
-                      updatedSlugs[i] = { ...updatedSlugs[i], DropStory: dropStoryValue(val) }; // Modify the object at index i
+                      updatedSlugs[i] = {
+                        ...updatedSlugs[i],
+                        DropStory: dropStoryValue(val),
+                      }; // Modify the object at index i
                       setSlugs(updatedSlugs); // Update state with the modified array
-                      fetch('/api/setDropedStory', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ dropstory: dropStoryValue(val), ScriptID: val.ScriptID, bulletindate: selectedDate, bulletinname: selectedRunOrderTitle, prompterId }),
+                      fetch("/api/setDropedStory", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          dropstory: dropStoryValue(val),
+                          ScriptID: val.ScriptID,
+                          bulletindate: selectedDate,
+                          bulletinname: selectedRunOrderTitle,
+                          prompterId,
+                        }),
                       })
-                        .then(response => response.json())
-                        .then(data => {
-                          console.log('Success:', data);
+                        .then((response) => response.json())
+                        .then((data) => {
+                          console.log("Success:", data);
                         })
-                        .catch(error => {
-                          console.error('Error:', error);
+                        .catch((error) => {
+                          console.error("Error:", error);
                         });
-
                     }}
                   />
-                }
-                <span title={'ScriptID:-' + val.ScriptID} style={{ fontSize: 30, }}>{i + 1}</span>{usedStory.includes(val.ScriptID) ? '✅' : ' '}
+                )}
+                <span
+                  title={"ScriptID:-" + val.ScriptID}
+                  style={{ fontSize: 30 }}
+                >
+                  {i + 1}
+                </span>
+                {usedStory.includes(val.ScriptID) ? "✅" : " "}
                 <label
                   title={
-                    (val.DropStory === 1 || val.DropStory === 3)
+                    val.DropStory === 1 || val.DropStory === 3
                       ? "Story Dropped"
                       : !val.Approval
                         ? "Story UnApproved"
@@ -1197,27 +1188,43 @@ export default function Home() {
                 >
                   {val.SlugName}{" "}
                 </label>{" "}
-                <label style={{ marginRight: 0, fontSize: 12 }}>{isVideoNndCGPresent(val)}</label>
+                <label style={{ marginRight: 0, fontSize: 12 }}>
+                  {isVideoNndCGPresent(val)}
+                </label>
                 <br />
               </div>
             ))}
           </div>
-          <button onClick={() => { setUsedStory([]) }}>Reset used story status</button>
+          <button
+            onClick={() => {
+              setUsedStory([]);
+            }}
+          >
+            Reset used story status
+          </button>
 
           <label>
             {" "}
             <input
               checked={sendUsedStory}
               type="checkbox"
-              onChange={() => setSendUsedStory((val) => {
-                setUsedStory([]);
-                return !val
-              })}
+              onChange={() =>
+                setSendUsedStory((val) => {
+                  setUsedStory([]);
+                  return !val;
+                })
+              }
             />{" "}
-            <b><span>Send Used Story</span></b>
+            <b>
+              <span>Send Used Story</span>
+            </b>
           </label>
 
-          <div title={useDB ? 'Data from database' : `Text file should be like this
+          <div
+            title={
+              useDB
+                ? "Data from database"
+                : `Text file should be like this
             Slugname1
             ZXZX
             Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 Stroty1 
@@ -1228,42 +1235,48 @@ export default function Home() {
             ZCZC
             Slugname3
             ZXZX
-            Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 `}>
+            Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 Story3 `
+            }
+          >
             <label>
               {" "}
               <input
                 checked={useDB}
                 type="checkbox"
-                onChange={() => setUseDB((val) => {
-                  setFile(null);
-                  return !val
-                })}
+                onChange={() =>
+                  setUseDB((val) => {
+                    setFile(null);
+                    return !val;
+                  })
+                }
               />{" "}
               <span>Use DB</span>
-              {!useDB &&
+              {!useDB && (
                 <input
                   type="file"
                   accept=".txt,.docx"
                   onChange={handleFileChange}
                 />
-              }
+              )}
             </label>
-            {!useDB && file && !ZXZX &&
+            {!useDB && file && !ZXZX && (
               <label>
                 <input
                   checked={singleScript}
                   type="checkbox"
-                  onChange={() => setSingleScript((val) => {
-                    return !val
-                  })}
+                  onChange={() =>
+                    setSingleScript((val) => {
+                      return !val;
+                    })
+                  }
                 />
                 <span>Single Script</span>
               </label>
-            }
-
-
+            )}
           </div>
-          <div><button onClick={exportScript}>Export Script</button></div>
+          <div>
+            <button onClick={exportScript}>Export Script</button>
+          </div>
           {/* <div>
             {JSON.stringify(textRef?.current?.getBoundingClientRect().top,)}
           </div>
@@ -1272,16 +1285,22 @@ export default function Home() {
           </div> */}
           {/* {JSON.stringify(usedStory)} */}
           <div>
-            Prompter ID <input style={{ width: 40 }} min={1} type="number" value={prompterId} onChange={(e) => {
-              setUsedStory([]);
-              setPrompterId(e.target.value);
-            }} />
+            Prompter ID{" "}
+            <input
+              style={{ width: 40 }}
+              min={1}
+              type="number"
+              value={prompterId}
+              onChange={(e) => {
+                setUsedStory([]);
+                setPrompterId(e.target.value);
+              }}
+            />
           </div>
         </div>
 
         {/* second column */}
-        <div style={{ height: '100vh' }}>
-
+        <div style={{ height: "100vh" }}>
           <div
             style={{
               border: "1px solid red",
@@ -1356,8 +1375,6 @@ export default function Home() {
               />{" "}
               <span>Allow UnApproved</span>
             </label>
-
-
           </div>
           <div style={{ border: "1px solid red", marginBottom: 10 }}>
             <div>
@@ -1390,9 +1407,9 @@ export default function Home() {
               position: "absolute",
               top: 150 + 28,
               overflow: "scroll",
-              padding: '0 25px',
-              boxSizing: 'border-box',
-              whiteSpace: 'pre-wrap',
+              padding: "0 25px",
+              boxSizing: "border-box",
+              whiteSpace: "pre-wrap",
             }}
           >
             {slugs && slugs[currentSlug] && (
@@ -1401,8 +1418,7 @@ export default function Home() {
                   backgroundColor: "blue",
                   color: "yellow",
                   width: 702,
-                  fontFamily: 'Times New Roman',
-
+                  fontFamily: "Times New Roman",
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
@@ -1410,61 +1426,78 @@ export default function Home() {
               </div>
             )}
 
-            {(!useDB && file) ?
+            {!useDB && file ? (
               <div>
                 <textarea
                   ref={textarea1Ref}
-                  dir={isRTL ? 'rtl' : 'ltr'}
+                  dir={isRTL ? "rtl" : "ltr"}
                   onKeyDown={handleTextareaKeyDown}
-                  value={slugs?.[currentSlug]?.Script ?? ''}
+                  value={slugs?.[currentSlug]?.Script ?? ""}
                   style={{
-                    backgroundColor: '#e0e0d2',
+                    backgroundColor: "#e0e0d2",
                     fontSize: `${fontSize}px`,
                     lineHeight: `${fontSize * 1.5}px`,
                     width: 702.22,
                     height: 510,
-                    resize: 'none',
+                    resize: "none",
                     fontFamily: currentFont,
-                    fontWeight: fontBold ? 'bold' : 'normal',
+                    fontWeight: fontBold ? "bold" : "normal",
                   }}
                   onChange={(e) => {
                     const updatedSlugs = [...slugs]; // Create a copy of the array
-                    updatedSlugs[currentSlug] = { ...updatedSlugs[currentSlug], Script: e.target.value }; // Modify the object at index i
+                    updatedSlugs[currentSlug] = {
+                      ...updatedSlugs[currentSlug],
+                      Script: e.target.value,
+                    }; // Modify the object at index i
                     setSlugs(updatedSlugs);
                   }}
                 />
-              </div> :
-              <div dir={isRTL ? 'rtl' : 'ltr'}
+              </div>
+            ) : (
+              <div
+                dir={isRTL ? "rtl" : "ltr"}
                 style={{
                   fontSize: `${fontSize}px`,
                   lineHeight: `${fontSize * 1.5}px`,
                   width: 702.22,
                   overflow: "hidden",
-                  fontWeight: fontBold ? 'bold' : 'normal',
+                  fontWeight: fontBold ? "bold" : "normal",
                   fontFamily: currentFont,
-                }}>
-                {(slugs?.[currentSlug]?.Script)?.trim() ?? ''}
+                }}
+              >
+                {slugs?.[currentSlug]?.Script?.trim() ?? ""}
               </div>
-            }
+            )}
           </div>
-          <div style={{ fontSize: 16, fontWeight: "normal", position: 'absolute', top: 770, }}>
-            {!useDB && file && <div><button onClick={saveScript}>Save Script</button></div>}
+          <div
+            style={{
+              fontSize: 16,
+              fontWeight: "normal",
+              position: "absolute",
+              top: 770,
+            }}
+          >
+            {!useDB && file && (
+              <div>
+                <button onClick={saveScript}>Save Script</button>
+              </div>
+            )}
 
-            <TTS content={slugs ? slugs[currentSlug]?.Script : ''} />
-            {file && <iframe
-              ref={iframeRef}
-              width="750"
-              height="40"
-              allow="microphone"
-              title="External Content"
-            ></iframe>}
+            <TTS content={slugs ? slugs[currentSlug]?.Script : ""} />
+            {file && (
+              <iframe
+                ref={iframeRef}
+                width="750"
+                height="40"
+                allow="microphone"
+                title="External Content"
+              ></iframe>
+            )}
           </div>
-
         </div>
 
         {/* Third column */}
-        <div style={{ height: '100vh' }}>
-
+        <div style={{ height: "100vh" }}>
           <div>
             <Scroll
               scrollContainerStyle={scrollContainerStyle}
@@ -1502,9 +1535,25 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView contentRefs={contentRefs2} textRef={textRef2} scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView
+                  contentRefs={contentRefs2}
+                  textRef={textRef2}
+                  scrollContainerStyle={scrollContainerStyle}
+                  scrollingTextStyle={scrollingTextStyle}
+                  currentFont={currentFont}
+                  fontBold={fontBold}
+                  isRTL={isRTL}
+                  fontColor={fontColor}
+                  allContent={allContent}
+                  currentStoryNumber={currentStoryNumber}
+                  crossedLines={crossedLines}
+                  storyLines={storyLines}
+                  slugs={slugs}
+                  newsReaderText={newsReaderText}
+                  showClock={showClock}
+                  startPosition={startPosition}
+                />
               </NewWindow>
-
             )}
             {showNewWindow2 && (
               <NewWindow
@@ -1513,7 +1562,24 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView contentRefs={contentRefs2} textRef={textRef2} scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView
+                  contentRefs={contentRefs2}
+                  textRef={textRef2}
+                  scrollContainerStyle={scrollContainerStyle}
+                  scrollingTextStyle={scrollingTextStyle}
+                  currentFont={currentFont}
+                  fontBold={fontBold}
+                  isRTL={isRTL}
+                  fontColor={fontColor}
+                  allContent={allContent}
+                  currentStoryNumber={currentStoryNumber}
+                  crossedLines={crossedLines}
+                  storyLines={storyLines}
+                  slugs={slugs}
+                  newsReaderText={newsReaderText}
+                  showClock={showClock}
+                  startPosition={startPosition}
+                />
               </NewWindow>
             )}
 
@@ -1524,7 +1590,24 @@ export default function Home() {
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
               >
-                <ScrollView contentRefs={contentRefs2} textRef={textRef2} scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} />
+                <ScrollView
+                  contentRefs={contentRefs2}
+                  textRef={textRef2}
+                  scrollContainerStyle={scrollContainerStyle}
+                  scrollingTextStyle={scrollingTextStyle}
+                  currentFont={currentFont}
+                  fontBold={fontBold}
+                  isRTL={isRTL}
+                  fontColor={fontColor}
+                  allContent={allContent}
+                  currentStoryNumber={currentStoryNumber}
+                  crossedLines={crossedLines}
+                  storyLines={storyLines}
+                  slugs={slugs}
+                  newsReaderText={newsReaderText}
+                  showClock={showClock}
+                  startPosition={startPosition}
+                />
               </NewWindowforfullscreen>
             )}
           </div>
@@ -1557,7 +1640,10 @@ export default function Home() {
               <button onClick={() => setSpeed(5)}> 5</button>
               <button onClick={() => setSpeed(6)}>6</button>
               <button onClick={() => setSpeed(7)}>7</button>
-              <button title='Increase speed by 1' onClick={() => setSpeed((val) => parseInt(val) + 1)}>
+              <button
+                title="Increase speed by 1"
+                onClick={() => setSpeed((val) => parseInt(val) + 1)}
+              >
                 ++1
               </button>
               <button
@@ -1581,8 +1667,12 @@ export default function Home() {
               <button onClick={() => setSpeed(-5)}> -5</button>
               <button onClick={() => setSpeed(-6)}>-6</button>
               <button onClick={() => setSpeed(-7)}>-7</button>
-              <button title='Decrease speed by 1' onClick={() => setSpeed((val) => val - 1)}>--1</button>
-
+              <button
+                title="Decrease speed by 1"
+                onClick={() => setSpeed((val) => val - 1)}
+              >
+                --1
+              </button>
             </div>
             <div>
               Speed: {speed}
@@ -1601,7 +1691,6 @@ export default function Home() {
             </div>
             <div style={{ textAlign: "center" }}>
               Right Click to Stop and Play
-
             </div>
             <div style={{ textAlign: "left" }}>
               <label>
@@ -1611,7 +1700,9 @@ export default function Home() {
                   checked={isRTL}
                   onChange={(e) => setIsRTL(e.target.checked)}
                 />
-                <b><span>Right to left for urdu</span></b>
+                <b>
+                  <span>Right to left for urdu</span>
+                </b>
               </label>
             </div>
 
@@ -1623,20 +1714,24 @@ export default function Home() {
                   checked={fontBold}
                   onChange={(e) => setFontBold(e.target.checked)}
                 />
-                <b><span>fontBold</span></b>
+                <b>
+                  <span>fontBold</span>
+                </b>
               </label>
             </div>
             <div style={{ textAlign: "left" }}>
               <b> Font: </b>{" "}
-              <select onChange={(e) => {
-                setCurrentFont(e.target.value);
-              }}
+              <select
+                onChange={(e) => {
+                  setCurrentFont(e.target.value);
+                }}
                 onKeyDown={(e) => {
-                  if (e.code === 'ArrowUp' || e.code === 'ArrowDown') {
+                  if (e.code === "ArrowUp" || e.code === "ArrowDown") {
                     e.stopPropagation();
                   }
                 }}
-                value={currentFont}>
+                value={currentFont}
+              >
                 {fontList.map((val, i) => {
                   return (
                     <option key={i} value={val}>
@@ -1653,7 +1748,7 @@ export default function Home() {
               stopOnNext={stopOnNext}
               setStopOnNext={setStopOnNext}
             />
-            <p style={{ fontWeight: 'bold' }}>
+            <p style={{ fontWeight: "bold" }}>
               Last Update:{" "}
               {hasMounted && latestDate instanceof Date && !isNaN(latestDate)
                 ? latestDate.toLocaleString(undefined, {
@@ -1666,11 +1761,14 @@ export default function Home() {
                 })
                 : "Invalid Time"}
             </p>
-            {hasMounted && latestDate instanceof Date && !isNaN(latestDate) && latestDate.toString()}
-
+            {hasMounted &&
+              latestDate instanceof Date &&
+              !isNaN(latestDate) &&
+              latestDate.toString()}
 
             <div>
-              For HDMI or VGA output <button
+              For HDMI or VGA output{" "}
+              <button
                 onClick={() => {
                   if (showNewWindow) {
                     newWindowRef.current.close();
@@ -1680,7 +1778,6 @@ export default function Home() {
               >
                 {showNewWindow ? "Close New Window" : "Open New Window"}
               </button>
-
               <button
                 onClick={() => {
                   if (showNewWindow2) {
@@ -1691,7 +1788,6 @@ export default function Home() {
               >
                 {showNewWindow2 ? "Close New Window2" : "Open New Window2"}
               </button>
-
               <button
                 onClick={() => {
                   if (showNewWindow3) {
@@ -1702,39 +1798,47 @@ export default function Home() {
               >
                 {showNewWindow3 ? "Close Full Screen" : "Open Full Screen"}
               </button>
-              <button onClick={() => {
-                window.open('/WebSocketOutput', '', `width=${scrollWidth},height=${scrollHeight + 40}`);
-                setTimeout(() => {
+              <button
+                onClick={() => {
+                  window.open(
+                    "/WebSocketOutput",
+                    "",
+                    `width=${scrollWidth},height=${scrollHeight + 40}`
+                  );
+                  setTimeout(() => {
+                    const socket = socketRef.current;
+                    if (!socket) return;
 
-                  const socket = socketRef.current;
-                  if (!socket) return;
+                    // socket.emit('newPosition', newPosition);
+                    socket.emit("setCurrentStoryNumber", currentStoryNumber);
+                    socket.emit("storyLines", storyLines);
+                    socket.emit("crossedLines", crossedLines);
+                    socket.emit("allContent", allContent);
+                    socket.emit("setSlugs", slugs);
 
-                  // socket.emit('newPosition', newPosition);
-                  socket.emit('setCurrentStoryNumber', currentStoryNumber);
-                  socket.emit('storyLines', storyLines);
-                  socket.emit('crossedLines', crossedLines);
-                  socket.emit('allContent', allContent);
-                  socket.emit('setSlugs', slugs);
+                    // socket.emit('setFontSize', fontSize * 2.5);
+                    socket.emit("setStartPosition", startPosition);
 
-                  // socket.emit('setFontSize', fontSize * 2.5);
-                  socket.emit('setStartPosition', startPosition);
-
-                  socket.emit('setShowClock', showClock);
-                  socket.emit('setNewsReaderText', newsReaderText);
-                  socket.emit('rtl', isRTL);
-                  // socket.emit('bgColor', bgColor);
-                  socket.emit('fontColor', fontColor);
-                  socket.emit('fontBold', fontBold);
-                  socket.emit('currentFont', currentFont);
-                  socket.emit('scrollContainerStyle', scrollContainerStyle);
-                  socket.emit('scrollingTextStyle', scrollingTextStyle);
-
-                }, 3000);
-              }}>WebSocketOutput</button>
+                    socket.emit("setShowClock", showClock);
+                    socket.emit("setNewsReaderText", newsReaderText);
+                    socket.emit("rtl", isRTL);
+                    // socket.emit('bgColor', bgColor);
+                    socket.emit("fontColor", fontColor);
+                    socket.emit("fontBold", fontBold);
+                    socket.emit("currentFont", currentFont);
+                    socket.emit("scrollContainerStyle", scrollContainerStyle);
+                    socket.emit("scrollingTextStyle", scrollingTextStyle);
+                  }, 3000);
+                }}
+              >
+                WebSocketOutput
+              </button>
             </div>
 
-            <button onClick={() => setShowSettings(val => !val)}>{showSettings ? 'Hide Setting' : 'Show Setting'}</button>
-            <div style={{ display: showSettings ? '' : 'none' }}>
+            <button onClick={() => setShowSettings((val) => !val)}>
+              {showSettings ? "Hide Setting" : "Show Setting"}
+            </button>
+            <div style={{ display: showSettings ? "" : "none" }}>
               <div>
                 Font Size:
                 <input
@@ -1752,8 +1856,7 @@ export default function Home() {
                     setStartPosition(e.target.value);
                   }}
                 />
-
-                <div style={{ display: 'flex', border: '1px solid red' }}>
+                <div style={{ display: "flex", border: "1px solid red" }}>
                   <div>
                     DB_HOST:
                     <input
@@ -1787,11 +1890,8 @@ export default function Home() {
                       }}
                     />
                     <button onClick={changeDB_NAME}>Set</button>
-
                   </div>
-
                 </div>
-
                 <div
                   style={{
                     display: "flex",
@@ -1800,13 +1900,22 @@ export default function Home() {
                     height: "100%",
                   }}
                 >
-
-                  <UseSocketControls speed={speed} setSpeed={setSpeed} tempSpeed={tempSpeed} setTempSpeed={setTempSpeed} fromStart={fromStart} handleDoubleClick={handleDoubleClick} slugs={slugs} currentStoryNumber={currentStoryNumber} onclickSlug={onclickSlug} previous={previous} next={next} />
+                  <UseSocketControls
+                    speed={speed}
+                    setSpeed={setSpeed}
+                    tempSpeed={tempSpeed}
+                    setTempSpeed={setTempSpeed}
+                    fromStart={fromStart}
+                    handleDoubleClick={handleDoubleClick}
+                    slugs={slugs}
+                    currentStoryNumber={currentStoryNumber}
+                    onclickSlug={onclickSlug}
+                    previous={previous}
+                    next={next}
+                  />
                 </div>
-
               </div>
               <div>
-
                 <label>
                   {" "}
                   <input
@@ -1815,29 +1924,33 @@ export default function Home() {
                     onChange={(e) => setShowDropControl(e.target.checked)}
                   />
                   <span>show Drop Control</span>
-                </label>
-                {" "}
-
-                Bg Color <input type="color" value={bgColor} onChange={e => {
-                  setbgColor(e.target.value);
-                  socketRef.current.emit('bgColor', e.target.value);
-                }} />
-                Font Color:<input type="color" value={fontColor} onChange={e => {
-                  setFontColor(e.target.value);
-                  socketRef.current.emit('fontColor', e.target.value);
-                }} />
-                <button onClick={() => window.open(`http://${ip}:3000/m`)}>Mobile controllerr</button>
+                </label>{" "}
+                Bg Color{" "}
+                <input
+                  type="color"
+                  value={bgColor}
+                  onChange={(e) => {
+                    setbgColor(e.target.value);
+                    socketRef.current.emit("bgColor", e.target.value);
+                  }}
+                />
+                Font Color:
+                <input
+                  type="color"
+                  value={fontColor}
+                  onChange={(e) => {
+                    setFontColor(e.target.value);
+                    socketRef.current.emit("fontColor", e.target.value);
+                  }}
+                />
+                <button onClick={() => window.open(`http://${ip}:3000/m`)}>
+                  Mobile controllerr
+                </button>
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
-
     </div>
   );
 }
