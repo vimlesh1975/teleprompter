@@ -107,7 +107,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (runOrderTitles.length > 0) {
+    if (runOrderTitles?.length > 0) {
       setSelectedRunOrderTitle(runOrderTitles[0].title);
     }
   }, [runOrderTitles]);
@@ -427,7 +427,7 @@ export default function Home() {
         ...oldSlugs.slice(0, currentStoryNumber - 1 - doubleClickedPosition),
         ...newwslugs.slice(currentStoryNumber - 1),
       ];
-      console.log(mixed.length, slugs.length);
+      // console.log(mixed.length, slugs.length);
 
       if (
         latestDate === null ||
