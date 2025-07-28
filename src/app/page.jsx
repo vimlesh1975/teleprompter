@@ -232,7 +232,7 @@ export default function Home() {
         }),
       })
         .then((response) => response.json())
-        .then(() => {})
+        .then(() => { })
         .catch((error) => {
           console.error("Error:", error);
         });
@@ -394,144 +394,6 @@ export default function Home() {
   const handleCloseNewWindow3 = () => {
     setShowNewWindow3(false);
   };
-  // const timerFunction = async () => {
-  //   if (selectedRunOrderTitle === '') {
-  //     return;
-  //   }
-  //   if (!useDB) {
-  //     return
-  //   }
-
-  //   try {
-  //     const res = await fetch(
-  //       `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
-  //     );
-  //     const data = await res.json();
-
-  //     const newSlugsTotal = data.data;
-  //     if (!newSlugsTotal) return
-  //     const LastModifiedTimeTotal = newSlugsTotal.map(
-  //       (slug) => slug.LastModifiedTime
-  //     );
-  //     const ScriptLastModifiedTimeTotal = newSlugsTotal.map(
-  //       (slug) => slug.ScriptLastModifiedTime
-  //     );
-  //     const dateArrayTotal = [
-  //       ...LastModifiedTimeTotal,
-  //       ...ScriptLastModifiedTimeTotal,
-  //     ];
-  //     const newLatestDateTotal = new Date(
-  //       Math.max(...dateArrayTotal.map((date) => new Date(date)))
-  //     );
-
-  //     if (
-  //       latestDate === null ||
-  //       newLatestDateTotal > latestDate ||
-  //       data.data.length !== slugs.length
-  //     ) {
-  //       setLatestDate(newLatestDateTotal);
-  //       setSlugs(data.data);
-  //     } else {
-  //     }
-
-  //     const newSlugs = data.data.slice(doubleClickedPosition);
-  //     const LastModifiedTime = newSlugs.map((slug) => slug.LastModifiedTime);
-  //     const ScriptLastModifiedTime = newSlugs.map(
-  //       (slug) => slug.ScriptLastModifiedTime
-  //     );
-  //     const dateArray = [...LastModifiedTime, ...ScriptLastModifiedTime];
-  //     const newLatestDate = new Date(
-  //       Math.max(...dateArray.map((date) => new Date(date)))
-  //     );
-
-  //     if (
-  //       latestDate === null ||
-  //       newLatestDate > latestDate ||
-  //       data.data.length !== slugs.length
-  //     ) {
-  //       if (
-  //         (data.data[currentStoryNumber - 1]?.DropStory === 1) || (data.data[currentStoryNumber - 1]?.DropStory === 3) ||
-  //         (data.data[currentStoryNumber - 1]?.Approval === 0)
-  //       ) {
-  //         handleDoubleClick(currentStoryNumber);
-  //       } else {
-  //         fetchAllContent(newSlugs, doubleClickedPosition);
-  //       }
-  //     } else {
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  // const timerFunction = async () => {
-  //   if (!selectedRunOrderTitle || !useDB) return;
-
-  //   try {
-  //     const res = await fetch(
-  //       `/api/ShowRunOrder?NewsId=${selectedRunOrderTitle}&date=${selectedDate}`
-  //     );
-  //     const { data } = await res.json();
-  //     if (!data) return;
-
-  //     const dataLengthChanged = data.length !== slugs.length;
-
-  //     // Extract and sanitize all timestamps
-  //     const allDates = data.flatMap(slug => [
-  //       slug.LastModifiedTime,
-  //       slug.ScriptLastModifiedTime
-  //     ]).filter(date => date && !isNaN(new Date(date)));
-
-  //     if (allDates.length === 0) {
-  //       console.warn("No valid timestamps found.");
-  //       return;
-  //     }
-
-  //     const newLatestDateTotal = new Date(
-  //       Math.max(...allDates.map(date => new Date(date).getTime()))
-  //     );
-
-  //     if (
-  //       latestDate === null ||
-  //       newLatestDateTotal > latestDate ||
-  //       dataLengthChanged
-  //     ) {
-  //       setLatestDate(newLatestDateTotal);
-  //       setSlugs(data);
-  //     }
-
-  //     // Process sliced data for current story logic
-  //     const slicedSlugs = data.slice(doubleClickedPosition);
-  //     const slicedDates = slicedSlugs.flatMap(slug => [
-  //       slug.LastModifiedTime,
-  //       slug.ScriptLastModifiedTime
-  //     ]).filter(date => date && !isNaN(new Date(date)));
-
-  //     if (slicedDates.length === 0) return;
-
-  //     const newLatestDate = new Date(
-  //       Math.max(...slicedDates.map(date => new Date(date).getTime()))
-  //     );
-
-  //     if (
-  //       latestDate === null ||
-  //       newLatestDate > latestDate ||
-  //       dataLengthChanged
-  //     ) {
-  //       const currentStory = data[currentStoryNumber - 1];
-  //       if (
-  //         currentStory?.DropStory === 1 ||
-  //         currentStory?.DropStory === 3 ||
-  //         currentStory?.Approval === 0
-  //       ) {
-  //         handleDoubleClick(currentStoryNumber);
-  //       } else {
-  //         fetchAllContent(slicedSlugs, doubleClickedPosition);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error in timerFunction:", error);
-  //   }
-  // };
 
   const timerFunction = async () => {
     if (!selectedRunOrderTitle || !useDB) return;
@@ -605,6 +467,7 @@ export default function Home() {
           handleDoubleClick(currentStoryNumber);
         } else {
           // fetchAllContent(slicedSlugs, doubleClickedPosition);
+          setOldSlugs(mixed);
           fetchAllContent(mixed, doubleClickedPosition);
         }
       }
@@ -702,19 +565,17 @@ export default function Home() {
             (slug.DropStory === 0 || slug.DropStory === 2) &&
             (slug?.Approval || allowUnApproved)
           ) {
-            data1[i * 3] = `${startNumber + i + 1} ${
-              slug?.SlugName
-            }${isVideoNndCGPresent(slug)}`;
+            data1[i * 3] = `${startNumber + i + 1} ${slug?.SlugName
+              }${isVideoNndCGPresent(slug)}`;
             data1[i * 3 + 1] = slug.Script
               ? `${slug.Script?.trim().split("$$$$")[0]}`
               : "";
             data1[i * 3 + 2] = `--------------`;
           } else {
-            data1[i * 3] = `${startNumber + i + 1} ${
-              !(slug?.DropStory === 0 || slug?.DropStory === 2)
-                ? "Story Dropped"
-                : "Story UnApproved"
-            }`;
+            data1[i * 3] = `${startNumber + i + 1} ${!(slug?.DropStory === 0 || slug?.DropStory === 2)
+              ? "Story Dropped"
+              : "Story UnApproved"
+              }`;
 
             data1[i * 3 + 1] = ` `;
             data1[i * 3 + 2] = ``;
@@ -1040,11 +901,9 @@ export default function Home() {
     if (!slugs) return;
     let text = "";
     slugs.forEach((item) => {
-      text += `${item.SlugName}${
-        item.DropStory === 1 || item.DropStory === 3 ? "(Story Dropped)" : ""
-      }${!item.approved ? "(Story UnApproved)" : ""}\nZXZX\n${
-        item.Script
-      }\nZCZC\n`;
+      text += `${item.SlugName}${item.DropStory === 1 || item.DropStory === 3 ? "(Story Dropped)" : ""
+        }${!item.approved ? "(Story UnApproved)" : ""}\nZXZX\n${item.Script
+        }\nZCZC\n`;
     });
     // Remove the last occurrence of "ZCZC\n"
     text = text.replace(/ZCZC\n$/, "");
@@ -1264,10 +1123,10 @@ export default function Home() {
                     currentSlug === i
                       ? "green"
                       : val.DropStory === 1 || val.DropStory === 3
-                      ? "#FF999C"
-                      : !val.Approval
-                      ? "red"
-                      : "#a1a178",
+                        ? "#FF999C"
+                        : !val.Approval
+                          ? "red"
+                          : "#a1a178",
                   margin: 10,
                 }}
               >
@@ -1322,8 +1181,8 @@ export default function Home() {
                     val.DropStory === 1 || val.DropStory === 3
                       ? "Story Dropped"
                       : !val.Approval
-                      ? "Story UnApproved"
-                      : ""
+                        ? "Story UnApproved"
+                        : ""
                   }
                   style={{ cursor: "pointer" }}
                 >
@@ -1893,13 +1752,13 @@ export default function Home() {
               Last Update:{" "}
               {hasMounted && latestDate instanceof Date && !isNaN(latestDate)
                 ? latestDate.toLocaleString(undefined, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    second: "numeric",
-                  })
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  second: "numeric",
+                })
                 : "Invalid Time"}
             </p>
             {hasMounted &&
