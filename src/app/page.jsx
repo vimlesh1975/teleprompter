@@ -1750,21 +1750,11 @@ export default function Home() {
             />
             <p style={{ fontWeight: "bold" }}>
               Last Update:{" "}
-              {hasMounted && latestDate instanceof Date && !isNaN(latestDate)
-                ? latestDate.toLocaleString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  second: "numeric",
-                })
-                : "Invalid Time"}
+              {hasMounted &&
+                latestDate instanceof Date &&
+                !isNaN(latestDate) &&
+                latestDate.toString()}
             </p>
-            {hasMounted &&
-              latestDate instanceof Date &&
-              !isNaN(latestDate) &&
-              latestDate.toString()}
 
             <div>
               For HDMI or VGA output{" "}

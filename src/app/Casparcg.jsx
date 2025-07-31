@@ -5,12 +5,8 @@ import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
 export default function Home({ handleDoubleClick, setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
-
-  const [fliped, setFliped] = useState(false);
   const [socketcurrentstory, setSocketcurrentstory] = useState('not set');
-
   const socketRef = useRef(null);
-
   useEffect(() => {
     socketRef.current = io();
 
@@ -63,30 +59,10 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
     <div>
       <div>
         <div>
-          {/* For Casparcg Output <button
-            style={{ backgroundColor: connected ? 'green' : 'red' }}
-            onClick={() =>
-              endpoint({
-                action: 'connect',
-              })
-            }
-          >
-            Connect
-          </button> */}
-          {/* <button
-            onClick={() =>
-              endpoint({
-                action: 'disconnect',
-              })
-            }
-          >
-            DisConnect
-          </button> */}
           <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
           {socketcurrentstory.ScriptID}
         </div>
         <div>
-          {/* Method 1: */}
           <button
             onClick={() => {
 
@@ -94,8 +70,6 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
                 action: 'endpoint',
                 command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
-
-
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
                 socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
@@ -118,15 +92,12 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
                 handleDoubleClick(0);
               }, 4000);
             }
-
             }
-
           >
             Start Teleprompting in Caspar with Normal Method
           </button>
         </div>
         <div>
-          {/* Method 2: */}
           <button
             onClick={() => {
               endpoint({
@@ -141,10 +112,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
           >
             Start Teleprompting in Caspar with Screen Capture Method
           </button>
-
-
         </div>
-
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div>
             <button
@@ -163,42 +131,8 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
             >
               Stop  Output
             </button>
-            <button
-              onClick={() => {
-                endpoint({
-                  action: 'endpoint',
-                  command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
-                });
-                setFliped(val => !val);
-              }}
-            >
-              Toggle Flip
-            </button>
           </div>
           <div >
-            <button onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: `play 2-97 route://1`
-              });
-              endpoint({
-                action: 'endpoint',
-                command: `mixer 2-97 fill 0 0 1 1`
-              });
-            }}>Play 2nd channel </button>
-            <button onClick={() => {
-              playOnSecondChannelinFlippedMode();
-            }}>Play 2nd channel flip mode</button>
-            <button onClick={() => {
-              endpoint({
-                action: 'endpoint',
-                command: `stop 2-97`
-              });
-              endpoint({
-                action: 'endpoint',
-                command: `mixer 2-97 clear`
-              });
-            }}>Stop 2nd Channel</button>
           </div>
         </div>
       </div>
