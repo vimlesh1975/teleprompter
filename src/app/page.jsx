@@ -1934,7 +1934,7 @@ export default function Home() {
                   }}
                 />
                 <button onClick={() => window.open(`http://${ip}:3000/m`)}>
-                  Mobile controllerr
+                  Mobile controller
                 </button>
               </div>
             </div>

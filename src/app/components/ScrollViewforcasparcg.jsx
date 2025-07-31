@@ -103,8 +103,6 @@ const ScrollViewforcasparcg = () => {
         marginTop: -8,
         marginLeft: -8,
     }} >
-        {/* {textRef}
-        ddd */}
         <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} contentRefs={contentRefs} textRef={textRef} />
     </div>
     )
