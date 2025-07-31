@@ -3,7 +3,10 @@ import ScrollViewforcasparcg from '../components/ScrollViewforcasparcg';
 
 const Page = () => {
   return (
-    <div >
+    <div style={{
+      transform: `scale(${1}, ${0.94})`,
+      transformOrigin: "top left",
+    }} >
       <ScrollViewforcasparcg />
     </div>
   );
