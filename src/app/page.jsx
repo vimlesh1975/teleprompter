@@ -1160,24 +1160,27 @@ export default function Home() {
                         DropStory: dropStoryValue(val),
                       }; // Modify the object at index i
                       setSlugs(updatedSlugs); // Update state with the modified array
-                      fetch("/api/setDropedStory", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          dropstory: dropStoryValue(val),
-                          ScriptID: val.ScriptID,
-                          bulletindate: selectedDate,
-                          bulletinname: selectedRunOrderTitle,
-                          prompterId,
-                        }),
-                      })
-                        .then((response) => response.json())
-                        .then((data) => {
-                          console.log("Success:", data);
+                      if (useDB) {
+                        fetch("/api/setDropedStory", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            dropstory: dropStoryValue(val),
+                            ScriptID: val.ScriptID,
+                            bulletindate: selectedDate,
+                            bulletinname: selectedRunOrderTitle,
+                            prompterId,
+                          }),
                         })
-                        .catch((error) => {
-                          console.error("Error:", error);
-                        });
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log("Success:", data);
+                          })
+                          .catch((error) => {
+                            console.error("Error:", error);
+                          });
+                      }
+
                     }}
                   />
                 )}
