@@ -1394,7 +1394,7 @@ export default function Home() {
               <button onClick={() => setNewsReaderText("Continue...")}>
                 Continue...
               </button>
-              <button onClick={() => setNewsReaderText("Stop...")}>Stop</button>
+              <button onClick={() => setNewsReaderText("Stop...")}>Stop</button> {newsReaderText}
             </div>
           </div>
           <div
