@@ -1117,6 +1117,18 @@ export default function Home() {
                 onClick={() => {
                   onclickSlug(val, i);
                 }}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  const aa = [...usedStory];
+                  if (aa.includes(val.ScriptID)) {
+                    const index = aa.indexOf(val.ScriptID);
+                    if (index !== -1) {
+                      aa.splice(index, 1);
+                      setUsedStory(aa);
+                    }
+                  }
+                }
+                }
                 onDoubleClick={() => handleDoubleClick(i)}
                 style={{
                   backgroundColor:
