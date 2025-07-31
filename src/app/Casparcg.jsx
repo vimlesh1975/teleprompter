@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
 
 export default function Home({ handleDoubleClick, setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
+  const [fliped, setFliped] = useState(false);
   const [socketcurrentstory, setSocketcurrentstory] = useState('not set');
   const socketRef = useRef(null);
   useEffect(() => {
@@ -130,6 +131,17 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
               }
             >
               Stop  Output
+            </button>
+            <button
+              onClick={() => {
+                endpoint({
+                  action: 'endpoint',
+                  command: !fliped ? 'mixer 1-97 fill 1 0 -1 1' : 'mixer 1-97 fill 0 0 1 1',
+                });
+                setFliped(val => !val);
+              }}
+            >
+              Toggle Flip
             </button>
           </div>
           <div >
