@@ -29,31 +29,7 @@ const ScrollView = ({
                     <div style={{ display: 'flex', justifyContent: 'space-around', width: 1920 }}>
                         <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                         <div>{newsReaderText}</div>
-                        {/* <div><Count currentStoryNumber={currentStoryNumber} /></div> */}
-                        {/* <div>
-                            {'FS:' + scrollingTextStyle.fontSize}
-                        </div> */}
-
-                        <div
-                            style={{
-                                width: 140,
-                                fontFamily: 'monospace',
-                                textAlign: 'right',
-                                position: 'relative',
-                            }}
-                        >
-                            {/* Invisible placeholder to reserve space */}
-                            {/* <span style={{ visibility: 'hidden' }}>-99999999.9</span> */}
-                            {/* <span style={{ position: 'absolute', right: 0, top: 0 }}>
-                                {
-                                    (() => {
-                                        const raw = parseFloat((scrollingTextStyle.transform?.match(/-?\d+(\.\d+)?/) || [0])[0]);
-                                        return Number.isInteger(raw) ? raw : raw.toString();
-                                    })()
-                                }
-                            </span> */}
-                        </div>
-
+                        <div><Count currentStoryNumber={currentStoryNumber} /></div>
                         <div>{showClock ? '' : '.'}</div>
                         <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
                         <div>{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
@@ -69,8 +45,6 @@ const ScrollView = ({
                                 dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'}
                                 ref={(el) => (contentRefs.current[i] = el)}
                                 style={{
-                                    fontSize: i % 3 === 0 ? scrollingTextStyle.fontSize - 20 : scrollingTextStyle.fontSize,
-                                    lineHeight: i % 3 === 0 ? `${(scrollingTextStyle.fontSize - 20) * 1.5}px` : scrollingTextStyle.lineHeight,
                                     fontFamily: (i % 3 === 1) ? currentFont : 'Times New Roman',
                                     backgroundColor: i % 3 === 0 ? 'blue' : 'transparent',
                                     color: i % 3 === 0 ? 'yellow' : fontColor,

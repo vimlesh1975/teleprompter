@@ -676,10 +676,13 @@ export default function Home() {
   }, [slugs, handleDoubleClick, allowUnApproved]);
 
   useEffect(() => {
+    if (!useDB) {
+      return;
+    }
+    setCurrentSlug(currentStoryNumber - 1);
     if (!slugs) return;
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
-    setCurrentSlug(currentStoryNumber - 1);
-  }, [currentStoryNumber, slugs]);
+  }, [currentStoryNumber, slugs, useDB]);
 
   useEffect(() => {
     if (stopAfterStoryChange) {
@@ -1157,27 +1160,24 @@ export default function Home() {
                         DropStory: dropStoryValue(val),
                       }; // Modify the object at index i
                       setSlugs(updatedSlugs); // Update state with the modified array
-                      if (useDB) {
-                        fetch("/api/setDropedStory", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            dropstory: dropStoryValue(val),
-                            ScriptID: val.ScriptID,
-                            bulletindate: selectedDate,
-                            bulletinname: selectedRunOrderTitle,
-                            prompterId,
-                          }),
+                      fetch("/api/setDropedStory", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          dropstory: dropStoryValue(val),
+                          ScriptID: val.ScriptID,
+                          bulletindate: selectedDate,
+                          bulletinname: selectedRunOrderTitle,
+                          prompterId,
+                        }),
+                      })
+                        .then((response) => response.json())
+                        .then((data) => {
+                          console.log("Success:", data);
                         })
-                          .then((response) => response.json())
-                          .then((data) => {
-                            console.log("Success:", data);
-                          })
-                          .catch((error) => {
-                            console.error("Error:", error);
-                          });
-                      }
-
+                        .catch((error) => {
+                          console.error("Error:", error);
+                        });
                     }}
                   />
                 )}
@@ -1427,8 +1427,6 @@ export default function Home() {
             {slugs && slugs[currentSlug] && (
               <div
                 style={{
-                  fontSize: fontSize - (20 / 2.5),
-                  lineHeight: `${(fontSize - (20 / 2.5)) * 1.5}px`,
                   backgroundColor: "blue",
                   color: "yellow",
                   width: 702,
@@ -1697,6 +1695,7 @@ export default function Home() {
                 step={1}
                 value={speed}
                 onChange={(e) => {
+                  console.log("CHANGE", e.target.value);
                   setSpeed(Number(e.target.value));
                 }}
                 style={{ width: "60%" }}
