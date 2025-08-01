@@ -30,7 +30,10 @@ const ScrollView = ({
                         <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                         <div>{newsReaderText}</div>
                         {/* <div><Count currentStoryNumber={currentStoryNumber} /></div> */}
-                        <div>{'FS:' + scrollingTextStyle.fontSize}</div>
+                        {/* <div>
+                            {'FS:' + scrollingTextStyle.fontSize}
+                        </div> */}
+
                         <div
                             style={{
                                 width: 140,
@@ -40,15 +43,16 @@ const ScrollView = ({
                             }}
                         >
                             {/* Invisible placeholder to reserve space */}
-                            <span style={{ visibility: 'hidden' }}>-99999999.9</span>
-
-                            {/* Real number absolutely positioned on top */}
-                            <span style={{ position: 'absolute', right: 0, top: 0 }}>
-                                {parseFloat((scrollingTextStyle.transform?.match(/-?\d+(\.\d+)?/) || [0])[0])}
-                            </span>
+                            {/* <span style={{ visibility: 'hidden' }}>-99999999.9</span> */}
+                            {/* <span style={{ position: 'absolute', right: 0, top: 0 }}>
+                                {
+                                    (() => {
+                                        const raw = parseFloat((scrollingTextStyle.transform?.match(/-?\d+(\.\d+)?/) || [0])[0]);
+                                        return Number.isInteger(raw) ? raw : raw.toString();
+                                    })()
+                                }
+                            </span> */}
                         </div>
-
-
 
                         <div>{showClock ? '' : '.'}</div>
                         <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
