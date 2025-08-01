@@ -676,13 +676,10 @@ export default function Home() {
   }, [slugs, handleDoubleClick, allowUnApproved]);
 
   useEffect(() => {
-    if (!useDB) {
-      return;
-    }
-    setCurrentSlug(currentStoryNumber - 1);
     if (!slugs) return;
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
-  }, [currentStoryNumber, slugs, useDB]);
+    setCurrentSlug(currentStoryNumber - 1);
+  }, [currentStoryNumber, slugs]);
 
   useEffect(() => {
     if (stopAfterStoryChange) {
@@ -1698,7 +1695,6 @@ export default function Home() {
                 step={1}
                 value={speed}
                 onChange={(e) => {
-                  console.log("CHANGE", e.target.value);
                   setSpeed(Number(e.target.value));
                 }}
                 style={{ width: "60%" }}
