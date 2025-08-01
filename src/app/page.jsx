@@ -62,7 +62,7 @@ export default function Home() {
   const [showNewWindow2, setShowNewWindow2] = useState(false);
   const [showNewWindow3, setShowNewWindow3] = useState(false);
   const [doubleClickedPosition, setDoubleClickedPosition] = useState(0);
-  const [fontSize, setFontSize] = useState(39);
+  const [fontSize, setFontSize] = useState(36);
   const [stopAfterStoryChange, setStopAfterStoryChange] = useState(false);
   const [stopOnNext, setStopOnNext] = useState(false);
   const [latestDate, setLatestDate] = useState(null);
@@ -1427,6 +1427,8 @@ export default function Home() {
             {slugs && slugs[currentSlug] && (
               <div
                 style={{
+                  fontSize: fontSize - (20 / 2.5),
+                  lineHeight: `${(fontSize - (20 / 2.5)) * 1.5}px`,
                   backgroundColor: "blue",
                   color: "yellow",
                   width: 702,
