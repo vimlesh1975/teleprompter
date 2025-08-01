@@ -676,13 +676,10 @@ export default function Home() {
   }, [slugs, handleDoubleClick, allowUnApproved]);
 
   useEffect(() => {
-    if (!useDB) {
-      return;
-    }
-    setCurrentSlug(currentStoryNumber - 1);
     if (!slugs) return;
     setCurrentSlugName(slugs[currentStoryNumber - 1]?.SlugName);
-  }, [currentStoryNumber, slugs, useDB]);
+    setCurrentSlug(currentStoryNumber - 1);
+  }, [currentStoryNumber, slugs]);
 
   useEffect(() => {
     if (stopAfterStoryChange) {
