@@ -68,8 +68,8 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
                     return;
                 }
 
-                // setNewPosition(prev => parseFloat((prev - speed * 1.2).toFixed(2)));
                 setNewPosition(prev => parseFloat((prev - speed * 1.2).toFixed(2)));
+                // setNewPosition(prev => parseFloat((prev - speed * 1.2).toFixed(2)));
 
                 const startPositionDivIndex = contentRefs.current.findIndex((ref) => {
                     if (ref) {
