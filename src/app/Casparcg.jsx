@@ -3,11 +3,32 @@
 import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 const IP = process.env.NEXT_PUBLIC_IP;
+import { useRefFromState } from './useRefFromState';
+
 
 export default function Home({ handleDoubleClick, setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
   const [fliped, setFliped] = useState(false);
   const [socketcurrentstory, setSocketcurrentstory] = useState('not set');
   const socketRef = useRef(null);
+
+  const currentStoryNumberRef = useRefFromState(currentStoryNumber);
+  const storyLinesRef = useRefFromState(storyLines);
+  const crossedLinesRef = useRefFromState(crossedLines);
+  const allContentRef = useRefFromState(allContent);
+  const slugsRef = useRefFromState(slugs);
+  const startPositionRef = useRefFromState(startPosition);
+  const showClockRef = useRefFromState(showClock);
+  const newsReaderTextRef = useRefFromState(newsReaderText);
+  const isRTLRef = useRefFromState(isRTL);
+  const fontColorRef = useRefFromState(fontColor);
+  const fontBoldRef = useRefFromState(fontBold);
+  const currentFontRef = useRefFromState(currentFont);
+  const scrollContainerStyleRef = useRefFromState(scrollContainerStyle);
+  const scrollingTextStyleRef = useRefFromState(scrollingTextStyle);
+
+  const handleDoubleClickRef = useRefFromState(handleDoubleClick);
+
+
   useEffect(() => {
     socketRef.current = io();
 
@@ -73,24 +94,26 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
               });
               playOnSecondChannelinFlippedMode();
               setTimeout(() => {
-                socketRef.current.emit('setCurrentStoryNumber', currentStoryNumber);
-                socketRef.current.emit('storyLines', storyLines);
-                socketRef.current.emit('crossedLines', crossedLines);
-                socketRef.current.emit('allContent', allContent);
-                socketRef.current.emit('setSlugs', slugs);
-                socketRef.current.emit('setStartPosition', startPosition);
-                socketRef.current.emit('setShowClock', showClock);
-                socketRef.current.emit('setNewsReaderText', newsReaderText);
-                socketRef.current.emit('rtl', isRTL);
-                socketRef.current.emit('fontColor', fontColor);
-                socketRef.current.emit('fontBold', fontBold);
-                socketRef.current.emit('currentFont', currentFont);
-                socketRef.current.emit('scrollContainerStyle', scrollContainerStyle);
-                socketRef.current.emit('scrollingTextStyle', scrollingTextStyle);
+                socketRef.current.emit('setCurrentStoryNumber', currentStoryNumberRef.current);
+                socketRef.current.emit('storyLines', storyLinesRef.current);
+                socketRef.current.emit('crossedLines', crossedLinesRef.current);
+                socketRef.current.emit('allContent', allContentRef.current);
+                socketRef.current.emit('setSlugs', slugsRef.current);
+                socketRef.current.emit('setStartPosition', startPositionRef.current);
+                socketRef.current.emit('setShowClock', showClockRef.current);
+                socketRef.current.emit('setNewsReaderText', newsReaderTextRef.current);
+                socketRef.current.emit('rtl', isRTLRef.current);
+                socketRef.current.emit('fontColor', fontColorRef.current);
+                socketRef.current.emit('fontBold', fontBoldRef.current);
+                socketRef.current.emit('currentFont', currentFontRef.current);
+                socketRef.current.emit('scrollContainerStyle', scrollContainerStyleRef.current);
+                socketRef.current.emit('scrollingTextStyle', scrollingTextStyleRef.current);
               }, 4000);
+
               setTimeout(() => {
-                handleDoubleClick(0);
+                handleDoubleClickRef.current(0);
               }, 6000);
+
             }
             }
           >

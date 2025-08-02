@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Count from './Count';
+// import Count from './Count';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
