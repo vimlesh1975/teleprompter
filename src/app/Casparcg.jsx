@@ -87,11 +87,10 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
                 socketRef.current.emit('currentFont', currentFont);
                 socketRef.current.emit('scrollContainerStyle', scrollContainerStyle);
                 socketRef.current.emit('scrollingTextStyle', scrollingTextStyle);
-
-              }, 3000);
+              }, 4000);
               setTimeout(() => {
                 handleDoubleClick(0);
-              }, 4000);
+              }, 6000);
             }
             }
           >
