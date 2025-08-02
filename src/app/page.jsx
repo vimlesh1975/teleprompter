@@ -1692,7 +1692,6 @@ export default function Home() {
                 step={1}
                 value={speed}
                 onChange={(e) => {
-                  console.log("CHANGE", e.target.value);
                   setSpeed(Number(e.target.value));
                 }}
                 style={{ width: "60%" }}
