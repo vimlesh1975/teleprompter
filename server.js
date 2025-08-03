@@ -121,6 +121,11 @@ app.prepare().then(async () => {
             io.emit('scrollingTextStyle2', data);
         });
 
+        socket.on('casparready', (data) => {
+            io.emit('casparready2', data);
+        });
+
+        //webrtc code starts
         socket.on('offer', (data) => {
             socket.broadcast.emit('offer', data);
         });
@@ -151,7 +156,6 @@ app.prepare().then(async () => {
             io.emit('fromStart2', '');
         });
 
-
         //end for mbile
 
         // Handle disconnection
@@ -173,6 +177,7 @@ app.prepare().then(async () => {
             socket.removeAllListeners("rtl");
             socket.removeAllListeners("scrollContainerStyle");
             socket.removeAllListeners("scrollingTextStyle");
+            socket.removeAllListeners("casparready");
 
             socket.removeAllListeners("speed");
             socket.removeAllListeners("next");

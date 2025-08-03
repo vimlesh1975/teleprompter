@@ -45,7 +45,29 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
     });
+    socket.on('casparready2', () => {
+      console.log('casparready2 from server');
 
+      socketRef.current.emit('setCurrentStoryNumber', currentStoryNumberRef.current);
+      socketRef.current.emit('storyLines', storyLinesRef.current);
+      socketRef.current.emit('crossedLines', crossedLinesRef.current);
+      socketRef.current.emit('allContent', allContentRef.current);
+      socketRef.current.emit('setSlugs', slugsRef.current);
+      socketRef.current.emit('setStartPosition', startPositionRef.current);
+      socketRef.current.emit('setShowClock', showClockRef.current);
+      socketRef.current.emit('setNewsReaderText', newsReaderTextRef.current);
+      socketRef.current.emit('rtl', isRTLRef.current);
+      socketRef.current.emit('fontColor', fontColorRef.current);
+      socketRef.current.emit('fontBold', fontBoldRef.current);
+      socketRef.current.emit('currentFont', currentFontRef.current);
+      socketRef.current.emit('scrollContainerStyle', scrollContainerStyleRef.current);
+      socketRef.current.emit('scrollingTextStyle', scrollingTextStyleRef.current);
+
+      setTimeout(() => {
+        handleDoubleClickRef.current(0);
+      }, 2000);
+
+    });
     return () => {
       socket.disconnect();
       socketRef.current = null;
@@ -93,26 +115,26 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
                 command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
               playOnSecondChannelinFlippedMode();
-              setTimeout(() => {
-                socketRef.current.emit('setCurrentStoryNumber', currentStoryNumberRef.current);
-                socketRef.current.emit('storyLines', storyLinesRef.current);
-                socketRef.current.emit('crossedLines', crossedLinesRef.current);
-                socketRef.current.emit('allContent', allContentRef.current);
-                socketRef.current.emit('setSlugs', slugsRef.current);
-                socketRef.current.emit('setStartPosition', startPositionRef.current);
-                socketRef.current.emit('setShowClock', showClockRef.current);
-                socketRef.current.emit('setNewsReaderText', newsReaderTextRef.current);
-                socketRef.current.emit('rtl', isRTLRef.current);
-                socketRef.current.emit('fontColor', fontColorRef.current);
-                socketRef.current.emit('fontBold', fontBoldRef.current);
-                socketRef.current.emit('currentFont', currentFontRef.current);
-                socketRef.current.emit('scrollContainerStyle', scrollContainerStyleRef.current);
-                socketRef.current.emit('scrollingTextStyle', scrollingTextStyleRef.current);
-              }, 4000);
+              // setTimeout(() => {
+              //   socketRef.current.emit('setCurrentStoryNumber', currentStoryNumberRef.current);
+              //   socketRef.current.emit('storyLines', storyLinesRef.current);
+              //   socketRef.current.emit('crossedLines', crossedLinesRef.current);
+              //   socketRef.current.emit('allContent', allContentRef.current);
+              //   socketRef.current.emit('setSlugs', slugsRef.current);
+              //   socketRef.current.emit('setStartPosition', startPositionRef.current);
+              //   socketRef.current.emit('setShowClock', showClockRef.current);
+              //   socketRef.current.emit('setNewsReaderText', newsReaderTextRef.current);
+              //   socketRef.current.emit('rtl', isRTLRef.current);
+              //   socketRef.current.emit('fontColor', fontColorRef.current);
+              //   socketRef.current.emit('fontBold', fontBoldRef.current);
+              //   socketRef.current.emit('currentFont', currentFontRef.current);
+              //   socketRef.current.emit('scrollContainerStyle', scrollContainerStyleRef.current);
+              //   socketRef.current.emit('scrollingTextStyle', scrollingTextStyleRef.current);
+              // }, 4000);
 
-              setTimeout(() => {
-                handleDoubleClickRef.current(0);
-              }, 6000);
+              // setTimeout(() => {
+              //   handleDoubleClickRef.current(0);
+              // }, 6000);
 
             }
             }
