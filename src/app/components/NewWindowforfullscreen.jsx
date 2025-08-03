@@ -1,9 +1,18 @@
 import React, { useEffect, useState, cloneElement } from 'react';
 import ReactDOM from 'react-dom';
 
-function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, scrollHeight }) {
+function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, scrollHeight,
+    next,
+    previous,
+    setSpeed,
+    speed,
+    handleDoubleClick
+}) {
     const [container, setContainer] = useState(null);
     const [scaleFactor, setScaleFactor] = useState(1);
+    const [tempSpeed, setTempSpeed] = useState(speed);
+    const [keyPressed, setKeyPressed] = useState("");
+
 
     useEffect(() => {
         const handleBeforeUnload = () => {
@@ -46,6 +55,7 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
 
         newWindowRef.current.resizeTo(newWindowRef.current.screen.width - 1, newWindowRef.current.screen.height - 1);
         newWindowRef.current.moveTo(0, 0);
+        newWindowRef.current.focus();
 
         containerDiv.style.transformOrigin = '5px 0';
         const screenHeight = newWindowRef.current.screen.height;
@@ -71,6 +81,55 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
             newWindowRef.current.removeEventListener('beforeunload', onClose);
         };
     }, [newWindowRef, scrollWidth, scrollHeight, onClose]);
+
+    useEffect(() => {
+        const win = newWindowRef.current;
+        if (!win) return;
+
+        const handleKeyDown = (e) => {
+            console.log(e.key)
+            if (e.key === 'Escape') {
+                onClose?.(); // Close the window
+                win.close();
+            } else if (e.key === 'ArrowUp') {
+                setSpeed(pre => pre + 1);
+            } else if (e.key === 'ArrowDown') {
+                setSpeed(pre => pre - 1);
+
+            }
+            else if (e.key.toLowerCase() === 'ArrowRight') {
+                next();
+            }
+            else if (e.key.toLowerCase() === 'ArrowLeft') {
+                previous();
+            }
+            else if (e.key === ' ') {
+                if (speed !== 0) {
+                    setTempSpeed(speed);
+                    setSpeed(0);
+                }
+                else {
+                    setSpeed(tempSpeed);
+                }
+            }
+
+            else if (e.key === "Enter") {
+                handleDoubleClick(parseInt(keyPressed) - 1);
+                setKeyPressed("");
+            } else {
+                if (!isNaN(e.key)) {
+                    setKeyPressed((val) => val + e.key);
+                }
+            }
+        };
+
+        win.document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            win.document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [newWindowRef, scrollWidth, scaleFactor, onClose, handleDoubleClick]);
+
 
     const childrenWithProps = React.Children.map(children, (child) =>
         cloneElement(child, { scaleFactor })

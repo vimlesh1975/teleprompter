@@ -1600,6 +1600,11 @@ export default function Home() {
                 newWindowRef={newWindowRef3}
                 scrollWidth={scrollWidth}
                 scrollHeight={scrollHeight}
+                next={next}
+                previous={previous}
+                setSpeed={setSpeed}
+                speed={speed}
+                handleDoubleClick={handleDoubleClick}
               >
                 <ScrollView
                   contentRefs={contentRefs2}
