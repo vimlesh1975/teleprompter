@@ -72,6 +72,8 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
       socket.disconnect();
       socketRef.current = null;
     };
+    // i need only first time
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 

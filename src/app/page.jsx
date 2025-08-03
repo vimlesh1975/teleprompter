@@ -1045,6 +1045,7 @@ export default function Home() {
 
   useEffect(() => {
     handleDoubleClick(0);
+    // i need only first time
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
