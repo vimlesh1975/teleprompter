@@ -128,7 +128,17 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
         return () => {
             win.document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [newWindowRef, scrollWidth, scaleFactor, onClose, handleDoubleClick]);
+    }, [newWindowRef,
+        scrollWidth,
+        scaleFactor,
+        onClose,
+        handleDoubleClick,
+        setSpeed,
+        speed,
+        tempSpeed,
+        keyPressed,
+        next,
+        previous]);
 
 
     const childrenWithProps = React.Children.map(children, (child) =>
