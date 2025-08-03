@@ -103,6 +103,11 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
             else if (e.key === 'ArrowLeft') {
                 previous();
             }
+            else if (e.key.startsWith('F')) {
+                e.preventDefault();
+                setSpeed(parseInt(e.key.slice(1)));
+
+            }
             else if (e.key === ' ') {
                 if (speed !== 0) {
                     setTempSpeed(speed);
