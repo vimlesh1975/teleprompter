@@ -97,10 +97,10 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
                 setSpeed(pre => pre - 1);
 
             }
-            else if (e.key.toLowerCase() === 'ArrowRight') {
+            else if (e.key === 'ArrowRight') {
                 next();
             }
-            else if (e.key.toLowerCase() === 'ArrowLeft') {
+            else if (e.key === 'ArrowLeft') {
                 previous();
             }
             else if (e.key === ' ') {
