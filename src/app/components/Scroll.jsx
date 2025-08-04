@@ -167,6 +167,8 @@ const Scroll = ({ scrollContainerStyle, scrollingTextStyle,
                     startPosition={startPosition}
                     contentRefs={contentRefs}
                     textRef={textRef}
+                    speed={speed}
+
                 />
             </div>
         </div>

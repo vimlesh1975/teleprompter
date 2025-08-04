@@ -744,6 +744,12 @@ export default function Home() {
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
+    socket.emit("speed", speed);
+  }, [speed]);
+
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket) return;
     socket.emit("fontColor", fontColor);
   }, [fontColor]);
 
@@ -1563,6 +1569,7 @@ export default function Home() {
                   newsReaderText={newsReaderText}
                   showClock={showClock}
                   startPosition={startPosition}
+                  speed={speed}
                 />
               </NewWindow>
             )}
@@ -1590,6 +1597,8 @@ export default function Home() {
                   newsReaderText={newsReaderText}
                   showClock={showClock}
                   startPosition={startPosition}
+                  speed={speed}
+
                 />
               </NewWindow>
             )}
@@ -1625,6 +1634,8 @@ export default function Home() {
                   newsReaderText={newsReaderText}
                   showClock={showClock}
                   startPosition={startPosition}
+                  speed={speed}
+
                 />
               </NewWindowforfullscreen>
             )}
@@ -1835,6 +1846,7 @@ export default function Home() {
                     socket.emit("currentFont", currentFont);
                     socket.emit("scrollContainerStyle", scrollContainerStyle);
                     socket.emit("scrollingTextStyle", scrollingTextStyle);
+                    socket.emit("speed", speed);
                   }, 3000);
                 }}
               >

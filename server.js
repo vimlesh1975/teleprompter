@@ -120,7 +120,9 @@ app.prepare().then(async () => {
         socket.on('scrollingTextStyle', (data) => {
             io.emit('scrollingTextStyle2', data);
         });
-
+        socket.on('speed', (data) => {
+            io.emit('speed2', data);
+        });
         socket.on('casparready', (data) => {
             io.emit('casparready2', data);
         });

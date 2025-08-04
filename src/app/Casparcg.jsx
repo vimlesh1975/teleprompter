@@ -6,7 +6,7 @@ const IP = process.env.NEXT_PUBLIC_IP;
 import { useRefFromState } from './useRefFromState';
 
 
-export default function Home({ handleDoubleClick, setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed }) {
+export default function Home({ handleDoubleClick, setAllContent, scrollingTextStyle, scrollContainerStyle, currentFont, fontBold, isRTL, fontColor, slugs, allContent, startPosition, currentStoryNumber, storyLines, crossedLines, showClock, newsReaderText, setSpeed, speed }) {
   const [fliped, setFliped] = useState(false);
   const [socketcurrentstory, setSocketcurrentstory] = useState('not set');
   const socketRef = useRef(null);
@@ -25,6 +25,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
   const currentFontRef = useRefFromState(currentFont);
   const scrollContainerStyleRef = useRefFromState(scrollContainerStyle);
   const scrollingTextStyleRef = useRefFromState(scrollingTextStyle);
+  const speedRef = useRefFromState(speed);
 
   const handleDoubleClickRef = useRefFromState(handleDoubleClick);
 
@@ -62,6 +63,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
       socketRef.current.emit('currentFont', currentFontRef.current);
       socketRef.current.emit('scrollContainerStyle', scrollContainerStyleRef.current);
       socketRef.current.emit('scrollingTextStyle', scrollingTextStyleRef.current);
+      socketRef.current.emit('speed', speedRef.current);
 
       setTimeout(() => {
         handleDoubleClickRef.current(0);

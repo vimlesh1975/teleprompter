@@ -17,7 +17,11 @@ const ScrollViewforcasparcg = () => {
     const [scrollContainerStyle, setScrollContainerStyle] = useState({});
     const [scrollingTextStyle, setScrollingTextStyle] = useState({});
     const [slugs, setSlugs] = useState(0);
+    const [speed, setSpeed] = useState(0);
+
+
     const socketRef = useRef(null);
+
 
     const textRef = useRef(null);
     const contentRefs = useRef([]);
@@ -80,6 +84,11 @@ const ScrollViewforcasparcg = () => {
             setScrollingTextStyle(data);
         });
 
+        socketRef.current.on("speed2", (data) => {
+            setSpeed(data);
+        });
+
+
         return () => {
             socketRef.current.off("crossedLines2");
             socketRef.current.off("storyLines2");
@@ -94,6 +103,7 @@ const ScrollViewforcasparcg = () => {
             socketRef.current.off("currentFont2");
             socketRef.current.off("scrollContainerStyle2");
             socketRef.current.off("scrollingTextStyle2");
+            socketRef.current.off("speed2");
 
             socketRef.current = null;
         };
@@ -103,7 +113,7 @@ const ScrollViewforcasparcg = () => {
         marginTop: -8,
         marginLeft: -8,
     }} >
-        <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} contentRefs={contentRefs} textRef={textRef} />
+        <ScrollView scrollContainerStyle={scrollContainerStyle} scrollingTextStyle={scrollingTextStyle} currentFont={currentFont} fontBold={fontBold} isRTL={isRTL} fontColor={fontColor} allContent={allContent} currentStoryNumber={currentStoryNumber} crossedLines={crossedLines} storyLines={storyLines} slugs={slugs} newsReaderText={newsReaderText} showClock={showClock} startPosition={startPosition} contentRefs={contentRefs} textRef={textRef} speed={speed} />
     </div>
     )
 }

@@ -10,7 +10,7 @@ const ScrollView = ({
     scrollContainerStyle, scrollingTextStyle, currentFont, fontBold,
     isRTL, fontColor, allContent, currentStoryNumber, crossedLines,
     storyLines, slugs, newsReaderText, showClock, startPosition,
-    contentRefs, textRef
+    contentRefs, textRef, speed,
 }) => {
     return (
         <div>
@@ -29,8 +29,12 @@ const ScrollView = ({
                     <div style={{ display: 'flex', position: 'relative', width: 1920 }}>
                         <div style={{ position: 'absolute', left: 10, }}>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
                         <div style={{ position: 'absolute', left: 300, }}>{newsReaderText}</div>
-                        <div style={{ position: 'absolute', left: 1550, visibility: showClock ? 'visible' : 'hidden', color: 'red' }}> <Clock /></div>
-                        <div style={{ position: 'absolute', left: 1800, }}>{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
+
+                        <div style={{ position: 'absolute', left: 600, }}>{'Speed:' + speed}</div>
+
+
+                        <div style={{ position: 'absolute', left: 1500, visibility: showClock ? 'visible' : 'hidden', color: 'red' }}> <Clock /></div>
+                        <div style={{ position: 'absolute', left: 1750, }}>{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
                     </div>
                 </div>
             </div>
