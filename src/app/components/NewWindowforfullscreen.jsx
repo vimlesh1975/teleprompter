@@ -138,14 +138,40 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
             }
         };
 
+        const handleWheel = (e) => {
+            console.log("Mouse wheel delta:", e.deltaY);
+            if (e.deltaY > 0) {
+                setSpeed(speed - 1);
+            } else {
+                setSpeed(speed + 1);
+            }
+            e.preventDefault(); // Block default scroll if needed
+        };
+
+        let clickTimer = null;
+        const delay = 250; // ms delay to distinguish single from double click
+
+        const handleClick = (e) => {
+            if (e.button !== 0) return; // Only left click
+            next();
+        };
+
         win.document.addEventListener('keydown', handleKeyDown);
         win.document.addEventListener('contextmenu', handleRightClick); // Add this
+        win.document.addEventListener('wheel', handleWheel, { passive: false });
+        win.document.addEventListener("click", handleClick);
+
 
         return () => {
+
             win.document.removeEventListener('keydown', handleKeyDown);
             win.document.removeEventListener('contextmenu', handleRightClick); // Clean up
+            win.document.removeEventListener('wheel', handleWheel);
+            win.document.removeEventListener("click", handleClick);
+
         };
-    }, [newWindowRef,
+    }, [
+        newWindowRef,
         scrollWidth,
         scaleFactor,
         onClose,
@@ -155,7 +181,8 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
         tempSpeed,
         keyPressed,
         next,
-        previous]);
+        previous
+    ]);
 
 
     const childrenWithProps = React.Children.map(children, (child) =>
