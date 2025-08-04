@@ -124,16 +124,19 @@ export default function Home() {
     [bgColor]
   );
 
+  const scaledFontSize = useMemo(() => parseInt(fontSize * 2.5), [fontSize]);
+
   const scrollingTextStyle = useMemo(
     () => ({
       position: "absolute",
       transform: `translateY(${newPosition}px)`,
       willChange: "transform",
+      backfaceVisibility: "hidden",
       width: 1720,
       padding: "0 100px",
       whiteSpace: "pre-wrap",
-      fontSize: parseInt(fontSize * 2.5),
-      lineHeight: `${Math.floor(fontSize * 1.5 * 2.5)}px`,
+      fontSize: scaledFontSize,
+      lineHeight: `${Math.floor(scaledFontSize * 1.5)}px`,
     }),
     [newPosition, fontSize]
   );
