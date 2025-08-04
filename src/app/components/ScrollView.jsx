@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-// import Count from './Count';
 import dynamic from 'next/dynamic';
 import Triangles from './Triangles';
 
@@ -20,19 +19,18 @@ const ScrollView = ({
                 color: 'blue',
                 fontSize: 18 * 2.5,
                 fontWeight: 'bolder',
-                width: 1920
+                width: 1920,
+                height: 60, // ✅ Add fixed height
             }}>
                 <div style={{
                     backgroundColor: 'lightgreen',
                     width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%`
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-around', width: 1920 }}>
-                        <div>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
-                        <div>{newsReaderText}</div>
-                        {/* <div><Count currentStoryNumber={currentStoryNumber} /></div> */}
-                        <div>{showClock ? '' : '.'}</div>
-                        <div style={{ display: showClock ? 'inline' : 'none', color: 'red' }}><Clock /></div>
-                        <div>{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
+                    <div style={{ display: 'flex', position: 'relative', width: 1920 }}>
+                        <div style={{ position: 'absolute', left: 10, }}>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
+                        <div style={{ position: 'absolute', left: 300, }}>{newsReaderText}</div>
+                        <div style={{ position: 'absolute', left: 1550, visibility: showClock ? 'visible' : 'hidden', color: 'red' }}> <Clock /></div>
+                        <div style={{ position: 'absolute', left: 1800, }}>{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
                     </div>
                 </div>
             </div>
