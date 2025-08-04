@@ -1705,7 +1705,7 @@ export default function Home() {
               />
             </div>
             <div style={{ textAlign: "center" }}>
-              Right Click to Stop and Play
+              Right Click here in this area to Pause and Resume
             </div>
             <div style={{ textAlign: "left" }}>
               <label>
