@@ -6,7 +6,8 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
     previous,
     setSpeed,
     speed,
-    handleDoubleClick
+    handleDoubleClick,
+    slugs
 }) {
     const [container, setContainer] = useState(null);
     const [scaleFactor, setScaleFactor] = useState(1);
@@ -148,18 +149,15 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
             e.preventDefault(); // Block default scroll if needed
         };
 
-        let clickTimer = null;
-        const delay = 250; // ms delay to distinguish single from double click
-
-        const handleClick = (e) => {
-            if (e.button !== 0) return; // Only left click
-            next();
-        };
+        // const handleClick = (e) => {
+        //     if (e.button !== 0) return; // Only left click
+        //     next();
+        // };
 
         win.document.addEventListener('keydown', handleKeyDown);
         win.document.addEventListener('contextmenu', handleRightClick); // Add this
         win.document.addEventListener('wheel', handleWheel, { passive: false });
-        win.document.addEventListener("click", handleClick);
+        // win.document.addEventListener("click", handleClick);
 
 
         return () => {
@@ -167,7 +165,7 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
             win.document.removeEventListener('keydown', handleKeyDown);
             win.document.removeEventListener('contextmenu', handleRightClick); // Clean up
             win.document.removeEventListener('wheel', handleWheel);
-            win.document.removeEventListener("click", handleClick);
+            // win.document.removeEventListener("click", handleClick);
 
         };
     }, [
@@ -189,6 +187,41 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
         cloneElement(child, { scaleFactor })
     );
 
-    return container ? ReactDOM.createPortal(childrenWithProps, container) : null;
+    const styel1 = {
+        position: 'absolute',
+        top: 15,
+        left: 805,
+        zIndex: 9999,
+        backgroundColor: 'red',
+        color: 'white',
+        padding: '2px 2px',
+        fontSize: 16,
+    }
+
+
+    // return container ? ReactDOM.createPortal(childrenWithProps, container) : null;
+    return container ? ReactDOM.createPortal(
+        <>
+            {childrenWithProps}
+            <div style={styel1}>
+                <button style={{ fontSize: 'inherit' }} onClick={() => handleDoubleClick(0)}  >From Start</button>
+                <button style={{ fontSize: 'inherit' }} onClick={() => handleDoubleClick(slugs.length - 1)} >Go to Last</button>
+                <button style={{ fontSize: 'inherit' }} onClick={previous} >Previous</button>
+                <button style={{ fontSize: 'inherit' }} onClick={next} >Next</button>
+
+                Speed:<button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(0)} >0</button>
+                <button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(1)} >1</button>
+                <button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(2)} >2</button>
+                <button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(3)} >3</button>
+
+                {speed}
+
+            </div>
+
+
+        </>,
+        container
+    ) : null;
+
 }
 export default NewWindowforfullscreen;

@@ -1605,6 +1605,8 @@ export default function Home() {
                 setSpeed={setSpeed}
                 speed={speed}
                 handleDoubleClick={handleDoubleClick}
+                slugs={slugs}
+
               >
                 <ScrollView
                   contentRefs={contentRefs2}
