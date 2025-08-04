@@ -10,7 +10,7 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
 }) {
     const [container, setContainer] = useState(null);
     const [scaleFactor, setScaleFactor] = useState(1);
-    const [tempSpeed, setTempSpeed] = useState(speed);
+    const [tempSpeed, setTempSpeed] = useState(1);
     const [keyPressed, setKeyPressed] = useState("");
 
 
@@ -127,11 +127,23 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
                 }
             }
         };
+        const handleRightClick = (e) => {
+            e.preventDefault(); // Prevent default right-click menu
+            if (speed !== 0) {
+                setTempSpeed(speed);
+                setSpeed(0);
+            }
+            else {
+                setSpeed(tempSpeed);
+            }
+        };
 
         win.document.addEventListener('keydown', handleKeyDown);
+        win.document.addEventListener('contextmenu', handleRightClick); // Add this
 
         return () => {
             win.document.removeEventListener('keydown', handleKeyDown);
+            win.document.removeEventListener('contextmenu', handleRightClick); // Clean up
         };
     }, [newWindowRef,
         scrollWidth,
