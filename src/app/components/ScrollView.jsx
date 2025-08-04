@@ -24,7 +24,9 @@ const ScrollView = ({
             }}>
                 <div style={{
                     backgroundColor: 'lightgreen',
-                    width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%`
+                    width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%`,
+                    height: 60, // ✅ Add fixed height
+
                 }}>
                     <div style={{ display: 'flex', position: 'relative', width: 1920 }}>
                         <div style={{ position: 'absolute', left: 10, }}>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
