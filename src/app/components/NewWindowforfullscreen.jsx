@@ -208,17 +208,12 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
                 <button style={{ fontSize: 'inherit' }} onClick={() => handleDoubleClick(slugs.length - 1)} >Go to Last</button>
                 <button style={{ fontSize: 'inherit' }} onClick={previous} >Previous</button>
                 <button style={{ fontSize: 'inherit' }} onClick={next} >Next</button>
-
                 Speed:<button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(0)} >0</button>
                 <button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(1)} >1</button>
                 <button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(2)} >2</button>
                 <button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(3)} >3</button>
 
-                {speed}
-
             </div>
-
-
         </>,
         container
     ) : null;
