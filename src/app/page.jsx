@@ -1105,7 +1105,7 @@ export default function Home() {
               ))}
             </select>
             {slugs?.length} Slugs{" "}
-            <button onClick={fetchNewsId}>Refresh RO</button>
+            {/* <button onClick={fetchNewsId}>Refresh RO</button> */}
           </div>
           <div
             style={{
