@@ -42,7 +42,7 @@ const ScrollViewM = ({
             </div>
             {
                 <div style={scrollContainerStyle}>
-                    <div ref={textRef} style={{ ...scrollingTextStyle, fontSize: scrollingTextStyle.fontSize * 1.07 }}>
+                    <div ref={textRef} style={scrollingTextStyle}>
                         {allContent.map((content, i) => (
                             <div
                                 key={i}
@@ -52,7 +52,8 @@ const ScrollViewM = ({
                                     fontFamily: (i % 3 === 1) ? currentFont : 'Times New Roman',
                                     backgroundColor: i % 3 === 0 ? 'blue' : 'transparent',
                                     color: i % 3 === 0 ? 'yellow' : fontColor,
-                                    fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal'
+                                    fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal',
+                                    fontSize: (i % 3 === 1) ? scrollingTextStyle.fontSize * 1.07 : scrollingTextStyle.fontSize * 0.9
                                 }}
                             >
                                 {content}
