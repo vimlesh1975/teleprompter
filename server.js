@@ -158,8 +158,8 @@ app.prepare().then(async () => {
             io.emit('previous2', '');
         });
 
-        socket.on('fromStart', () => {
-            io.emit('fromStart2', '');
+        socket.on('fromStart', data => {
+            io.emit('fromStart2', data);
         });
 
         //end for mbile

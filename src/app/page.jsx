@@ -55,7 +55,7 @@ export default function Home() {
   const [newsReaderText, setNewsReaderText] = useState("Continue...");
   const [showClock, setShowClock] = useState(true);
   const [newPosition, setNewPosition] = useState(startPosition);
-  const [tempSpeed, setTempSpeed] = useState(0);
+  const [tempSpeed, setTempSpeed] = useState(1);
   const [loggedPositions, setLoggedPositions] = useState(new Set());
   const [currentStoryNumber, setCurrentStoryNumber] = useState(-1);
   const [showNewWindow, setShowNewWindow] = useState(false);
@@ -625,11 +625,11 @@ export default function Home() {
     [slugs, startPosition, fetchAllContent]
   );
 
-  const fromStart = () => {
-    setCurrentSlug(0);
-    handleDoubleClick(0);
-    if (slugs.length > 0) {
-      setCurrentSlugName(slugs[0].SlugName);
+  const fromStart = (i = 0) => {
+    setCurrentSlug(i);
+    handleDoubleClick(i);
+    if (slugs.length > i) {
+      setCurrentSlugName(slugs[i].SlugName);
     }
   };
 
@@ -981,8 +981,8 @@ export default function Home() {
       previousRef.current?.();
     });
 
-    socket.on("fromStart2", () => {
-      fromStartRef.current?.();
+    socket.on("fromStart2", (data) => {
+      fromStartRef.current?.(data);
     });
 
     return () => {
