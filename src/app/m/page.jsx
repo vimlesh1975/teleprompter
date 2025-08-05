@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import socket from '../components/socket'
-import ScrollViewforcasparcg from '../components/ScrollViewforcasparcg'
+import ScrollViewforcasparcgM from '../components/ScrollViewforcasparcgM'
 import './controller.css'
 
 const Page = () => {
@@ -30,7 +30,8 @@ const Page = () => {
     return (<>
         <div >
             <div style={{ transform: `scale(0.5,0.7)`, transformOrigin: 'top left', backgroundColor: 'black', height: 1080, width: 1920, overflow: 'hidden' }}>
-                <ScrollViewforcasparcg />
+                <ScrollViewforcasparcgM />
+                {/* <iframe style={{ width: '1920px', height: '1080px', border: 'none' }} src="/webrtc.html" frameborder="0"></iframe> */}
             </div>
             <div style={{ display: 'flex' }}>
                 <div style={{ textAlign: 'left', position: 'absolute', top: 760 }}>
