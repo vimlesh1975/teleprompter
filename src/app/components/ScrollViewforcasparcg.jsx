@@ -88,6 +88,8 @@ const ScrollViewforcasparcg = () => {
             setSpeed(data);
         });
 
+        socketRef.current.emit("casparready", screen.colorDepth);
+
 
         return () => {
             socketRef.current.off("crossedLines2");

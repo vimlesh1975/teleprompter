@@ -127,6 +127,10 @@ app.prepare().then(async () => {
             io.emit('casparready2', data);
         });
 
+        socket.on('initialisationcomplete', data => {
+            io.emit('initialisationcomplete2', data);
+        });
+
         //webrtc code starts
         socket.on('offer', (data) => {
             socket.broadcast.emit('offer', data);
@@ -180,6 +184,8 @@ app.prepare().then(async () => {
             socket.removeAllListeners("scrollContainerStyle");
             socket.removeAllListeners("scrollingTextStyle");
             socket.removeAllListeners("casparready");
+            socket.removeAllListeners("initialisationcomplete");
+
 
             socket.removeAllListeners("speed");
             socket.removeAllListeners("next");

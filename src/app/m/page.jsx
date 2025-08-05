@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import socket from '../components/socket'
+import ScrollViewforcasparcg from '../components/ScrollViewforcasparcg'
 
 const Page = () => {
     const [speed, setSpeed] = useState(0);
@@ -27,6 +28,9 @@ const Page = () => {
 
     return (<>
         <div >
+            <div style={{ transform: `scale(0.2,0.3)`, transformOrigin: 'top left', backgroundColor: 'black', height: 1100, width: 1900, overflow: 'hidden' }}>
+                <ScrollViewforcasparcg />
+            </div>
             Speed :{speed}
             <button onClick={fromStart} >
                 fromStart

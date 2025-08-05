@@ -46,8 +46,8 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
     });
-    socket.on('casparready2', () => {
-      console.log('casparready2 from server');
+    socket.on('casparready2', data => {
+      console.log('casparready2 from server', data);
 
       socketRef.current.emit('setCurrentStoryNumber', currentStoryNumberRef.current);
       socketRef.current.emit('storyLines', storyLinesRef.current);
@@ -65,11 +65,24 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
       socketRef.current.emit('scrollingTextStyle', scrollingTextStyleRef.current);
       socketRef.current.emit('speed', speedRef.current);
 
-      setTimeout(() => {
-        handleDoubleClickRef.current(0);
-      }, 2000);
+      socketRef.current.emit('initialisationcomplete', data);
+
+      // setTimeout(() => {
+      //   handleDoubleClickRef.current(0);
+      // }, 2000);
 
     });
+
+    socket.on('initialisationcomplete2', data => {
+      console.log(data)
+      if (data === 0) {
+        setTimeout(() => {
+          handleDoubleClickRef.current(0);
+        }, 2000);
+      }
+    })
+
+
     return () => {
       socket.disconnect();
       socketRef.current = null;

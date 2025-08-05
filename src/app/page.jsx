@@ -1826,31 +1826,31 @@ export default function Home() {
                     "",
                     `width=${scrollWidth},height=${scrollHeight + 40}`
                   );
-                  setTimeout(() => {
-                    const socket = socketRef.current;
-                    if (!socket) return;
+                  // setTimeout(() => {
+                  //   const socket = socketRef.current;
+                  //   if (!socket) return;
 
-                    // socket.emit('newPosition', newPosition);
-                    socket.emit("setCurrentStoryNumber", currentStoryNumber);
-                    socket.emit("storyLines", storyLines);
-                    socket.emit("crossedLines", crossedLines);
-                    socket.emit("allContent", allContent);
-                    socket.emit("setSlugs", slugs);
+                  //   // socket.emit('newPosition', newPosition);
+                  //   socket.emit("setCurrentStoryNumber", currentStoryNumber);
+                  //   socket.emit("storyLines", storyLines);
+                  //   socket.emit("crossedLines", crossedLines);
+                  //   socket.emit("allContent", allContent);
+                  //   socket.emit("setSlugs", slugs);
 
-                    // socket.emit('setFontSize', fontSize * 2.5);
-                    socket.emit("setStartPosition", startPosition);
+                  //   // socket.emit('setFontSize', fontSize * 2.5);
+                  //   socket.emit("setStartPosition", startPosition);
 
-                    socket.emit("setShowClock", showClock);
-                    socket.emit("setNewsReaderText", newsReaderText);
-                    socket.emit("rtl", isRTL);
-                    // socket.emit('bgColor', bgColor);
-                    socket.emit("fontColor", fontColor);
-                    socket.emit("fontBold", fontBold);
-                    socket.emit("currentFont", currentFont);
-                    socket.emit("scrollContainerStyle", scrollContainerStyle);
-                    socket.emit("scrollingTextStyle", scrollingTextStyle);
-                    socket.emit("speed", speed);
-                  }, 3000);
+                  //   socket.emit("setShowClock", showClock);
+                  //   socket.emit("setNewsReaderText", newsReaderText);
+                  //   socket.emit("rtl", isRTL);
+                  //   // socket.emit('bgColor', bgColor);
+                  //   socket.emit("fontColor", fontColor);
+                  //   socket.emit("fontBold", fontBold);
+                  //   socket.emit("currentFont", currentFont);
+                  //   socket.emit("scrollContainerStyle", scrollContainerStyle);
+                  //   socket.emit("scrollingTextStyle", scrollingTextStyle);
+                  //   socket.emit("speed", speed);
+                  // }, 3000);
                 }}
               >
                 WebSocketOutput
