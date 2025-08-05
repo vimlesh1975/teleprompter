@@ -138,7 +138,7 @@ export default function Home() {
       fontSize: scaledFontSize,
       lineHeight: `${Math.floor(scaledFontSize * 1.5)}px`,
     }),
-    [newPosition, fontSize]
+    [scaledFontSize, newPosition]
   );
 
   useEffect(() => {
