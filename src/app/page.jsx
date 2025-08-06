@@ -722,16 +722,6 @@ export default function Home() {
     }
   }, [currentStoryNumber, stopAfterStoryChange]);
 
-  // useEffect(() => {
-  //   const slug = slugs[currentStoryNumber - 1];
-  //   if (!slug || slug.DropStory === 1 || slug.DropStory === 3) return;
-
-  //   const newScriptID = slug.ScriptID;
-  //   if (!newScriptID || usedStory.includes(newScriptID)) return;
-
-  //   setUsedStory((prev) => [...prev, newScriptID]);
-  // }, [currentStoryNumber, slugs, usedStory]);
-
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
