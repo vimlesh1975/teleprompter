@@ -28,11 +28,11 @@ const ScrollView = ({
                     height: 60, // ✅ Add fixed height
 
                 }}>
-                    <div style={{ display: 'flex', position: 'relative', width: 1920 }}>
+                    <div style={{ display: 'flex', position: 'relative', width: 1920, fontFamily: 'Roboto' }}>
                         <div style={{ position: 'absolute', left: 10, }}>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
-                        <div style={{ position: 'absolute', left: 300, }}>{newsReaderText}</div>
+                        <div style={{ position: 'absolute', left: 350, }}>{newsReaderText}</div>
 
-                        <div style={{ position: 'absolute', left: 600, }}>{'Speed:' + speed}</div>
+                        <div style={{ position: 'absolute', left: 610, }}>{'Speed:' + speed}</div>
 
 
                         <div style={{ position: 'absolute', left: 1500, visibility: showClock ? 'visible' : 'hidden', color: 'red' }}> <Clock /></div>
