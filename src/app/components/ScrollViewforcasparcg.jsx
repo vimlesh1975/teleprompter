@@ -27,11 +27,10 @@ const ScrollViewforcasparcg = () => {
     const contentRefs = useRef([]);
 
     useEffect(() => {
+        if (socketRef.current) return; // 🛑 Prevent duplicate connection
         socketRef.current = io();
 
-        socketRef.current.on('connect', () => {
-            console.log('SOCKET CONNECTED! from Scrollviewforcasparcg page', socketRef.current.id);
-        });
+
 
         socketRef.current.on("crossedLines2", (data) => {
             setCrossedLines(data);
@@ -88,24 +87,37 @@ const ScrollViewforcasparcg = () => {
             setSpeed(data);
         });
 
+        socketRef.current.on('connect', function () {
+            const socket = socketRef.current;
+            console.log('SOCKET CONNECTED! from Scrollviewforcasparcg page', socket?.id ?? 'no id yet');
+            socketRef.current.emit("casparready", screen.colorDepth);
+
+        });
+
+
+
 
         return () => {
-            socketRef.current.off("crossedLines2");
-            socketRef.current.off("storyLines2");
-            socketRef.current.off("setCurrentStoryNumber2");
-            socketRef.current.off("allContent2");
-            socketRef.current.off("setSlugs2");
-            socketRef.current.off("setStartPosition2");
-            socketRef.current.off("rtl2");
-            socketRef.current.off("rbgColor2tl2");
-            socketRef.current.off("fontColor2");
-            socketRef.current.off("fontBold2");
-            socketRef.current.off("currentFont2");
-            socketRef.current.off("scrollContainerStyle2");
-            socketRef.current.off("scrollingTextStyle2");
-            socketRef.current.off("speed2");
+            // socketRef.current.off("crossedLines2");
+            // socketRef.current.off("storyLines2");
+            // socketRef.current.off("setCurrentStoryNumber2");
+            // socketRef.current.off("allContent2");
+            // socketRef.current.off("setSlugs2");
+            // socketRef.current.off("setStartPosition2");
+            // socketRef.current.off("rtl2");
+            // socketRef.current.off("rbgColor2tl2");
+            // socketRef.current.off("fontColor2");
+            // socketRef.current.off("fontBold2");
+            // socketRef.current.off("currentFont2");
+            // socketRef.current.off("scrollContainerStyle2");
+            // socketRef.current.off("scrollingTextStyle2");
+            // socketRef.current.off("speed2");
 
-            socketRef.current = null;
+            // socketRef.current = null;
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+                socketRef.current = null;
+            }
         };
     }, []);
 

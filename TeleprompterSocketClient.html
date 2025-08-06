@@ -39,14 +39,14 @@
       <h2>current Story Drop Allow</h2>
       <p id="currentStoryDropAllow">Waiting for updates...</p>
     </div>
-    <div style="border: 1px solid red;">
+    <!-- <div style="border: 1px solid red;">
       <h1>Socket.IO Client 2</h1>
 
       <h2>Current Story Update</h2>
       <p id="storyData2">Waiting for updates...</p>
       <h2>current Story Drop Allow</h2>
       <p id="currentStoryDropAllow2">Waiting for updates...</p>
-    </div>
+    </div> -->
   </div>
 
 
@@ -75,29 +75,29 @@
       console.log('Disconnected from the server');
     });
 
-    const socket2 = io('http://192.168.15.114:3000');
-    socket2.on('currentStoryBroadcast', (data) => {
-      console.log(data);
-      if (data.prompterId.toString() === '2') {
-        document.getElementById('storyData2').innerText = `  ${JSON.stringify(data)} `;
-      }
-    });
+    // const socket2 = io('http://192.168.15.114:3000');
+    // socket2.on('currentStoryBroadcast', (data) => {
+    //   console.log(data);
+    //   if (data.prompterId.toString() === '2') {
+    //     document.getElementById('storyData2').innerText = `  ${JSON.stringify(data)} `;
+    //   }
+    // });
 
-    socket2.on('currentStoryDropAllow', (data) => {
-      if (data.prompterId.toString() === '2') {
-        document.getElementById('currentStoryDropAllow2').innerText = `
-        ${JSON.stringify(data)}  
-      `;
-      }
+    // socket2.on('currentStoryDropAllow', (data) => {
+    //   if (data.prompterId.toString() === '2') {
+    //     document.getElementById('currentStoryDropAllow2').innerText = `
+    //     ${JSON.stringify(data)}
+    //   `;
+    //   }
 
 
-    });
-    socket2.on('connect', () => {
-      console.log('Connected to the server');
-    });
-    socket2.on('disconnect', () => {
-      console.log('Disconnected from the server');
-    });
+    // });
+    // socket2.on('connect', () => {
+    //   console.log('Connected to the server');
+    // });
+    // socket2.on('disconnect', () => {
+    //   console.log('Disconnected from the server');
+    // });
   </script>
 </body>
 

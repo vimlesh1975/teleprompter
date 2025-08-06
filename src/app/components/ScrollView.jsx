@@ -28,11 +28,11 @@ const ScrollView = ({
                     height: 60, // ✅ Add fixed height
 
                 }}>
-                    <div style={{ display: 'flex', position: 'relative', width: 1920 }}>
+                    <div style={{ display: 'flex', position: 'relative', width: 1920, fontFamily: 'Roboto' }}>
                         <div style={{ position: 'absolute', left: 10, }}>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
-                        <div style={{ position: 'absolute', left: 300, }}>{newsReaderText}</div>
+                        <div style={{ position: 'absolute', left: 350, }}>{newsReaderText}</div>
 
-                        <div style={{ position: 'absolute', left: 600, }}>{'Speed:' + speed}</div>
+                        <div style={{ position: 'absolute', left: 610, }}>{'Speed:' + speed}</div>
 
 
                         <div style={{ position: 'absolute', left: 1500, visibility: showClock ? 'visible' : 'hidden', color: 'red' }}> <Clock /></div>
@@ -49,7 +49,7 @@ const ScrollView = ({
                                 dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'}
                                 ref={(el) => (contentRefs.current[i] = el)}
                                 style={{
-                                    fontFamily: (i % 3 === 1) ? currentFont : 'Times New Roman',
+                                    fontFamily: (i % 3 === 1) ? currentFont : 'Roboto',
                                     backgroundColor: i % 3 === 0 ? 'blue' : 'transparent',
                                     color: i % 3 === 0 ? 'yellow' : fontColor,
                                     fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal'

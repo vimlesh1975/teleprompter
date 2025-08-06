@@ -213,6 +213,20 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
                 <button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(2)} >2</button>
                 <button style={{ fontSize: 'inherit' }} onClick={() => setSpeed(3)} >3</button>
 
+
+
+
+            </div>
+            <div style={{ ...styel1, fontSize: 16, marginLeft: 20, left: 1300 }}>
+                <label style={{ color: 'black', fontWeight: 'bolder' }}>Go To</label>
+                <select onChange={(e) => handleDoubleClick(Number(e.target.value))}>
+                    <option value="">Select</option>
+                    {Array.from({ length: slugs.length }, (_, i) => (
+                        <option key={i} value={i}>
+                            {i + 1}
+                        </option>
+                    ))}
+                </select>
             </div>
         </>,
         container

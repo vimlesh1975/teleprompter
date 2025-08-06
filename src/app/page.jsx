@@ -26,7 +26,7 @@ export default function Home() {
   const [showDropControl, setShowDropControl] = useState(true);
   const [ip, setIp] = useState(null);
   const [fontList, setFontList] = useState(fontLists);
-  const [currentFont, setCurrentFont] = useState("Times New Roman");
+  const [currentFont, setCurrentFont] = useState("Roboto");
   const [isRTL, setIsRTL] = useState(false);
   const [bgColor, setbgColor] = useState("#000000");
   const [fontColor, setFontColor] = useState("#ffffff");
@@ -55,7 +55,7 @@ export default function Home() {
   const [newsReaderText, setNewsReaderText] = useState("Continue...");
   const [showClock, setShowClock] = useState(true);
   const [newPosition, setNewPosition] = useState(startPosition);
-  const [tempSpeed, setTempSpeed] = useState(0);
+  const [tempSpeed, setTempSpeed] = useState(1);
   const [loggedPositions, setLoggedPositions] = useState(new Set());
   const [currentStoryNumber, setCurrentStoryNumber] = useState(-1);
   const [showNewWindow, setShowNewWindow] = useState(false);
@@ -138,7 +138,7 @@ export default function Home() {
       fontSize: scaledFontSize,
       lineHeight: `${Math.floor(scaledFontSize * 1.5)}px`,
     }),
-    [newPosition, fontSize]
+    [scaledFontSize, newPosition]
   );
 
   useEffect(() => {
@@ -215,7 +215,7 @@ export default function Home() {
   }, [focusedInput, useDB, file, currentSlug, slugs]);
 
   const updateCurrentStory = useCallback(
-    (curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
+    (curstory, curbulletin, ScriptID, selectedDate, prompterId) => {
       if (!curbulletin) return;
       if (!ScriptID) return;
       fetch("/api/currentStory", {
@@ -240,17 +240,47 @@ export default function Home() {
           console.error("Error:", error);
         });
     },
-    [sendUsedStory]
+    [sendUsedStory, usedStory]
   );
 
+  // useEffect(() => {
+  //   if (!slugs) return;
+  //   if (!useDB) return;
+  //   updateCurrentStory(
+  //     currentStoryNumber,
+  //     selectedRunOrderTitle,
+  //     slugs[currentStoryNumber - 1]?.ScriptID,
+  //     selectedDate,
+  //     prompterId
+  //   );
+  // }, [
+  //   useDB,
+  //   currentStoryNumber,
+  //   selectedRunOrderTitle,
+  //   updateCurrentStory,
+  //   slugs,
+  //   selectedDate,
+  //   prompterId,
+  // ]);
+
   useEffect(() => {
-    if (!slugs) return;
-    if (!useDB) return;
+    const slug = slugs?.[currentStoryNumber - 1];
+    if (!slug || !useDB) return;
+    if (slug.DropStory === 1 || slug.DropStory === 3) return;
+
+    const scriptId = slug.ScriptID;
+    if (!scriptId) return;
+
+    const alreadyUsed = usedStory.includes(scriptId);
+    if (sendUsedStory && !alreadyUsed) {
+      setUsedStory((prev) => [...prev, scriptId]);
+      return; // Wait until usedStory updates before making API call
+    }
+
     updateCurrentStory(
       currentStoryNumber,
       selectedRunOrderTitle,
-      slugs[currentStoryNumber - 1]?.ScriptID,
-      usedStory,
+      scriptId,
       selectedDate,
       prompterId
     );
@@ -258,12 +288,14 @@ export default function Home() {
     useDB,
     currentStoryNumber,
     selectedRunOrderTitle,
-    updateCurrentStory,
     slugs,
-    usedStory,
     selectedDate,
     prompterId,
+    sendUsedStory,
+    usedStory,
+    updateCurrentStory,
   ]);
+
 
   const handleDateChange = (event) => {
     const date = event.target.value;
@@ -625,11 +657,11 @@ export default function Home() {
     [slugs, startPosition, fetchAllContent]
   );
 
-  const fromStart = () => {
-    setCurrentSlug(0);
-    handleDoubleClick(0);
-    if (slugs.length > 0) {
-      setCurrentSlugName(slugs[0].SlugName);
+  const fromStart = (i = 0) => {
+    setCurrentSlug(i);
+    handleDoubleClick(i);
+    if (slugs.length > i) {
+      setCurrentSlugName(slugs[i].SlugName);
     }
   };
 
@@ -689,16 +721,6 @@ export default function Home() {
       setSpeed(0);
     }
   }, [currentStoryNumber, stopAfterStoryChange]);
-
-  useEffect(() => {
-    const slug = slugs[currentStoryNumber - 1];
-    if (!slug || slug.DropStory === 1 || slug.DropStory === 3) return;
-
-    const newScriptID = slug.ScriptID;
-    if (!newScriptID || usedStory.includes(newScriptID)) return;
-
-    setUsedStory((prev) => [...prev, newScriptID]);
-  }, [currentStoryNumber, slugs, usedStory]);
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -981,8 +1003,8 @@ export default function Home() {
       previousRef.current?.();
     });
 
-    socket.on("fromStart2", () => {
-      fromStartRef.current?.();
+    socket.on("fromStart2", (data) => {
+      fromStartRef.current?.(data);
     });
 
     return () => {
@@ -1438,7 +1460,7 @@ export default function Home() {
                   backgroundColor: "blue",
                   color: "yellow",
                   width: 702,
-                  fontFamily: "Times New Roman",
+                  fontFamily: "Roboto",
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
@@ -1826,31 +1848,31 @@ export default function Home() {
                     "",
                     `width=${scrollWidth},height=${scrollHeight + 40}`
                   );
-                  setTimeout(() => {
-                    const socket = socketRef.current;
-                    if (!socket) return;
+                  // setTimeout(() => {
+                  //   const socket = socketRef.current;
+                  //   if (!socket) return;
 
-                    // socket.emit('newPosition', newPosition);
-                    socket.emit("setCurrentStoryNumber", currentStoryNumber);
-                    socket.emit("storyLines", storyLines);
-                    socket.emit("crossedLines", crossedLines);
-                    socket.emit("allContent", allContent);
-                    socket.emit("setSlugs", slugs);
+                  //   // socket.emit('newPosition', newPosition);
+                  //   socket.emit("setCurrentStoryNumber", currentStoryNumber);
+                  //   socket.emit("storyLines", storyLines);
+                  //   socket.emit("crossedLines", crossedLines);
+                  //   socket.emit("allContent", allContent);
+                  //   socket.emit("setSlugs", slugs);
 
-                    // socket.emit('setFontSize', fontSize * 2.5);
-                    socket.emit("setStartPosition", startPosition);
+                  //   // socket.emit('setFontSize', fontSize * 2.5);
+                  //   socket.emit("setStartPosition", startPosition);
 
-                    socket.emit("setShowClock", showClock);
-                    socket.emit("setNewsReaderText", newsReaderText);
-                    socket.emit("rtl", isRTL);
-                    // socket.emit('bgColor', bgColor);
-                    socket.emit("fontColor", fontColor);
-                    socket.emit("fontBold", fontBold);
-                    socket.emit("currentFont", currentFont);
-                    socket.emit("scrollContainerStyle", scrollContainerStyle);
-                    socket.emit("scrollingTextStyle", scrollingTextStyle);
-                    socket.emit("speed", speed);
-                  }, 3000);
+                  //   socket.emit("setShowClock", showClock);
+                  //   socket.emit("setNewsReaderText", newsReaderText);
+                  //   socket.emit("rtl", isRTL);
+                  //   // socket.emit('bgColor', bgColor);
+                  //   socket.emit("fontColor", fontColor);
+                  //   socket.emit("fontBold", fontBold);
+                  //   socket.emit("currentFont", currentFont);
+                  //   socket.emit("scrollContainerStyle", scrollContainerStyle);
+                  //   socket.emit("scrollingTextStyle", scrollingTextStyle);
+                  //   socket.emit("speed", speed);
+                  // }, 3000);
                 }}
               >
                 WebSocketOutput
