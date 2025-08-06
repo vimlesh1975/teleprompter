@@ -49,7 +49,7 @@ const ScrollView = ({
                                 dir={(i % 3 === 1) ? (isRTL ? 'rtl' : 'ltr') : 'ltr'}
                                 ref={(el) => (contentRefs.current[i] = el)}
                                 style={{
-                                    fontFamily: (i % 3 === 1) ? currentFont : 'Times New Roman',
+                                    fontFamily: (i % 3 === 1) ? currentFont : 'Roboto',
                                     backgroundColor: i % 3 === 0 ? 'blue' : 'transparent',
                                     color: i % 3 === 0 ? 'yellow' : fontColor,
                                     fontWeight: (i % 3 === 1) ? (fontBold ? 'bold' : 'normal') : 'normal'

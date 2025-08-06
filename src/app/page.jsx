@@ -26,7 +26,7 @@ export default function Home() {
   const [showDropControl, setShowDropControl] = useState(true);
   const [ip, setIp] = useState(null);
   const [fontList, setFontList] = useState(fontLists);
-  const [currentFont, setCurrentFont] = useState("Times New Roman");
+  const [currentFont, setCurrentFont] = useState("Roboto");
   const [isRTL, setIsRTL] = useState(false);
   const [bgColor, setbgColor] = useState("#000000");
   const [fontColor, setFontColor] = useState("#ffffff");
@@ -1438,7 +1438,7 @@ export default function Home() {
                   backgroundColor: "blue",
                   color: "yellow",
                   width: 702,
-                  fontFamily: "Times New Roman",
+                  fontFamily: "Roboto",
                 }}
               >
                 {currentSlug + 1} {currentSlugName}
