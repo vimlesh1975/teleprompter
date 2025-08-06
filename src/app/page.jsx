@@ -215,7 +215,7 @@ export default function Home() {
   }, [focusedInput, useDB, file, currentSlug, slugs]);
 
   const updateCurrentStory = useCallback(
-    (curstory, curbulletin, ScriptID, usedStory, selectedDate, prompterId) => {
+    (curstory, curbulletin, ScriptID, selectedDate, prompterId) => {
       if (!curbulletin) return;
       if (!ScriptID) return;
       fetch("/api/currentStory", {
@@ -240,17 +240,47 @@ export default function Home() {
           console.error("Error:", error);
         });
     },
-    [sendUsedStory]
+    [sendUsedStory, usedStory]
   );
 
+  // useEffect(() => {
+  //   if (!slugs) return;
+  //   if (!useDB) return;
+  //   updateCurrentStory(
+  //     currentStoryNumber,
+  //     selectedRunOrderTitle,
+  //     slugs[currentStoryNumber - 1]?.ScriptID,
+  //     selectedDate,
+  //     prompterId
+  //   );
+  // }, [
+  //   useDB,
+  //   currentStoryNumber,
+  //   selectedRunOrderTitle,
+  //   updateCurrentStory,
+  //   slugs,
+  //   selectedDate,
+  //   prompterId,
+  // ]);
+
   useEffect(() => {
-    if (!slugs) return;
-    if (!useDB) return;
+    const slug = slugs?.[currentStoryNumber - 1];
+    if (!slug || !useDB) return;
+    if (slug.DropStory === 1 || slug.DropStory === 3) return;
+
+    const scriptId = slug.ScriptID;
+    if (!scriptId) return;
+
+    const alreadyUsed = usedStory.includes(scriptId);
+    if (sendUsedStory && !alreadyUsed) {
+      setUsedStory((prev) => [...prev, scriptId]);
+      return; // Wait until usedStory updates before making API call
+    }
+
     updateCurrentStory(
       currentStoryNumber,
       selectedRunOrderTitle,
-      slugs[currentStoryNumber - 1]?.ScriptID,
-      usedStory,
+      scriptId,
       selectedDate,
       prompterId
     );
@@ -258,12 +288,14 @@ export default function Home() {
     useDB,
     currentStoryNumber,
     selectedRunOrderTitle,
-    updateCurrentStory,
     slugs,
-    usedStory,
     selectedDate,
     prompterId,
+    sendUsedStory,
+    usedStory,
+    updateCurrentStory,
   ]);
+
 
   const handleDateChange = (event) => {
     const date = event.target.value;
@@ -690,15 +722,15 @@ export default function Home() {
     }
   }, [currentStoryNumber, stopAfterStoryChange]);
 
-  useEffect(() => {
-    const slug = slugs[currentStoryNumber - 1];
-    if (!slug || slug.DropStory === 1 || slug.DropStory === 3) return;
+  // useEffect(() => {
+  //   const slug = slugs[currentStoryNumber - 1];
+  //   if (!slug || slug.DropStory === 1 || slug.DropStory === 3) return;
 
-    const newScriptID = slug.ScriptID;
-    if (!newScriptID || usedStory.includes(newScriptID)) return;
+  //   const newScriptID = slug.ScriptID;
+  //   if (!newScriptID || usedStory.includes(newScriptID)) return;
 
-    setUsedStory((prev) => [...prev, newScriptID]);
-  }, [currentStoryNumber, slugs, usedStory]);
+  //   setUsedStory((prev) => [...prev, newScriptID]);
+  // }, [currentStoryNumber, slugs, usedStory]);
 
   useEffect(() => {
     const socket = socketRef.current;
