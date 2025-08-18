@@ -1081,7 +1081,6 @@ export default function Home() {
   }, []);
 
   const handleWheel = (e) => {
-    console.log("Mouse wheel delta:", e.deltaY);
     if (e.deltaY > 0) {
       setSpeed(speed - 1);
     } else {
@@ -1089,9 +1088,23 @@ export default function Home() {
     }
     e.preventDefault(); // Block default scroll if needed
   };
+  const handleMouseUp = (event) => {
+    if (event.button === 3) {
+      // console.log("Back button pressed");
+      previous();
+      event.preventDefault();
+    }
+    if (event.button === 4) {
+      // console.log("Forward button pressed");
+      next();
+      event.preventDefault();
+    }
+  };
 
   return (
-    <div style={{ overflow: "hidden", backgroundColor: "#e0e0d2" }}>
+    <div
+      onMouseUp={handleMouseUp}
+      style={{ overflow: "hidden", backgroundColor: "#e0e0d2" }}>
       <div style={{ display: "flex" }}>
         <div style={{ height: "100vh" }}>
           <div>
@@ -1677,6 +1690,7 @@ export default function Home() {
           </div>
 
           <div
+
             onWheel={handleWheel}
             onContextMenu={(e) => {
               e.preventDefault();

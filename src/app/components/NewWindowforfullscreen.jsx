@@ -140,7 +140,7 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
         };
 
         const handleWheel = (e) => {
-            console.log("Mouse wheel delta:", e.deltaY);
+            // console.log("Mouse wheel delta:", e.deltaY);
             if (e.deltaY > 0) {
                 setSpeed(speed - 1);
             } else {
