@@ -1080,6 +1080,16 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleWheel = (e) => {
+    console.log("Mouse wheel delta:", e.deltaY);
+    if (e.deltaY > 0) {
+      setSpeed(speed - 1);
+    } else {
+      setSpeed(speed + 1);
+    }
+    e.preventDefault(); // Block default scroll if needed
+  };
+
   return (
     <div style={{ overflow: "hidden", backgroundColor: "#e0e0d2" }}>
       <div style={{ display: "flex" }}>
@@ -1667,6 +1677,7 @@ export default function Home() {
           </div>
 
           <div
+            onWheel={handleWheel}
             onContextMenu={(e) => {
               e.preventDefault();
               if (speed === 0) {
