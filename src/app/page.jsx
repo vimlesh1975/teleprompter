@@ -272,7 +272,7 @@ export default function Home() {
     if (!scriptId) return;
 
     const alreadyUsed = usedStory.includes(scriptId);
-    if (sendUsedStory && !alreadyUsed) {
+    if (!alreadyUsed) {
       setUsedStory((prev) => [...prev, scriptId]);
       return; // Wait until usedStory updates before making API call
     }
