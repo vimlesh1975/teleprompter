@@ -59,7 +59,7 @@ const ScrollView = ({
                             </div>
                         ))}
                     </div>
-                    <div style={{ position: 'absolute', top: parseInt(startPosition) - 50 }}>
+                    <div style={{ position: 'absolute', top: parseInt(startPosition) - 50, left: isRTL ? 1815 : 0, rotate: isRTL ? '180deg' : '0deg' }}>
                         <Triangles />
                     </div>
                 </div>}
