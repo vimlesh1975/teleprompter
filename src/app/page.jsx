@@ -44,7 +44,7 @@ export default function Home() {
   const newdatabase = useSelector(
     (state) => state.newdatabaseReducer.newdatabase
   );
-  const [startPosition, setStartPosition] = useState(355);
+  const [startPosition, setStartPosition] = useState(308);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("");
@@ -52,7 +52,7 @@ export default function Home() {
   const [currentSlug, setCurrentSlug] = useState(0);
   const [currentSlugName, setCurrentSlugName] = useState("");
   const [allContent, setAllContent] = useState([]);
-  const [newsReaderText, setNewsReaderText] = useState("Continue...");
+  const [newsReaderText, setNewsReaderText] = useState("Continue..");
   const [showClock, setShowClock] = useState(true);
   const [newPosition, setNewPosition] = useState(startPosition);
   const [tempSpeed, setTempSpeed] = useState(1);
@@ -1456,7 +1456,7 @@ export default function Home() {
               <button onClick={() => setNewsReaderText("Go Slow...")}>
                 Go Slow
               </button>
-              <button onClick={() => setNewsReaderText("Continue...")}>
+              <button onClick={() => setNewsReaderText("Continue..")}>
                 Continue...
               </button>
               <button onClick={() => setNewsReaderText("Stop...")}>Stop</button> {newsReaderText}
@@ -1873,31 +1873,6 @@ export default function Home() {
                     "",
                     `width=${scrollWidth},height=${scrollHeight + 40}`
                   );
-                  // setTimeout(() => {
-                  //   const socket = socketRef.current;
-                  //   if (!socket) return;
-
-                  //   // socket.emit('newPosition', newPosition);
-                  //   socket.emit("setCurrentStoryNumber", currentStoryNumber);
-                  //   socket.emit("storyLines", storyLines);
-                  //   socket.emit("crossedLines", crossedLines);
-                  //   socket.emit("allContent", allContent);
-                  //   socket.emit("setSlugs", slugs);
-
-                  //   // socket.emit('setFontSize', fontSize * 2.5);
-                  //   socket.emit("setStartPosition", startPosition);
-
-                  //   socket.emit("setShowClock", showClock);
-                  //   socket.emit("setNewsReaderText", newsReaderText);
-                  //   socket.emit("rtl", isRTL);
-                  //   // socket.emit('bgColor', bgColor);
-                  //   socket.emit("fontColor", fontColor);
-                  //   socket.emit("fontBold", fontBold);
-                  //   socket.emit("currentFont", currentFont);
-                  //   socket.emit("scrollContainerStyle", scrollContainerStyle);
-                  //   socket.emit("scrollingTextStyle", scrollingTextStyle);
-                  //   socket.emit("speed", speed);
-                  // }, 3000);
                 }}
               >
                 WebSocketOutput

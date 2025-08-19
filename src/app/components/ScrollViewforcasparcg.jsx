@@ -11,8 +11,8 @@ const ScrollViewforcasparcg = () => {
     const [storyLines, setStoryLines] = useState([]);
     const [currentStoryNumber, setCurrentStoryNumber] = useState(1);
     const [allContent, setAllContent] = useState([]);
-    const [startPosition, setStartPosition] = useState(355);
-    const [newsReaderText, setNewsReaderText] = useState('Continue...');
+    const [startPosition, setStartPosition] = useState(308);
+    const [newsReaderText, setNewsReaderText] = useState('Continue..');
     const [showClock, setShowClock] = useState(true);
     const [scrollContainerStyle, setScrollContainerStyle] = useState({});
     const [scrollingTextStyle, setScrollingTextStyle] = useState({});

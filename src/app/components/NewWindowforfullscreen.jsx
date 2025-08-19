@@ -189,8 +189,8 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
 
     const styel1 = {
         position: 'absolute',
-        top: 15,
-        left: 805,
+        top: 35,
+        left: 825,
         zIndex: 9999,
         backgroundColor: 'red',
         color: 'white',
@@ -217,7 +217,7 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
 
 
             </div>
-            <div style={{ ...styel1, fontSize: 16, marginLeft: 20, left: 1300 }}>
+            <div style={{ ...styel1, fontSize: 16, marginLeft: 20, left: 1270 }}>
                 <label style={{ color: 'black', fontWeight: 'bolder' }}>Go To</label>
                 <select onChange={(e) => handleDoubleClick(Number(e.target.value))}>
                     <option value="">Select</option>

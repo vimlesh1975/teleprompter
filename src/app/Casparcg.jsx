@@ -128,27 +128,6 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
                 command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
               });
               playOnSecondChannelinFlippedMode();
-              // setTimeout(() => {
-              //   socketRef.current.emit('setCurrentStoryNumber', currentStoryNumberRef.current);
-              //   socketRef.current.emit('storyLines', storyLinesRef.current);
-              //   socketRef.current.emit('crossedLines', crossedLinesRef.current);
-              //   socketRef.current.emit('allContent', allContentRef.current);
-              //   socketRef.current.emit('setSlugs', slugsRef.current);
-              //   socketRef.current.emit('setStartPosition', startPositionRef.current);
-              //   socketRef.current.emit('setShowClock', showClockRef.current);
-              //   socketRef.current.emit('setNewsReaderText', newsReaderTextRef.current);
-              //   socketRef.current.emit('rtl', isRTLRef.current);
-              //   socketRef.current.emit('fontColor', fontColorRef.current);
-              //   socketRef.current.emit('fontBold', fontBoldRef.current);
-              //   socketRef.current.emit('currentFont', currentFontRef.current);
-              //   socketRef.current.emit('scrollContainerStyle', scrollContainerStyleRef.current);
-              //   socketRef.current.emit('scrollingTextStyle', scrollingTextStyleRef.current);
-              // }, 4000);
-
-              // setTimeout(() => {
-              //   handleDoubleClickRef.current(0);
-              // }, 6000);
-
             }
             }
           >
@@ -163,7 +142,6 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
                 command: `play 1-97 [html] http://${IP}:3000/webrtc.html`,
               });
               handleDoubleClick(0);
-
               playOnSecondChannelinFlippedMode();
             }
             }

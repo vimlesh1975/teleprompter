@@ -17,26 +17,26 @@ const ScrollView = ({
             <div style={{
                 backgroundColor: 'lightgray',
                 color: 'blue',
-                fontSize: 18 * 2.5,
+                fontSize: 18 * 2.5 * 1.5,
                 fontWeight: 'bolder',
                 width: 1920,
-                height: 60, // ✅ Add fixed height
+                height: 100, // ✅ Add fixed height
             }}>
                 <div style={{
                     backgroundColor: 'lightgreen',
                     width: `${Math.min((crossedLines / storyLines[currentStoryNumber - 1]) * 100, 100)}%`,
-                    height: 60, // ✅ Add fixed height
+                    height: 100, // ✅ Add fixed height
 
                 }}>
                     <div style={{ display: 'flex', position: 'relative', width: 1920, fontFamily: 'Roboto' }}>
-                        <div style={{ position: 'absolute', left: 10, }}>{`Cur: ${currentStoryNumber} (${currentStoryNumber}/${slugs?.length})`}</div>
-                        <div style={{ position: 'absolute', left: 350, }}>{newsReaderText}</div>
+                        <div style={{ position: 'absolute', left: 10, }}>{`${currentStoryNumber}/${slugs?.length}`}</div>
+                        <div style={{ position: 'absolute', left: 220, }}>{newsReaderText}</div>
 
-                        <div style={{ position: 'absolute', left: 610, }}>{'Speed:' + speed}</div>
+                        <div style={{ position: 'absolute', left: 555, }}>{'Speed:' + speed}</div>
 
 
-                        <div style={{ position: 'absolute', left: 1500, visibility: showClock ? 'visible' : 'hidden', color: 'red' }}> <Clock /></div>
-                        <div style={{ position: 'absolute', left: 1750, }}>{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
+                        <div style={{ position: 'absolute', left: 1415, visibility: showClock ? 'visible' : 'hidden', color: 'red' }}> <Clock /></div>
+                        <div style={{ position: 'absolute', left: 1700, }}>{crossedLines}/{storyLines[currentStoryNumber - 1]}</div>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,6 @@ const ScrollView = ({
                             </div>
                         ))}
                     </div>
-                    {/* <div style={{ position: 'absolute', top: parseInt(startPosition) - 50, left: isRTL ? 1815 : 0, rotate: isRTL ? '180deg' : '0deg' }}> */}
                     <div
                         style={{
                             position: 'absolute',
@@ -68,11 +67,9 @@ const ScrollView = ({
                             transform: isRTL ? 'rotate(180deg)' : 'rotate(0deg)',
                         }}
                     >
-
                         <Triangles />
                     </div>
                 </div>}
-
         </div>
     );
 };

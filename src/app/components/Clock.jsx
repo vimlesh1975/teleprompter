@@ -20,7 +20,7 @@ const Clock = () => {
   };
 
   return (
-    <div style={{ fontSize: '1.1em', fontFamily: 'Roboto' }}>
+    <div style={{ fontFamily: 'Roboto' }}>
       {formatTime(time)}
     </div>
   );
