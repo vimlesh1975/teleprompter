@@ -28,7 +28,7 @@ const ScrollView = ({
                     height: 100, // ✅ Add fixed height
 
                 }}>
-                    <div style={{ display: 'flex', position: 'relative', width: 1920, fontFamily: 'Roboto' }}>
+                    <div style={{ display: 'flex', position: 'relative', top: 20, width: 1920, fontFamily: 'Roboto' }}>
                         <div style={{ position: 'absolute', left: 10, }}>{`${currentStoryNumber}/${slugs?.length}`}</div>
                         <div style={{ position: 'absolute', left: 220, }}>{newsReaderText}</div>
 

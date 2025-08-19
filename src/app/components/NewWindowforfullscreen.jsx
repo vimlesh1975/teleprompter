@@ -189,7 +189,7 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
 
     const styel1 = {
         position: 'absolute',
-        top: 35,
+        top: 55,
         left: 825,
         zIndex: 9999,
         backgroundColor: 'red',
