@@ -658,11 +658,11 @@ export default function Home() {
   );
 
   const fromStart = (i = 0) => {
-    setCurrentSlug(i);
+    // setCurrentSlug(i);
     handleDoubleClick(i);
-    if (slugs.length > i) {
-      setCurrentSlugName(slugs[i].SlugName);
-    }
+    // if (slugs.length > i) {
+    //   setCurrentSlugName(slugs[i].SlugName);
+    // }
   };
 
   const previous = useCallback(() => {
@@ -1407,9 +1407,9 @@ export default function Home() {
             <button
               onClick={() => {
                 const lastIndex = slugs.length - 1;
-                setCurrentSlug(lastIndex);
+                // setCurrentSlug(lastIndex);
                 handleDoubleClick(lastIndex);
-                setCurrentSlugName(slugs[lastIndex].SlugName);
+                // setCurrentSlugName(slugs[lastIndex].SlugName);
               }}
             >
               Go to Last
