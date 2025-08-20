@@ -23,6 +23,8 @@ const scrollWidth = 782; //scrollHeight * 16 / 9=782.22;
 const dummyScriptid = 200502071223160;
 
 export default function Home() {
+  const [isFlashing, setIsFlashing] = useState(false);
+
   const [showDropControl, setShowDropControl] = useState(true);
   const [ip, setIp] = useState(null);
   const [fontList, setFontList] = useState(fontLists);
@@ -99,6 +101,12 @@ export default function Home() {
   const iframeRef = useRef(null);
   const textarea1Ref = useRef(null);
   const [focusedInput, setFocusedInput] = useState(null);
+
+  useEffect(() => {
+    setIsFlashing(true);
+    const timeout = setTimeout(() => setIsFlashing(false), 500); // flash duration
+    return () => clearTimeout(timeout);
+  }, [latestDate]);
 
   useEffect(() => {
     setHasMounted(true);
@@ -1761,7 +1769,7 @@ export default function Home() {
               />
             </div>
             <div style={{ textAlign: "center" }}>
-              Right Click here in this area to Pause and Resume
+              Right Click here in this area to Pause and Resume, Mouse Wheel for speed
             </div>
             <div style={{ textAlign: "left" }}>
               <label>
@@ -1819,7 +1827,12 @@ export default function Home() {
               stopOnNext={stopOnNext}
               setStopOnNext={setStopOnNext}
             />
-            <p style={{ fontWeight: "bold" }}>
+            <p style={{
+              fontWeight: "bold",
+              backgroundColor: isFlashing ? "yellow" : "transparent",
+              // transform: isFlashing ? "scale(1.2)" : "scale(1)",
+              transition: "all 0.5s ease"
+            }}>
               Last Update:{" "}
               {hasMounted &&
                 latestDate instanceof Date &&
