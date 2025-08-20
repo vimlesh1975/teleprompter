@@ -665,50 +665,43 @@ export default function Home() {
     }
   };
 
-  const previous = () => {
-    setCurrentSlug((prevSlug) => {
-      let newIndex = prevSlug - 1;
+  const previous = useCallback(() => {
+    let newIndex = currentStoryNumber - 2;
+    if (newIndex < 0) {
+      newIndex = slugs.length - 1;
+    }
+    while (
+      slugs[newIndex]?.DropStory === 1 ||
+      slugs[newIndex]?.DropStory === 3 ||
+      (!slugs[newIndex]?.Approval && !allowUnApproved)
+    ) {
+      newIndex--;
       if (newIndex < 0) {
         newIndex = slugs.length - 1;
       }
-      while (
-        slugs[newIndex]?.DropStory === 1 ||
-        slugs[newIndex]?.DropStory === 3 ||
-        (!slugs[newIndex]?.Approval && !allowUnApproved)
-      ) {
-        newIndex--;
-        if (newIndex < 0) {
-          newIndex = slugs.length - 1;
-        }
-      }
-      handleDoubleClick(newIndex);
-      setCurrentSlugName(slugs[newIndex].SlugName);
-      return newIndex;
-    });
-  };
+    }
+    handleDoubleClick(newIndex);
+  }, [currentStoryNumber, slugs, allowUnApproved, handleDoubleClick]);
 
   const next = useCallback(() => {
-    setCurrentSlug((prevSlug) => {
-      let newIndex = prevSlug + 1;
+    let newIndex = currentStoryNumber;
+    if (newIndex >= slugs.length) {
+      newIndex = 0;
+    }
+    while (
+      slugs[newIndex]?.DropStory === 1 ||
+      slugs[newIndex]?.DropStory === 3 ||
+      (!slugs[newIndex]?.Approval && !allowUnApproved)
+    ) {
+      newIndex++;
       if (newIndex >= slugs.length) {
         newIndex = 0;
       }
-      while (
-        slugs[newIndex]?.DropStory === 1 ||
-        slugs[newIndex]?.DropStory === 3 ||
-        (!slugs[newIndex]?.Approval && !allowUnApproved)
-      ) {
-        newIndex++;
-        if (newIndex >= slugs.length) {
-          newIndex = 0;
-        }
-      }
+    }
+    handleDoubleClick(newIndex);
+  }, [currentStoryNumber, slugs, allowUnApproved, handleDoubleClick]);
 
-      setCurrentSlugName(slugs[newIndex].SlugName);
-      handleDoubleClick(newIndex);
-      return newIndex;
-    });
-  }, [slugs, handleDoubleClick, allowUnApproved]);
+
 
   useEffect(() => {
     if (!slugs) return;
