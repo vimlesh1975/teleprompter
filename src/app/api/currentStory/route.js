@@ -8,6 +8,7 @@ export async function POST(req) {
 
     const emittedData = { prompterId, curstory, curbulletin, ScriptID, usedStory, bulletindate: selectedDate };
     socket.emit('currentStory1', emittedData);
+    // console.log(emittedData)
 
     let connection;
     try {
