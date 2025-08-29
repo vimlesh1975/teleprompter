@@ -16,6 +16,7 @@ import { changenewdatabase } from "./store/store"; // Adjust the path as needed
 import mammoth from "mammoth";
 import "react-tabs/style/react-tabs.css";
 import { UseSocketControls } from "./components/UseSocketControls";
+import { v4 as uuid } from "uuid";
 
 const scrollHeight = 460;
 const scrollWidth = 782; //scrollHeight * 16 / 9=782.22;
@@ -1125,6 +1126,43 @@ export default function Home() {
         console.error("Error:", error);
       });
   }, [currentStoryNumber, allowUnApproved, slugs])
+
+  useEffect(() => {
+    const channel = new BroadcastChannel("app_channel");
+    const tabId = uuid(); // unique ID for this tab
+
+    const existingOwner = localStorage.getItem("app_owner");
+
+    if (existingOwner) {
+      // Another tab is already the owner -> block this one
+      document.body.innerHTML =
+        "<h1 style='color:red;text-align:center;margin-top:50px;'>App is already open in another tab!</h1>";
+    } else {
+      // Become the owner
+      localStorage.setItem("app_owner", tabId);
+
+      channel.onmessage = (e) => {
+        if (e.data === "request") {
+          // Tell the other tab that an owner exists
+          channel.postMessage("hasOwner");
+        }
+      };
+    }
+
+    // If this tab closes, release ownership
+    const handleUnload = () => {
+      if (localStorage.getItem("app_owner") === tabId) {
+        localStorage.removeItem("app_owner");
+      }
+    };
+    window.addEventListener("beforeunload", handleUnload);
+
+    return () => {
+      handleUnload();
+      channel.close();
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
 
   return (
     <div
