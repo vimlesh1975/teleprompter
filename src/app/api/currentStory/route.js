@@ -4,9 +4,9 @@ import socket from '../socketClient.js';
 
 export async function POST(req) {
     const payload = await req.json();
-    const { prompterId, curstory, curbulletin, ScriptID, usedStory, selectedDate } = payload;
+    const { prompterId, curstory, curbulletin, ScriptID, usedStory, selectedDate, actualScriptId } = payload;
 
-    const emittedData = { prompterId, curstory, curbulletin, ScriptID, usedStory, bulletindate: selectedDate };
+    const emittedData = { prompterId, curstory, curbulletin, ScriptID, usedStory, bulletindate: selectedDate, actualScriptId };
     socket.emit('currentStory1', emittedData);
     // console.log(emittedData)
 
@@ -68,6 +68,14 @@ export async function POST(req) {
 
         try {
             await connection.query(query, values);
+            const query2 = `UPDATE script SET scriptid_onair = 1 WHERE ScriptID = ?`;
+            const values2 = [actualScriptId];
+            // console.log(actualScriptId);
+            if (newdatabase) {
+                const [result] = await connection.query(query2, values2);
+                // console.log("Rows affected:", result.affectedRows);
+            }
+
             return new Response(JSON.stringify({ message: 'Content inserted/updated successfully' }), {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
