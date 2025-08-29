@@ -5,7 +5,7 @@ export async function GET() {
   let connection;
   try {
     connection = await mysql.createConnection(config);
-    const query = newdatabase ? `SELECT distinct bulletinname as title FROM bulletin where bulletinname != '' and  bulletintype ='News Bulletin' and status=1  order by bulletinname asc` : `SELECT distinct title FROM newsid where title != '' order by title asc`
+    const query = newdatabase ? `SELECT distinct bulletinname as title, bulletintime FROM bulletin where bulletinname != '' and  bulletintype ='News Bulletin' and status=1  order by bulletintime asc` : `SELECT distinct title FROM newsid where title != '' order by title asc`
 
     try {
       const [rows] = await connection.query(query);
