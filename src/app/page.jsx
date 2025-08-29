@@ -1102,6 +1102,30 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    const currentStory = slugs[currentStoryNumber - 1];
+
+    if (
+      currentStory?.DropStory === 1 ||
+      currentStory?.DropStory === 3 ||
+      (!allowUnApproved && currentStory?.Approval === 0)
+    ) {
+      return;
+    }
+    fetch("/api/onair", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ScriptID: currentStory?.ScriptID
+      }),
+    })
+      .then((response) => response.json())
+      .then(() => { })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, [currentStoryNumber, allowUnApproved, slugs])
+
   return (
     <div
       onMouseUp={handleMouseUp}
