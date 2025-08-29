@@ -240,7 +240,6 @@ export default function Home() {
           usedStory: sendUsedStory ? usedStory : [],
           selectedDate,
           prompterId,
-          actualScriptId: ScriptID,
         }),
       })
         .then((response) => response.json())
