@@ -16,7 +16,7 @@ export async function POST(req) {
             const values2 = [ScriptID];
             // console.log(actualScriptId);
             if (newdatabase) {
-                const [result] = await connection.query(query2, values2);
+                await connection.query(query2, values2);
                 // console.log("Rows affected:", result.affectedRows);
             }
 
