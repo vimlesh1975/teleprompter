@@ -16,6 +16,9 @@ import { changenewdatabase } from "./store/store"; // Adjust the path as needed
 import mammoth from "mammoth";
 import "react-tabs/style/react-tabs.css";
 import { UseSocketControls } from "./components/UseSocketControls";
+
+import GraphicsAndVideo from "./components/GraphicsAndVideo";
+
 // import { v4 as uuid } from "uuid";
 import Image from "next/image";
 
@@ -26,6 +29,7 @@ const dummyScriptid = 200502071223160;
 
 export default function Home() {
   const [isFlashing, setIsFlashing] = useState(false);
+  const [showExpressNews, setShowExpressNews] = useState(false);
 
   const [showDropControl, setShowDropControl] = useState(true);
   const [ip, setIp] = useState(null);
@@ -2065,11 +2069,26 @@ export default function Home() {
                 <button onClick={() => window.open(`http://${ip}:3000/m`)}>
                   Mobile controller
                 </button>
+                <label>
+                  {" "}
+                  <input
+                    type="checkbox"
+                    checked={showExpressNews}
+                    onChange={(e) => setShowExpressNews(e.target.checked)}
+                  />
+                  <span>show Express News</span>
+                </label>{" "}
               </div>
             </div>
           </div>
+          <div style={{ position: "absolute", top: 800 }}>
+            {showExpressNews && <GraphicsAndVideo slugs={slugs} currentStoryNumber={currentStoryNumber} content={slugs[currentSlug].Script} currentSlug={currentSlug} />}
+          </div>
+
         </div>
+
       </div>
+
     </div>
   );
 }
