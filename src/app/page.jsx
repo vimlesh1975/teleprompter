@@ -1088,6 +1088,7 @@ export default function Home() {
   }, []);
 
   const handleWheel = (e) => {
+    if (e.target.tagName === "INPUT") return; // ignore if on input
     if (e.deltaY > 0) {
       setSpeed(speed - 1);
     } else {
