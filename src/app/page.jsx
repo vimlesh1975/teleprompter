@@ -20,7 +20,7 @@ import { UseSocketControls } from "./components/UseSocketControls";
 import GraphicsAndVideo from "./components/GraphicsAndVideo";
 
 // import { v4 as uuid } from "uuid";
-import Image from "next/image";
+// import Image from "next/image";
 
 const scrollHeight = 460;
 const scrollWidth = 782; //scrollHeight * 16 / 9=782.22;
@@ -1109,29 +1109,29 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    const currentStory = slugs[currentStoryNumber - 1];
+  // useEffect(() => {
+  //   const currentStory = slugs[currentStoryNumber - 1];
 
-    if (
-      currentStory?.DropStory === 1 ||
-      currentStory?.DropStory === 3 ||
-      (!allowUnApproved && currentStory?.Approval === 0)
-    ) {
-      return;
-    }
-    fetch("/api/onair", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ScriptID: currentStory?.ScriptID
-      }),
-    })
-      .then((response) => response.json())
-      .then(() => { })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, [currentStoryNumber, allowUnApproved, slugs])
+  //   if (
+  //     currentStory?.DropStory === 1 ||
+  //     currentStory?.DropStory === 3 ||
+  //     (!allowUnApproved && currentStory?.Approval === 0)
+  //   ) {
+  //     return;
+  //   }
+  //   fetch("/api/onair", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       ScriptID: currentStory?.ScriptID
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then(() => { })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // }, [currentStoryNumber, allowUnApproved, slugs])
 
   // useEffect(() => {
   //   const channel = new BroadcastChannel("app_channel");
