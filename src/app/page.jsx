@@ -1170,6 +1170,48 @@ export default function Home() {
   //   };
   // }, []);
 
+  const sendtoWtvisionR3 = async () => {
+    try {
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `Engine LoadScene "25IN_ChannelPackaging_351.450/testhtml2"`,
+        }),
+      });
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/testhtml2" EXPORT "url1" SetValue "http://localhost:3000/CasparcgOutput"`,
+        }),
+      });
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/testhtml2" TAKEONLINEWITHSLOT -1`,
+        }),
+      });
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/testhtml2" ANIMATION "In" PLAY`,
+        }),
+      });
+
+      console.log("Commands sent successfully ✅");
+    } catch (err) {
+      console.error("Error:", err);
+      console.log("Failed ❌ " + err.message);
+    }
+  };
+
+
   return (
     <div
       onMouseUp={handleMouseUp}
@@ -2079,6 +2121,7 @@ export default function Home() {
                   />
                   <span>show Express News</span>
                 </label>{" "}
+                <button onClick={sendtoWtvisionR3}>to wtvision R3</button>
               </div>
             </div>
           </div>
