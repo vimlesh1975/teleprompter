@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) => {
   const [useAutoPlay, setuseAutoPlay] = useState(false)
   const [videoChannel2, setVideoChannel2] = useState(false)
+  const [toWtVision, setToWtVision] = useState(false)
   const endpoint = async (str) => {
     const requestOptions = {
       method: "POST",
@@ -121,6 +122,77 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
     }
   }, [currentStoryNumber]);
 
+  useEffect(() => {
+    if (toWtVision) {
+      sendGraphicstowtvision();
+    }
+  }, [currentStoryNumber, toWtVision]);
+  const sendGraphicstowtvision = async () => {
+    try {
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `Engine LoadScene "25IN_ChannelPackaging_351.450/speednews1"`,
+        }),
+      });
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" EXPORT "video1" SetValue "c:/casparcg/_media/${slugs[currentStoryNumber - 1]?.media1}"`,
+        }),
+      });
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" EXPORT "text1" SetValue "${currentStoryNumber}"`,
+        }),
+      });
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" EXPORT "3dnumber" SetValue "${currentStoryNumber}.png"`,
+        }),
+      });
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" EXPORT "text2" SetValue "${(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("$$$ $$$")[0]}"`,
+        }),
+      });
+
+
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" TAKEONLINEWITHSLOT -1`,
+        }),
+      });
+
+      await fetch("/api/tcp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" ANIMATION "In" PLAY`,
+        }),
+      });
+
+      console.log("Commands sent successfully ✅");
+    } catch (err) {
+      console.error("Error:", err);
+      console.log("Failed ❌ " + err.message);
+    }
+  }
 
   const stopGraphics = () => {
     endpoint({
@@ -211,6 +283,19 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
           }}
         />{" "}
         <span>Video on 2nd Channel</span>
+      </label>
+
+      <label>
+        {" "}
+        <input
+          checked={toWtVision}
+          type="checkbox"
+          onChange={async () => {
+            setToWtVision(val => !val);
+
+          }}
+        />{" "}
+        <span>To WtVision</span>
       </label>
       <div>
         {(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("$$$$$$")[0]}
