@@ -29,14 +29,32 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
 
   const handleDoubleClickRef = useRefFromState(handleDoubleClick);
 
+  const [count, setCount] = useState(0);
+
 
   useEffect(() => {
-    socketRef.current = io();
+    // your special ID
+    const specialId = "browser-abc-123";
+
+    socketRef.current = io({
+      query: { specialId },
+    });
 
     const socket = socketRef.current;
 
     socket.on('connect', () => {
       console.log('SOCKET CONNECTED! from casparcg page', socket.id);
+
+    });
+
+    socket.on('userCount', (data) => {
+      console.log(data)
+      setCount(data);
+    })
+
+    // Listen for messages related to this ID
+    socket.on("specialUpdate", (data) => {
+      console.log("Received update:", data);
     });
 
     socket.on('currentStoryBroadcast', (data) => {
@@ -118,6 +136,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
         <div>
           <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
           {socketcurrentstory.ScriptID}
+          <label>🌐 Active Browsers: {count}</label>
         </div>
         <div>
           <button

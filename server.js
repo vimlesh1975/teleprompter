@@ -10,6 +10,8 @@ const handle = app.getRequestHandler();
 require('dotenv').config({ path: './.env.local' });
 var newdatabase = process.env.NEWDATABASE === "true";
 
+let onlineCount = 0;
+
 app.prepare().then(async () => {
     const server = express();
     const httpServer = http.createServer(server);
@@ -49,6 +51,13 @@ app.prepare().then(async () => {
 
     io.on('connection', (socket) => {
         console.log('Socket Client connected', socket.id);
+
+        const specialId = socket.handshake.query.specialId;
+        if (specialId === "browser-abc-123") {
+            onlineCount++;
+            io.emit('userCount', onlineCount);
+        }
+
         socket.on('ServerConnectionStatus', (data) => {
             io.emit('ServerConnectionStatus2', data);
         });
@@ -167,6 +176,18 @@ app.prepare().then(async () => {
         // Handle disconnection
         socket.on('disconnect', () => {
             console.log('User disconnected:', socket.id);
+
+            if (specialId === "browser-abc-123") {
+                setTimeout(() => {
+                    if (!socket.connected) {
+                        onlineCount--;
+                        io.emit('userCount', onlineCount);
+                    }
+                }, 3000); // waits 3 seconds before reducing
+            }
+
+
+
             socket.removeAllListeners();
             socket.removeAllListeners('ServerConnectionStatus');
             socket.removeAllListeners("connect");
