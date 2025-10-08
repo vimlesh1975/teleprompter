@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getTcpClient } from "../../lib/tcpClient"
 
-const HOST = "127.0.0.1"; // your R3 IP
-const PORT = 9010;        // your R3 TCP port
+const HOST = process.env.R3_HOST
+const PORT = process.env.R3_PORT;        // your R3 TCP port
 
 export async function POST(req) {
     try {
