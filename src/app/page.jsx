@@ -534,6 +534,12 @@ export default function Home() {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
+      console.log(event.key)
+      // Always stop browser default refresh or other actions
+      if (["F5", "ESCAPE"].includes(event.key.toUpperCase())) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       switch (event.key) {
         case "ArrowUp":
           setSpeed((val) => Number(val) + 1);
@@ -543,11 +549,19 @@ export default function Home() {
           break;
 
         case "PageUp":
-          console.log('pageup')
           previousRef.current?.();
           break;
         case "PageDown":
           nextRef.current?.();
+          break;
+
+        case "Escape":
+          if (speed === 0) return
+          setTempSpeed(speed)
+          setSpeed(0);
+          break;
+        case "F5":
+          setSpeed(tempSpeed);
           break;
 
         case " ":
@@ -562,9 +576,9 @@ export default function Home() {
           break;
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown, true);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown, true);
     };
   }, [speed, tempSpeed]);
 
