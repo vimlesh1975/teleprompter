@@ -541,6 +541,15 @@ export default function Home() {
         case "ArrowDown":
           setSpeed((val) => val - 1);
           break;
+
+        case "PageUp":
+          console.log('pageup')
+          previousRef.current?.();
+          break;
+        case "PageDown":
+          nextRef.current?.();
+          break;
+
         case " ":
           if (speed === 0) {
             setSpeed(tempSpeed);
@@ -1110,6 +1119,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (!useDB) return;
     const currentStory = slugs[currentStoryNumber - 1];
 
     if (
@@ -1131,7 +1141,7 @@ export default function Home() {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [currentStoryNumber, allowUnApproved, slugs])
+  }, [currentStoryNumber, allowUnApproved, slugs, useDB])
 
   // useEffect(() => {
   //   const channel = new BroadcastChannel("app_channel");
