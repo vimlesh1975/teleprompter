@@ -31,9 +31,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
 
   const [count, setCount] = useState(0);
 
-
   useEffect(() => {
-    // your special ID
     const specialId = "browser-abc-123";
 
     socketRef.current = io({
@@ -48,25 +46,17 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
     });
 
     socket.on('userCount', (data) => {
-      console.log(data)
       setCount(data);
     })
-
-    // Listen for messages related to this ID
-    socket.on("specialUpdate", (data) => {
-      console.log("Received update:", data);
-    });
 
     socket.on('currentStoryBroadcast', (data) => {
       setSocketcurrentstory(data);
     });
 
     socket.on('disconnect', () => {
-      console.log('Disconnected from server');
+      document.body.innerHTML = "<h2 style='color:red;text-align:center;margin-top:50px'>Your session has been closed by admin.</h2>";
     });
     socket.on('casparready2', data => {
-      // console.log('casparready2 from server', data);
-
       socketRef.current.emit('setCurrentStoryNumber', currentStoryNumberRef.current);
       socketRef.current.emit('storyLines', storyLinesRef.current);
       socketRef.current.emit('crossedLines', crossedLinesRef.current);
@@ -130,6 +120,12 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
     });
   }
 
+  const handleDisconnectOthers = () => {
+    socketRef.current.emit('disconnectOthers');
+  };
+
+
+
   return (
     <div>
       <div>
@@ -137,6 +133,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
           <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
           {socketcurrentstory.ScriptID}
           <label>🌐 Active Browsers: {count}</label>
+          {(count > 1) && <button onClick={handleDisconnectOthers}>Discconect Other browsers</button>}
         </div>
         <div>
           <button

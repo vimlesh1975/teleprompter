@@ -1143,42 +1143,6 @@ export default function Home() {
       });
   }, [currentStoryNumber, allowUnApproved, slugs, useDB])
 
-  // useEffect(() => {
-  //   const channel = new BroadcastChannel("app_channel");
-  //   const tabId = uuid(); // unique ID for this tab
-
-  //   const existingOwner = localStorage.getItem("app_owner");
-
-  //   if (existingOwner) {
-  //     // Another tab is already the owner -> block this one
-  //     document.body.innerHTML =
-  //       "<h1 style='color:red;text-align:center;margin-top:50px;'>App is already open in another tab!</h1>";
-  //   } else {
-  //     // Become the owner
-  //     localStorage.setItem("app_owner", tabId);
-
-  //     channel.onmessage = (e) => {
-  //       if (e.data === "request") {
-  //         // Tell the other tab that an owner exists
-  //         channel.postMessage("hasOwner");
-  //       }
-  //     };
-  //   }
-
-  //   // If this tab closes, release ownership
-  //   const handleUnload = () => {
-  //     if (localStorage.getItem("app_owner") === tabId) {
-  //       localStorage.removeItem("app_owner");
-  //     }
-  //   };
-  //   window.addEventListener("beforeunload", handleUnload);
-
-  //   return () => {
-  //     handleUnload();
-  //     channel.close();
-  //     window.removeEventListener("beforeunload", handleUnload);
-  //   };
-  // }, []);
 
   const sendtoWtvisionR3 = async () => {
     try {

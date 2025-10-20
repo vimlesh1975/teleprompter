@@ -11,6 +11,7 @@ require('dotenv').config({ path: './.env.local' });
 var newdatabase = process.env.NEWDATABASE === "true";
 
 let onlineCount = 0;
+let connectedClients = []; // store all sockets
 
 app.prepare().then(async () => {
     const server = express();
@@ -50,13 +51,25 @@ app.prepare().then(async () => {
 
 
     io.on('connection', (socket) => {
-        console.log('Socket Client connected', socket.id);
 
         const specialId = socket.handshake.query.specialId;
         if (specialId === "browser-abc-123") {
+            connectedClients.push(socket.id);
             onlineCount++;
             io.emit('userCount', onlineCount);
         }
+
+        socket.on('disconnectOthers', () => {
+            connectedClients.forEach(id => {
+                if (specialId === "browser-abc-123") {
+                    if (id !== socket.id) {
+                        io.sockets.sockets.get(id)?.disconnect(true);
+                    }
+                }
+
+            });
+            connectedClients = [socket.id]; // keep only this one
+        });
 
         socket.on('ServerConnectionStatus', (data) => {
             io.emit('ServerConnectionStatus2', data);
@@ -185,8 +198,6 @@ app.prepare().then(async () => {
                     }
                 }, 3000); // waits 3 seconds before reducing
             }
-
-
 
             socket.removeAllListeners();
             socket.removeAllListeners('ServerConnectionStatus');
