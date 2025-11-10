@@ -1037,6 +1037,16 @@ export default function Home() {
       fromStartRef.current?.(data);
     });
 
+    // rf code starts-------------
+    socket.on("speed+", () => {
+      setSpeed(val => val + 1)
+    });
+
+    socket.on("speed-", () => {
+      setSpeed(val => val - 1)
+    });
+    // rf code end-------------
+
     return () => {
       socket.off("connect");
       socket.off("newdatabase");
