@@ -1174,7 +1174,7 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `Engine LoadScene "25IN_ChannelPackaging_351.450/testhtml2"`,
+          msg: `Engine LoadScene "ddnrcs/testhtml2"`,
         }),
       });
 
@@ -1182,7 +1182,7 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/testhtml2" EXPORT "url1" SetValue "http://localhost:3000/CasparcgOutput"`,
+          msg: `SCENE "ddnrcs/testhtml2" EXPORT "url1" SetValue "http://localhost:3000/CasparcgOutput"`,
         }),
       });
 
@@ -1190,7 +1190,7 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/testhtml2" TAKEONLINEWITHSLOT -1`,
+          msg: `SCENE "ddnrcs/testhtml2" TAKEONLINEWITHSLOT -1`,
         }),
       });
 
@@ -1198,7 +1198,7 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/testhtml2" ANIMATION "In" PLAY`,
+          msg: `SCENE "ddnrcs/testhtml2" ANIMATION "In" PLAY`,
         }),
       });
 
