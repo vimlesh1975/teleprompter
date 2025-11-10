@@ -133,7 +133,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `Engine LoadScene "25IN_ChannelPackaging_351.450/speednews1"`,
+          msg: `Engine LoadScene "ddnrcs/speednews1"`,
         }),
       });
 
@@ -141,7 +141,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" EXPORT "video1" SetValue "c:/casparcg/_media/${slugs[currentStoryNumber - 1]?.media1}"`,
+          msg: `SCENE "ddnrcs/speednews1" EXPORT "video1" SetValue "c:/casparcg/_media/${slugs[currentStoryNumber - 1]?.media1}"`,
         }),
       });
 
@@ -149,7 +149,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" EXPORT "text1" SetValue "${currentStoryNumber}"`,
+          msg: `SCENE "ddnrcs/speednews1" EXPORT "text1" SetValue "${currentStoryNumber}"`,
         }),
       });
 
@@ -157,7 +157,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" EXPORT "3dnumber" SetValue "${currentStoryNumber}.png"`,
+          msg: `SCENE "ddnrcs/speednews1" EXPORT "3dnumber" SetValue "${currentStoryNumber}.png"`,
         }),
       });
 
@@ -165,7 +165,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" EXPORT "text2" SetValue "${(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("$$$ $$$")[0]}"`,
+          msg: `SCENE "ddnrcs/speednews1" EXPORT "text2" SetValue "${(slugs[currentStoryNumber - 1]?.OneLinerText)?.split("$$$ $$$")[0]}"`,
         }),
       });
 
@@ -175,7 +175,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" TAKEONLINEWITHSLOT -1`,
+          msg: `SCENE "ddnrcs/speednews1" TAKEONLINEWITHSLOT -1`,
         }),
       });
 
@@ -183,7 +183,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "25IN_ChannelPackaging_351.450/speednews1" ANIMATION "In" PLAY`,
+          msg: `SCENE "ddnrcs/speednews1" ANIMATION "In" PLAY`,
         }),
       });
 
