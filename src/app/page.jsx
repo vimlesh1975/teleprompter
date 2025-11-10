@@ -1366,10 +1366,11 @@ export default function Home() {
                   {isVideoNndCGPresent(val)}
                 </label>
                 {val.Approval === 2 && <Image
-                  src="/RED_BUTTION.png"
-                  width={40}
-                  height={40}
-                  style={{ marginBottom: -18, display: "inline" }}
+                  // src="/RED_BUTTION.png"
+                  src="/rb2.png"
+                  width={25}
+                  height={25}
+                  style={{ marginBottom: -2, display: "inline" }}
                   alt="Mandatary" />}
 
                 <br />
