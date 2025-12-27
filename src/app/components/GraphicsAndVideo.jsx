@@ -12,7 +12,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
       },
       body: JSON.stringify(str), // Convert the data to JSON format
     };
-    fetch("/api/casparcg", requestOptions);
+    fetch("/api/casparcg2", requestOptions);
   };
   const sendGraphics = () => {
 
@@ -42,7 +42,7 @@ const GraphicsAndVideo = ({ slugs, currentStoryNumber, content, currentSlug }) =
         command: `mixer ${videoChannel2 ? 2 : 1}-1 fill 0.27 0.09 0.69 0.65`,
       });
 
-      var data = (slugs[currentStoryNumber - 1]?.OneLinerText)?.split("$$$ $$$")
+      var data = (slugs[currentStoryNumber - 1]?.OneLinerText)?.split("$$$$$$")
       if (!data) {
         data = ['']
       }
