@@ -598,7 +598,8 @@ export default function Home() {
   const isVideoNndCGPresent = useCallback(
     (slug) => {
       if (!useDB && file) return ""; // Handle single script case
-      if (!slug) return "No visuals"; // Handle undefined slug
+      // if (!slug) return "No visuals"; // Handle undefined slug
+      if (!slug) return "0"; // Handle undefined slug
 
       const mediaList = [
         slug.media1,
@@ -611,15 +612,8 @@ export default function Home() {
 
       const totalCount = newdatabase ? count : slug?.Media ? 1 : 0;
       var aa;
-
-      if (totalCount === 0) {
-        aa = ", (No Visual)";
-      } else if (totalCount === 1) {
-        aa = `, (1 Visual)`;
-      } else {
-        aa = `, (${totalCount} Visuals)`;
-      }
-      return `${aa} (${slug.graphicsid ? slug.graphicsid : "No CG"})`;
+      aa = `${totalCount}`;
+      return `, (${aa}-${slug.graphicsid ? slug.graphicsid : "0"})`;
     },
     [useDB, newdatabase, file]
   );
