@@ -51,7 +51,7 @@
 
 
   <script>
-    const socket1 = io('http://localhost:3000');
+    const socket1 = io('http://localhost:14000');
     socket1.on('currentStoryBroadcast', (data) => {
       console.log(data);
       if (data.prompterId.toString() === '1') {
@@ -75,7 +75,7 @@
       console.log('Disconnected from the server');
     });
 
-    // const socket2 = io('http://192.168.15.114:3000');
+    // const socket2 = io('http://192.168.15.114:14000');
     // socket2.on('currentStoryBroadcast', (data) => {
     //   console.log(data);
     //   if (data.prompterId.toString() === '2') {

@@ -141,7 +141,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
 
               endpoint({
                 action: 'endpoint',
-                command: `Play 1-97 [html] "http://${IP}:3000/CasparcgOutput"`,
+                command: `Play 1-97 [html] "http://${IP}:14000/CasparcgOutput"`,
               });
               playOnSecondChannelinFlippedMode();
             }
@@ -155,7 +155,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
             onClick={() => {
               endpoint({
                 action: 'endpoint',
-                command: `play 1-97 [html] http://${IP}:3000/webrtc.html`,
+                command: `play 1-97 [html] http://${IP}:14000/webrtc.html`,
               });
               handleDoubleClick(0);
               playOnSecondChannelinFlippedMode();

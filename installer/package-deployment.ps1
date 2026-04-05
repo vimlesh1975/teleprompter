@@ -7,8 +7,6 @@ $StageRoot = Join-Path $BuildRoot "app"
 
 $ExcludeDirs = @(
     ".git",
-    ".next",
-    "node_modules",
     ".vscode",
     "installer",
     "installer\.service-runtime",

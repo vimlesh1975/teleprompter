@@ -25,17 +25,16 @@ $NodeZipPath = Join-Path $ServiceRuntime $NodeZipName
 $NodeExtractRoot = Join-Path $ServiceRuntime "node-dist"
 $NodeHome = Join-Path $NodeExtractRoot "node-v23.11.1-win-x64"
 $NodeExe = Join-Path $NodeHome "node.exe"
-$NpmCmd = Join-Path $NodeHome "npm.cmd"
 
-$WinSWVersion = "2.12.0"
-$WinSWUrl = "https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe"
+$WinSWVersion = "2.8.0"
+$WinSWUrl = "https://github.com/winsw/winsw/releases/download/v2.8.0/WinSW.NET4.exe"
 $WinSWExe = Join-Path $ServiceRuntime "$ServiceName.exe"
 $WinSWXml = Join-Path $ServiceRuntime "$ServiceName.xml"
 $LogsDir = Join-Path $ServiceRuntime "logs"
 
 $ServerJs = Join-Path $AppRoot "server.js"
 $PackageJson = Join-Path $AppRoot "package.json"
-$NodeModulesDir = Join-Path $AppRoot "node_modules"
+$NextBuildDir = Join-Path $AppRoot ".next"
 
 if (-not (Test-Path $ServerJs)) {
     throw "server.js not found in $AppRoot"
@@ -45,48 +44,44 @@ if (-not (Test-Path $PackageJson)) {
     throw "package.json not found in $AppRoot"
 }
 
+if (-not (Test-Path $NextBuildDir)) {
+    throw ".next build output not found in $AppRoot"
+}
+
 New-Item -ItemType Directory -Force -Path $ServiceRuntime | Out-Null
 New-Item -ItemType Directory -Force -Path $LogsDir | Out-Null
 New-Item -ItemType Directory -Force -Path $NodeExtractRoot | Out-Null
 
-Write-Host "Downloading portable Node.js $NodeVersion..."
-Invoke-WebRequest -Uri $NodeZipUrl -OutFile $NodeZipPath
-
-Write-Host "Extracting Node.js..."
-if (Test-Path $NodeHome) {
-    Remove-Item -LiteralPath $NodeHome -Recurse -Force
+if (Test-Path $WinSWExe) {
+    Write-Host "Stopping existing service if present..."
+    try {
+        & $WinSWExe stop | Out-Null
+    } catch {
+    }
+    Start-Sleep -Seconds 2
 }
-Expand-Archive -Path $NodeZipPath -DestinationPath $NodeExtractRoot -Force
+
+if (-not (Test-Path $NodeExe)) {
+    Write-Host "Downloading portable Node.js $NodeVersion..."
+    Invoke-WebRequest -Uri $NodeZipUrl -OutFile $NodeZipPath
+
+    Write-Host "Extracting Node.js..."
+    if (Test-Path $NodeHome) {
+        Remove-Item -LiteralPath $NodeHome -Recurse -Force
+    }
+    Expand-Archive -Path $NodeZipPath -DestinationPath $NodeExtractRoot -Force
+} else {
+    Write-Host "Portable Node.js already present, skipping download and extraction."
+}
 
 if (-not (Test-Path $NodeExe)) {
     throw "Bundled node.exe was not found after extraction: $NodeExe"
 }
 
-if (-not (Test-Path $NpmCmd)) {
-    throw "Bundled npm.cmd was not found after extraction: $NpmCmd"
-}
-
 Write-Host "Bundled Node version:"
 & $NodeExe -v
 
-Write-Host "Bundled npm version:"
-& $NpmCmd -v
-
-if (-not (Test-Path $NodeModulesDir)) {
-    Write-Host "Installing app dependencies with bundled npm..."
-    & $NpmCmd install
-    if ($LASTEXITCODE -ne 0) {
-        throw "npm install failed."
-    }
-} else {
-    Write-Host "node_modules already exists, skipping npm install."
-}
-
-Write-Host "Building the app with bundled npm..."
-& $NpmCmd run build
-if ($LASTEXITCODE -ne 0) {
-    throw "npm run build failed."
-}
+Write-Host "Using packaged app files and prebuilt .next output."
 
 Write-Host "Downloading WinSW $WinSWVersion..."
 Invoke-WebRequest -Uri $WinSWUrl -OutFile $WinSWExe
@@ -100,7 +95,7 @@ $xml = @"
   <arguments>server.js</arguments>
   <workingdirectory>$AppRoot</workingdirectory>
   <env name="NODE_ENV" value="production" />
-  <env name="PORT" value="3000" />
+  <env name="PORT" value="14000" />
   <logpath>$LogsDir</logpath>
   <log mode="roll" />
   <startmode>Automatic</startmode>
@@ -112,14 +107,6 @@ $xml = @"
 "@
 
 Set-Content -Path $WinSWXml -Value $xml -Encoding UTF8
-
-Write-Host "Stopping existing service if present..."
-try {
-    & $WinSWExe stop | Out-Null
-} catch {
-}
-
-Start-Sleep -Seconds 2
 
 Write-Host "Uninstalling existing service if present..."
 try {

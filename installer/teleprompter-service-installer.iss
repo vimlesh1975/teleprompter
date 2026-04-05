@@ -26,7 +26,7 @@ Source: "install-teleprompter-service.ps1"; DestDir: "{app}\installer"; Flags: i
 Source: "uninstall-teleprompter-service.ps1"; DestDir: "{app}\installer"; Flags: ignoreversion
 
 [Run]
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\installer\install-teleprompter-service.ps1"""; StatusMsg: "Installing Teleprompter Windows service..."; Flags: runhidden waituntilterminated
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\installer\install-teleprompter-service.ps1"""; StatusMsg: "Installing Teleprompter Windows service..."; Flags: waituntilterminated
 
 [UninstallRun]
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\installer\uninstall-teleprompter-service.ps1"""; RunOnceId: "UninstallTeleprompterService"; StatusMsg: "Removing Teleprompter Windows service..."; Flags: runhidden waituntilterminated
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\installer\uninstall-teleprompter-service.ps1"""; RunOnceId: "UninstallTeleprompterService"; StatusMsg: "Removing Teleprompter Windows service..."; Flags: waituntilterminated

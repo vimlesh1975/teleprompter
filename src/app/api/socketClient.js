@@ -1,7 +1,9 @@
 // socketClient.js
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000', {
+const socketUrl = `http://localhost:${process.env.PORT || 14000}`;
+
+const socket = io(socketUrl, {
     transports: ['polling'],
 });
 

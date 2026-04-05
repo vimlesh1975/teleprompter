@@ -1176,7 +1176,7 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          msg: `SCENE "ddnrcs/testhtml2" EXPORT "url1" SetValue "http://localhost:3000/CasparcgOutput"`,
+          msg: `SCENE "ddnrcs/testhtml2" EXPORT "url1" SetValue "http://localhost:14000/CasparcgOutput"`,
         }),
       });
 
@@ -2103,7 +2103,7 @@ export default function Home() {
                     socketRef.current.emit("fontColor", e.target.value);
                   }}
                 />
-                <button onClick={() => window.open(`http://${ip}:3000/m`)}>
+                <button onClick={() => window.open(`http://${ip}:14000/m`)}>
                   Mobile controller
                 </button>
                 <label>
