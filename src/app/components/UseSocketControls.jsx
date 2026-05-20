@@ -23,10 +23,13 @@ export const UseSocketControls = ({
             else if (msg === 3) setSpeed((val) => val - 1);
             else if (msg === 4) fromStart();
             else if (msg === 5) setSpeed(1);
-            else if (msg === 6) setSpeed(2);
-            else if (msg === 7) setSpeed(3);
-            else if (msg === 8) setSpeed(4);
-            else if (msg === 9) setSpeed((val) => val + 1);
+            // else if (msg === 6) setSpeed(2);
+            // else if (msg === 7) setSpeed(3);
+            // else if (msg === 8) setSpeed(4);
+            else if (msg === 6) setSpeed(1.25);
+            else if (msg === 7) setSpeed(1.5);
+            else if (msg === 8) setSpeed(1.75);
+            else if (msg === 9) setSpeed((val) => val + 0.25);
             else if (msg === 10) {
                 onclickSlug(slugs[4], 4);
                 handleDoubleClick(4);
@@ -54,7 +57,22 @@ export const UseSocketControls = ({
 
         const handleShuttle = debounce((msg) => {
             console.log(msg);
-            setSpeed(msg);
+            // setSpeed(msg);
+            if (msg === 1) setSpeed(1);
+            else if (msg === 2) setSpeed(1.25);
+            else if (msg === 3) setSpeed(1.5);
+            else if (msg === 4) setSpeed(1.75);
+            else if (msg === 5) setSpeed(2);
+            else if (msg === 6) setSpeed(2.25);
+            else if (msg === 7) setSpeed(2.5);
+
+            else if (msg === -1) setSpeed(-1);
+            else if (msg === -2) setSpeed(-1.25);
+            else if (msg === -3) setSpeed(-1.5);
+            else if (msg === -4) setSpeed(-1.75);
+            else if (msg === -5) setSpeed(-2);
+            else if (msg === -6) setSpeed(-2.25);
+            else if (msg === -7) setSpeed(-2.5);
         }, 300);
 
         socket.on("buttondown1", handleButtonDown);

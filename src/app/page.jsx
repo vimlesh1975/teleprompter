@@ -1824,17 +1824,17 @@ export default function Home() {
           >
             <div>
               <button onClick={() => setSpeed(1)}> Start with Speed 1</button>
+              <button onClick={() => setSpeed(1.25)}> 1.25</button>
+              <button onClick={() => setSpeed(1.5)}> 1.5</button>
+              <button onClick={() => setSpeed(1.7)}> 1.75</button>
               <button onClick={() => setSpeed(2)}> 2</button>
-              <button onClick={() => setSpeed(3)}> 3</button>
-              <button onClick={() => setSpeed(4)}> 4</button>
-              <button onClick={() => setSpeed(5)}> 5</button>
-              <button onClick={() => setSpeed(6)}>6</button>
-              <button onClick={() => setSpeed(7)}>7</button>
+              <button onClick={() => setSpeed(2.25)}>2.25</button>
+              <button onClick={() => setSpeed(2.5)}>2.5</button>
               <button
-                title="Increase speed by 1"
-                onClick={() => setSpeed((val) => parseInt(val) + 1)}
+                title="Increase speed by 0.25"
+                onClick={() => setSpeed((val) => val + 0.25)}
               >
-                ++1
+                ++.25
               </button>
               <button
                 style={{ width: 60 }}
@@ -1851,17 +1851,17 @@ export default function Home() {
                 {speed ? "Pause" : "Resume"}
               </button>
               <button onClick={() => setSpeed(-1)}> -1</button>
+              <button onClick={() => setSpeed(-1.25)}> -1.25</button>
+              <button onClick={() => setSpeed(-1.5)}> -1.5</button>
+              <button onClick={() => setSpeed(-1.75)}> -1.75</button>
               <button onClick={() => setSpeed(-2)}> -2</button>
-              <button onClick={() => setSpeed(-3)}> -3</button>
-              <button onClick={() => setSpeed(-4)}> -4</button>
-              <button onClick={() => setSpeed(-5)}> -5</button>
-              <button onClick={() => setSpeed(-6)}>-6</button>
-              <button onClick={() => setSpeed(-7)}>-7</button>
+              <button onClick={() => setSpeed(-2.25)}>-2.25</button>
+              <button onClick={() => setSpeed(-2.5)}>-2.5</button>
               <button
                 title="Decrease speed by 1"
-                onClick={() => setSpeed((val) => val - 1)}
+                onClick={() => setSpeed((val) => val - 0.25)}
               >
-                --1
+                --.25
               </button>
             </div>
             <div>
