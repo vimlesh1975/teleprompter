@@ -52,7 +52,7 @@ export default function Home() {
   const newdatabase = useSelector(
     (state) => state.newdatabaseReducer.newdatabase
   );
-  const [startPosition, setStartPosition] = useState(308);
+  const [startPosition, setStartPosition] = useState(150);
   const [speed, setSpeed] = useState(0);
   const [runOrderTitles, setRunOrderTitles] = useState([]);
   const [selectedRunOrderTitle, setSelectedRunOrderTitle] = useState("");
@@ -542,10 +542,12 @@ export default function Home() {
       }
       switch (event.key) {
         case "ArrowUp":
-          setSpeed((val) => Number(val) + 1);
+          if (speed < 1) setspeed(1);
+          else setSpeed((val) => Number(val) + 0.25);
           break;
         case "ArrowDown":
-          setSpeed((val) => val - 1);
+          if (speed === 1) setspeed(0);
+          else setSpeed((val) => val - 0.25);
           break;
 
         case "PageUp":

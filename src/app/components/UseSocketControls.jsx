@@ -65,6 +65,7 @@ export const UseSocketControls = ({
             else if (msg === 5) setSpeed(2);
             else if (msg === 6) setSpeed(2.25);
             else if (msg === 7) setSpeed(2.5);
+            else if (msg === 0) setSpeed(0);
 
             else if (msg === -1) setSpeed(-1);
             else if (msg === -2) setSpeed(-1.25);
