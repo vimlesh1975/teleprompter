@@ -1,5 +1,8 @@
 #define MyAppName "Teleprompter"
 #define MyAppVersion "1.0.0"
+#ifndef InstallerBaseFilename
+#define InstallerBaseFilename "Teleprompter"
+#endif
 
 [Setup]
 AppId={{D15E294A-947C-4A4E-937A-E675B8906A7F}
@@ -10,7 +13,7 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 PrivilegesRequired=admin
 OutputDir=output
-OutputBaseFilename=teleprompter-service-setup
+OutputBaseFilename={#InstallerBaseFilename}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

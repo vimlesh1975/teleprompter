@@ -147,7 +147,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
             }
             }
           >
-            Start Teleprompting in Caspar with Normal Method
+            Start Teleprompting in Caspar
           </button>
         </div>
         <div>
@@ -162,7 +162,7 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
             }
             }
           >
-            Start Teleprompting in Caspar with Screen Capture Method
+            {/* Start Teleprompting in Caspar with Screen Capture Method */}
           </button>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

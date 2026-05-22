@@ -542,11 +542,12 @@ export default function Home() {
       }
       switch (event.key) {
         case "ArrowUp":
-          if (speed < 1) setspeed(1);
+          if (speed < 1) setSpeed(1);
           else setSpeed((val) => Number(val) + 0.25);
           break;
         case "ArrowDown":
-          if (speed === 1) setspeed(0);
+          if (speed === 1) setSpeed(0);
+          else if (speed === 0) setSpeed(-1);
           else setSpeed((val) => val - 0.25);
           break;
 
