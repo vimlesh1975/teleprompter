@@ -18,7 +18,14 @@ export const UseSocketControls = ({
     useEffect(() => {
         const handleButtonDown = debounce((msg) => {
             console.log(msg);
-            if (msg === 1) setSpeed(0);
+            if (msg === 1) {
+                if (speed === 0) {
+                    setSpeed(tempSpeed);
+                } else {
+                    setTempSpeed(speed);
+                    setSpeed(0);
+                }
+            }
             else if (msg === 2) setSpeed(-3);
             else if (msg === 3) setSpeed((val) => val - 1);
             else if (msg === 4) fromStart();
