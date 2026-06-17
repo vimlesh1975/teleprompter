@@ -28,6 +28,9 @@ Source: "build\app\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs cre
 Source: "install-teleprompter-service.ps1"; DestDir: "{app}\installer"; Flags: ignoreversion
 Source: "uninstall-teleprompter-service.ps1"; DestDir: "{app}\installer"; Flags: ignoreversion
 
+[Icons]
+Name: "{autodesktop}\Teleprompter"; Filename: "http://localhost:14000"
+
 [Run]
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\installer\install-teleprompter-service.ps1"""; StatusMsg: "Installing Teleprompter Windows service..."; Flags: waituntilterminated
 
