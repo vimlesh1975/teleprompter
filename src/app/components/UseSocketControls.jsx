@@ -96,6 +96,7 @@ export const UseSocketControls = ({
             socket.off("shuttle1", handleShuttle);
         };
     }, [
+        setTempSpeed, speed, , tempSpeed,
         setSpeed,
         fromStart,
         handleDoubleClick,
