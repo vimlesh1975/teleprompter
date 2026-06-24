@@ -6,6 +6,9 @@ import debounce from "lodash.debounce"; // Importing debounce from lodash
 import socket from "./socket"; // assumes shared instance
 
 export const UseSocketControls = ({
+    speed,
+    tempSpeed,
+    setTempSpeed,
     setSpeed,
     fromStart,
     handleDoubleClick,
