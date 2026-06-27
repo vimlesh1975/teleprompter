@@ -134,6 +134,7 @@ export default function Home() {
       overflow: "hidden",
       backgroundColor: bgColor,
       color: "#fff",
+      zIndex: 1,
     }),
     [bgColor]
   );

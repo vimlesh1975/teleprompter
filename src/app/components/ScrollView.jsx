@@ -21,6 +21,8 @@ const ScrollView = ({
                 fontWeight: 'bolder',
                 width: 1920,
                 height: 100, // ✅ Add fixed height
+                position: "relative",
+                zIndex: 2,
             }}>
                 <div style={{
                     backgroundColor: 'lightgreen',
@@ -29,7 +31,7 @@ const ScrollView = ({
 
                 }}>
                     <div style={{ display: 'flex', position: 'relative', top: 20, width: 1920, fontFamily: 'Roboto' }}>
-                        <div style={{ position: 'absolute', left: 10, }}>{`${currentStoryNumber}/${slugs?.length}`}</div>
+                        <div style={{ position: 'absolute', left: 10, }}>{`${currentStoryNumber}/${slugs ? slugs.length : ""}`}</div>
                         <div style={{ position: 'absolute', left: 220, }}>{newsReaderText}</div>
 
                         <div style={{ position: 'absolute', left: 555, }}>{'Speed:' + speed}</div>

@@ -78,8 +78,9 @@ export default function Home({ handleDoubleClick, setAllContent, scrollingTextSt
     });
 
     socket.on('initialisationcomplete2', data => {
-      // console.log(data)
-      if (data === 0) {
+      console.log(data)
+      //0 for casparcg 2.3, 24 for 2.6 and ceftodecklink, 32 for chrome
+      if (data === 0 || data === 24) {
         setTimeout(() => {
           handleDoubleClickRef.current(0);
         }, 2000);

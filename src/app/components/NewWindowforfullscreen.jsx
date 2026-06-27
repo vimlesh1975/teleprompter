@@ -93,9 +93,9 @@ function NewWindowforfullscreen({ children, onClose, newWindowRef, scrollWidth, 
                 onClose?.(); // Close the window
                 win.close();
             } else if (e.key === 'ArrowUp') {
-                setSpeed(pre => pre + 1);
+                setSpeed(pre => pre + 0.25);
             } else if (e.key === 'ArrowDown') {
-                setSpeed(pre => pre - 1);
+                setSpeed(pre => pre - 0.25);
 
             }
             else if (e.key === 'ArrowRight') {
