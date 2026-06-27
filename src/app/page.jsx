@@ -1036,11 +1036,11 @@ export default function Home() {
 
     // rf code starts-------------
     socket.on("speed+", () => {
-      setSpeed(val => val + 1)
+      setSpeed(val => val + 0.25)
     });
 
     socket.on("speed-", () => {
-      setSpeed(val => val - 1)
+      setSpeed(val => val - 0.25)
     });
     // rf code end-------------
 

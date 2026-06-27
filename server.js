@@ -28,20 +28,36 @@ app.prepare().then(async () => {
     // RF code start---------------
     const HID = require("node-hid");
     const devices = HID.devices();
-    // Find the multimedia (usagePage 12) interface
-    const deviceInfo = devices.find((d) => d.usagePage === 12);
-    if (deviceInfo) {
-        const device = new HID.HID(deviceInfo.path);
-        device.on("data", (data) => {
-            const code = data[1]; // second byte is usually the usage ID
-            if (code === 0xe9) {
-                io.emit("speed+", "");
-            }
-            if (code === 0xea) {
-                io.emit("speed-", "");
-            }
-        });
-    }
+    const rfDevices = [];
+    const rfCandidates = devices.filter((d) => d.usagePage === 12 && d.product !== "ShuttlePRO v2");
+
+    rfCandidates.forEach((deviceInfo) => {
+        try {
+            const device = new HID.HID(deviceInfo.path);
+            rfDevices.push(device);
+            device.on("data", (data) => {
+                const code = data[1]; // second byte is usually the usage ID
+                if (code === 0xe9) {
+                    io.emit("speed+", "");
+                }
+                if (code === 0xea) {
+                    io.emit("speed-", "");
+                }
+            });
+
+            device.on("error", (error) => {
+                console.error("RF HID device error:", error.message);
+            });
+        } catch (error) {
+            console.error("Unable to open RF HID device:", {
+                manufacturer: deviceInfo.manufacturer,
+                product: deviceInfo.product,
+                vendorId: deviceInfo.vendorId,
+                productId: deviceInfo.productId,
+                error: error.message
+            });
+        }
+    });
 
     // RF code end---------------
 
