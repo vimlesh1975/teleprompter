@@ -566,6 +566,20 @@ export default function Home() {
         case "F5":
           setSpeed(tempSpeed);
           break;
+        case "AudioVolumeUp":
+          setSpeed(val => val + 0.25);
+
+          break;
+
+        case "AudioVolumeDown":
+          console.log("Volume Down");
+          setSpeed(val => val - 0.25);
+          break;
+
+        case "AudioVolumeMute":
+          console.log("Mute");
+          setSpeed(0);
+          break;
 
         case " ":
           if (speed === 0) {
@@ -1035,13 +1049,13 @@ export default function Home() {
     });
 
     // rf code starts-------------
-    socket.on("speed+", () => {
-      setSpeed(val => val + 0.25)
-    });
+    // socket.on("speed+", () => {
+    //   setSpeed(val => val + 0.25)
+    // });
 
-    socket.on("speed-", () => {
-      setSpeed(val => val - 0.25)
-    });
+    // socket.on("speed-", () => {
+    //   setSpeed(val => val - 0.25)
+    // });
     // rf code end-------------
 
     return () => {
